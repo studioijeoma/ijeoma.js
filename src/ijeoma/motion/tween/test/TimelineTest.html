@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Tween.js / simplest possible example!</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+	</head>
+	<body>
+		<script type="text/javascript" src="../MotionConstant.js"></script>
+		<script type="text/javascript" src="../easing/Easing.js"></script>
+		<script type="text/javascript" src="../Motion.js"></script>
+		<script type="text/javascript" src="NumberProperty.js"></script>
+		<script type="text/javascript" src="Tween.js"></script>
+		<script type="text/javascript" src="../MotionController.js"></script>
+		<script type="text/javascript" src="Parallel.js"></script>
+		<script type="text/javascript" src="Sequence.js"></script>
+		<script type="text/javascript" src="KeyFrame.js"></script>
+		<script type="text/javascript" src="Timeline.js"></script>
+		<script type="text/javascript">
+		// alert('motiontest');
+
+			var x = 0;
+			var y = 0;
+
+			var d1 = document.createElement( 'div' );
+			d1.style.cssText = 'position: absolute; left: 50px; top: 100; font-size: 100px';
+			document.body.appendChild(d1);
+
+
+			var d2 = document.createElement( 'div' );
+			d2.style.cssText = 'position: absolute; left: 50px; top: 200px; font-size: 100px';
+			document.body.appendChild( d2 );
+
+			var tx = new Tween("x-tween", this, "x", 400, 1); 
+			var ty = new Tween("y-tween", this, "y", 400, 1);
+
+			// console.log(tx)
+			// console.log(ty)
+
+			var p = new Timeline().add(tx,1).add(ty,3); 
+			p.play(); 
+
+			draw();
+
+			function draw() {
+			    setTimeout(draw, 100);
+			    
+			    p.update();
+
+			    if(p.isPlaying()){
+			    	d1.innerHTML = 'x == ' + Math.round( x );
+					d1.style.left = x + 'px';
+
+					d2.innerHTML = 'y == ' + Math.round( y );
+					d2.style.left = y + 'px';
+
+				    // console.log("time = "+p.getTime())
+				    // console.log("x = "+x)
+				}
+			}
+
+			document.onkeypress=function(e){
+				var e=window.event || e 
+				var c = String.fromCharCode(e.charCode)
+				if(c == 'a')
+					p.pause();
+				else if(c == 's')
+					p.resume();
+				else if(c == 'd')
+					p.play();
+				else if(c == 'f')
+					p.stop();
+			}
+		</script>
+	</body>
+</html>	
