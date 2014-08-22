@@ -205,5 +205,5 @@ Timeline.prototype.printKeyFrames = function() {
 	for (var i = 0; i < this._children.length; i++)
 		childrenAsString += this._children[i].toString() + ((i < this._children.length - 1) ? ", " : "");
 
-	console.log(childrenAsString);
+	// console.log(childrenAsString);
 }

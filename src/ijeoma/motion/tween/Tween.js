@@ -154,19 +154,19 @@ Tween.prototype.getPropertyNames = function() {
 }
 
 Tween.prototype.dispatchMotionStartedEvent = function() {
-	console.log('dispatchMotionStartedEvent');
+	// console.log('dispatchMotionStartedEvent');
 }
 
 Tween.prototype.dispatchMotionEndedEvent = function() {
-	console.log('dispatchMotionEndedEvent');
+	// console.log('dispatchMotionEndedEvent');
 }
 
 Tween.prototype.dispatchMotionChangedEvent = function() {
-	console.log('dispatchMotionChangedEvent');
+	// console.log('dispatchMotionChangedEvent');
 }
 
 Tween.prototype.dispatchMotionRepeatedEvent = function() {
- 	console.log('dispatchMotionRepeatedEvent');
+ 	// console.log('dispatchMotionRepeatedEvent');
 }
 
 Tween.prototype.toString = function() { 

@@ -7,17 +7,17 @@ KeyFrame.prototype = new MotionController();
 KeyFrame.prototype.constructor = KeyFrame;  
 	 
 KeyFrame.prototype.dispatchMotionStartedEvent = function() {
-	console.log('dispatchMotionStartedEvent');
+	// console.log('dispatchMotionStartedEvent');
 }
 
 KeyFrame.prototype.dispatchMotionEndedEvent = function() {
-	console.log('dispatchMotionEndedEvent');
+	// console.log('dispatchMotionEndedEvent');
 }
 
 KeyFrame.prototype.dispatchMotionChangedEvent = function() {
-	console.log('dispatchMotionChangedEvent');
+	// console.log('dispatchMotionChangedEvent');
 }
 
 KeyFrame.prototype.dispatchMotionRepeatedEvent = function() {
- 	console.log('dispatchMotionRepeatedEvent');
+ 	// console.log('dispatchMotionRepeatedEvent');
 }

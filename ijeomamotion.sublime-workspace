@@ -1,0 +1,1950 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"order",
+				"orderedAssets"
+			],
+			[
+				"mouse",
+				"mouseoutCompanyLine"
+			],
+			[
+				"vor",
+				"voronoiPoints"
+			],
+			[
+				"trans",
+				"transform"
+			],
+			[
+				"f",
+				"font-family"
+			],
+			[
+				"inlin",
+				"inline-block"
+			],
+			[
+				"compa",
+				"company-tooltip"
+			],
+			[
+				"tran",
+				"transition"
+			],
+			[
+				"text",
+				"text-decoration"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"border-b",
+				"border-bottom"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"main",
+				"main-form"
+			],
+			[
+				"pad",
+				"padding-top"
+			],
+			[
+				"assetsBy",
+				"assetsByCompany"
+			],
+			[
+				"vestin",
+				"vesting"
+			],
+			[
+				"format",
+				"formatPercent"
+			],
+			[
+				"vest",
+				"vestingScale"
+			],
+			[
+				"border",
+				"border-radius"
+			],
+			[
+				"show",
+				"showAssetsView"
+			],
+			[
+				"update",
+				"updateAssets"
+			],
+			[
+				"chart",
+				"chart-info"
+			],
+			[
+				"marg",
+				"margin"
+			],
+			[
+				"mar",
+				"margin-bottom"
+			],
+			[
+				"non",
+				"nonVestedAssets"
+			],
+			[
+				"be",
+				"benefits"
+			],
+			[
+				"di",
+				"disabled"
+			],
+			[
+				"in",
+				"investmentRate"
+			],
+			[
+				"sar",
+				"salaryRate"
+			],
+			[
+				"invest",
+				"investmentRate"
+			],
+			[
+				"inves",
+				"investmentRate"
+			],
+			[
+				"sele",
+				"select"
+			],
+			[
+				"blo",
+				"inline-block"
+			],
+			[
+				"pay",
+				"payment"
+			],
+			[
+				"co",
+				"company"
+			],
+			[
+				"com",
+				"company"
+			],
+			[
+				"orderB",
+				"orderByCompany"
+			],
+			[
+				"p",
+				"padding-bottom"
+			],
+			[
+				"score",
+				"score-penalty-axis"
+			],
+			[
+				"te",
+				"text-align"
+			],
+			[
+				"max",
+				"MAX_WAGE_CONTRIBUTION"
+			],
+			[
+				"companyRO",
+				"companyRowHeaders"
+			],
+			[
+				"row",
+				"rowHeaderH"
+			],
+			[
+				"company-row",
+				"company-row-header"
+			],
+			[
+				"companyRow",
+				"companyRowHeaders"
+			],
+			[
+				"cat",
+				"category"
+			],
+			[
+				"col-md",
+				"col-md-4"
+			],
+			[
+				"companies",
+				"companiesByIndustry"
+			],
+			[
+				"ind",
+				"industryBalances"
+			],
+			[
+				"or",
+				"orderedIndustries"
+			],
+			[
+				"c",
+				"company"
+			],
+			[
+				"index",
+				"indexOf"
+			],
+			[
+				"ord",
+				"orderedCompanies"
+			],
+			[
+				"comp",
+				"company"
+			],
+			[
+				"indu",
+				"industry"
+			],
+			[
+				"ca",
+				"category"
+			],
+			[
+				"balanc",
+				"balance"
+			],
+			[
+				"sort",
+				"sortByBalance"
+			],
+			[
+				"ma",
+				"maxPenalty"
+			],
+			[
+				"ba",
+				"balance"
+			],
+			[
+				"bal",
+				"balance"
+			],
+			[
+				"sal",
+				"salaryContribution"
+			],
+			[
+				"cap",
+				"caption"
+			],
+			[
+				"inex",
+				"indexOf"
+			],
+			[
+				"E",
+				"EST_INVESTMENT_RETURN"
+			],
+			[
+				"em",
+				"employeeContribution"
+			],
+			[
+				"form",
+				"formula"
+			],
+			[
+				"bala",
+				"balance"
+			],
+			[
+				"salary",
+				"salaryContributionPercent"
+			],
+			[
+				"perc",
+				"perecentToContribute"
+			],
+			[
+				"mat",
+				"matchFormula"
+			],
+			[
+				"con",
+				"contributionFactor"
+			],
+			[
+				"cont",
+				"contributionFactor"
+			],
+			[
+				"m",
+				"matchFormula"
+			],
+			[
+				"matchF",
+				"matchFactor"
+			],
+			[
+				"match",
+				"matchesFormula"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"you",
+				"your-company"
+			],
+			[
+				"padd",
+				"padding-top"
+			],
+			[
+				"year",
+				"yearDomain"
+			],
+			[
+				"sco",
+				"score"
+			],
+			[
+				"fon",
+				"font-size"
+			],
+			[
+				"baln",
+				"balances"
+			],
+			[
+				"b",
+				"balances"
+			],
+			[
+				"get",
+				"getBalance"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"ear",
+				"earning"
+			],
+			[
+				"le",
+				"length"
+			],
+			[
+				"inde",
+				"indexOf"
+			],
+			[
+				"line",
+				"lineData"
+			],
+			[
+				"ret",
+				"retirement"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"sc",
+				"scoreDomain"
+			],
+			[
+				"al",
+				"text-align"
+			],
+			[
+				"grade",
+				"gradeScale"
+			],
+			[
+				"d",
+				"display"
+			],
+			[
+				"category-",
+				"category-labels"
+			],
+			[
+				"cato",
+				"category-label"
+			],
+			[
+				"categ",
+				"category"
+			],
+			[
+				"cate",
+				"categories"
+			],
+			[
+				"bk",
+				"background-color"
+			],
+			[
+				"bl",
+				"inline-block"
+			],
+			[
+				"cm",
+				"company"
+			],
+			[
+				"en",
+				"enrollment"
+			],
+			[
+				"company",
+				"company-label"
+			],
+			[
+				"left",
+				"left"
+			],
+			[
+				"ab",
+				"absolute"
+			],
+			[
+				"scores",
+				"scoresByCo"
+			],
+			[
+				"ran",
+				"range"
+			],
+			[
+				"stac",
+				"stackedScale"
+			],
+			[
+				"compan",
+				"companies"
+			],
+			[
+				"data",
+				"dataByGroup"
+			],
+			[
+				"rankD",
+				"rankDuration"
+			],
+			[
+				"tr",
+				"transition"
+			],
+			[
+				"padding",
+				"padding-bottom"
+			],
+			[
+				"rank",
+				"rankking"
+			],
+			[
+				"count",
+				"countryGeo"
+			],
+			[
+				"geo",
+				"geometries"
+			],
+			[
+				"vis",
+				"visible"
+			],
+			[
+				"slide",
+				"slideshow-progressbar"
+			],
+			[
+				"slideshow-capt",
+				"slideshow-caption1"
+			],
+			[
+				"IN",
+				"inline-block"
+			],
+			[
+				"RANKD",
+				"rankDuration"
+			],
+			[
+				"top",
+				"top"
+			],
+			[
+				"gu",
+				"gunDeathsData"
+			],
+			[
+				"mean-l",
+				"mean-label"
+			],
+			[
+				"cur",
+				"currentId"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/ijeoma/motion/tween/NumberProperty.js",
+			"settings":
+			{
+				"buffer_size": 1969,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/ijeoma/motion/Motion.js",
+			"settings":
+			{
+				"buffer_size": 11852,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/ijeoma/motion/test/MotionTest.html",
+			"settings":
+			{
+				"buffer_size": 653,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\nBack = function Back() {};\n\nBack.easeIn = function(t, b, c, d) {\n	var s = 1.70158;\n	return c * (t /= d) * t * ((s + 1) * t - s) + b;\n}\n\nBack.easeOut = function(t, b, c, d) {\n	var s = 1.70158;\n	return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;\n}\n\nBack.easeBoth = function(t, b, c, d) {\n	var s = 1.70158;\n	if((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.52)) + 1) * t - s)) + b;\n	return c / 2 * ((t -= 2) * t * (((s *= (1.52)) + 1) * t + s) + 2) + b;\n}\n\nBounce = function Bounce() {};\n\nBounce.easeIn = function(t, b, c, d) {\n	return c - Bounce.easeOut(d - t, 0, c, d) + b;\n}\n\nBounce.easeOut = function(t, b, c, d) {\n	if((t /= d) < (1 / 2.7)) {\n		return c * (7.562 * t * t) + b;\n	} else if(t < (2 / 2.7)) {\n		return c * (7.562 * (t -= (1. / 2.7)) * t + .7) + b;\n	} else if(t < (2.5 / 2.75)) {\n		return c * (7.562 * (t -= (2.2 / 2.7)) * t + .937) + b;\n	} else {\n		return c * (7.562 * (t -= (2.62 / 2.7)) * t + .98437) + b;\n	}\n}\n\nBounce.easeBoth = function(t, b, c, d) {\n	if(t < d / 2) return Bounce.easeIn(t * 2, 0, c, d) * .5 + b;\n	else return Bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;\n}\n\nCirc = function Circ() {};\n\nCirc.easeIn = function(t, b, c, d) {\n	return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;\n}\n\nCirc.easeOut = function(t, b, c, d) {\n	return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;\n}\n\nCirc.easeBoth = function(t, b, c, d) {\n	if((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;\n	return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;\n}\n\nCubic = function Cubic() {};\n\nCubic.easeIn = function(t, b, c, d) {\n	return c * (t /= d) * t * t + b;\n}\n\nCubic.easeOut = function(t, b, c, d) {\n	return c * ((t = t / d - 1) * t * t + 1) + b;\n}\n\nCubic.easeBoth = function(t, b, c, d) {\n	if((t /= d / 2) < 1) return c / 2 * t * t * t + b;\n	return c / 2 * ((t -= 2) * t * t + 2) + b;\n}\n\nCubicBezier = function CubicBezier() {};\n\n// Cubic Bezier tween from b to b+c, influenced by p1 & p2\n// t: current time, b: beginning value, c: total change, d: duration\n// p1, p2: Bezier control point positions\nCubicBezier.easeIn = function(t, b, c, d, p1, p2) {\n	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;\n}\n\nCubicBezier.easeOut = function(t, b, c, d, p1, p2) {\n	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;\n}\n\nCubicBezier.easeBoth = function(t, b, c, d, p1, p2) {\n	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;\n}\n\nElastic = function Elastic() {};\n\nElastic.easeIn = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d) == 1) return b + c;\n	var p = d * .3;\n	var a = c;\n	var s = p / 4;\n	return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;\n}\n\nElastic.easeOut = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d) == 1) return b + c;\n	var p = d * .3;\n	var a = c;\n	var s = p / 4;\n	return(a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);\n}\n\nElastic.easeBoth = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d / 2) == 2) return b + c;\n	var p = d * (.3 * 1.);\n	var a = c;\n	var s = p / 4;\n	if(t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;\n	return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;\n}\n\nElastic = function Elastic() {};\n\nElastic.easeIn = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d) == 1) return b + c;\n	var p = d * .3;\n	var a = c;\n	var s = p / 4;\n	return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;\n}\n\nElastic.easeOut = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d) == 1) return b + c;\n	var p = d * .3;\n	var a = c;\n	var s = p / 4;\n	return(a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);\n}\n\nElastic.easeBoth = function(t, b, c, d) {\n	if(t == 0) return b;\n	if((t /= d / 2) == 2) return b + c;\n	var p = d * (.3 * 1.);\n	var a = c;\n	var s = p / 4;\n	if(t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;\n	return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;\n}\n\nExpo = function Expo() {};\n\nExpo.easeIn = function(t, b, c, d) {\n	return(t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;\n}\n\nExpo.easeOut = function(t, b, c, d) {\n	return(t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;\n}\n\nExpo.easeBoth = function(t, b, c, d) {\n	if(t == 0) return b;\n	if(t == d) return b + c;\n	if((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;\n	return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;\n}\n\nLinear = function Linear() {};\n\nLinear.easeNone = function(t, b, c, d) {\n	return c * t / d + b;\n}\n\nLinear.easeIn = function(t, b, c, d) {\n	return c * t / d + b;\n}\n\nLinear.easeOut = function(t, b, c, d) {\n	return c * t / d + b;\n}\n\nLinear.easeBoth = function(t, b, c, d) {\n	return c * t / d + b;\n}\n\nQuad = function Quad() {};\n\nQuad.easeIn = function(t, b, c, d) {\n	return c * (t /= d) * t + b;\n}\n\nQuad.easeOut = function(t, b, c, d) {\n	return -c * (t /= d) * (t - 2) + b;\n}\n\nQuad.easeBoth = function(t, b, c, d) {\n	if((t /= d / 2) < 1) return c / 2 * t * t + b;\n	return -c / 2 * ((--t) * (t - 2) - 1) + b;\n}\n\nQuart = function Quart() {};\n\nQuart.easeIn = function(t, b, c, d) {\n	return c * (t /= d) * t * t * t + b;\n}\n\nQuart.easeOut = function(t, b, c, d) {\n	return -c * ((t = t / d - 1) * t * t * t - 1) + b;\n}\n\nQuart.easeBoth = function(t, b, c, d) {\n	if((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;\n	return -c / 2 * ((t -= 2) * t * t * t - 2) + b;\n}\n\nQuint = function Quint() {};\n\nQuint.easeIn = function(t, b, c, d) {\n	return c * (t /= d) * t * t * t * t + b;\n}\n\nQuint.easeOut = function(t, b, c, d) {\n	return c * ((t = t / d - 1) * t * t * t * t + 1) + b;\n}\n\nQuint.easeBoth = function(t, b, c, d) {\n	if((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;\n	return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;\n}\n\nSine = function Sine() {};\n\nSine.easeIn = function(t, b, c, d) {\n	return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;\n}\n\nSine.easeOut = function(t, b, c, d) {\n	return c * Math.sin(t / d * (Math.PI / 2)) + b;\n}\n\nSine.easeBoth = function(t, b, c, d) {\n	return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;\n}",
+			"file": "src/ijeoma/motion/easing/Easing.js",
+			"file_size": 6265,
+			"file_write_time": 1408035375000000,
+			"settings":
+			{
+				"buffer_size": 6266,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": " {\n     \"folders\": [{ \n         \"path\": \"/Users/ebonesijeoma/git/ijeomamotion-js\"\n     }],\n     \"settings\": {\n         \"Combine: FileList\": \"/Users/ebonesijeoma/git/files.txt\",\n         \"Combine: InPath\": \"/path/to/working/files/public/js/\",\n         \"Combine: OutPath\": \"/path/to/working/files/private/js/\",\n         \"Combine: MasterName\": \"master.js\",\n         \"Combine: MinifyName\": \"master.min.js\"\n     }\n }",
+			"file": "src/ijeoma/motion/ijeomamotion.sublime-project",
+			"file_size": 83,
+			"file_write_time": 1408720232000000,
+			"settings":
+			{
+				"buffer_size": 411,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"selected_items":
+		[
+			[
+				"pret",
+				"HTMLPrettify"
+			],
+			[
+				"combine",
+				"CombineAndMinfiy: Build"
+			],
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"min",
+				"Minify Javascript to file"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"comb",
+				"Sort via CSScomb"
+			],
+			[
+				"java",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"html",
+				"Set Syntax: HTML"
+			],
+			[
+				"pert",
+				"Set Syntax: Java Properties"
+			],
+			[
+				"PRET",
+				"HTMLPrettify"
+			],
+			[
+				"pewr",
+				"Package Control: Upgrade/Overwrite All Packages"
+			],
+			[
+				"Pret",
+				"HTMLPrettify"
+			],
+			[
+				"prret",
+				"Preferences: Settings - Default"
+			],
+			[
+				"com",
+				"Sort via CSScomb"
+			],
+			[
+				"PRet",
+				"HTMLPrettify"
+			],
+			[
+				"pre",
+				"HTMLPrettify"
+			],
+			[
+				"css",
+				"Sort via CSScomb"
+			],
+			[
+				"prer",
+				"Preferences: Browse Packages"
+			],
+			[
+				"ret",
+				"HTMLPrettify"
+			],
+			[
+				"peret",
+				"Preferences: Settings - Default"
+			],
+			[
+				"pet",
+				"Preferences: Settings - Default"
+			],
+			[
+				"Pre",
+				"HTMLPrettify"
+			],
+			[
+				"perte",
+				"Preferences: SublimeLinter Settings – Default"
+			],
+			[
+				"sub",
+				"SublimeLinter: Lint Current File"
+			],
+			[
+				"lint",
+				"SublimeLinter: Lint Current File"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"rpet",
+				"HTMLPrettify: Set Prettify Preferences"
+			],
+			[
+				"js",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"cs",
+				"Set Syntax: CSS"
+			],
+			[
+				"prete",
+				"HTMLPrettify: Set Prettify Preferences"
+			],
+			[
+				"sele",
+				"Rot13 Selection"
+			],
+			[
+				"paret",
+				"Package Control: Add Repository"
+			],
+			[
+				"htm",
+				"Set Syntax: HTML"
+			],
+			[
+				"prett",
+				"HTMLPrettify"
+			],
+			[
+				"javas",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"praet",
+				"Preferences: Package Control Settings – Default"
+			],
+			[
+				"pr",
+				"HTMLPrettify"
+			],
+			[
+				"PRE",
+				"HTMLPrettify"
+			],
+			[
+				"pret ",
+				"HTMLPrettify"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"pretif",
+				"HTMLPrettify"
+			],
+			[
+				"JSON",
+				"Set Syntax: JSON"
+			],
+			[
+				"preet",
+				"Preferences: Settings - Default"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
+			],
+			[
+				"jav",
+				"Set Syntax: JavaScript"
+			],
+			[
+				"h",
+				"Set Syntax: HTML"
+			],
+			[
+				"pref",
+				"HTMLPrettify"
+			],
+			[
+				"prfet",
+				"Preferences: Settings - Default"
+			],
+			[
+				"pretti",
+				"HTMLPrettify"
+			],
+			[
+				"form",
+				"Format: Javascript"
+			],
+			[
+				"for",
+				"Format: Javascript"
+			],
+			[
+				"FORMAT",
+				"Format: Javascript"
+			],
+			[
+				"format",
+				"Format: Javascript"
+			],
+			[
+				"forma",
+				"Format: Javascript"
+			],
+			[
+				"tidy",
+				"Tidy HTML"
+			],
+			[
+				"xml",
+				"Set Syntax: XML"
+			]
+		],
+		"width": 521.0
+	},
+	"console":
+	{
+		"height": 389.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/ebonesijeoma/git/ijeomamotion-js/src/ijeoma/motion/test/MotionTest.html",
+		"/Users/ebonesijeoma/git/bloomberg/401k/notes.csv",
+		"/Users/ebonesijeoma/git/bloomberg/401k/main.js",
+		"/Users/ebonesijeoma/git/bloomberg/401k/sharing.js",
+		"/Users/ebonesijeoma/git/bloomberg/401k/tracking.js",
+		"/Users/ebonesijeoma/git/bloomberg/401k/index2.html",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/Default/Preferences.sublime-settings",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/User/Preferences.sublime-settings",
+		"/Users/ebonesijeoma/git/bloomberg/401k/401k-50.csv",
+		"/Users/ebonesijeoma/git/bloomberg/401k/401K retirement value-Peggy.xlsx",
+		"/Users/ebonesijeoma/git/bloomberg/401k/main.css",
+		"/Users/ebonesijeoma/git/bloomberg/401k/401k-50-updated.csv",
+		"/Users/ebonesijeoma/git/bloomberg/401k/~$Workbook1.xlsx",
+		"/Users/ebonesijeoma/git/bloomberg/401k/401k.csv",
+		"/Users/ebonesijeoma/Sites/401k/3/401k-50.csv",
+		"/Users/ebonesijeoma/Sites/401k/3/401k.csv",
+		"/Users/ebonesijeoma/Sites/401k/index2.html",
+		"/Users/ebonesijeoma/Sites/401k/3/main.css",
+		"/Users/ebonesijeoma/Sites/401k/3/index.html",
+		"/Users/ebonesijeoma/Sites/401k/3/main.js",
+		"/Users/ebonesijeoma/Sites/401k/lines.html",
+		"/Users/ebonesijeoma/Sites/401k/2/index.html",
+		"/Users/ebonesijeoma/Sites/401k/2/main.css",
+		"/Users/ebonesijeoma/Sites/401k/2/main.js",
+		"/Users/ebonesijeoma/Sites/401k/main.js",
+		"/Users/ebonesijeoma/Sites/401k/index.html",
+		"/Users/ebonesijeoma/Sites/401k/main.css",
+		"/Users/ebonesijeoma/Sites/401k/rain.html",
+		"/Users/ebonesijeoma/Sites/401k/rain3.html",
+		"/Users/ebonesijeoma/Sites/401k/401k.csv",
+		"/Users/ebonesijeoma/Sites/401k/401K ranking as of 6-13-14.csv",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/SublimeLinter/SublimeLinter.sublime-settings",
+		"/Users/ebonesijeoma/Sites/401k/data.tsv",
+		"/Users/ebonesijeoma/Sites/401k/401k.xlsx",
+		"/Users/ebonesijeoma/Sites/rankings/world-110m.json",
+		"/Users/ebonesijeoma/Sites/guns/main.js",
+		"/Users/ebonesijeoma/Sites/guns/cmagmap.html",
+		"/Users/ebonesijeoma/Downloads/bootstrap (2)/css/bootstrap.css",
+		"/Users/ebonesijeoma/Sites/drugs/drugsfinal-4pmApril30.csv",
+		"/Users/ebonesijeoma/Sites/drugs/data.js",
+		"/Users/ebonesijeoma/Sites/drugs/drugsfinal-12noonApril30.csv",
+		"/Users/ebonesijeoma/Sites/drugs/drugsfinal-6pmapril29.csv",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/Sublime-HTMLPrettify-master/.jsbeautifyrc",
+		"/Users/ebonesijeoma/Sites/drugs/test.js",
+		"/Users/ebonesijeoma/Sites/drugs/drugs.csv",
+		"/Users/ebonesijeoma/Sites/drugs/index.html",
+		"/Users/ebonesijeoma/Sites/drugs/bfm604A.csv",
+		"/Users/ebonesijeoma/Sites/drugs/drugs.js",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/Package Control/Package Control.sublime-settings",
+		"/Users/ebonesijeoma/Sites/drugs/2014 Brand AWP Increases 3-26-14.csv",
+		"/Users/ebonesijeoma/Sites/drugs/2014 Brand AWP Increases 3-26-14 - AWP Progression.csv",
+		"/Users/ebonesijeoma/Sites/drugs/drug-prices.csv",
+		"/Users/ebonesijeoma/Sites/news-loader.js",
+		"/Users/ebonesijeoma/Sites/bvd-lists-1.html",
+		"/Users/ebonesijeoma/http_proxy=proxy.bloomberg.com:8080",
+		"/Users/ebonesijeoma/Renviron.site",
+		"/Users/ebonesijeoma/Sites/bvd-topic-lists-2.html",
+		"/Users/ebonesijeoma/Sites/article-loader.js",
+		"/Users/ebonesijeoma/Sites/bvd-category-lists-3.html",
+		"/Users/ebonesijeoma/Sites/bvd-category-lists-5.html",
+		"/Users/ebonesijeoma/Sites/bvd-topic-lists-1.html",
+		"/Users/ebonesijeoma/Sites/data/news-2014-02-1.json",
+		"/Users/ebonesijeoma/Sites/bvd-category-lists-2.html",
+		"/Users/ebonesijeoma/Sites/bvd-category-lists-1.html",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/User/Package Control.sublime-settings",
+		"/Users/ebonesijeoma/Sites/articles.js",
+		"/Users/ebonesijeoma/Sites/trends-liwc.js",
+		"/Users/ebonesijeoma/Sites/bvd-category-bubbles-1.html",
+		"/Users/ebonesijeoma/Sites/day-articles.js",
+		"/Users/ebonesijeoma/Sites/main.js",
+		"/Users/ebonesijeoma/Sites/bvd-title-lists-1.html",
+		"/Users/ebonesijeoma/Sites/bvd-category-bubbles-2.html",
+		"/Users/ebonesijeoma/Sites/bvd-trends-liwc-filter.html",
+		"/Users/ebonesijeoma/Sites/bvd-trends-bubbles-2.html",
+		"/Users/ebonesijeoma/Sites/liwc.js",
+		"/Users/ebonesijeoma/Sites/main.css",
+		"/Users/ebonesijeoma/Sites/bvd-trends.html",
+		"/Users/ebonesijeoma/Sites/geonames.js",
+		"/Users/ebonesijeoma/Sites/bvd-trends-liwc.html",
+		"/Users/ebonesijeoma/Sites/trends-liwc-ck.js",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/User/Default (OSX).sublime-keymap",
+		"/Users/ebonesijeoma/Library/Application Support/Sublime Text 2/Packages/Default/Default (OSX).sublime-keymap",
+		"/Users/ebonesijeoma/Desktop/bubbles",
+		"/Users/ebonesijeoma/Desktop/sorted-bubbles-1.svg",
+		"/Users/ebonesijeoma/Desktop/bubbles-charted.svg",
+		"/Users/ebonesijeoma/Desktop/bubbles-grided.svg",
+		"/Users/ebonesijeoma/Desktop/bubbles-graphed-2.svg"
+	],
+	"find":
+	{
+		"height": 177.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+			"/Users/ebonesijeoma/Sites"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"emoji",
+			"var ",
+			"auto",
+			"return colorScale(d.value[time - 1].assets)",
+			"category10",
+			"#",
+			"#C56E85",
+			"#",
+			"return colorScale(d.value[time - 1].assets)",
+			"orderAssets",
+			"color = ",
+			"scale.linear",
+			"#",
+			"TRACKER",
+			"tracker",
+			"scroll",
+			"||",
+			"tracker",
+			"voronoiPath",
+			"voronoi",
+			"tracker",
+			"500",
+			"tracker",
+			"px'",
+			".rank",
+			"display: block;",
+			"cmopanyTooltip",
+			"display: block;",
+			"#company-tooltip",
+			"inline-block",
+			"block",
+			".tooltip",
+			"dotTooltip",
+			"d.",
+			"lineTooltip",
+			"mouseoverCompanyLine",
+			"labels",
+			"pointer-events",
+			"<br>",
+			"lineTooltip",
+			"-' + i",
+			"xScale",
+			"lineTooltip",
+			"true",
+			"false",
+			"xScale(d.time)",
+			"transform",
+			"-transform",
+			" - transform:",
+			" - ",
+			"value",
+			"px",
+			"company-line",
+			"updateAssetsView();",
+			"updateAssetsView",
+			"updateRowHeights();",
+			"updateRowHeights",
+			"}, 10)",
+			"}, 100)",
+			"px'",
+			"300",
+			"50",
+			"14px'",
+			"Akzidenz",
+			"akzidnez",
+			"40px",
+			"26px",
+			"26",
+			"18",
+			"600",
+			"#graphic-header",
+			"401k",
+			"col-xs",
+			"md-",
+			"col-md",
+			"1068",
+			"250",
+			"\"id\": 250",
+			"250",
+			"france",
+			"<p",
+			"Bristol Meyers-Squibb ",
+			"AMGEN",
+			"tracker",
+			"col-md",
+			" = ",
+			"bb_",
+			" = ",
+			"sharing",
+			"updateHash()",
+			"updateRow1Labels",
+			"updateRowHeights",
+			"highlight",
+			"glyphicon-arrow-left",
+			"auto",
+			"18",
+			"d",
+			"<span class=\"sign\">+</span>",
+			"<span class=\"sign\">–</span>",
+			"2px",
+			"5px",
+			">+",
+			"score-buttons",
+			"</button>",
+			"years >",
+			"+vestingFormula[0]",
+			"per year for",
+			"per",
+			"range",
+			"i >",
+			"i > ",
+			"i ",
+			"console.log",
+			">",
+			"console.log",
+			"1",
+			">",
+			"input",
+			"inset 0 1px 2px rgba(0,0,0,0.1)",
+			"3px",
+			"tracker",
+			"border-top",
+			"categories",
+			"});\n",
+			"category-header",
+			"select",
+			"cols",
+			"affix"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"'",
+			"",
+			"'",
+			";}"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/ijeoma/motion/tween/NumberProperty.js",
+					"settings":
+					{
+						"buffer_size": 1969,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/ijeoma/motion/Motion.js",
+					"settings":
+					{
+						"buffer_size": 11852,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								339,
+								339
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/ijeoma/motion/test/MotionTest.html",
+					"settings":
+					{
+						"buffer_size": 653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								653
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/ijeoma/motion/easing/Easing.js",
+					"settings":
+					{
+						"buffer_size": 6266,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6266,
+								6266
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/ijeoma/motion/ijeomamotion.sublime-project",
+					"settings":
+					{
+						"buffer_size": 411,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								164,
+								164
+							]
+						],
+						"settings":
+						{
+							"BracketHighlighterBusy": false,
+							"annotations":
+							[
+								"TODO",
+								"README",
+								"FIXME"
+							],
+							"bh_regions":
+							[
+								"bh_regex",
+								"bh_regex_center",
+								"bh_regex_open",
+								"bh_regex_close",
+								"bh_double_quote",
+								"bh_double_quote_center",
+								"bh_double_quote_open",
+								"bh_double_quote_close",
+								"bh_square",
+								"bh_square_center",
+								"bh_square_open",
+								"bh_square_close",
+								"bh_angle",
+								"bh_angle_center",
+								"bh_angle_open",
+								"bh_angle_close",
+								"bh_curly",
+								"bh_curly_center",
+								"bh_curly_open",
+								"bh_curly_close",
+								"bh_default",
+								"bh_default_center",
+								"bh_default_open",
+								"bh_default_close",
+								"bh_unmatched",
+								"bh_unmatched_center",
+								"bh_unmatched_open",
+								"bh_unmatched_close",
+								"bh_round",
+								"bh_round_center",
+								"bh_round_open",
+								"bh_round_close",
+								"bh_tag",
+								"bh_tag_center",
+								"bh_tag_open",
+								"bh_tag_close",
+								"bh_single_quote",
+								"bh_single_quote_center",
+								"bh_single_quote_open",
+								"bh_single_quote_close"
+							],
+							"color_scheme": "Packages/User/Color Highlighter/themes/Monokai.tmTheme",
+							"csslint_options":
+							{
+								"adjoining-classes": "warning",
+								"box-model": true,
+								"box-sizing": "warning",
+								"compatible-vendor-prefixes": "warning",
+								"display-property-grouping": true,
+								"duplicate-background-images": "warning",
+								"duplicate-properties": true,
+								"empty-rules": true,
+								"errors": true,
+								"fallback-colors": "warning",
+								"floats": "warning",
+								"font-faces": "warning",
+								"font-sizes": "warning",
+								"gradients": "warning",
+								"ids": "warning",
+								"import": "warning",
+								"important": "warning",
+								"known-properties": true,
+								"outline-none": "warning",
+								"overqualified-elements": "warning",
+								"qualified-headings": "warning",
+								"regex-selectors": "warning",
+								"rules-count": "warning",
+								"shorthand": "warning",
+								"star-property-hack": "warning",
+								"text-indent": "warning",
+								"underscore-property-hack": "warning",
+								"unique-headings": "warning",
+								"universal-selector": "warning",
+								"vendor-prefix": true,
+								"zero-units": "warning"
+							},
+							"gjslint_ignore":
+							[
+								110.0
+							],
+							"gjslint_options":
+							[
+							],
+							"javascript_linter": "jshint",
+							"jshint_options":
+							{
+								"browser": true,
+								"evil": true,
+								"regexdash": true,
+								"sub": true,
+								"trailing": true,
+								"wsh": true
+							},
+							"pep8": true,
+							"pep8_ignore":
+							[
+								"E501"
+							],
+							"perl_linter": "perlcritic",
+							"pyflakes_ignore":
+							[
+							],
+							"pyflakes_ignore_import_*": true,
+							"sublimelinter": true,
+							"sublimelinter_delay": 2.0,
+							"sublimelinter_disable":
+							[
+							],
+							"sublimelinter_executable_map":
+							{
+							},
+							"sublimelinter_fill_outlines": false,
+							"sublimelinter_gutter_marks": true,
+							"sublimelinter_gutter_marks_theme": "simple",
+							"sublimelinter_mark_style": "none",
+							"sublimelinter_notes": false,
+							"sublimelinter_objj_check_ascii": false,
+							"sublimelinter_popup_errors_on_save": false,
+							"sublimelinter_syntax_map":
+							{
+								"C++": "c",
+								"Python Django": "python",
+								"Ruby on Rails": "ruby"
+							},
+							"sublimelinter_wrap_find": true,
+							"syntax": "Packages/JavaScript/JSON.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 34.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 94.0
+	},
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 266.0,
+	"status_bar_visible": true
+}

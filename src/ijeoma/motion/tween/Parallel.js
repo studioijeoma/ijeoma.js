@@ -10,19 +10,19 @@ Parallel.prototype.setup = function() {}
 Parallel.prototype.setupEvents = function() {}
 
 Parallel.prototype.dispatchMotionStartedEvent = function() {
-	console.log('dispatchMotionStartedEvent');
+	// console.log('dispatchMotionStartedEvent');
 }
 
 Parallel.prototype.dispatchMotionEndedEvent = function() {
-	console.log('dispatchMotionEndedEvent');
+	// console.log('dispatchMotionEndedEvent');
 }
 
 Parallel.prototype.dispatchMotionChangedEvent = function() {
-	console.log('dispatchMotionChangedEvent');
+	// console.log('dispatchMotionChangedEvent');
 }
 
 Parallel.prototype.dispatchMotionRepeatedEvent = function() {
-	console.log('dispatchMotionRepeatedEvent');
+	// console.log('dispatchMotionRepeatedEvent');
 }
 
 Parallel.prototype.toString = function() {

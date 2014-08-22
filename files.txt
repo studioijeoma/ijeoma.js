@@ -1,0 +1,11 @@
+src/ijeomamotion/easing/Easing.js
+src/ijeomamotion/Motion.js
+src/ijeomamotion/MotionConstant.js
+src/ijeomamotion/MotionController.js
+src/ijeomamotion/tween/NumberProperty.js
+src/ijeomamotion/tween/PVectorProperty.js
+src/ijeomamotion/tween/Tween.js
+src/ijeomamotion/tween/Parallel.js
+src/ijeomamotion/tween/Sequence.js
+src/ijeomamotion/tween/Timeline.js
+src/ijeomamotion/tween/KeyFrame.js

@@ -1,0 +1,12 @@
+ {
+     "folders": [{
+         "path": "/Users/ebonesijeoma/git/ijeomamotion-js"
+     }],
+     "settings": {
+         "Combine: FileList": "/Users/ebonesijeoma/git/ijeomamotion-js/files.txt",
+         "Combine: InPath": "/Users/ebonesijeoma/git/ijeomamotion-js/",
+         "Combine: OutPath": "/Users/ebonesijeoma/git/ijeomamotion-js/",
+         "Combine: MasterName": "ijeomamotion.js",
+         "Combine: MinifyName": "ijeomamotion.min.js"
+     }
+ }
