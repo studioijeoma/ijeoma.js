@@ -6,13 +6,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
 	</head>
 	<body>
-		<script type="text/javascript" src="../../MotionConstant.js"></script>
-		<script type="text/javascript" src="../../easing/Easing.js"></script>
-		<script type="text/javascript" src="../../Motion.js"></script>
-		<script type="text/javascript" src="../NumberProperty.js"></script>
-		<script type="text/javascript" src="../Tween.js"></script>
-		<script type="text/javascript" src="../../MotionController.js"></script>
-		<script type="text/javascript" src="../Sequence.js"></script>
+		<script type="text/javascript" src="../build/ijeomamotion.js"></script> 
 		<script type="text/javascript">
 		// alert('motiontest');
 
@@ -34,7 +28,7 @@
 			// console.log(tx)
 			// console.log(ty)
 
-			var p = new Sequence("xy-sequence",[tx,ty]); 
+			var p = new Timeline().add(tx,1).add(ty,3); 
 			p.play(); 
 
 			draw();

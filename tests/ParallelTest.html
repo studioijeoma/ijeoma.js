@@ -6,16 +6,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
 	</head>
 	<body>
-		<script type="text/javascript" src="../../MotionConstant.js"></script>
-		<script type="text/javascript" src="../../easing/Easing.js"></script>
-		<script type="text/javascript" src="../../Motion.js"></script>
-		<script type="text/javascript" src="../NumberProperty.js"></script>
-		<script type="text/javascript" src="../Tween.js"></script>
-		<script type="text/javascript" src="../../MotionController.js"></script>
-		<script type="text/javascript" src="../Parallel.js"></script>
-		<script type="text/javascript" src="../Sequence.js"></script>
-		<script type="text/javascript" src="../KeyFrame.js"></script>
-		<script type="text/javascript" src="../Timeline.js"></script>
+		<script type="text/javascript" src="../build/ijeomamotion.js"></script>
 		<script type="text/javascript">
 		// alert('motiontest');
 
@@ -31,19 +22,19 @@
 			d2.style.cssText = 'position: absolute; left: 50px; top: 200px; font-size: 100px';
 			document.body.appendChild( d2 );
 
-			var tx = new Tween("x-tween", this, "x", 400, 1); 
-			var ty = new Tween("y-tween", this, "y", 400, 1);
+			var tx = new Tween("x-tween", this, "x",400,1); 
+			var ty = new Tween("y-tween", this, "y",400,1);
 
 			// console.log(tx)
 			// console.log(ty)
 
-			var p = new Timeline().add(tx,1).add(ty,3); 
+			var p = new Parallel("xy-parallel",[tx,ty]); 
 			p.play(); 
 
 			draw();
 
 			function draw() {
-			    setTimeout(draw, 10);
+			    setTimeout(draw, 100);
 			    
 			    p.update();
 
