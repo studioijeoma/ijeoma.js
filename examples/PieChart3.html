@@ -57,6 +57,9 @@
         // ellipse(width / 2, height / 2, s - s * m2.getPosition(), s - s * m2.getPosition())
     }
 
+    function mouseDragged() {
+        s.seek(mouseX/width)
+    }
     function keyTyped() {
         if (key == 'a')
             s.pause();

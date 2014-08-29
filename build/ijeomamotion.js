@@ -729,12 +729,11 @@ MOTION.MotionController.prototype.seek = function(value) {
     for (var i = 0; i < this._children.length; i++) {
         var c = this._children[i];
 
-        if (c.isInsidePlayingTime(this.getTime()))
+        if (c.isInsidePlayingTime(this.getTime())){
+            c._isUpdatingProperties = true;
             c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
-        // else if (c.isAbovePlayingTime(this.getTime()))
-        //     c.seek(1);
-        // else
-        //     c.seek(0);
+        } else
+            c._isUpdatingProperties = false; 
     }
 
     return this;
@@ -770,11 +769,7 @@ MOTION.MotionController.prototype.update = function(time) {
 
 MOTION.MotionController.prototype.updateChildren = function() {
     for (var i = 0; i < this._children.length; i++) {
-        // if(i > 0) {
-            // console.log(this._children[i]._isUpdatingProperties)
-            this._children[i]._isUpdatingProperties = (i == 0);
-        // }
-
+        this._children[i]._isUpdatingProperties = (i == 0);
         this._children[i].update(this.getTime());
     }
 };
