@@ -1,127 +1,42 @@
-MOTION.Timeline = function (name) {
-    MOTION.MotionController.call(this, name)
-
-    this._keyFrames = [];
-    this._keyFrameMap = [];
+MOTION.KeyFrame = function(time, children) {
+    MOTION.MotionController.call(this, children)
+    this.delay(time);
 };
 
-MOTION.Timeline.prototype = {
-    constructor: MOTION.Timeline,
-    setup: function() {},
+MOTION.KeyFrame.prototype = Object.create(MOTION.MotionController.prototype);
 
-    setupEvents: function() {},
-    
-    insert: function(child, time) {
-        MotionController.prototype.insert.call(this, child, time);
+MOTION.Timeline = function() {
+    MOTION.MotionController.call(this);
+};
 
-        if (child.isKeyFrame()) {
-            this._keyFrames.push(child);
+MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
+// MOTION.Timeline.prototype.constructor = MOTION.Timeline,
 
-            if (child.getName() != null)
-                this._keyFrameMap[child.getName()] = child;
+MOTION.Timeline.prototype.add = function(child, time) {
+    if (time) {
+        var keyFrame = this.getChild(time + "");
+
+        if (keyFrame)
+            keyFrame.add(child);
+        else {
+            keyFrame = new MOTION.KeyFrame(time);
+            keyFrame.add(child);
+
+            this.insert(keyFrame, time);
         }
 
-        return this;
-    },
-    
-    add: function(child) {
+    } else {
         var c = this._childrenMap[child.getName()];
         c.push(child);
 
         this._children[this._children.indexOf(c)] = c;
+    }
 
-        return this;
-    },
-    
-    add: function(child, time) {
-        var keyFrame = this.getKeyFrame(time + "");
+    return this;
+};
 
-        if (keyFrame == null) {
-            keyFrame = new KeyFrame(time + "", time);
-            keyFrame.add(child);
-
-            this.insert(keyFrame, time);
-        } else
-            keyFrame.add(child);
-
-        // console.log(keyFrame.getDuration());
-
-        return this;
-    },
-    
-    addAll: function(children, time) {
-        var keyFrame = getKeyFrame(time);
-
-        if (keyFrame == null) {
-            keyFrame = new KeyFrame(time + "", time);
-
-            for (var j = 0; j < children.length; j++)
-                keyFrame.add(children[j]);
-
-            this.insert(keyFrame, time);
-        } else
-            for (var j = 0; j < children.length; j++)
-                keyFrame.add(children[j]);
-
-        return this;
-    },
-    
-    addAll: function(children, name) {
-        // PApplet.println("insertChildren(" + children + ", " + name + ")");
-        var c = childrenMap.get(name);
-        c.addAll(children);
-
-        children.set(children.indexOf(c), c);
-
-        return this;
-    },
-    
-    removeKeyFrame: function(time) {
-        // for(var i = 0; i < this._children.length; i++) {
-        // 	var c = this._children[i]
-        // 	if (c.getPlayTime() == time) {
-        // 		children.remove(children.indexOf(c));
-        // 		childrenMap.remove(c);
-        // 	}
-        // }
-    },
-    
-    removeKeyFrame: function(name) {
-        // var c = childrenMap.get(name);
-
-        // children.remove(children.indexOf(c));
-        // childrenMap.remove(c);
-    },
-    
-    getKeyFrameCount: function() {
-        return this._keyFrames.length;
-    },
-    
-    getCurrentKeyFrames: function() {
-        var currentKeyFrames = [];
-
-        for (var i = 0; i < this._children.length; i++)
-            if (this._children[i].isInsidePlayingTime(this.getTime()))
-                currentKeyFrames.push(children[i]);
-
-        return currentKeyFrames;
-    },
-    
-    getCurrentKeyFrameIndices: function() {
-        var indices = [];
-
-        for (var i = 0; i < this._children.length; i++)
-            if (this._children[i].isInsidePlayingTime(getTime()))
-                indices.push(i);
-
-        return indices;
-    },
-    
-    getKeyFrame: function(index) {
-        return this._children[index];
-    },
-    
-    getKeyFrame: function(time) {
+MOTION.Timeline.prototype.getChild = function(index) {
+    if (typeof arguments[0] == 'number') {
         var keyFrame = null;
 
         for (var i = 0; i < children.length; i++) {
@@ -131,79 +46,76 @@ MOTION.Timeline.prototype = {
                 keyFrame = c;
         }
 
-        return keyFrame;
-    },
-    
-    getKeyFrame: function(name) {
-        return this._childrenMap[name];
-    },
-    
-    getKeyFrames: function() {
-        return this._children;
-    },
-    
-    getKeyFrameTime: function(name) {
-        return this.getKeyFrame(name).getTime();
-    },
-    
-    getKeyFrameChildren: function(name) {
-        return this.getKeyFrame(name).getChildren();
-    },
-    
-    gotoAndPlay: function(time) {
-        this.seek(time / this._duration);
+        // return keyFrame;
+        return this._childrenMap[arguments[0]+''];
+    } else if (typeof arguments == 'string') {
+        return this._childrenMap[arguments[0]];
+    } else
+        return this.getCurrentKeyFrames();
+};
+
+MOTION.Timeline.prototype.getKeyFrameCount = function() {
+    return this._keyFrames.length;
+};
+
+MOTION.Timeline.prototype.getCurrentKeyFrames = function() {
+    var currentKeyFrames = [];
+
+    for (var i = 0; i < this._children.length; i++)
+        if (this._children[i].isInsidePlayingTime(this.getTime()))
+            currentKeyFrames.push(children[i]);
+
+    return currentKeyFrames;
+};
+
+MOTION.Timeline.prototype.getCurrentKeyFrameIndices = function() {
+    var indices = [];
+
+    for (var i = 0; i < this._children.length; i++)
+        if (this._children[i].isInsidePlayingTime(getTime()))
+            indices.push(i);
+
+    return indices;
+};
+
+MOTION.Timeline.prototype.getKeyFrames = function() {
+    return this._children;
+};
+
+MOTION.Timeline.prototype.getKeyFrameTime = function(name) {
+    return this.getChild(name).getTime();
+};
+
+MOTION.Timeline.prototype.getKeyFrameChildren = function(name) {
+    return this.getChild(name).getChildren();
+};
+
+MOTION.Timeline.prototype.gotoAndPlay = function(time) {
+    if (typeof arguments[0] == 'number') {
+        this.seek(arguments[0] / this._duration);
         this.resume();
-    },
-    
-    gotoAndPlay: function(name) {
-        var keyFrame = this.getKeyFrame(name);
+    } else if (typeof arguments[0] == 'string') {
+        var k = this.getChild(arguments[0]);
 
-        this.seek(keyFrame.getPlayTime() / this._duration);
+        this.seek(k.getPlayTime() / this._duration);
         this.resume();
-    },
-    
-    gotoAndPlay: function() {
-        this.seek(keyFrame.getPlayTime() / this._duration);
+    } else if (typeof arguments[0] == 'object') {
+        this.seek(arguments[0].getPlayTime() / this._duration);
         this.resume();
-    },
-    
-    gotoAndStop: function(time) {
-        this.seek(time / this._duration);
+    }
+};
+
+MOTION.Timeline.prototype.gotoAndStop = function(time) {
+    if (typeof arguments[0] == 'number') {
+        this.seek(arguments[0] / this._duration);
         this.pause();
-    },
-    
-    gotoAndStop: function(name) {
-        var keyFrame = getKeyFrame(name);
+    } else if (typeof arguments[0] == 'string') {
+        var k = getKeyFrame(arguments[0]);
 
-        this.seek(keyFrame.getPlayTime() / this._duration);
+        this.seek(k.getPlayTime() / this._duration);
         this.pause();
-    },
-    
-    gotoAndStop: function() {
-        this.seek(keyFrame.getPlayTime() / this._duration);
+    } else if (typeof arguments[0] == 'object') {
+        this.seek(arguments[0].getPlayTime() / this._duration);
         this.pause();
-    },
-    
-    toString: function() {
-        // String keyFrameNames = "";
-
-        // Iterator i = childrenMap.entrySet().iterator();
-
-        // while (i.hasNext()) {
-        // 	Map.Entry me = (Map.Entry) i.next();
-        // 	keyFrameNames += "{" + me.getKey() + "," + me.getValue() + "},";
-        // }
-
-        // return ("Timeline[children: [" + keyFrameNames + "] duration: "
-        // 		+ duration + "]");
-    },
-    
-    printKeyFrames: function() {
-        var childrenAsString = "";
-
-        for (var i = 0; i < this._children.length; i++)
-            childrenAsString += this._children[i].toString() + ((i < this._children.length - 1) ? ", " : "");
-
-        // console.log(childrenAsString);
     }
 };

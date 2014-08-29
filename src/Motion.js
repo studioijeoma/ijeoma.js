@@ -1,4 +1,5 @@
 usingP5 = (typeof p5 != "undefined") ? true : false
+id = 0;
 
 if (usingP5) {
     // p5.prototype.motions = []; 
@@ -13,8 +14,9 @@ if (usingP5) {
     // });
 }
 
-MOTION = function(name, duration, delay, easing) {
-    this._name = (name) ? name : "";
+MOTION = function(duration, delay, easing) {
+    this._id = id++;
+    this._name = "";
 
     this._calls = [];
     this._callMap = [];
@@ -25,17 +27,16 @@ MOTION = function(name, duration, delay, easing) {
     this._time = 0;
     this._timeScale = 1;
 
-    this._duration = (duration) ? duration : 0;
+    this._duration = (typeof duration == 'undefined') ? 0 : duration;
 
-    this._delay = (delay) ? delay : 0;
+    this._delay = (typeof delay == 'undefined') ? 0 : delay;
 
-    this._easing = (easing) ? easing : Linear.easeIn;
+    this._easing = (typeof easing == 'undefined') ? Linear.easeIn : easing;
 
     this._repeatCount = 0;
     this._repeatDuration = 0;
 
     this._isPlaying = false;
-    // this._isDelaying = false;
     this._isRepeating = false;
     this._isRepeatingDelay = false;
     this._isReversing = false;
@@ -48,10 +49,10 @@ MOTION = function(name, duration, delay, easing) {
 
     this._order = 0;
 
-    this._onBegin, this._onEnd, this._onChange, this._onRepeat;
-
-    this.setup(name, duration, delay, easing);
-    this.setupEvents();
+    this._onBegin = undefined;
+    this._onEnd = undefined;
+    this._onChange = undefined;
+    this._onRepeat = undefined;
 
     if (usingP5) {
         // p5.prototype.motions.push(this)
@@ -73,20 +74,7 @@ MOTION.REPEAT = "repeat";
 MOTION.timeMode = (usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
 
 MOTION.prototype = {
-    setup: function(name, duration, delay, easing) {
-        if (name) this._name = name;
-
-        if (duration) this._duration = duration;
-
-        if (delay) this._delay = delay;
-
-        this._playTime = 0;
-
-        if (easing) this.setEasing(easing);
-    },
-
-    setupEvents: function() {},
-
+    constructor: MOTION,
     play: function() {
         this.seek(0);
         this.resume();
@@ -195,12 +183,14 @@ MOTION.prototype = {
 
     update: function(time) {
         if (time) {
-            if (this._isInsidePlayingTime(time)) {
+            if (this.isInsidePlayingTime(time)) {
                 if (!this._isPlaying)
                     this.play();
 
                 this.setTime(time);
                 this.updateCalls();
+
+                this.dispatchChangedEvent();
             } else if (this._isPlaying)
                 this.stop();
         } else {
@@ -208,12 +198,12 @@ MOTION.prototype = {
                 this.updateTime();
                 this.updateCalls();
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))  
                     this.stop();
+                else
+                    this.dispatchChangedEvent(); 
             }
         }
-
-        this.dispatchChangedEvent()
     },
 
     updateTime: function() {
@@ -417,37 +407,35 @@ MOTION.prototype = {
     },
 
     isInsideDelayingTime: function(value) {
-        return (value >= 0 && value <= this._delay);
-        // return (value >= 0 && value <= delay);
+        return (value >= 0 && value < this._delay);
     },
 
     isInsidePlayingTime: function(value) {
         return (value >= this._delay && value <= this._delay + this._duration);
-        // return (value > this._delay && value <= this._delay + duration);
     },
 
     isAbovePlayingTime: function(value) {
-        return value > this._delay + this._duration;
+        return value >= this._delay + this._duration;
     },
 
     isTween: function() {
-        return this instanceof Tween;
+        return this instanceof MOTION.Tween;
     },
 
     isParallel: function() {
-        return this instanceof Parallel;
+        return this instanceof MOTION.Parallel;
     },
 
     isSequence: function() {
-        return this instanceof Sequence;
+        return this instanceof MOTION.Sequence;
     },
 
     isTimeline: function() {
-        return this instanceof Timeline;
+        return this instanceof MOTION.Timeline;
     },
 
     isKeyFrame: function() {
-        return this instanceof KeyFrame;
+        return this instanceof MOTION.KeyFrame;
     },
 
     usingSeconds: function() {

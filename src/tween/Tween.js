@@ -1,179 +1,117 @@
-MOTION.Tween = function(name, object, property, end, duration, delay, easing) {
-    Motion.call(this, name, duration, delay, easing)
+MOTION.Tween = function(object, property, end, duration, delay, easing) {
+    MOTION.call(this, duration, delay, easing)
 
     this._properties = [];
+    this._propertyMap = [];
 
-    this.addProperty(new NumberProperty(object, property, end));
+    this._isUpdatingProperties = true;
+
+    if (typeof object !== "undefined" && typeof property !== "undefined")
+        this.add(new MOTION.Property(object, property, end));
 };
 
-MOTION.Tween.prototype = {
-    constructor: MOTION.Tween,
+MOTION.Tween.prototype = Object.create(MOTION.prototype);
+MOTION.Tween.prototype.constrctor = MOTION.Tween
 
-    setup: function() {},
+MOTION.Tween.prototype.play = function() {
+    MOTION.prototype.play.call(this);
 
-    setupEvents: function() {},
+    this._isUpdatingProperties = true;
 
-    update: function(time) {
-        Motion.prototype.update.call(this, time);
+    for (var i = 0; i < this._properties.length; i++) {
+        this._properties[i].setBegin();
+        console.log(this._properties[i].getBegin());
+    }
+}
 
-        if (this.isPlaying())
-            this.updateProperties();
-    },
-
-    updateProperties: function() {
-        for (var i = 0; i < this._properties.length; i++) {
-            var p = this._properties[i];
-            p.setPosition(this._easing(this.getPosition(), 0, 1, 1))
-        }
-    },
-
-    seek: function(value) {
-        Motion.prototype.seek.call(this, value)
-
-        this.updateProperties();
-
-        return this;
-    },
-
-    addProperty: function(p) {
-        this._properties.push(p);
-
-        return this;
-    },
-
-    add: function(p) {
-        this.properties.push(p);
-
-        return this;
-    },
-
-    add: function(object, property, end) {
-        return this.addProperty(new NumberProperty(object, property, end));
-    },
-
-    // add = function(object, property, end) {
-    // 	return this.addProperty(new ColorProperty(object, property, end));
-    // }
-
-    // add = function(PVector _vector, PVector end) {
-    // 	return this.addProperty(new PVectorProperty(_vector, end));
-    // }
-
-    addNumber: function(object, property, end) {
-        return this.addProperty(new NumberProperty(object, property, end));
-    },
-
-    // addColor = function(object, property, end) {
-    // 	return this.addProperty(new ColorProperty(object, property, end));
-    // }
-
-    // addPVector = function(PVector _vector, PVector end) {
-    // 	return this.addProperty(new PVectorProperty(_vector, end));
-    // }
-
-    call: function(object, method, _time) {
-        return this.addCall(new Callback(object, method, _time));
-    },
-
-    // addCall = function(Callback _call) {
-    // 	calls.push(_call);
-    // 	return this;
-    // }
-
-    getPosition: function() { 
-        return this.getTime() / this._duration 
-    },
-
-    get: function(_index) {
-        return this.getProperty(_index);
-    },
-
-    get: function(name) {
-        return this.getProperty(name);
-    },
-
-    getNumber: function(_index) {
-        return this.getProperty(_index);
-    },
-
-    getNumber: function(name) {
-        return this.getProperty(name);
-    },
-
-    getColor: function(_index) {
-        return this.getProperty(_index);
-    },
-
-    getColor: function(name) {
-        return this.getProperty(name);
-    },
-
-    getPVector: function(_index) {
-        return this.getProperty(_index);
-    },
-
-    getPVector: function(name) {
-        return this.getProperty(name);
-    },
-
-    getProperty: function(_index) {
-        return this.properties[_index];
-    },
-
-    getProperty: function(name) {
-        var mp = null;
-
-        for (i = 0; i < this.properties.length; i++)
-            if (this.properties[i].getName() == name) {
-                mp = this.properties[i];
-                break;
+MOTION.Tween.prototype.update = function(time) {
+    if (time) {
+        if (this.isInsidePlayingTime(time)) {
+            if (!this._isPlaying){ 
+                // this._isUpdatingProperties =false;
+                this.play();
             }
 
-        return mp;
-    },
+            this.setTime(time);
+            this.updateCalls();
+            this.updateProperties();
 
-    getProperties: function() {
-        // return properties.toArray(new IProperty[properties.length]);
-        return this.properties;
-    },
+            this.dispatchChangedEvent();
+        } else if (this._isPlaying){ 
+            this.stop();
+        }
+    } else {
+        if (this._isRegistered && this._isPlaying) {
+            this.updateTime();
+            this.updateCalls();
+            this.updateProperties();
 
-    getPropertyCount: function() {
-        return this.properties.length;
-    },
+            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                this.stop();
+            else
+                this.dispatchChangedEvent();
+        }
+    } 
+};
 
-    getPropertyName: function(_index) {
-        return this.properties[_index].getName();
-    },
+MOTION.Tween.prototype.updateProperties = function() {
+    for (var i = 0; i < this._properties.length; i++)
+        this._properties[i].update(this.getPosition(), this._easing);
+};
 
-    getPropertyNames: function() {
-        if (this.properties.length > 1) {
-            var propertyNames = [];
+MOTION.Tween.prototype.seek = function(value) {
+    MOTION.prototype.seek.call(this, value);
 
-            for (i = 1; i < properties.length - 1; i++)
-                propertyNames.push(this.properties[i + 1].getName());
+    if (this._isUpdatingProperties)
+        this.updateProperties();
 
-            return propertyNames;
-        } else
-            return [];
-    },
+    return this;
+};
 
-    dispatchStartedEvent: function() {
-        // console.log('dispatchStartedEvent');
-    },
+MOTION.Tween.prototype.addProperty = function(object, property, end) {
+    if (arguments.length == 1) {
+        this._properties.push(arguments[0]);
 
-    dispatchEndedEvent: function() {
-        // console.log('dispatchEndedEvent');
-    },
-
-    dispatchChangedEvent: function() {
-        // console.log('dispatchChangedEvent');
-    },
-
-    dispatchRepeatedEvent: function() {
-        // console.log('dispatchRepeatedEvent');
-    },
-
-    toString: function() {
-        return "Tween[time = " + this._delay + ", duration = " + this.getDuration() + "]";
+        if (arguments[0].getName())
+            this._propertyMap[arguments[0].getName()] = arguments[0];
+    } else {
+        return this.addProperty(new MOTION.Property(object, property, end));
     }
+
+    return this;
+};
+
+MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
+
+MOTION.Tween.prototype.getProperty = function() {
+    if (isNaN(arguments[0]))
+        return this._propertyMap[arguments[0]];
+    else
+        return this._properties[arguments[0]];
+};
+
+MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
+
+MOTION.Tween.prototype.getProperties = function() {
+    return this._properties;
+};
+
+MOTION.Tween.prototype.getPropertyCount = function() {
+    return this._properties.length;
+};
+
+MOTION.Tween.prototype.getPropertyName = function(i) {
+    return this._properties[i].getName();
+};
+
+MOTION.Tween.prototype.getPropertyNames = function() {
+    if (this._properties.length > 1) {
+        var propertyNames = [];
+
+        for (i = 1; i < properties.length - 1; i++)
+            propertyNames.push(this._properties[i + 1].getName());
+
+        return propertyNames;
+    } else
+        return [];
 };

@@ -22,13 +22,13 @@
 			d2.style.cssText = 'position: absolute; left: 50px; top: 200px; font-size: 100px';
 			document.body.appendChild( d2 );
 
-			var tx = new Tween("x-tween", this, "x", 400, 1); 
-			var ty = new Tween("y-tween", this, "y", 400, 1);
+			var tx = new MOTION.Tween(this, "x", 400, 1); 
+			var ty = new MOTION.Tween(this, "y", 400, 1);
 
 			// console.log(tx)
 			// console.log(ty)
 
-			var p = new Timeline().add(tx,1).add(ty,3); 
+			var p = new MOTION.Timeline().add(tx,1).add(ty,3); 
 			p.play(); 
 
 			draw();
