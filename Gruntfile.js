@@ -21,8 +21,9 @@ module.exports = function(grunt) {
             scripts: {
                 files: ['*.js', 'src/*.js', 'src/easing/*.js', 'src/tween/*.js'],
                 tasks: ['concat', 'uglify'],
-                options: {
+                options: { 
                     spawn: false,
+                    livereload: true, 
                 },
             }
         }
