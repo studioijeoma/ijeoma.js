@@ -1,76 +1,151 @@
-<head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>
-    <script language="javascript">
-    var angles = [30, 10, 45, 35, 60, 38, 75, 67];
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+var angles = [30]; //, 10, 45, 35, 60, 38, 75, 67];
 
-    var test = {}
+var r = 270;
 
-    var t, t1, t2;
-    var r;
-    var d = 200;
+var pieArcs = [];
 
-    function setup() {
-        createCanvas(720, 400);
-        noStroke();
-        angleMode(DEGREES);
+function setup() {
+    createCanvas(720, 400);
+    noStroke();
+    angleMode(DEGREES);
 
-        s = new MOTION.Sequence();
+    createPieChart(200, angles)
 
-        var a = 0;
-        for (var i = 0; i < angles.length; i++) {
-            s.add(new MOTION.Tween(this, 'r', a, 50))
-            s.add(new MOTION.Tween(this, 'r', a, 50))
-            // s.add(new MOTION(0,2))
-            a += angles[i]; 
+    s = new MOTION.Sequence();
+
+    var a = r;
+
+    for (var i = 0; i < pieArcs.length; i++) {
+        var pa = pieArcs[i]
+
+        a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
+
+        // pa.offset = 100;
+        // pa.alpha = 0;
+
+        // s.add(new MOTION.Tween(this, 'r', a, 50));
+        // s.add(new MOTION.Tween(this, 'r', a, 50));
+
+        // s.add(
+        //     // new MOTION.Tween(pa, 'offset', 0, 50).add(pa, 'alpha', 255).onStart(function() {    
+        //     new MOTION.Tween(pa, 'alpha', 255, 100).onStart(function() {
+        //         // pa.offset = 100;
+        //         pa.alpha = 0;
+
+        //         console.log('------')
+        //         console.log(pa) 
+        //         console.log(pa.alpha)
+        //     }))
+        // s.add(new MOTION.Tween(this, 'r', a, 50));
+        // s.setTimeScale(2)
+    }
+
+    s.play()
+
+    t = new MOTION.Tween(this, 'r', 360, 50)
+        .onStart(function() { 
+            console.log(window.r)
+            window.r =0;
+            console.log(window.r)
+        }).play();
+}
+
+function start() {
+    console.log(r)
+    r = 0;
+    console.log(r)
+}
+
+function draw() {
+    background(100);
+    angleMode(DEGREES);
+
+    s.update()
+    t.update();
+
+    text(r, 25, 25)
+
+    drawPieChart()
+
+    stroke(255, 0, 0);
+    line(width / 2, 0, width / 2, height);
+}
+
+function mouseDragged() {
+    s.seek(mouseX / width)
+}
+
+function keyTyped() {
+    if (key == 'a')
+        s.pause();
+    else if (key == 's')
+        s.resume();
+    else if (key == 'd')
+        s.play();
+    else if (key == 'f')
+        s.stop();
+}
+
+PieArc = function(x, y, d, a1, a2, c, a) {
+    return {
+        x: x,
+        y: y,
+        offset: 0,
+        d: d,
+        a1: a1,
+        a2: a2,
+        color: c,
+        alpha: 255,
+        draw: function() {
+            noStroke();
+            fill(this.color, this.alpha);
+
+            // this.offset= 10
+
+            // push();
+            // translate(this.x, this.y)
+            // rotate(r)   
+            // translate(this.offset * cos((this.a2)/2), this.offset * sin((this.a2)/2))
+            // arc(0, 0, this.d, this.d, radians(this.a1), radians(this.a2), PIE);
+            // pop();
+
+            push();
+            translate(this.x, this.y)
+            rotate(r + this.a2)
+            translate(this.offset * cos(this.a1 / 2), this.offset * sin(this.a1 / 2))
+            arc(0, 0, this.d, this.d, 0, radians(this.a1), PIE);
+            pop();
         }
-
-        s.play()
     }
+}
 
-    function draw() {
-        background(100);
+createPieChart = function(diameter, data) {
+    var lastAngle = 0;
+    for (var i = 0; i < data.length; i++) {
+        var gray = (i < 0) ? color(255, 0, 0) : map(i, 0, data.length, 0, 255);
+        pieArcs.push(new PieArc(width / 2, height / 2, diameter, angles[i], lastAngle, gray));
+        // pieArcs.push(new PieArc(width / 2, height / 2, diameter, lastAngle, lastAngle +angles[i], gray));
+        lastAngle += angles[i];
 
-        s.update()
-
-        text(s.getTime(), 25, 25) 
- 
-        translate(width / 2, height / 2);
-        rotate(r);
-
-        pieChart(d, angles, 1); 
     }
+}
 
-    function mouseDragged() {
-        s.seek(mouseX/width)
-    }
-    function keyTyped() {
-        if (key == 'a')
-            s.pause();
-        else if (key == 's')
-            s.resume();
-        else if (key == 'd')
-            s.play();
-        else if (key == 'f')
-            s.stop();
-    }
-
-    function pieChart(diameter, data, t) {
-        var lastAngle = 0;
-        for (var i = 0; i < data.length; i++) {
-            var gray = map(i, 0, data.length, 0, 255);
-            fill(gray);
-            arc(0, 0, diameter, diameter * t, lastAngle, lastAngle + radians(angles[i]));
-            lastAngle += radians(angles[i]);
-        }
-    }
-    </script>
-    <style>
-    body {
-        padding: 0;
-    }
-    </style>
-    <!-- this line removes any default padding -->
+drawPieChart = function() {
+    push();
+    for (var i = 0; i < pieArcs.length; i++)
+        pieArcs[i].draw();
+    pop();
+}
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
 </head>
 
 <body>

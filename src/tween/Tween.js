@@ -18,10 +18,14 @@ MOTION.Tween.prototype.play = function() {
 
     this._isUpdatingProperties = true;
 
+
+            console.log('------')
     for (var i = 0; i < this._properties.length; i++) {
-        this._properties[i].setBegin();
-        console.log(this._properties[i].getBegin());
+        this._properties[i].setBegin(); 
+        console.log(this._properties[i].getName() + ': '+this._properties[i].getBegin());
     }
+
+    return this;
 }
 
 MOTION.Tween.prototype.update = function(time) {

@@ -289,7 +289,7 @@ MOTION = function(duration, delay, easing) {
 
     this._order = 0;
 
-    this._onBegin = undefined;
+    this._onStart = undefined;
     this._onEnd = undefined;
     this._onChange = undefined;
     this._onRepeat = undefined;
@@ -316,13 +316,13 @@ MOTION.timeMode = (usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
 MOTION.prototype = {
     constructor: MOTION,
     play: function() {
+        this.dispatchStartedEvent();
+
         this.seek(0);
         this.resume();
 
         this._playCount++;
         this._repeatCount = 0;
-
-        this.dispatchStartedEvent();
 
         return this;
     },
@@ -486,23 +486,23 @@ MOTION.prototype = {
         return this;
     },
 
-    onBegin: function() {
-        this._onBegin = object;
+    onStart: function(func) {
+        this._onStart = func;
         return this;
     },
 
-    onEnd: function(object) {
-        this._onEnd = object;
+    onEnd: function(func) {
+        this._onEnd = func;
         return this;
     },
 
-    onChange: function(object) {
-        this._onChange = object;
+    onChange: function(func) {
+        this._onChange = func;
         return this;
     },
 
-    onRepeat: function(object) {
-        this._onRepeat = object;
+    onRepeat: function(func) {
+        this._onRepeat = func;
         return this;
     },
 
@@ -688,8 +688,8 @@ MOTION.prototype = {
 
     dispatchStartedEvent: function() {
         // console.log('dispatchStartedEvent');
-        if (this._onBegin)
-            this._onBegin();
+        if (this._onStart)
+            this._onStart();
     },
 
     dispatchEndedEvent: function() {
@@ -1209,10 +1209,14 @@ MOTION.Tween.prototype.play = function() {
 
     this._isUpdatingProperties = true;
 
+
+            console.log('------')
     for (var i = 0; i < this._properties.length; i++) {
-        this._properties[i].setBegin();
-        console.log(this._properties[i].getBegin());
+        this._properties[i].setBegin(); 
+        console.log(this._properties[i].getName() + ': '+this._properties[i].getBegin());
     }
+
+    return this;
 }
 
 MOTION.Tween.prototype.update = function(time) {
