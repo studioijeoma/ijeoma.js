@@ -1189,7 +1189,9 @@ MOTION.Timeline.prototype.gotoAndStop = function(time) {
         this.seek(arguments[0].getPlayTime() / this._duration);
         this.pause();
     }
-};;MOTION.Tween = function(object, property, end, duration, delay, easing) {
+};;//http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
+
+MOTION.Tween = function(object, property, end, duration, delay, easing) {
     MOTION.call(this, duration, delay, easing)
 
     this._properties = [];

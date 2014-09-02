@@ -1,3 +1,5 @@
+//http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
+
 MOTION.Tween = function(object, property, end, duration, delay, easing) {
     MOTION.call(this, duration, delay, easing)
 

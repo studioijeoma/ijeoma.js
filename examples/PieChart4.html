@@ -1,6 +1,7 @@
 <script language="javascript" src="p5.js"></script>
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
+ 
 var angles = [30]; //, 10, 45, 35, 60, 38, 75, 67];
 
 var r = 270;
@@ -46,25 +47,23 @@ function setup() {
     s.play()
 
     t = new MOTION.Tween(this, 'r', 360, 50)
-        .onStart(function() { 
-            console.log(window.r)
-            window.r =0;
-            console.log(window.r)
-        }).play();
+        .onStart((function(w){
+            console.log(w)
+            console.log(w.r)
+            w.r =0;
+            console.log(w.r)
+        })(window)).play();
 }
-
-function start() {
-    console.log(r)
-    r = 0;
-    console.log(r)
-}
-
+ 
 function draw() {
     background(100);
     angleMode(DEGREES);
 
     s.update()
     t.update();
+
+    if(t.isPlaying())
+        console.log(window.r)
 
     text(r, 25, 25)
 
