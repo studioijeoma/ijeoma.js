@@ -1,0 +1,46 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+ 
+var bgc 
+
+function setup() {
+    createCanvas(720, 400);
+    noStroke(); 
+
+    bgc =color(0);
+    t = new MOTION.Tween(100).add(this, 'bgc', color(255)).play(); 
+}
+ 
+function draw() {
+    background(bgc);
+    angleMode(DEGREES);
+ 
+    t.update(); 
+}
+
+function mouseDragged() {
+    s.seek(mouseX / width)
+}
+
+function keyTyped() {
+    if (key == 'a')
+        s.pause();
+    else if (key == 's')
+        s.resume();
+    else if (key == 'd')
+        s.play();
+    else if (key == 'f')
+        s.stop();
+}
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+
+<body>
+</body>

@@ -4,7 +4,7 @@
  
 var angles = [30]; //, 10, 45, 35, 60, 38, 75, 67];
 
-var r = 270;
+var rotation = 270;
 
 var pieArcs = [];
 
@@ -17,7 +17,7 @@ function setup() {
 
     s = new MOTION.Sequence();
 
-    var a = r;
+    var a = rotation;
 
     for (var i = 0; i < pieArcs.length; i++) {
         var pa = pieArcs[i]
@@ -46,13 +46,16 @@ function setup() {
 
     s.play()
 
-    t = new MOTION.Tween(this, 'r', 360, 50)
-        .onStart((function(w){
-            console.log(w)
-            console.log(w.r)
-            w.r =0;
-            console.log(w.r)
-        })(window)).play();
+    rotation =0;
+
+    t = new MOTION.Tween(100).add(this, 'rotation', 360).play();
+
+    // t = new MOTION.Tween(this, 'rotation', 360, 5)
+    //     .onStart((function(w){  
+    //         console.log(w.rotation)
+    //         w.rotation =0;
+    //         console.log(w.rotation)
+    //     })).play();
 }
  
 function draw() {
@@ -62,10 +65,10 @@ function draw() {
     s.update()
     t.update();
 
-    if(t.isPlaying())
-        console.log(window.r)
+    // if(t.isPlaying())
+    //     console.log(rotation)
 
-    text(r, 25, 25)
+    text(rotation, 25, 25)
 
     drawPieChart()
 
@@ -113,7 +116,7 @@ PieArc = function(x, y, d, a1, a2, c, a) {
 
             push();
             translate(this.x, this.y)
-            rotate(r + this.a2)
+            rotate(rotation + this.a2)
             translate(this.offset * cos(this.a1 / 2), this.offset * sin(this.a1 / 2))
             arc(0, 0, this.d, this.d, 0, radians(this.a1), PIE);
             pop();
