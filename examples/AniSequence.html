@@ -22,11 +22,11 @@ function setup() {
     //     .play();
 
     s = beginSequence();
-    tween(this, 100).add('diameter', 55)
-    tween(this, 100).add('x', 400).add('y', 100)
-    tween(this, 100).add('x', 450).add('y', 400)
-    tween(this, 100).add('x', 100).add('y', 450)
-    tween(this, 100).add('x', 50).add('y', 50).add(this, 'diameter', 5)
+    tween(100).add('diameter', 55)
+    tween(100).add('x', 400).add('y', 100)
+    tween(100).add('x', 450).add('y', 400)
+    tween(100).add('x', 100).add('y', 450)
+    tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5)
     endSequence();
     play(s); 
 }
@@ -58,8 +58,7 @@ function keyTyped() {
 body {
     padding: 0;
 }
-</style>
-<!-- this line removes any default padding -->
+</style> 
 </head>
 
 <body>
