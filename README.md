@@ -12,7 +12,7 @@ https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeom
 ##How to create Tweens
 
 ###Numbers  
-There are 4 ways to setup Tweens for numbers.
+There are 4 ways to setup Tweens.
 ```javascript
 new Tween(duration,delay,easing) //object defaults to window
 new Tween(object, duration, delay, easing) 
