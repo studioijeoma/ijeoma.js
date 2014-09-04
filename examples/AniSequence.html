@@ -5,16 +5,12 @@ var x, y, diameter;
 var s;
 
 function setup() {
-    createCanvas(512, 512);
-    noStroke();
-    textAlign(CENTER);
-    // background(255);
+    createCanvas(512, 512); 
+    noStroke(); 
 
     x = 50;
     y = 50;
-    diameter = 10;
-
-    rect
+    diameter = 10; 
 
     // s = new MOTION.Sequence();
     // s.add(new MOTION.Tween(this, 100).add('diameter', 55))
@@ -37,10 +33,7 @@ function setup() {
 
 function draw() {
     fill(255, 5);
-    rect(0, 0, width, height);
-    // background(255);
-
-    //println(seq.isFinished());
+    rect(0, 0, width, height); 
 
     fill(0);
     ellipse(x, y, diameter, diameter);
@@ -59,27 +52,7 @@ function keyTyped() {
         s.play();
     else if (key == 'f')
         s.stop();
-}
-
-// void draw() {
-//   fill(255,5);
-//   rect(0,0,width,height);
-
-//   //println(seq.isFinished());
-
-//   fill(0);
-//   ellipse(x,y,diameter,diameter);
-// }
-
-// // pause and resume animation by pressing SPACE
-// // or press "s" to start the sequence
-// void keyPressed() {
-//   if (key == 's' || key == 'S') seq.start();
-//   if (key == ' ') {
-//     if (seq.isPlaying()) seq.pause();
-//     else seq.resume();
-//   }
-// }
+} 
 </script>
 <style>
 body {
