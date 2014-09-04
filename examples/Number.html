@@ -9,9 +9,9 @@ function setup() {
     noStroke(); 
 
     x = width;
-    // x=0
-    t = new MOTION.Tween(100).add(this, 'x', width).onStart(function(window) { 
-        window.x = 0;
+    x=0
+    t = new MOTION.Tween(100).add('x', width).onStart(function(window) { 
+        // window.x = 0;
     }).onUpdate(function(window){
         // console.log(window.x)
     }).play(); 

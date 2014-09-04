@@ -110,7 +110,8 @@
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end)
+        MOTION.Property.call(this, object, field, end) 
+        this._value = this._begin.get();
     };
 
     MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
@@ -118,8 +119,23 @@
 
     MOTION.VectorProperty.prototype.update = function(position) {
         this._position = position;
-        this._object[this._field] = this._begin.lerp(this._end, this._position);
+        // this._object[this._field].set(
+        //     lerp(this._begin.x, this._end.x, this._position),
+        //     lerp(this._begin.y, this._end.y, this._position),
+        //     lerp(this._begin.z, this._end.z, this._position))
+        this._object[this._field].set(this._value.lerp(this._end, this._position));
+
     };
+
+     MOTION.VectorProperty.prototype.setBegin = function(begin) {
+        if (begin)
+            this._begin = begin;
+        else
+            this._begin = (typeof this._object[this._field] == "undefined") ? 0 : this._object[this._field];
+
+        this._value = this._begin.get();
+    };
+
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p;
@@ -134,8 +150,8 @@
             else if (v instanceof p5.Vector)
                 p = new MOTION.VectorProperty(this._object, arguments[0], arguments[1]);
             else
-                console.warn('Only numbers, p5.colors and p5.vectors are supported.'); 
-        } else { 
+                console.warn('Only numbers, p5.colors and p5.vectors are supported.');
+        } else {
             var v = object[property]
 
             if (typeof v == 'number')

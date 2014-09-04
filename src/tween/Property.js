@@ -3,7 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._name = object+'.'+field;
+        this._name = object + '.' + field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -28,8 +28,7 @@
     };
 
     MOTION.Property.prototype.setName = function(name) {
-        if (!this._field)
-            this._name = name;
+        this._name = name;
     };
 
     MOTION.Property.prototype.getBegin = function() {
