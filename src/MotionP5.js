@@ -28,9 +28,9 @@
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
         t = new MOTION.Tween(object, property, end, duration, delay, easing)
 
-        if(currentParallel)
+        if (currentParallel)
             currentParallel.add(t)
-        else if(currentSequence)
+        else if (currentSequence)
             currentSequence.add(t)
 
         return t;
@@ -52,30 +52,30 @@
         m.resume();
     };
 
-    p5.prototype.seek = function(m,t) {
+    p5.prototype.seek = function(m, t) {
         m.seek(t);
     };
 
     currentSequence = null;
 
-    p5.prototype.beginSequence = function(name) { 
+    p5.prototype.beginSequence = function(name) {
         currentSequence = new MOTION.Sequence().setName(name);
         return currentSequence;
     }
 
-    p5.prototype.endSequence = function() { 
+    p5.prototype.endSequence = function() {
         currentSequence.updateTweens();
         currentSequence = null
     }
 
     currentParallel = null;
 
-    p5.prototype.beginParallel = function(name) { 
+    p5.prototype.beginParallel = function(name) {
         currentParallel = new MOTION.Parallel().setName(name);;
         return currentParallel;
     }
 
-    p5.prototype.endParallel = function() { 
+    p5.prototype.endParallel = function() {
         currentParallel.updateTweens();
         currentParallel = null
     }
@@ -122,29 +122,39 @@
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
-        if (arguments.length == 1) {
-            this._properties.push(arguments[0]);
+        var p;
 
-            if (arguments[0].getName())
-                this._propertyMap[arguments[0].getName()] = arguments[0];
-        } else {
-            var p;
+        if (typeof arguments[0] == 'string') {
+            var v = this._object[arguments[0]]
 
-            if (typeof object[property] == 'number')
+            if (typeof v == 'number')
+                p = new MOTION.NumberProperty(this._object, arguments[0], arguments[1]);
+            else if (v instanceof p5.Color)
+                p = new MOTION.ColorProperty(this._object, arguments[0], arguments[1]);
+            else if (v instanceof p5.Vector)
+                p = new MOTION.VectorProperty(this._object, arguments[0], arguments[1]);
+            else
+                console.warn('Only numbers, p5.colors and p5.vectors are supported.'); 
+        } else { 
+            var v = object[property]
+
+            if (typeof v == 'number')
                 p = new MOTION.NumberProperty(object, property, end);
-            else if (object[property] instanceof p5.Color)
+            else if (v instanceof p5.Color)
                 p = new MOTION.ColorProperty(object, property, end);
-            else if (object[property] instanceof p5.Vector)
+            else if (v instanceof p5.Vector)
                 p = new MOTION.VectorProperty(object, property, end);
             else
-                console.warn('Only numbers, p5.colors and p5.vectors are supported.')
-
-                this._properties.push(p);
-
-            if (p.getName())
-                this._propertyMap[p.getName()] = p;
+                console.warn('Only numbers, p5.colors and p5.vectors are supported.');
         }
+
+        this._properties.push(p);
+
+        if (p.getName())
+            this._propertyMap[p.getName()] = p;
 
         return this;
     };
+
+    MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
 })(MOTION);

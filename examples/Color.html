@@ -2,36 +2,34 @@
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
  
-var bgc 
+var c 
 
 function setup() {
     createCanvas(720, 400);
     noStroke(); 
 
-    bgc =color(0);
-    t = new MOTION.Tween(100).add(this, 'bgc', color(255)).play(); 
+    c = color(0);
+     
+    t = new MOTION.Tween(100).add('c', color(255)).play(); 
 }
  
 function draw() {
-    background(bgc);
-    angleMode(DEGREES);
- 
-    t.update(); 
+    background(c); 
 }
 
 function mouseDragged() {
-    s.seek(mouseX / width)
+    t.seek(mouseX / width)
 }
 
 function keyTyped() {
     if (key == 'a')
-        s.pause();
+        t.pause();
     else if (key == 's')
-        s.resume();
+        t.resume();
     else if (key == 'd')
-        s.play();
+        t.play();
     else if (key == 'f')
-        s.stop();
+        t.stop();
 }
 </script>
 <style>

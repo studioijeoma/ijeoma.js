@@ -95,7 +95,7 @@
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
-        var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(this._object, arguments[0], arguments[1]);
+        var p = (typeof arguments[0] == 'string') ? new MOTION.NumberProperty(this._object, arguments[0], arguments[1]) : new MOTION.NumberProperty(object, property, end);
 
         this._properties.push(p);
 
