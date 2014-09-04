@@ -26,8 +26,8 @@
     MOTION.Tween.prototype.constrctor = MOTION.Tween
 
     MOTION.Tween.prototype._setupPlay = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        // for (var i = 0; i < this._properties.length; i++)
+        //     console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
 
         this.seek(0);
         this.resume();
@@ -36,8 +36,8 @@
         this._repeatCount = 0;
 
         for (var i = 0; i < this._properties.length; i++) {
-            this._properties[i].setBegin();
-            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            // this._properties[i].setBegin();
+            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
     }
 
@@ -88,8 +88,8 @@
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        if (this._isUpdatingProperties)
-            this.updateProperties();
+        // if (this._isUpdatingProperties)
+        this.updateProperties();
 
         return this;
     };

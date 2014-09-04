@@ -28,8 +28,8 @@
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
         t = new MOTION.Tween(object, property, end, duration, delay, easing)
 
-        if(currentParalell)
-            currentParalell.add(t)
+        if(currentParallel)
+            currentParallel.add(t)
         else if(currentSequence)
             currentSequence.add(t)
 
@@ -64,18 +64,20 @@
     }
 
     p5.prototype.endSequence = function() { 
+        currentSequence.updateTweens();
         currentSequence = null
     }
 
-    currentParalell = null;
+    currentParallel = null;
 
-    p5.prototype.beginParalell = function(name) { 
-        currentParalell = new MOTION.Paralell().setName(name);;
-        return currentParalell;
+    p5.prototype.beginParallel = function(name) { 
+        currentParallel = new MOTION.Parallel().setName(name);;
+        return currentParallel;
     }
 
-    p5.prototype.endParalell = function() { 
-        currentParalell = null
+    p5.prototype.endParallel = function() { 
+        currentParallel.updateTweens();
+        currentParallel = null
     }
 
     MOTION.timeMode = MOTION.FRAMES;

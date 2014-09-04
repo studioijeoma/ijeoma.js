@@ -710,13 +710,12 @@ Sine.easeBoth = function(t, b, c, d) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getObject().constructor.name + "." + p.getName();
-                // console.log(name)
+                var name = p.getName(); 
 
-                if (orderMap[name]) {
-                    var pp = ppropertyMap.get(name);
+                if (name in orderMap) {
+                    var pp = ppropertyMap[name];
 
-                    var order = orderMap.get(name);
+                    var order = orderMap[name];
                     order++;
 
                     p.setBegin(pp.getEnd());
@@ -724,10 +723,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
                     orderMap[name] = order;
                     ppropertyMap[name] = p;
-                } else {
-                    var tweens = [];
-                    tweens.push(t);
-
+                } else { 
                     p.setBegin();
                     p.setOrder(0);
 
@@ -735,7 +731,7 @@ Sine.easeBoth = function(t, b, c, d) {
                     ppropertyMap[name] = p;
                 }
             }
-        }
+        } 
     };
 
     MOTION.MotionController.prototype.updateDuration = function() {
@@ -802,7 +798,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
         if (child.isTween()) {
             this._tweens.push(child);
-            // this.updateTweens();
+            this.updateTweens();
         }
 
         this._children.push(child);
@@ -1139,8 +1135,8 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.constrctor = MOTION.Tween
 
     MOTION.Tween.prototype._setupPlay = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        // for (var i = 0; i < this._properties.length; i++)
+        //     console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
 
         this.seek(0);
         this.resume();
@@ -1149,8 +1145,8 @@ Sine.easeBoth = function(t, b, c, d) {
         this._repeatCount = 0;
 
         for (var i = 0; i < this._properties.length; i++) {
-            this._properties[i].setBegin();
-            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            // this._properties[i].setBegin();
+            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
     }
 
@@ -1201,8 +1197,8 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        if (this._isUpdatingProperties)
-            this.updateProperties();
+        // if (this._isUpdatingProperties)
+        this.updateProperties();
 
         return this;
     };
@@ -1292,8 +1288,8 @@ Sine.easeBoth = function(t, b, c, d) {
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
         t = new MOTION.Tween(object, property, end, duration, delay, easing)
 
-        if(currentParalell)
-            currentParalell.add(t)
+        if(currentParallel)
+            currentParallel.add(t)
         else if(currentSequence)
             currentSequence.add(t)
 
@@ -1328,18 +1324,20 @@ Sine.easeBoth = function(t, b, c, d) {
     }
 
     p5.prototype.endSequence = function() { 
+        currentSequence.updateTweens();
         currentSequence = null
     }
 
-    currentParalell = null;
+    currentParallel = null;
 
-    p5.prototype.beginParalell = function(name) { 
-        currentParalell = new MOTION.Paralell().setName(name);;
-        return currentParalell;
+    p5.prototype.beginParallel = function(name) { 
+        currentParallel = new MOTION.Parallel().setName(name);;
+        return currentParallel;
     }
 
-    p5.prototype.endParalell = function() { 
-        currentParalell = null
+    p5.prototype.endParallel = function() { 
+        currentParallel.updateTweens();
+        currentParallel = null
     }
 
     MOTION.timeMode = MOTION.FRAMES;

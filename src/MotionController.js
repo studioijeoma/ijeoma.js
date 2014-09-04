@@ -74,13 +74,12 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getObject().constructor.name + "." + p.getName();
-                // console.log(name)
+                var name = p.getName(); 
 
-                if (orderMap[name]) {
-                    var pp = ppropertyMap.get(name);
+                if (name in orderMap) {
+                    var pp = ppropertyMap[name];
 
-                    var order = orderMap.get(name);
+                    var order = orderMap[name];
                     order++;
 
                     p.setBegin(pp.getEnd());
@@ -88,10 +87,7 @@
 
                     orderMap[name] = order;
                     ppropertyMap[name] = p;
-                } else {
-                    var tweens = [];
-                    tweens.push(t);
-
+                } else { 
                     p.setBegin();
                     p.setOrder(0);
 
@@ -99,7 +95,7 @@
                     ppropertyMap[name] = p;
                 }
             }
-        }
+        } 
     };
 
     MOTION.MotionController.prototype.updateDuration = function() {
@@ -166,7 +162,7 @@
 
         if (child.isTween()) {
             this._tweens.push(child);
-            // this.updateTweens();
+            this.updateTweens();
         }
 
         this._children.push(child);
