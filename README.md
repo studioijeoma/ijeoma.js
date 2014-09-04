@@ -13,10 +13,12 @@ https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeom
 
 ###Numbers  
 There are 4 ways to setup Tweens for numbers.
+```javascript
 new Tween(duration,delay,easing) //object defaults to window
 new Tween(object, duration, delay, easing) 
 new Tween(object, property, end, duration, delay, easing)
 new Tween(property, end, duration, delay, easing) //object defaults to window
+```
 
 Say you want to tween x from 0 to 100 in 100 frames. 
 ```javascript
