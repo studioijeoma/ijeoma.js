@@ -44,11 +44,5 @@
 
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
-    };
-
-    if (usingP5) {
-        p5.prototype.createSequence = function(children) {
-            return new MOTION.Sequence(children);
-        }
-    }
+    }; 
 })(MOTION)

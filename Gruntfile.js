@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 separator: ';',
             },
             dist: {
-                src: ['src/easing/Easing.js', 'src/Motion.js', 'src/MotionController.js', 'src/tween/*.js'],
+                src: ['src/easing/Easing.js', 'src/Motion.js', 'src/MotionController.js', 'src/tween/*.js', 'src/MotionP5.js'],
                 dest: 'build/ijeomamotion.js',
             },
         },

@@ -86,30 +86,4 @@
 
     MOTION.NumberProperty.prototype = Object.create(MOTION.Property.prototype);
     MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty
-
-    if (usingP5) {
-        MOTION.ColorProperty = function(object, field, end) {
-            MOTION.Property.call(this, object, field, end)
-        };
-
-        MOTION.ColorProperty.prototype = Object.create(MOTION.Property.prototype);
-        MOTION.ColorProperty.prototype.constrctor = MOTION.ColorProperty
-
-        MOTION.ColorProperty.prototype.update = function(position) {
-            this._position = position;
-            this._object[this._field] = lerpColor(this._begin, this._end, this._position);
-        };
-
-        MOTION.VectorProperty = function(object, field, end) {
-            MOTION.Property.call(this, object, field, end)
-        };
-
-        MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
-        MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
-
-        MOTION.VectorProperty.prototype.update = function(position) {
-            this._position = position;
-            this._object[this._field] = this._begin.lerp(this._end, this._position);
-        };
-    }
 })(MOTION)

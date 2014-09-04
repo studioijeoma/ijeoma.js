@@ -1,0 +1,93 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+var x, y, diameter;
+var s;
+
+function setup() {
+    createCanvas(512, 512);
+    noStroke();
+    textAlign(CENTER);
+    // background(255);
+
+    x = 50;
+    y = 50;
+    diameter = 10;
+
+    rect
+
+    // s = new MOTION.Sequence();
+    // s.add(new MOTION.Tween(this, 100).add('diameter', 55))
+    // s.add(new MOTION.Tween(this, 100).add('x', 400).add('y', 100))
+    // s.add(new MOTION.Tween(this, 100).add('x', 450).add('y', 400))
+    // s.add(new MOTION.Tween(this, 100).add('x', 100).add('y', 450))
+    // s.add(new MOTION.Tween(this, 100).add('x', 50).add('y', 50).add(this, 'diameter', 5)) 
+    //     .setTimeScale(2)
+    //     .play();
+
+    s = beginSequence();
+    tween(this, 100).add('diameter', 55)
+    tween(this, 100).add('x', 400).add('y', 100)
+    tween(this, 100).add('x', 450).add('y', 400)
+    tween(this, 100).add('x', 100).add('y', 450)
+    tween(this, 100).add('x', 50).add('y', 50).add(this, 'diameter', 5)
+    endSequence();
+    play(s); 
+}
+
+function draw() {
+    fill(255, 5);
+    rect(0, 0, width, height);
+    // background(255);
+
+    //println(seq.isFinished());
+
+    fill(0);
+    ellipse(x, y, diameter, diameter);
+}
+
+function mouseDragged() {
+    s.seek(mouseX / width)
+}
+
+function keyTyped() {
+    if (key == 'a')
+        s.pause();
+    else if (key == 's')
+        s.resume();
+    else if (key == 'd')
+        s.play();
+    else if (key == 'f')
+        s.stop();
+}
+
+// void draw() {
+//   fill(255,5);
+//   rect(0,0,width,height);
+
+//   //println(seq.isFinished());
+
+//   fill(0);
+//   ellipse(x,y,diameter,diameter);
+// }
+
+// // pause and resume animation by pressing SPACE
+// // or press "s" to start the sequence
+// void keyPressed() {
+//   if (key == 's' || key == 'S') seq.start();
+//   if (key == ' ') {
+//     if (seq.isPlaying()) seq.pause();
+//     else seq.resume();
+//   }
+// }
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+
+<body>
+</body>

@@ -1,16 +1,8 @@
 (function(window, undefined) {
-    usingP5 = (typeof p5 != "undefined") ? true : false
+    usingP5 = (typeof p5 != "undefined") ? true : false;
     id = 0;
 
-    if (usingP5) {
-        motions = []
-
-        p5.prototype.registerMethod('pre', function() {
-            for (var i = 0; i < motions.length; i++)
-                if (motions[i].isAutoUpdating())
-                    motions[i].update()
-        });
-    }
+    motions = [];
 
     MOTION = function(duration, delay, easing) {
         this._id = id++;
@@ -52,8 +44,7 @@
 
         this._asyncPlay = false;
 
-        if (usingP5)
-            motions.push(this)
+        motions.push(this);
     };
 
     MOTION.REVISION = '1';
@@ -67,7 +58,7 @@
     MOTION.ONCE = "once";
     MOTION.REPEAT = "repeat";
 
-    MOTION.timeMode = (usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+    MOTION.timeMode = MOTION.SECONDS;
 
     MOTION.prototype = {
         constructor: MOTION,
@@ -131,10 +122,7 @@
         resume: function() {
             this._isPlaying = true;
 
-            if (usingP5)
-                this._playTime = (MOTION.timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
-            else
-                this._playTime = new Date().getTime() - this._playTime * 1000;
+            this._playTime = new Date().getTime() - this._playTime * 1000;
 
             return this;
         },
@@ -198,10 +186,7 @@
         },
 
         updateTime: function() {
-            if (usingP5)
-                this._time = ((MOTION.timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
-            else
-                this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+            this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
             if (this._isReversing && this._reverseTime != 0)
                 this._time = this._reverseTime - this._time;
@@ -280,6 +265,7 @@
 
         setName: function(name) {
             this._name = name;
+            return this;
         },
 
         getName: function() {
@@ -288,8 +274,8 @@
 
         setTime: function(time) {
             this._time = time;
-
             if (this._isReversing && this._reverseTime != 0) this._time = this._reverseTime - this._time;
+            return this;
         },
 
         getTime: function() {
@@ -359,7 +345,6 @@
 
         setTimeMode: function(_timeMode) {
             MOTION.timeMode = _timeMode;
-
             return this;
         },
 
@@ -461,12 +446,6 @@
                 this._onRepeat(window);
         }
     };
-
-    if (usingP5) {
-        p5.prototype.createMotion = function(duration, delay, easing) {
-            return new MOTION(duration, delay, easing);
-        }
-    }
 
     window.MOTION = MOTION;
 })(window)

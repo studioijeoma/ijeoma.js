@@ -44,8 +44,8 @@
             } else if (this._isPlaying) {
                 this.stop();
             }
-        } else {
-            if (this._isRegistered && this._isPlaying) {
+        } else { 
+            if (this._isPlaying) {
                 this.updateTime();
                 this.updateCalls();
                 this.updateChildren()

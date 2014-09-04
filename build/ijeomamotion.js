@@ -239,18 +239,10 @@ Sine.easeOut = function(t, b, c, d) {
 Sine.easeBoth = function(t, b, c, d) {
 	return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
 };(function(window, undefined) {
-    usingP5 = (typeof p5 != "undefined") ? true : false
+    usingP5 = (typeof p5 != "undefined") ? true : false;
     id = 0;
 
-    if (usingP5) {
-        motions = []
-
-        p5.prototype.registerMethod('pre', function() {
-            for (var i = 0; i < motions.length; i++)
-                if (motions[i].isAutoUpdating())
-                    motions[i].update()
-        });
-    }
+    motions = [];
 
     MOTION = function(duration, delay, easing) {
         this._id = id++;
@@ -292,8 +284,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
         this._asyncPlay = false;
 
-        if (usingP5)
-            motions.push(this)
+        motions.push(this);
     };
 
     MOTION.REVISION = '1';
@@ -307,7 +298,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.ONCE = "once";
     MOTION.REPEAT = "repeat";
 
-    MOTION.timeMode = (usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+    MOTION.timeMode = MOTION.SECONDS;
 
     MOTION.prototype = {
         constructor: MOTION,
@@ -371,10 +362,7 @@ Sine.easeBoth = function(t, b, c, d) {
         resume: function() {
             this._isPlaying = true;
 
-            if (usingP5)
-                this._playTime = (MOTION.timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
-            else
-                this._playTime = new Date().getTime() - this._playTime * 1000;
+            this._playTime = new Date().getTime() - this._playTime * 1000;
 
             return this;
         },
@@ -438,10 +426,7 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         updateTime: function() {
-            if (usingP5)
-                this._time = ((MOTION.timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
-            else
-                this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+            this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
             if (this._isReversing && this._reverseTime != 0)
                 this._time = this._reverseTime - this._time;
@@ -520,6 +505,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
         setName: function(name) {
             this._name = name;
+            return this;
         },
 
         getName: function() {
@@ -528,8 +514,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
         setTime: function(time) {
             this._time = time;
-
             if (this._isReversing && this._reverseTime != 0) this._time = this._reverseTime - this._time;
+            return this;
         },
 
         getTime: function() {
@@ -599,7 +585,6 @@ Sine.easeBoth = function(t, b, c, d) {
 
         setTimeMode: function(_timeMode) {
             MOTION.timeMode = _timeMode;
-
             return this;
         },
 
@@ -702,12 +687,6 @@ Sine.easeBoth = function(t, b, c, d) {
         }
     };
 
-    if (usingP5) {
-        p5.prototype.createMotion = function(duration, delay, easing) {
-            return new MOTION(duration, delay, easing);
-        }
-    }
-
     window.MOTION = MOTION;
 })(window);
 (function(MOTION, undefined) { 
@@ -755,8 +734,8 @@ Sine.easeBoth = function(t, b, c, d) {
             } else if (this._isPlaying) {
                 this.stop();
             }
-        } else {
-            if (this._isRegistered && this._isPlaying) {
+        } else { 
+            if (this._isPlaying) {
                 this.updateTime();
                 this.updateCalls();
                 this.updateChildren()
@@ -938,13 +917,7 @@ Sine.easeBoth = function(t, b, c, d) {
 	};
 
 	MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
-	MOTION.Parallel.prototype.constructor = MOTION.Parallel;
-
-	if (usingP5) {
-		p5.prototype.createMotion = function(children) {
-			return new MOTION.Parallel(children);
-		}
-	}
+	MOTION.Parallel.prototype.constructor = MOTION.Parallel; 
 })(MOTION);(function(MOTION, undefined) {
     MOTION.Property = function(object, field, end) {
         this._object = object;
@@ -1033,32 +1006,6 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.NumberProperty.prototype = Object.create(MOTION.Property.prototype);
     MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty
-
-    if (usingP5) {
-        MOTION.ColorProperty = function(object, field, end) {
-            MOTION.Property.call(this, object, field, end)
-        };
-
-        MOTION.ColorProperty.prototype = Object.create(MOTION.Property.prototype);
-        MOTION.ColorProperty.prototype.constrctor = MOTION.ColorProperty
-
-        MOTION.ColorProperty.prototype.update = function(position) {
-            this._position = position;
-            this._object[this._field] = lerpColor(this._begin, this._end, this._position);
-        };
-
-        MOTION.VectorProperty = function(object, field, end) {
-            MOTION.Property.call(this, object, field, end)
-        };
-
-        MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
-        MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
-
-        MOTION.VectorProperty.prototype.update = function(position) {
-            this._position = position;
-            this._object[this._field] = this._begin.lerp(this._end, this._position);
-        };
-    }
 })(MOTION);(function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
         MOTION.MotionController.call(this, children)
@@ -1105,13 +1052,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
-    };
-
-    if (usingP5) {
-        p5.prototype.createSequence = function(children) {
-            return new MOTION.Sequence(children);
-        }
-    }
+    }; 
 })(MOTION);
 (function(MOTION, undefined) {
     MOTION.KeyFrame = function(time, children) {
@@ -1235,55 +1176,42 @@ Sine.easeBoth = function(t, b, c, d) {
             this.pause();
         }
     };
-})(MOTION);//http://markdalgleish.com/2011/03/self-executing-anonymous-functions/
-
-(function(MOTION, undefined) {
+})(MOTION);(function(MOTION, undefined) {
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
+        this._object;
         this._properties = [];
         this._propertyMap = [];
-
         this._isUpdatingProperties = true;
-
-        if (typeof arguments[0] == 'number')
-            MOTION.call(this, arguments[0], arguments[1], arguments[2])
-        else {
+        if (typeof arguments[1] == 'string') {
             MOTION.call(this, duration, delay, easing)
-
-            if (typeof object !== "undefined" && typeof property !== "undefined")
-                this.addProperty(object, property, end);
+            this._object = object;
+            this.addProperty(this._object, property, end);
+        } else {
+            MOTION.call(this, arguments[1], arguments[2], arguments[3])
+            this._object = object;
         }
     };
-
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween
-
     MOTION.Tween.prototype._setupPlay = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-
+        for (var i = 0; i < this._properties.length; i++) console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         this.seek(0);
         this.resume();
-
         this._playCount++;
         this._repeatCount = 0;
-
         for (var i = 0; i < this._properties.length; i++) {
             this._properties[i].setBegin();
             console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
     }
-
     MOTION.Tween.prototype.play = function() {
         this.dispatchStartedEvent();
-
         // if (!this._asyncPlay) {
         // this._isUpdatingProperties = true;
         this._setupPlay();
         // }
-
         return this;
     }
-
     MOTION.Tween.prototype.update = function(time) {
         if (time) {
             if (this.isInsidePlayingTime(time)) {
@@ -1291,10 +1219,8 @@ Sine.easeBoth = function(t, b, c, d) {
                     // this._isUpdatingProperties =false;
                     this.play();
                 }
-
                 this.setTime(time);
                 this.updateProperties();
-
                 this.dispatchChangedEvent();
             } else if (this._isPlaying) {
                 this.stop();
@@ -1303,27 +1229,174 @@ Sine.easeBoth = function(t, b, c, d) {
             if (this._isPlaying) {
                 this.updateTime();
                 this.updateProperties();
-
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                    this.stop();
-                else
-                    this.dispatchChangedEvent();
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time)) this.stop();
+                else this.dispatchChangedEvent();
             }
         }
     };
-
     MOTION.Tween.prototype.updateProperties = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            this._properties[i].update(this.getPosition());
+        for (var i = 0; i < this._properties.length; i++) this._properties[i].update(this.getPosition());
     };
-
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
+        if (this._isUpdatingProperties) this.updateProperties();
+        return this;
+    };
+    MOTION.Tween.prototype.addProperty = function(object, property, end) {
+        var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(this._object, arguments[0], arguments[1]);
+        this._properties.push(p);
+        if (p.getName()) this._propertyMap[p.getName()] = p;
+        return this;
+    };
+    MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
+    MOTION.Tween.prototype.getProperty = function() {
+        if (isNaN(arguments[0])) return this._propertyMap[arguments[0]];
+        else return this._properties[arguments[0]];
+    };
+    MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
+    MOTION.Tween.prototype.getProperties = function() {
+        return this._properties;
+    };
+    MOTION.Tween.prototype.getPropertyCount = function() {
+        return this._properties.length;
+    };
+    MOTION.Tween.prototype.getPropertyName = function(i) {
+        return this._properties[i].getName();
+    };
+    MOTION.Tween.prototype.getPropertyNames = function() {
+        if (this._properties.length > 1) {
+            var propertyNames = [];
+            for (i = 1; i < properties.length - 1; i++) propertyNames.push(this._properties[i + 1].getName());
+            return propertyNames;
+        } else return [];
+    };
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        if (this._onStart) {
+            this._onStart(window);
+            this._isUpdatingProperties = false;
+            // this._asyncPlay = true;
+            // this._setupPlay();
+        }
+    }
+})(MOTION);(function(MOTION, undefined) {
+    p5.prototype.registerMethod('pre', function() {
+        for (var i = 0; i < motions.length; i++)
+            if (motions[i].isAutoUpdating())
+                motions[i].update()
+    });
 
-        if (this._isUpdatingProperties)
-            this.updateProperties();
+    p5.prototype.createMotion = function(duration, delay, easing) {
+        return new MOTION(duration, delay, easing);
+    };
+
+    p5.prototype.createTween = function(object, property, end, duration, delay, easing) {
+        return new MOTION.Tween(object, property, end, duration, delay, easing);
+    };
+
+    p5.prototype.createParallel = function(children) {
+        return new MOTION.Parallel(children);
+    };
+
+    p5.prototype.createSequence = function(children) {
+        return new MOTION.Sequence(children);
+    };
+
+    p5.prototype.createMotion = function(children) {
+        return new MOTION.Parallel(children);
+    };
+
+    p5.prototype.tween = function(object, property, end, duration, delay, easing) {
+        t = new MOTION.Tween(object, property, end, duration, delay, easing)
+
+        if(currentParalell)
+            currentParalell.add(t)
+        else if(currentSequence)
+            currentSequence.add(t)
+
+        return t;
+    };
+
+    p5.prototype.play = function(m) {
+        m.play();
+    };
+
+    p5.prototype.stop = function(m) {
+        m.stop();
+    };
+
+    p5.prototype.pause = function(m) {
+        m.pause();
+    };
+
+    p5.prototype.resume = function(m) {
+        m.resume();
+    };
+
+    p5.prototype.seek = function(m,t) {
+        m.seek(t);
+    };
+
+    currentSequence = null;
+
+    p5.prototype.beginSequence = function(name) { 
+        currentSequence = new MOTION.Sequence().setName(name);
+        return currentSequence;
+    }
+
+    p5.prototype.endSequence = function() { 
+        currentSequence = null
+    }
+
+    currentParalell = null;
+
+    p5.prototype.beginParalell = function(name) { 
+        currentParalell = new MOTION.Paralell().setName(name);;
+        return currentParalell;
+    }
+
+    p5.prototype.endParalell = function() { 
+        currentParalell = null
+    }
+
+    MOTION.timeMode = MOTION.FRAMES;
+
+    MOTION.prototype.resume = function() {
+        this._isPlaying = true;
+
+        this._playTime = (MOTION.timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
 
         return this;
+    };
+
+    MOTION.prototype.updateTime = function() {
+        this._time = ((MOTION.timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
+
+        if (this._isReversing && this._reverseTime != 0)
+            this._time = this._reverseTime - this._time;
+    };
+
+    MOTION.ColorProperty = function(object, field, end) {
+        MOTION.Property.call(this, object, field, end)
+    };
+
+    MOTION.ColorProperty.prototype = Object.create(MOTION.Property.prototype);
+    MOTION.ColorProperty.prototype.constrctor = MOTION.ColorProperty
+
+    MOTION.ColorProperty.prototype.update = function(position) {
+        this._position = position;
+        this._object[this._field] = lerpColor(this._begin, this._end, this._position);
+    };
+
+    MOTION.VectorProperty = function(object, field, end) {
+        MOTION.Property.call(this, object, field, end)
+    };
+
+    MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
+    MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
+
+    MOTION.VectorProperty.prototype.update = function(position) {
+        this._position = position;
+        this._object[this._field] = this._begin.lerp(this._end, this._position);
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
@@ -1337,14 +1410,14 @@ Sine.easeBoth = function(t, b, c, d) {
 
             if (typeof object[property] == 'number')
                 p = new MOTION.NumberProperty(object, property, end);
-            else if (usingP5 && object[property] instanceof p5.Color)
+            else if (object[property] instanceof p5.Color)
                 p = new MOTION.ColorProperty(object, property, end);
-            else if (usingP5 && object[property] instanceof p5.Vector)
+            else if (object[property] instanceof p5.Vector)
                 p = new MOTION.VectorProperty(object, property, end);
             else
                 console.warn('Only numbers, p5.colors and p5.vectors are supported.')
 
-            this._properties.push(p);
+                this._properties.push(p);
 
             if (p.getName())
                 this._propertyMap[p.getName()] = p;
@@ -1352,55 +1425,4 @@ Sine.easeBoth = function(t, b, c, d) {
 
         return this;
     };
-
-    MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
-
-    MOTION.Tween.prototype.getProperty = function() {
-        if (isNaN(arguments[0]))
-            return this._propertyMap[arguments[0]];
-        else
-            return this._properties[arguments[0]];
-    };
-
-    MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
-
-    MOTION.Tween.prototype.getProperties = function() {
-        return this._properties;
-    };
-
-    MOTION.Tween.prototype.getPropertyCount = function() {
-        return this._properties.length;
-    };
-
-    MOTION.Tween.prototype.getPropertyName = function(i) {
-        return this._properties[i].getName();
-    };
-
-    MOTION.Tween.prototype.getPropertyNames = function() {
-        if (this._properties.length > 1) {
-            var propertyNames = [];
-
-            for (i = 1; i < properties.length - 1; i++)
-                propertyNames.push(this._properties[i + 1].getName());
-
-            return propertyNames;
-        } else
-            return [];
-    };
-
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._onStart) {
-            this._onStart(window);
-
-            this._isUpdatingProperties = false;
-            // this._asyncPlay = true;
-            // this._setupPlay();
-        }
-    }
-
-    if(usingP5){
-        p5.prototype.createTween = function(object, property, end, duration, delay, easing) {
-            return new MOTION.Tween(object, property, end, duration, delay, easing);
-        }
-    }
-})(MOTION)
+})(MOTION);
