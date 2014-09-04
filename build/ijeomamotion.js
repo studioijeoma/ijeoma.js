@@ -281,19 +281,19 @@ Sine.easeBoth = function(t, b, c, d) {
 
         this._isAutoUpdating = true;
 
-        this._isRegistered = false;
-
         this._reverseTime = 0;
 
         this._order = 0;
 
         this._onStart = undefined;
         this._onEnd = undefined;
-        this._onChange = undefined;
+        this._onUpdate = undefined;
         this._onRepeat = undefined;
 
-        if (usingP5) 
-            motions.push(this)   
+        this._asyncPlay = false;
+
+        if (usingP5)
+            motions.push(this)
     };
 
     MOTION.REVISION = '1';
@@ -311,8 +311,20 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.prototype = {
         constructor: MOTION,
+
+        // _setupPlay: function() {
+        //     this.seek(0);
+        //     this.resume();
+
+        //     this._playCount++;
+        //     this._repeatCount = 0; 
+        // },
+
         play: function() {
             this.dispatchStartedEvent();
+
+            // if (!this._asyncPlay)
+            //     this._setupPlay();
 
             this.seek(0);
             this.resume();
@@ -349,13 +361,6 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         pause: function() {
-            if (this._isRegistered) {
-                // if (this._isAutoUpdating)
-                //     p5.prototype.unregisterMethod('pre', this.update);
-
-                this._isRegistered = false;
-            }
-
             this._isPlaying = false;
 
             this._playTime = this._time;
@@ -364,13 +369,6 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         resume: function() {
-            if (!this._isRegistered) {
-                // if (this._isAutoUpdating)
-                //     p5.prototype.registerMethod('pre', this.update);
-
-                this._isRegistered = true;
-            }
-
             this._isPlaying = true;
 
             if (usingP5)
@@ -386,7 +384,6 @@ Sine.easeBoth = function(t, b, c, d) {
 
             if (this._playTime != this._time) {
                 this.setTime(this._playTime);
-                // this.updateCalls();
             }
 
             return this;
@@ -424,15 +421,13 @@ Sine.easeBoth = function(t, b, c, d) {
                         this.play();
 
                     this.setTime(time);
-                    // this.updateCalls();
 
                     this.dispatchChangedEvent();
                 } else if (this._isPlaying)
                     this.stop();
             } else {
-                if (this._isRegistered && this._isPlaying) {
+                if (this._isPlaying) {
                     this.updateTime();
-                    // this.updateCalls();
 
                     if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                         this.stop();
@@ -492,8 +487,8 @@ Sine.easeBoth = function(t, b, c, d) {
             return this;
         },
 
-        onChange: function(func) {
-            this._onChange = func;
+        onUpdate: function(func) {
+            this._onUpdate = func;
             return this;
         },
 
@@ -683,8 +678,12 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         dispatchStartedEvent: function() {
-            if (this._onStart)
+            if (this._onStart) {
                 this._onStart(window);
+
+                // this._asyncPlay = true;
+                // this._setupPlay();
+            }
         },
 
         dispatchEndedEvent: function() {
@@ -693,8 +692,8 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         dispatchChangedEvent: function() {
-            if (this._onChange)
-                this._onChange(window);
+            if (this._onUpdate)
+                this._onUpdate(window);
         },
 
         dispatchRepeatedEvent: function() {
@@ -702,6 +701,12 @@ Sine.easeBoth = function(t, b, c, d) {
                 this._onRepeat(window);
         }
     };
+
+    if (usingP5) {
+        p5.prototype.createMotion = function(duration, delay, easing) {
+            return new MOTION(duration, delay, easing);
+        }
+    }
 
     window.MOTION = MOTION;
 })(window);
@@ -927,20 +932,25 @@ Sine.easeBoth = function(t, b, c, d) {
 
         return this;
     };
-})(MOTION);
-(function(MOTION, undefined) {
-	MOTION.Parallel = function(name, children) {
+})(MOTION);(function(MOTION, undefined) {
+	MOTION.Parallel = function(children) {
 		MOTION.MotionController.call(this, name, children);
 	};
 
 	MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
 	MOTION.Parallel.prototype.constructor = MOTION.Parallel;
+
+	if (usingP5) {
+		p5.prototype.createMotion = function(children) {
+			return new MOTION.Parallel(children);
+		}
+	}
 })(MOTION);(function(MOTION, undefined) {
     MOTION.Property = function(object, field, end) {
         this._object = object;
         this._field = field;
 
-        this._name = field;
+        this._name = object+'.'+field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -998,14 +1008,15 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.Property.prototype.getValue = function() {
-        if (this._field)
-            return this._object[this._field];
-        else
-            return this._value;
+        return this._object[this._field];
     };
 
     MOTION.Property.prototype.getObject = function() {
         return this._object
+    };
+
+    MOTION.Property.prototype.getField = function() {
+        return this._field
     };
 
     MOTION.Property.prototype.setOrder = function(order) {
@@ -1048,8 +1059,7 @@ Sine.easeBoth = function(t, b, c, d) {
             this._object[this._field] = this._begin.lerp(this._end, this._position);
         };
     }
-})(MOTION);
-(function(MOTION, undefined) {
+})(MOTION);(function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
         MOTION.MotionController.call(this, children)
 
@@ -1096,6 +1106,12 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
     };
+
+    if (usingP5) {
+        p5.prototype.createSequence = function(children) {
+            return new MOTION.Sequence(children);
+        }
+    }
 })(MOTION);
 (function(MOTION, undefined) {
     MOTION.KeyFrame = function(time, children) {
@@ -1241,16 +1257,29 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween
 
-    MOTION.Tween.prototype.play = function() {
-        MOTION.prototype.play.call(this);
+    MOTION.Tween.prototype._setupPlay = function() {
+        for (var i = 0; i < this._properties.length; i++)
+            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
 
-        this._isUpdatingProperties = true;
+        this.seek(0);
+        this.resume();
 
-        // console.log('------')
+        this._playCount++;
+        this._repeatCount = 0;
+
         for (var i = 0; i < this._properties.length; i++) {
             this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getBegin());
+            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
+    }
+
+    MOTION.Tween.prototype.play = function() {
+        this.dispatchStartedEvent();
+
+        // if (!this._asyncPlay) {
+        // this._isUpdatingProperties = true;
+        this._setupPlay();
+        // }
 
         return this;
     }
@@ -1264,7 +1293,6 @@ Sine.easeBoth = function(t, b, c, d) {
                 }
 
                 this.setTime(time);
-                // this.updateCalls();
                 this.updateProperties();
 
                 this.dispatchChangedEvent();
@@ -1272,9 +1300,8 @@ Sine.easeBoth = function(t, b, c, d) {
                 this.stop();
             }
         } else {
-            if (this._isRegistered && this._isPlaying) {
+            if (this._isPlaying) {
                 this.updateTime();
-                // this.updateCalls();
                 this.updateProperties();
 
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
@@ -1288,7 +1315,6 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
-            // this._properties[i].update(this.getPosition(), this._easing);
     };
 
     MOTION.Tween.prototype.seek = function(value) {
@@ -1306,17 +1332,17 @@ Sine.easeBoth = function(t, b, c, d) {
 
             if (arguments[0].getName())
                 this._propertyMap[arguments[0].getName()] = arguments[0];
-        } else { 
+        } else {
             var p;
 
-            if(typeof object[property] == 'number')
+            if (typeof object[property] == 'number')
                 p = new MOTION.NumberProperty(object, property, end);
-            else if(usingP5 && object[property] instanceof p5.Color)
+            else if (usingP5 && object[property] instanceof p5.Color)
                 p = new MOTION.ColorProperty(object, property, end);
-            else if(usingP5 && object[property] instanceof p5.Vector)
+            else if (usingP5 && object[property] instanceof p5.Vector)
                 p = new MOTION.VectorProperty(object, property, end);
             else
-                console.log('Only numbers, p5.colors and p5.vectors are supported.')
+                console.warn('Only numbers, p5.colors and p5.vectors are supported.')
 
             this._properties.push(p);
 
@@ -1361,4 +1387,20 @@ Sine.easeBoth = function(t, b, c, d) {
         } else
             return [];
     };
+
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        if (this._onStart) {
+            this._onStart(window);
+
+            this._isUpdatingProperties = false;
+            // this._asyncPlay = true;
+            // this._setupPlay();
+        }
+    }
+
+    if(usingP5){
+        p5.prototype.createTween = function(object, property, end, duration, delay, easing) {
+            return new MOTION.Tween(object, property, end, duration, delay, easing);
+        }
+    }
 })(MOTION)

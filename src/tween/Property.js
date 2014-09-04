@@ -3,7 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._name = field;
+        this._name = object+'.'+field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -61,14 +61,15 @@
     };
 
     MOTION.Property.prototype.getValue = function() {
-        if (this._field)
-            return this._object[this._field];
-        else
-            return this._value;
+        return this._object[this._field];
     };
 
     MOTION.Property.prototype.getObject = function() {
         return this._object
+    };
+
+    MOTION.Property.prototype.getField = function() {
+        return this._field
     };
 
     MOTION.Property.prototype.setOrder = function(order) {

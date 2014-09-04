@@ -1,4 +1,3 @@
-
 (function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
         MOTION.MotionController.call(this, children)
@@ -46,4 +45,10 @@
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
     };
+
+    if (usingP5) {
+        p5.prototype.createSequence = function(children) {
+            return new MOTION.Sequence(children);
+        }
+    }
 })(MOTION)

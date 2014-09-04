@@ -41,19 +41,19 @@
 
         this._isAutoUpdating = true;
 
-        this._isRegistered = false;
-
         this._reverseTime = 0;
 
         this._order = 0;
 
         this._onStart = undefined;
         this._onEnd = undefined;
-        this._onChange = undefined;
+        this._onUpdate = undefined;
         this._onRepeat = undefined;
 
-        if (usingP5) 
-            motions.push(this)   
+        this._asyncPlay = false;
+
+        if (usingP5)
+            motions.push(this)
     };
 
     MOTION.REVISION = '1';
@@ -71,8 +71,20 @@
 
     MOTION.prototype = {
         constructor: MOTION,
+
+        // _setupPlay: function() {
+        //     this.seek(0);
+        //     this.resume();
+
+        //     this._playCount++;
+        //     this._repeatCount = 0; 
+        // },
+
         play: function() {
             this.dispatchStartedEvent();
+
+            // if (!this._asyncPlay)
+            //     this._setupPlay();
 
             this.seek(0);
             this.resume();
@@ -109,13 +121,6 @@
         },
 
         pause: function() {
-            if (this._isRegistered) {
-                // if (this._isAutoUpdating)
-                //     p5.prototype.unregisterMethod('pre', this.update);
-
-                this._isRegistered = false;
-            }
-
             this._isPlaying = false;
 
             this._playTime = this._time;
@@ -124,13 +129,6 @@
         },
 
         resume: function() {
-            if (!this._isRegistered) {
-                // if (this._isAutoUpdating)
-                //     p5.prototype.registerMethod('pre', this.update);
-
-                this._isRegistered = true;
-            }
-
             this._isPlaying = true;
 
             if (usingP5)
@@ -146,7 +144,6 @@
 
             if (this._playTime != this._time) {
                 this.setTime(this._playTime);
-                // this.updateCalls();
             }
 
             return this;
@@ -184,15 +181,13 @@
                         this.play();
 
                     this.setTime(time);
-                    // this.updateCalls();
 
                     this.dispatchChangedEvent();
                 } else if (this._isPlaying)
                     this.stop();
             } else {
-                if (this._isRegistered && this._isPlaying) {
+                if (this._isPlaying) {
                     this.updateTime();
-                    // this.updateCalls();
 
                     if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                         this.stop();
@@ -252,8 +247,8 @@
             return this;
         },
 
-        onChange: function(func) {
-            this._onChange = func;
+        onUpdate: function(func) {
+            this._onUpdate = func;
             return this;
         },
 
@@ -443,8 +438,12 @@
         },
 
         dispatchStartedEvent: function() {
-            if (this._onStart)
+            if (this._onStart) {
                 this._onStart(window);
+
+                // this._asyncPlay = true;
+                // this._setupPlay();
+            }
         },
 
         dispatchEndedEvent: function() {
@@ -453,8 +452,8 @@
         },
 
         dispatchChangedEvent: function() {
-            if (this._onChange)
-                this._onChange(window);
+            if (this._onUpdate)
+                this._onUpdate(window);
         },
 
         dispatchRepeatedEvent: function() {
@@ -462,6 +461,12 @@
                 this._onRepeat(window);
         }
     };
+
+    if (usingP5) {
+        p5.prototype.createMotion = function(duration, delay, easing) {
+            return new MOTION(duration, delay, easing);
+        }
+    }
 
     window.MOTION = MOTION;
 })(window)

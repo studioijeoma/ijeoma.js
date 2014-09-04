@@ -20,16 +20,29 @@
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween
 
-    MOTION.Tween.prototype.play = function() {
-        MOTION.prototype.play.call(this);
+    MOTION.Tween.prototype._setupPlay = function() {
+        for (var i = 0; i < this._properties.length; i++)
+            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
 
-        this._isUpdatingProperties = true;
+        this.seek(0);
+        this.resume();
 
-        // console.log('------')
+        this._playCount++;
+        this._repeatCount = 0;
+
         for (var i = 0; i < this._properties.length; i++) {
             this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getBegin());
+            console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
+    }
+
+    MOTION.Tween.prototype.play = function() {
+        this.dispatchStartedEvent();
+
+        // if (!this._asyncPlay) {
+        // this._isUpdatingProperties = true;
+        this._setupPlay();
+        // }
 
         return this;
     }
@@ -43,7 +56,6 @@
                 }
 
                 this.setTime(time);
-                // this.updateCalls();
                 this.updateProperties();
 
                 this.dispatchChangedEvent();
@@ -51,9 +63,8 @@
                 this.stop();
             }
         } else {
-            if (this._isRegistered && this._isPlaying) {
+            if (this._isPlaying) {
                 this.updateTime();
-                // this.updateCalls();
                 this.updateProperties();
 
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
@@ -67,7 +78,6 @@
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
-            // this._properties[i].update(this.getPosition(), this._easing);
     };
 
     MOTION.Tween.prototype.seek = function(value) {
@@ -85,17 +95,17 @@
 
             if (arguments[0].getName())
                 this._propertyMap[arguments[0].getName()] = arguments[0];
-        } else { 
+        } else {
             var p;
 
-            if(typeof object[property] == 'number')
+            if (typeof object[property] == 'number')
                 p = new MOTION.NumberProperty(object, property, end);
-            else if(usingP5 && object[property] instanceof p5.Color)
+            else if (usingP5 && object[property] instanceof p5.Color)
                 p = new MOTION.ColorProperty(object, property, end);
-            else if(usingP5 && object[property] instanceof p5.Vector)
+            else if (usingP5 && object[property] instanceof p5.Vector)
                 p = new MOTION.VectorProperty(object, property, end);
             else
-                console.log('Only numbers, p5.colors and p5.vectors are supported.')
+                console.warn('Only numbers, p5.colors and p5.vectors are supported.')
 
             this._properties.push(p);
 
@@ -140,4 +150,20 @@
         } else
             return [];
     };
+
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        if (this._onStart) {
+            this._onStart(window);
+
+            this._isUpdatingProperties = false;
+            // this._asyncPlay = true;
+            // this._setupPlay();
+        }
+    }
+
+    if(usingP5){
+        p5.prototype.createTween = function(object, property, end, duration, delay, easing) {
+            return new MOTION.Tween(object, property, end, duration, delay, easing);
+        }
+    }
 })(MOTION)
