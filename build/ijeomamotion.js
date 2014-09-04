@@ -246,10 +246,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION = function(duration, delay, easing) {
         this._id = id++;
-        this._name = "";
-
-        this._calls = [];
-        this._callMap = [];
+        this._name = ""; 
 
         this._playTime = 0;
         this._playCount = 0;
@@ -432,36 +429,6 @@ Sine.easeBoth = function(t, b, c, d) {
                 this._time = this._reverseTime - this._time;
         },
 
-        updateCalls: function() {
-            // for (Callback c  = this._calls)
-            //  if (this.getTime() > c.getTime()) {
-            //      if (!c.hasInvoked())
-            //          c.invoke();
-            //  } else
-            //      c.noInvoke();
-        },
-
-        // Motion call(Object _object, _name) {
-        //  return addCall(new Callback(_object, _name, duration));
-        // }
-        // Motion call(Object _object, _name,  _time) {
-        //  return addCall(new Callback(_object, _name, _time));
-
-        addCall: function(_call) {
-            calls.push(_call);
-            return this;
-        },
-
-        removeCall: function(call) {
-            // calls.remove(call);
-            return this;
-        },
-
-        removeCalls: function() {
-            calls = [];
-            return this;
-        },
-
         onStart: function(func) {
             this._onStart = func;
             return this;
@@ -480,27 +447,6 @@ Sine.easeBoth = function(t, b, c, d) {
         onRepeat: function(func) {
             this._onRepeat = func;
             return this;
-        },
-
-        getCallback: function(index) {
-            if (index < calls.length) return calls[index];
-            else return null;
-        },
-
-        getCallback: function(name) {
-            return callMap[name];
-        },
-
-        getCallbacks: function() {
-            return calls;
-        },
-
-        getCallbackList: function() {
-            return calls;
-        },
-
-        getCallbackCount: function() {
-            return calls.length;
         },
 
         setName: function(name) {
@@ -726,8 +672,7 @@ Sine.easeBoth = function(t, b, c, d) {
                 if (!this._isPlaying)
                     this.play();
 
-                this.setTime(time);
-                this.updateCalls();
+                this.setTime(time); 
                 this.updateChildren();
 
                 this.dispatchChangedEvent();
@@ -736,8 +681,7 @@ Sine.easeBoth = function(t, b, c, d) {
             }
         } else { 
             if (this._isPlaying) {
-                this.updateTime();
-                this.updateCalls();
+                this.updateTime(); 
                 this.updateChildren()
 
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
@@ -798,10 +742,7 @@ Sine.easeBoth = function(t, b, c, d) {
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i]
             this._duration = Math.max(this._duration, c.getDelay() + c.getDuration());
-        }
-
-        // for (Callback c : calls)
-        //     duration = PApplet.max(duration, c.getTime() - getDelay());
+        } 
     };
 
     MOTION.MotionController.prototype.getPosition = function() {
@@ -895,13 +836,7 @@ Sine.easeBoth = function(t, b, c, d) {
             this.add(children[i]);
 
         return this;
-    };
-
-    // addCall = function(_call) {
-    //  calls.add(_call);
-    //  updateDuration();
-    //  return this;
-    // ,
+    }; 
 
     MOTION.MotionController.prototype.removeAll = function() {
         this._tweens = [];

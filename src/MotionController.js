@@ -36,8 +36,7 @@
                 if (!this._isPlaying)
                     this.play();
 
-                this.setTime(time);
-                this.updateCalls();
+                this.setTime(time); 
                 this.updateChildren();
 
                 this.dispatchChangedEvent();
@@ -46,8 +45,7 @@
             }
         } else { 
             if (this._isPlaying) {
-                this.updateTime();
-                this.updateCalls();
+                this.updateTime(); 
                 this.updateChildren()
 
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
@@ -108,10 +106,7 @@
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i]
             this._duration = Math.max(this._duration, c.getDelay() + c.getDuration());
-        }
-
-        // for (Callback c : calls)
-        //     duration = PApplet.max(duration, c.getTime() - getDelay());
+        } 
     };
 
     MOTION.MotionController.prototype.getPosition = function() {
@@ -205,13 +200,7 @@
             this.add(children[i]);
 
         return this;
-    };
-
-    // addCall = function(_call) {
-    //  calls.add(_call);
-    //  updateDuration();
-    //  return this;
-    // ,
+    }; 
 
     MOTION.MotionController.prototype.removeAll = function() {
         this._tweens = [];

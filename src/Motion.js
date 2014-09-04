@@ -6,10 +6,7 @@
 
     MOTION = function(duration, delay, easing) {
         this._id = id++;
-        this._name = "";
-
-        this._calls = [];
-        this._callMap = [];
+        this._name = ""; 
 
         this._playTime = 0;
         this._playCount = 0;
@@ -192,36 +189,6 @@
                 this._time = this._reverseTime - this._time;
         },
 
-        updateCalls: function() {
-            // for (Callback c  = this._calls)
-            //  if (this.getTime() > c.getTime()) {
-            //      if (!c.hasInvoked())
-            //          c.invoke();
-            //  } else
-            //      c.noInvoke();
-        },
-
-        // Motion call(Object _object, _name) {
-        //  return addCall(new Callback(_object, _name, duration));
-        // }
-        // Motion call(Object _object, _name,  _time) {
-        //  return addCall(new Callback(_object, _name, _time));
-
-        addCall: function(_call) {
-            calls.push(_call);
-            return this;
-        },
-
-        removeCall: function(call) {
-            // calls.remove(call);
-            return this;
-        },
-
-        removeCalls: function() {
-            calls = [];
-            return this;
-        },
-
         onStart: function(func) {
             this._onStart = func;
             return this;
@@ -240,27 +207,6 @@
         onRepeat: function(func) {
             this._onRepeat = func;
             return this;
-        },
-
-        getCallback: function(index) {
-            if (index < calls.length) return calls[index];
-            else return null;
-        },
-
-        getCallback: function(name) {
-            return callMap[name];
-        },
-
-        getCallbacks: function() {
-            return calls;
-        },
-
-        getCallbackList: function() {
-            return calls;
-        },
-
-        getCallbackCount: function() {
-            return calls.length;
         },
 
         setName: function(name) {
