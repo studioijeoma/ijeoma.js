@@ -1,6 +1,6 @@
 #ijeomamotion-js
  
-A Javascript library (which supports p5.js) for sketching animations. 
+A Javascript library (which supports p5.js) for sketching animations. Ijeoma means safe journey in Igbo, the language of my family from Nigeria. I started writing this a while back in Java for Processing then ported it to JS for processing.js and recently I've rewrote it for JS and p5.js.
 
 #Download 
 Developement
