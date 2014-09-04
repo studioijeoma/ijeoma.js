@@ -35,9 +35,12 @@
         this._playCount++;
         this._repeatCount = 0;
 
-        for (var i = 0; i < this._properties.length; i++) {
-            // this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        if (this._isAutoUpdating) {
+            console.log('asdf')
+            for (var i = 0; i < this._properties.length; i++) {
+                this._properties[i].setBegin();
+                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            }
         }
     }
 

@@ -4,9 +4,8 @@
 
     motions = [];
 
-    MOTION = function(duration, delay, easing) {
-        this._id = id++;
-        this._name = ""; 
+    MOTION = function(duration, delay, easing) { 
+        this._name = ''; 
 
         this._playTime = 0;
         this._playCount = 0;

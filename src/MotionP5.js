@@ -1,4 +1,6 @@
 (function(MOTION, undefined) {
+    REVISION = '1';
+
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < motions.length; i++)
             if (motions[i].isAutoUpdating())
@@ -21,8 +23,8 @@
         return new MOTION.Sequence(children);
     };
 
-    p5.prototype.createMotion = function(children) {
-        return new MOTION.Parallel(children);
+    p5.prototype.createTimeline = function(children) {
+        return new MOTION.Timeline(children);
     };
 
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {

@@ -244,9 +244,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
     motions = [];
 
-    MOTION = function(duration, delay, easing) {
-        this._id = id++;
-        this._name = ""; 
+    MOTION = function(duration, delay, easing) { 
+        this._name = ''; 
 
         this._playTime = 0;
         this._playCount = 0;
@@ -634,8 +633,7 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     window.MOTION = MOTION;
-})(window);
-(function(MOTION, undefined) { 
+})(window);(function(MOTION, undefined) {
     MOTION.MotionController = function(children) {
         MOTION.call(this);
 
@@ -672,16 +670,16 @@ Sine.easeBoth = function(t, b, c, d) {
                 if (!this._isPlaying)
                     this.play();
 
-                this.setTime(time); 
+                this.setTime(time);
                 this.updateChildren();
 
                 this.dispatchChangedEvent();
             } else if (this._isPlaying) {
                 this.stop();
             }
-        } else { 
+        } else {
             if (this._isPlaying) {
-                this.updateTime(); 
+                this.updateTime();
                 this.updateChildren()
 
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
@@ -710,7 +708,7 @@ Sine.easeBoth = function(t, b, c, d) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getName(); 
+                var name = p.getName();
 
                 if (name in orderMap) {
                     var pp = ppropertyMap[name];
@@ -723,7 +721,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
                     orderMap[name] = order;
                     ppropertyMap[name] = p;
-                } else { 
+                } else {
                     p.setBegin();
                     p.setOrder(0);
 
@@ -731,14 +729,12 @@ Sine.easeBoth = function(t, b, c, d) {
                     ppropertyMap[name] = p;
                 }
             }
-        } 
+        }
     };
 
     MOTION.MotionController.prototype.updateDuration = function() {
-        for (var i = 0; i < this._children.length; i++) {
-            var c = this._children[i]
-            this._duration = Math.max(this._duration, c.getDelay() + c.getDuration());
-        } 
+        for (var i = 0; i < this._children.length; i++)
+            this._duration = Math.max(this._duration, this._children[i].getDelay() + this._children[i].getDuration());
     };
 
     MOTION.MotionController.prototype.getPosition = function() {
@@ -765,10 +761,8 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.MotionController.prototype.setTimeScale = function(timeScale) {
         MOTION.prototype.setTimeScale.call(this, timeScale);
 
-        for (var i = 0; i < this._children.length; i++) {
-            var child = this._children[i]
-            child.setTimeScale(timeScale);
-        }
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].setTimeScale(timeScale);
 
         return this;
     };
@@ -776,10 +770,8 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.MotionController.prototype.setTimeMode = function(_durationMode) {
         MOTION.prototype.setTimeMode.call(this, _durationMode);
 
-        for (var i = 0; i < this._children.length; i++) {
-            var child = this._children[i];
-            child.setTimeMode(_durationMode);
-        }
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].setTimeMode(_durationMode);
 
         return this;
     };
@@ -791,10 +783,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
-        // _child.seek(1);
         child.setTimeMode(this._timeMode);
         child.noAutoUpdate();
-        // child.addEventListener(this);
 
         if (child.isTween()) {
             this._tweens.push(child);
@@ -832,7 +822,7 @@ Sine.easeBoth = function(t, b, c, d) {
             this.add(children[i]);
 
         return this;
-    }; 
+    };
 
     MOTION.MotionController.prototype.removeAll = function() {
         this._tweens = [];
@@ -1143,9 +1133,12 @@ Sine.easeBoth = function(t, b, c, d) {
         this._playCount++;
         this._repeatCount = 0;
 
-        for (var i = 0; i < this._properties.length; i++) {
-            // this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        if (this._isAutoUpdating) {
+            console.log('asdf')
+            for (var i = 0; i < this._properties.length; i++) {
+                this._properties[i].setBegin();
+                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            }
         }
     }
 
@@ -1258,6 +1251,8 @@ Sine.easeBoth = function(t, b, c, d) {
         }
     }
 })(MOTION);(function(MOTION, undefined) {
+    REVISION = '1';
+
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < motions.length; i++)
             if (motions[i].isAutoUpdating())
@@ -1280,8 +1275,8 @@ Sine.easeBoth = function(t, b, c, d) {
         return new MOTION.Sequence(children);
     };
 
-    p5.prototype.createMotion = function(children) {
-        return new MOTION.Parallel(children);
+    p5.prototype.createTimeline = function(children) {
+        return new MOTION.Timeline(children);
     };
 
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
