@@ -977,22 +977,29 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Timeline.prototype.constructor = MOTION.Timeline,
 
     MOTION.Timeline.prototype.add = function(child, time) {
-        if (typeof time != 'undefined') {
-            var k = this.get(time + '');
-
-            if (typeof k != 'undefined') {
-                k.add(child);
-            } else {
-                k = new MOTION.Keyframe(time + '', time);
-                k.add(child);
-
-                this.insert(k, time);
-            }
+        if (child.isKeyframe()) {
+            if (typeof time != 'undefined') 
+                this.insert(child, time);
+            else
+                this.insert(child, child.getDelay());
         } else {
-            var c = this._childrenMap.get(child.getName());
-            c.add(child);
+            if (typeof time != 'undefined') {
+                var k = this.get(time + '');
 
-            this._children[children.indexOf(c)] = c;
+                if (typeof k != 'undefined') {
+                    k.add(child);
+                } else {
+                    k = new MOTION.Keyframe(time + '', time);
+                    k.add(child);
+
+                    this.insert(k, time);
+                }
+            } else {
+                var c = this._childrenMap.get(child.getName());
+                c.add(child);
+
+                this._children[children.indexOf(c)] = c;
+            }
         }
 
         return this;
@@ -1361,32 +1368,17 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end)
-        this._value = this._begin.get();
+        MOTION.Property.call(this, object, field, end) 
     };
 
     MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
     MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
 
-    MOTION.VectorProperty.prototype.update = function(position) {
-        this._position = position;
-        // this._object[this._field].set(
-        //     lerp(this._begin.x, this._end.x, this._position),
-        //     lerp(this._begin.y, this._end.y, this._position),
-        //     lerp(this._begin.z, this._end.z, this._position))
-        this._object[this._field].set(this._value.lerp(this._end, this._position));
-
-    };
-
-    MOTION.VectorProperty.prototype.setBegin = function(begin) {
-        if (begin)
-            this._begin = begin;
-        else
-            this._begin = (typeof this._object[this._field] == "undefined") ? 0 : this._object[this._field];
-
-        this._value = this._begin.get();
-    };
-
+    MOTION.VectorProperty.prototype.update = function(position) { 
+        this._position = position; 
+        console.log(this._position)
+        this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
+    }; 
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p;

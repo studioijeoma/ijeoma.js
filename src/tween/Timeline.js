@@ -14,22 +14,29 @@
     MOTION.Timeline.prototype.constructor = MOTION.Timeline,
 
     MOTION.Timeline.prototype.add = function(child, time) {
-        if (typeof time != 'undefined') {
-            var k = this.get(time + '');
-
-            if (typeof k != 'undefined') {
-                k.add(child);
-            } else {
-                k = new MOTION.Keyframe(time + '', time);
-                k.add(child);
-
-                this.insert(k, time);
-            }
+        if (child.isKeyframe()) {
+            if (typeof time != 'undefined') 
+                this.insert(child, time);
+            else
+                this.insert(child, child.getDelay());
         } else {
-            var c = this._childrenMap.get(child.getName());
-            c.add(child);
+            if (typeof time != 'undefined') {
+                var k = this.get(time + '');
 
-            this._children[children.indexOf(c)] = c;
+                if (typeof k != 'undefined') {
+                    k.add(child);
+                } else {
+                    k = new MOTION.Keyframe(time + '', time);
+                    k.add(child);
+
+                    this.insert(k, time);
+                }
+            } else {
+                var c = this._childrenMap.get(child.getName());
+                c.add(child);
+
+                this._children[children.indexOf(c)] = c;
+            }
         }
 
         return this;
