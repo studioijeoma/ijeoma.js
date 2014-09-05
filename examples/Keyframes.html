@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tween.js / simplest possible example!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <script type="text/javascript" src="p5.js"></script>
+    <script type="text/javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var t;
+
+    var k1y1;
+    var k2y1, k2y2;
+
+    function setup() {
+        createCanvas(400, 200);
+
+        ellipseMode(CORNER);
+        smooth();
+
+        t = new MOTION.Timeline();
+
+        y1 =0;
+        k1 = new MOTION.Keyframe(0)
+            .add(new MOTION.Tween(this, "y1", height, 100))
+
+        y2 = height;
+        k2 = new MOTION.Keyframe(100)
+            .add(new MOTION.Tween(this, "y1", height, 100))
+            .add(new MOTION.Tween(this, "y2", -height, 100));
+
+        y3 = -height;
+        k3 = new MOTION.Keyframe(200)
+            .add(new MOTION.Tween(-height, height, 100))
+            .add(new MOTION.Tween(height, -height, 100))
+            .add(new MOTION.Tween(-height, height, 100));
+ 
+        t.add(k1, 100);
+        t.add(k2, 200);
+        t.add(k3, 300); 
+ 
+        t.repeat().play();
+
+        console.log(t)
+    }
+
+    function draw() {
+        background(255);
+
+        rect
+
+    }
+
+    function keyPressed() {
+        if (key == '1')
+            t.gotoAndPlay("ONE");
+        else if (key == '2')
+            t.gotoAndPlay("TWO");
+        else if (key == '3')
+            t.gotoAndPlay("THREE");
+        else if (key == '4')
+            t.gotoAndPlay("FOUR");
+        else if (key == '5')
+            t.gotoAndPlay("FIVE");
+        else
+            t.play();
+    }
+
+    function mousePressed() {
+        t.pause();
+    }
+
+    function mouseReleased() {
+        t.resume();
+    }
+
+    function mouseDragged() {
+        t.seek(norm(mouseX, 0, width));
+    }
+    </script>
+</body>
+
+</html>

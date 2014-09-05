@@ -961,14 +961,13 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
     }; 
-})(MOTION);
-(function(MOTION, undefined) {
-    MOTION.KeyFrame = function(time, children) {
+})(MOTION);(function(MOTION, undefined) {
+    MOTION.Keyframe = function(time, children) {
         MOTION.MotionController.call(this, children)
         this.delay(time);
     };
 
-    MOTION.KeyFrame.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Keyframe.prototype = Object.create(MOTION.MotionController.prototype);
 
     MOTION.Timeline = function() {
         MOTION.MotionController.call(this);
@@ -979,22 +978,21 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Timeline.prototype.add = function(child, time) {
         if (typeof time != 'undefined') {
-            var keyFrame = this.getChild(time + "");
+            var k = this.get(time + '');
 
-            if (typeof keyFrame != 'undefined')
-                keyFrame.add(child);
-            else {
-                keyFrame = new MOTION.KeyFrame(time);
-                keyFrame.add(child);
+            if (typeof k != 'undefined') {
+                k.add(child);
+            } else {
+                k = new MOTION.Keyframe(time + '', time);
+                k.add(child);
 
-                this.insert(keyFrame, time);
+                this.insert(k, time);
             }
-            console.log(keyFrame)
         } else {
-            var c = this._childrenMap[child.getName()];
-            c.push(child);
+            var c = this._childrenMap.get(child.getName());
+            c.add(child);
 
-            this._children[this._children.indexOf(c)] = c;
+            this._children[children.indexOf(c)] = c;
         }
 
         return this;
@@ -1002,56 +1000,31 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Timeline.prototype.getChild = function(index) {
         if (typeof arguments[0] == 'number') {
-            var keyFrame = null;
+            var k = null;
 
             for (var i = 0; i < children.length; i++) {
                 var c = this.chilren[i];
 
                 if (c.getTime() == arguments[0])
-                    keyFrame = c;
+                    k = c;
             }
 
-            // return keyFrame;
+            // return k;
             return this._childrenMap[arguments[0] + ''];
-        } else if (typeof arguments == 'string') {
+        } else if (typeof arguments == 'string')
             return this._childrenMap[arguments[0]];
-        }  
+        else
+            return getCurrentChildren();
     };
 
-    MOTION.Timeline.prototype.getKeyFrameCount = function() {
-        return this._keyFrames.length;
-    };
-
-    MOTION.Timeline.prototype.getCurrentKeyFrames = function() {
-        var currentKeyFrames = [];
+    MOTION.Timeline.prototype.getCurrentChildren = function() {
+        var currentKeyframes = [];
 
         for (var i = 0; i < this._children.length; i++)
             if (this._children[i].isInsidePlayingTime(this.getTime()))
                 currentKeyFrames.push(children[i]);
 
         return currentKeyFrames;
-    };
-
-    MOTION.Timeline.prototype.getCurrentKeyFrameIndices = function() {
-        var indices = [];
-
-        for (var i = 0; i < this._children.length; i++)
-            if (this._children[i].isInsidePlayingTime(getTime()))
-                indices.push(i);
-
-        return indices;
-    };
-
-    MOTION.Timeline.prototype.getKeyFrames = function() {
-        return this._children;
-    };
-
-    MOTION.Timeline.prototype.getKeyFrameTime = function(name) {
-        return this.getChild(name).getTime();
-    };
-
-    MOTION.Timeline.prototype.getKeyFrameChildren = function(name) {
-        return this.getChild(name).getChildren();
     };
 
     MOTION.Timeline.prototype.gotoAndPlay = function(time) {
@@ -1269,6 +1242,75 @@ Sine.easeBoth = function(t, b, c, d) {
         return t;
     };
 
+    currentParallel = null;
+
+    p5.prototype.beginParallel = function(name) {
+        currentParallel = new MOTION.Parallel();;
+        if (typeof name != 'undefined')
+            currentParallel.setName(name)
+
+        return currentParallel;
+    }
+
+    p5.prototype.endParallel = function() {
+        currentParallel.updateTweens();
+        currentParallel = null
+    }
+
+    currentSequence = null;
+
+    p5.prototype.beginSequence = function(name) {
+        currentSequence = new MOTION.Sequence();
+        if (typeof name != 'undefined')
+            currentSequence.setName(name)
+
+        return currentSequence;
+    }
+
+    p5.prototype.endSequence = function() {
+        currentSequence.updateTweens();
+        currentSequence = null
+    }
+
+    currentTimeline = null;
+
+    p5.prototype.beginTimeline = function(name) {
+        currentTimeline = new MOTION.Timeline();
+        if (typeof name != 'undefined')
+            currentTimeline.setName(name)
+
+        return currentTimeline;
+    }
+
+    p5.prototype.endTimeline = function() {
+        currentTimeline.updateTweens();
+        currentTimeline = null
+    }
+
+    currentKeyframe = null;
+
+    p5.prototype.beginKeyframe = function(name, time) {
+        currentKeyframe = new MOTION.keyFrame();
+
+        if (arguments.length == 1 && typeof arguments[0] != 'undefined') {
+            if (typeof arguments[0] == 'number')
+                currentKeyframe.delay(arguments[0])
+            else if (typeof arguments[0] == 'string')
+                currentKeyframe.setName(arguments[0])
+        } else if (arguments.length == 2) {
+            currentKeyframe.setName(name)
+            currentKeyframe.delay(time)
+        }
+
+        return currentKeyframe;
+    }
+
+    p5.prototype.endkeyFrame = function() {
+        currentKeyframe.updateTweens();
+        currentTimeline.add(currentKeyframe)
+        currentKeyframe = null
+    }
+
     p5.prototype.play = function(m) {
         m.play();
     };
@@ -1288,30 +1330,6 @@ Sine.easeBoth = function(t, b, c, d) {
     p5.prototype.seek = function(m, t) {
         m.seek(t);
     };
-
-    currentSequence = null;
-
-    p5.prototype.beginSequence = function(name) {
-        currentSequence = new MOTION.Sequence().setName(name);
-        return currentSequence;
-    }
-
-    p5.prototype.endSequence = function() {
-        currentSequence.updateTweens();
-        currentSequence = null
-    }
-
-    currentParallel = null;
-
-    p5.prototype.beginParallel = function(name) {
-        currentParallel = new MOTION.Parallel().setName(name);;
-        return currentParallel;
-    }
-
-    p5.prototype.endParallel = function() {
-        currentParallel.updateTweens();
-        currentParallel = null
-    }
 
     MOTION.timeMode = MOTION.FRAMES;
 
@@ -1343,7 +1361,7 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end) 
+        MOTION.Property.call(this, object, field, end)
         this._value = this._begin.get();
     };
 
@@ -1360,7 +1378,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     };
 
-     MOTION.VectorProperty.prototype.setBegin = function(begin) {
+    MOTION.VectorProperty.prototype.setBegin = function(begin) {
         if (begin)
             this._begin = begin;
         else

@@ -38,6 +38,75 @@
         return t;
     };
 
+    currentParallel = null;
+
+    p5.prototype.beginParallel = function(name) {
+        currentParallel = new MOTION.Parallel();;
+        if (typeof name != 'undefined')
+            currentParallel.setName(name)
+
+        return currentParallel;
+    }
+
+    p5.prototype.endParallel = function() {
+        currentParallel.updateTweens();
+        currentParallel = null
+    }
+
+    currentSequence = null;
+
+    p5.prototype.beginSequence = function(name) {
+        currentSequence = new MOTION.Sequence();
+        if (typeof name != 'undefined')
+            currentSequence.setName(name)
+
+        return currentSequence;
+    }
+
+    p5.prototype.endSequence = function() {
+        currentSequence.updateTweens();
+        currentSequence = null
+    }
+
+    currentTimeline = null;
+
+    p5.prototype.beginTimeline = function(name) {
+        currentTimeline = new MOTION.Timeline();
+        if (typeof name != 'undefined')
+            currentTimeline.setName(name)
+
+        return currentTimeline;
+    }
+
+    p5.prototype.endTimeline = function() {
+        currentTimeline.updateTweens();
+        currentTimeline = null
+    }
+
+    currentKeyframe = null;
+
+    p5.prototype.beginKeyframe = function(name, time) {
+        currentKeyframe = new MOTION.keyFrame();
+
+        if (arguments.length == 1 && typeof arguments[0] != 'undefined') {
+            if (typeof arguments[0] == 'number')
+                currentKeyframe.delay(arguments[0])
+            else if (typeof arguments[0] == 'string')
+                currentKeyframe.setName(arguments[0])
+        } else if (arguments.length == 2) {
+            currentKeyframe.setName(name)
+            currentKeyframe.delay(time)
+        }
+
+        return currentKeyframe;
+    }
+
+    p5.prototype.endkeyFrame = function() {
+        currentKeyframe.updateTweens();
+        currentTimeline.add(currentKeyframe)
+        currentKeyframe = null
+    }
+
     p5.prototype.play = function(m) {
         m.play();
     };
@@ -57,30 +126,6 @@
     p5.prototype.seek = function(m, t) {
         m.seek(t);
     };
-
-    currentSequence = null;
-
-    p5.prototype.beginSequence = function(name) {
-        currentSequence = new MOTION.Sequence().setName(name);
-        return currentSequence;
-    }
-
-    p5.prototype.endSequence = function() {
-        currentSequence.updateTweens();
-        currentSequence = null
-    }
-
-    currentParallel = null;
-
-    p5.prototype.beginParallel = function(name) {
-        currentParallel = new MOTION.Parallel().setName(name);;
-        return currentParallel;
-    }
-
-    p5.prototype.endParallel = function() {
-        currentParallel.updateTweens();
-        currentParallel = null
-    }
 
     MOTION.timeMode = MOTION.FRAMES;
 
@@ -112,7 +157,7 @@
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end) 
+        MOTION.Property.call(this, object, field, end)
         this._value = this._begin.get();
     };
 
@@ -129,7 +174,7 @@
 
     };
 
-     MOTION.VectorProperty.prototype.setBegin = function(begin) {
+    MOTION.VectorProperty.prototype.setBegin = function(begin) {
         if (begin)
             this._begin = begin;
         else
