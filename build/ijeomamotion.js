@@ -354,10 +354,10 @@ Sine.easeBoth = function(t, b, c, d) {
             this._playTime = (this._delay + this._duration) * value;
 
             if (this._playTime != this._time) {
-                // this.setTime(this._playTime);
-                this._isPlaying =true;
-                this.update(this._playTime);
-                this._isPlaying =false;
+                this.setTime(this._playTime);
+                // this._isPlaying =true;
+                // this.update(this._playTime);
+                // this._isPlaying =false;
             }
 
             return this;
@@ -1157,7 +1157,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        // this.updateProperties();
+        this.updateProperties();
 
         return this;
     };

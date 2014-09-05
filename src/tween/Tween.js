@@ -74,7 +74,7 @@
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        // this.updateProperties();
+        this.updateProperties();
 
         return this;
     };
