@@ -354,7 +354,10 @@ Sine.easeBoth = function(t, b, c, d) {
             this._playTime = (this._delay + this._duration) * value;
 
             if (this._playTime != this._time) {
-                this.setTime(this._playTime);
+                // this.setTime(this._playTime);
+                this._isPlaying =true;
+                this.update(this._playTime);
+                this._isPlaying =false;
             }
 
             return this;
@@ -631,17 +634,18 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
+    MOTION.MotionController.prototype.play = function() {
+        MOTION.prototype.play.call(this); 
+    }
+
     MOTION.MotionController.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i];
 
-            if (c.isInsidePlayingTime(this.getTime())) {
-                c._isUpdatingProperties = true;
+            if (c.isInsidePlayingTime(this.getTime())) 
                 c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
-            } else
-                c._isUpdatingProperties = false;
         }
 
         return this;
@@ -674,10 +678,8 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) {
-            this._children[i]._isUpdatingProperties = (i == 0);
-            this._children[i].update(this.getTime());
-        }
+        for (var i = 0; i < this._children.length; i++) 
+            this._children[i].update(this.getTime()); 
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {
@@ -1086,8 +1088,6 @@ Sine.easeBoth = function(t, b, c, d) {
         this._properties = [];
         this._propertyMap = [];
 
-        this._isUpdatingProperties = true;
-
         if (typeof arguments[1] == 'string') {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2])
@@ -1126,10 +1126,8 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.update = function(time) {
         if (time) {
             if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying) {
-                    // this._isUpdatingProperties =false;
+                if (!this._isPlaying)
                     this.play();
-                }
 
                 this.setTime(time);
                 this.updateProperties();
@@ -1159,8 +1157,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        // if (this._isUpdatingProperties)
-        this.updateProperties();
+        // this.updateProperties();
 
         return this;
     };
@@ -1212,12 +1209,24 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._onStart) {
-            this._onStart(window);
+        if (this._onStart)
+            this._onStart(window, this._object);
+    };
 
-            this._isUpdatingProperties = false; 
-        }
-    }
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        if (this._onEnd)
+            this._onEnd(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        if (this._onUpdate)
+            this._onUpdate(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
+        if (this._onRepeat)
+            this._onRepeat(window, this._object);
+    };
 })(MOTION);(function(MOTION, undefined) {
     REVISION = '1';
 

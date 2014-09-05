@@ -13,17 +13,18 @@
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
+    MOTION.MotionController.prototype.play = function() {
+        MOTION.prototype.play.call(this); 
+    }
+
     MOTION.MotionController.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i];
 
-            if (c.isInsidePlayingTime(this.getTime())) {
-                c._isUpdatingProperties = true;
+            if (c.isInsidePlayingTime(this.getTime())) 
                 c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
-            } else
-                c._isUpdatingProperties = false;
         }
 
         return this;
@@ -56,10 +57,8 @@
     };
 
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) {
-            this._children[i]._isUpdatingProperties = (i == 0);
-            this._children[i].update(this.getTime());
-        }
+        for (var i = 0; i < this._children.length; i++) 
+            this._children[i].update(this.getTime()); 
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {

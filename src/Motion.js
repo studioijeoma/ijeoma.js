@@ -114,7 +114,10 @@
             this._playTime = (this._delay + this._duration) * value;
 
             if (this._playTime != this._time) {
-                this.setTime(this._playTime);
+                // this.setTime(this._playTime);
+                this._isPlaying =true;
+                this.update(this._playTime);
+                this._isPlaying =false;
             }
 
             return this;

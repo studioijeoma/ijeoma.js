@@ -1,0 +1,61 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+var c,t;
+var circles = []
+function setup() {
+    createCanvas(720, 400);
+    noStroke();
+    
+    c = new Circle(width/2,height/2,100,255,100);
+    circles.push(c)
+
+    var i = 0;
+    t = new MOTION.Tween(circles[i],100)
+    .add('alpha',255)
+    .onStart(function() {
+        circles[i].alpha = 0;
+    })
+    .play();
+}
+function draw() {
+    background(100);
+    
+    circles[0].draw();
+}
+function mouseDragged() {
+    t.seek(mouseX / width)
+}
+function keyTyped() {
+    if (key == 'a')
+        t.pause();
+    else if (key == 's')
+        t.resume();
+    else if (key == 'd')
+        t.play();
+    else if (key == 'f')
+        t.stop();
+}
+Circle = function(x, y, r, color,alpha) {
+    this.x = x;
+    this.y = y;
+    this.r = r;
+    this.color = color;
+    this.alpha = 255;
+    this.draw= function() {
+        fill(this.color, this.alpha);
+        ellipse(this.x, this.y,this.r,this.r);
+    }
+    
+    return this;
+}
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+<body>
+</body>

@@ -5,8 +5,6 @@
         this._properties = [];
         this._propertyMap = [];
 
-        this._isUpdatingProperties = true;
-
         if (typeof arguments[1] == 'string') {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2])
@@ -45,10 +43,8 @@
     MOTION.Tween.prototype.update = function(time) {
         if (time) {
             if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying) {
-                    // this._isUpdatingProperties =false;
+                if (!this._isPlaying)
                     this.play();
-                }
 
                 this.setTime(time);
                 this.updateProperties();
@@ -78,8 +74,7 @@
     MOTION.Tween.prototype.seek = function(value) {
         MOTION.prototype.seek.call(this, value);
 
-        // if (this._isUpdatingProperties)
-        this.updateProperties();
+        // this.updateProperties();
 
         return this;
     };
@@ -131,10 +126,22 @@
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._onStart) {
-            this._onStart(window);
+        if (this._onStart)
+            this._onStart(window, this._object);
+    };
 
-            this._isUpdatingProperties = false; 
-        }
-    }
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        if (this._onEnd)
+            this._onEnd(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        if (this._onUpdate)
+            this._onUpdate(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
+        if (this._onRepeat)
+            this._onRepeat(window, this._object);
+    };
 })(MOTION)
