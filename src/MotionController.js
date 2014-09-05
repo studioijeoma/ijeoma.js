@@ -15,6 +15,7 @@
 
     MOTION.MotionController.prototype.play = function() {
         MOTION.prototype.play.call(this); 
+        return this;
     }
 
     MOTION.MotionController.prototype.seek = function(value) {
@@ -105,14 +106,14 @@
         return this.getTime() / this._duration;
     };
 
-    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
-
     MOTION.MotionController.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
             return this._children[arguments[0]]
         else
             return this._childrenMap[arguments[0]];
     };
+
+    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
 
     MOTION.MotionController.prototype.getChildren = function() {
         return this._children;

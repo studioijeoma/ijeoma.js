@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Tween.js / simplest possible example!</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+
+<body>
+    <script type="text/javascript" src="p5.js"></script>
+    <script type="text/javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var c1, c2, c3, c4;
+    var x1, x2, x3, x4;
+    var ts;
+
+    function setup() {
+        createCanvas(400, 400);
+
+        smooth();
+ 
+        c1 = c2 = c3 = c4 = color(255);
+        x1 = x2 = x3 = x4 = -width;
+
+        var d = 100;
+
+        ts = new MOTION.Sequence();
+        ts.add(new MOTION.Tween(d)
+            .add("x1", width)
+            .add("c1", color(0)));
+        ts.add(new MOTION.Tween(d)
+            .add("x2", width)
+            .add("c2", color(0)));
+        ts.add(new MOTION.Tween(d)
+            .add("x3", width)
+            .add("c3", color(0)));
+        ts.add(new MOTION.Tween(d)
+            .add("x4", width)
+            .add("c4", color(0))); 
+        ts.reverse().repeat().play();
+    }
+
+    function draw() {
+        background(255);
+
+        // ts.update();
+
+        noStroke();
+
+        fill(0);
+        fill(c1);
+        rect(x1, 0, width, 100);
+        fill(c2);
+        rect(x2, 100, width, 100);
+        fill(c3);
+        rect(x3, 200, width, 100);
+        fill(c4);
+        rect(x4, 300, width, 100);
+
+        fill(0);
+
+        var time = ts.get(0).getTime() + " / " + ts.get(0).getDuration();
+        fill((ts.get(0).isPlaying() ? color(0, 255, 0) : color(255, 0,
+            0)));
+        text(time, 10, 10 + 12);
+
+        time = ts.get(1).getTime() + " / " + ts.get(1).getDuration();
+        fill((ts.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0,
+            0)));
+        text(time, 10, 100 + 10 + 12);
+
+        time = ts.get(2).getTime() + " / " + ts.get(2).getDuration();
+        fill((ts.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0,
+            0)));
+        text(time, 10, 200 + 10 + 12);
+
+        time = ts.get(3).getTime() + " / " + ts.get(3).getDuration();
+        fill((ts.get(3).isPlaying() ? color(0, 255, 0) : color(255, 0,
+            0)));
+        text(time, 10, 300 + 10 + 12);
+
+        time = ts.getTime() + " / " + ts.getDuration();
+        fill((ts.isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
+        text(time, width - textWidth(time) - 10, height - 10);
+    }
+
+    function keyPressed() {
+        ts.play();
+    }
+
+    function mousePressed() {
+        ts.pause();
+    }
+
+    function mouseReleased() {
+        ts.resume();
+    }
+
+    function mouseDragged() {
+        ts.seek(mouseX / width);
+    }
+    </script>
+</body>
+
+</html>

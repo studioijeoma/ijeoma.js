@@ -12,13 +12,13 @@
     };
 
     MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
-    // MOTION.Timeline.prototype.constructor = MOTION.Timeline,
+    MOTION.Timeline.prototype.constructor = MOTION.Timeline,
 
     MOTION.Timeline.prototype.add = function(child, time) {
-        if (time) {
+        if (typeof time != 'undefined') {
             var keyFrame = this.getChild(time + "");
 
-            if (keyFrame)
+            if (typeof keyFrame != 'undefined')
                 keyFrame.add(child);
             else {
                 keyFrame = new MOTION.KeyFrame(time);
@@ -26,7 +26,7 @@
 
                 this.insert(keyFrame, time);
             }
-
+            console.log(keyFrame)
         } else {
             var c = this._childrenMap[child.getName()];
             c.push(child);
@@ -44,7 +44,7 @@
             for (var i = 0; i < children.length; i++) {
                 var c = this.chilren[i];
 
-                if (c.getTime() == time)
+                if (c.getTime() == arguments[0])
                     keyFrame = c;
             }
 
@@ -52,8 +52,7 @@
             return this._childrenMap[arguments[0] + ''];
         } else if (typeof arguments == 'string') {
             return this._childrenMap[arguments[0]];
-        } else
-            return this.getCurrentKeyFrames();
+        }  
     };
 
     MOTION.Timeline.prototype.getKeyFrameCount = function() {

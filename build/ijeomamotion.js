@@ -636,6 +636,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.MotionController.prototype.play = function() {
         MOTION.prototype.play.call(this); 
+        return this;
     }
 
     MOTION.MotionController.prototype.seek = function(value) {
@@ -726,14 +727,14 @@ Sine.easeBoth = function(t, b, c, d) {
         return this.getTime() / this._duration;
     };
 
-    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
-
     MOTION.MotionController.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
             return this._children[arguments[0]]
         else
             return this._childrenMap[arguments[0]];
     };
+
+    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
 
     MOTION.MotionController.prototype.getChildren = function() {
         return this._children;
@@ -972,13 +973,13 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
-    // MOTION.Timeline.prototype.constructor = MOTION.Timeline,
+    MOTION.Timeline.prototype.constructor = MOTION.Timeline,
 
     MOTION.Timeline.prototype.add = function(child, time) {
-        if (time) {
+        if (typeof time != 'undefined') {
             var keyFrame = this.getChild(time + "");
 
-            if (keyFrame)
+            if (typeof keyFrame != 'undefined')
                 keyFrame.add(child);
             else {
                 keyFrame = new MOTION.KeyFrame(time);
@@ -986,7 +987,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
                 this.insert(keyFrame, time);
             }
-
+            console.log(keyFrame)
         } else {
             var c = this._childrenMap[child.getName()];
             c.push(child);
@@ -1004,7 +1005,7 @@ Sine.easeBoth = function(t, b, c, d) {
             for (var i = 0; i < children.length; i++) {
                 var c = this.chilren[i];
 
-                if (c.getTime() == time)
+                if (c.getTime() == arguments[0])
                     keyFrame = c;
             }
 
@@ -1012,8 +1013,7 @@ Sine.easeBoth = function(t, b, c, d) {
             return this._childrenMap[arguments[0] + ''];
         } else if (typeof arguments == 'string') {
             return this._childrenMap[arguments[0]];
-        } else
-            return this.getCurrentKeyFrames();
+        }  
     };
 
     MOTION.Timeline.prototype.getKeyFrameCount = function() {
