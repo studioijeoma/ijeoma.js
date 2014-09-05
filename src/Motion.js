@@ -36,9 +36,7 @@
         this._onStart = undefined;
         this._onEnd = undefined;
         this._onUpdate = undefined;
-        this._onRepeat = undefined;
-
-        this._asyncPlay = false;
+        this._onRepeat = undefined; 
 
         motions.push(this);
     };
@@ -59,19 +57,8 @@
     MOTION.prototype = {
         constructor: MOTION,
 
-        // _setupPlay: function() {
-        //     this.seek(0);
-        //     this.resume();
-
-        //     this._playCount++;
-        //     this._repeatCount = 0; 
-        // },
-
         play: function() {
-            this.dispatchStartedEvent();
-
-            // if (!this._asyncPlay)
-            //     this._setupPlay();
+            this.dispatchStartedEvent(); 
 
             this.seek(0);
             this.resume();
@@ -368,12 +355,8 @@
         },
 
         dispatchStartedEvent: function() {
-            if (this._onStart) {
-                this._onStart(window);
-
-                // this._asyncPlay = true;
-                // this._setupPlay();
-            }
+            if (this._onStart) 
+                this._onStart(window);  
         },
 
         dispatchEndedEvent: function() {

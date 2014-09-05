@@ -13,7 +13,7 @@
             else
                 MOTION.call(this, duration, delay, easing)
 
-                this.addProperty(this._object, property, end);
+            this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2])
@@ -23,34 +23,21 @@
     };
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
-    MOTION.Tween.prototype.constrctor = MOTION.Tween
+    MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype._setupPlay = function() {
-        // for (var i = 0; i < this._properties.length; i++)
-        //     console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-
+    MOTION.Tween.prototype.play = function() {
         this.seek(0);
         this.resume();
 
         this._playCount++;
         this._repeatCount = 0;
 
-        if (this._isAutoUpdating) {
-            console.log('asdf')
-            for (var i = 0; i < this._properties.length; i++) {
-                this._properties[i].setBegin();
-                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-            }
-        }
-    }
-
-    MOTION.Tween.prototype.play = function() {
         this.dispatchStartedEvent();
 
-        // if (!this._asyncPlay) {
-        // this._isUpdatingProperties = true;
-        this._setupPlay();
-        // }
+        for (var i = 0; i < this._properties.length; i++) {
+            this._properties[i].setBegin();
+            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        }
 
         return this;
     }
@@ -147,9 +134,7 @@
         if (this._onStart) {
             this._onStart(window);
 
-            this._isUpdatingProperties = false;
-            // this._asyncPlay = true;
-            // this._setupPlay();
+            this._isUpdatingProperties = false; 
         }
     }
 })(MOTION)
