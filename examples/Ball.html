@@ -1,41 +1,37 @@
 <script language="javascript" src="p5.js"></script>
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
-var x, y, diameter;
+var x, y, w, h;
 var s;
 
 function setup() {
-    createCanvas(512, 512); 
-    noStroke(); 
+    createCanvas(512, 512);
+    noStroke();
 
     x = 50;
-    y = 50;
-    diameter = 10; 
+    y = height / 2;
+    w = 100;
+    h = 100;
 
-    // s = new MOTION.Sequence();
-    // s.add(new MOTION.Tween(100).add('diameter', 55))
-    // s.add(new MOTION.Tween(100).add('x', 400).add('y', 100))
-    // s.add(new MOTION.Tween(100).add('x', 450).add('y', 400))
-    // s.add(new MOTION.Tween(100).add('x', 100).add('y', 450))
-    // s.add(new MOTION.Tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5))  
-    // s.play();
+    // s = beginParallel();
+    // tween(25).add('x', 400) 
+    // s.insert(tween(50).add('w', 50),25)
+    // endParallel();
+    // s.play(); 
+    // t1 = new MOTION.Tween(this, 'x', width - w, 50).repeat().reverse().play()
+    t2 = new MOTION.Tween(this, 'w', w / 2, 10, 40)
+        .onStart(function() {
 
-    s = beginSequence();
-    tween(100).add('diameter', 55)
-    tween(100).add('x', 400).add('y', 100)
-    tween(100).add('x', 450).add('y', 400)
-    tween(100).add('x', 100).add('y', 450)
-    tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5)
-    endSequence();
-    play(s); 
+        })
+        .repeatDelay().play()
 }
 
 function draw() {
     fill(255, 255);
-    rect(0, 0, width, height); 
+    rect(0, 0, width, height);
 
     fill(0);
-    ellipse(x, y, diameter, diameter);
+    ellipse(x, y, w, h);
 }
 
 function mouseDragged() {
@@ -51,13 +47,13 @@ function keyTyped() {
         s.play();
     else if (key == 'f')
         s.stop();
-} 
+}
 </script>
 <style>
 body {
     padding: 0;
 }
-</style> 
+</style>
 </head>
 
 <body>

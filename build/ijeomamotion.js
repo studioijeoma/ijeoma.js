@@ -363,10 +363,10 @@ Sine.easeBoth = function(t, b, c, d) {
             return this;
         },
 
-        repeat: function(repeat) {
+        repeat: function(duration) {
             this._isRepeating = true;
 
-            if (repeat) this._repeatDuration = repeat;
+            if (typeof repeat != 'undefined') this._repeatDuration = duration;
 
             return this;
         },
@@ -493,12 +493,14 @@ Sine.easeBoth = function(t, b, c, d) {
             return this._delay;
         },
 
-        repeatDelay: function() {
+        repeatDelay: function(duration) {
+            this.repeat(duration)
             this._isRepeatingDelay = true;
             return this;
         },
 
         noRepeatDelay: function() {
+            this.noRepeat();
             this._isRepeatingDelay = false;
             return this;
         },
