@@ -3,9 +3,10 @@
 A Javascript library (which supports p5.js) for sketching animations. Ijeoma means safe journey in Igbo, the language of my family from Nigeria. I started writing this a while back in Java for Processing then ported it to JS for processing.js and recently I've rewrote it for JS and p5.js.
 
 #Download 
-Developement
+Developement: 
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.js
-Production
+
+Production: 
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.min.js
 
 #Getting Started 
@@ -70,17 +71,17 @@ t = new MOTION.Tween(100).onStart(func).onUpdate(func).onEnd(func).play();
 ##How to playback Tweens 
 ###Delaying
 ```javascript
-t = new MOTION.Tween("w", width, 50, 50).play();
+var t = new MOTION.Tween("w", width, 50, 50).play(); //delay for 50 frames
 ```
 or
 ```javascript
-t = new MOTION.Tween(this,50,50).add("w", width).delay(50).play();
+var t = new MOTION.Tween(this,50,50).add("w", width).delay(50).play();
 ```
 ###Pausing, Resuming  
 ```javascript  
-  t.pause(); 
-  t.resume(); 
-  t.seek(time); 
+t.pause(); 
+t.resume(); 
+t.seek(time); 
 ```
 ###Repeating
 ```javascript
@@ -93,31 +94,26 @@ var t = new MOTION.Tween("w", width, 100).repeat().reverse().play();
 
 ##How to playback tweens in parallel
 ```javascript
-Parallel p = new MOTION.Parallel()
-  .add(new MOTION.Tween("x1", width, 100))
-  .add(new MOTION.Tween("x2", -width, 200))
+var p = new MOTION.Parallel()
+  .add(new MOTION.Tween(...)) 
+  .add(new MOTION.Tween(...)) 
   .play(); 
 ```
 
 ##How to playback tweens in a sequence
 ```javascript
-Sequence s = new MOTION.Sequence()
-  .add(new MOTION.Tween(100).add("x1", width).add("c1", color(0))
-  .add(new MOTION.Tween(75).add("x2", width).add("c2", color(0))
-  .add(new MOTION.Tween(50).add("x3", width).add("c3", color(0))
-  .add(new MOTION.Tween(25).add("x4", width).add("c4", color(0))
+var s = new MOTION.Sequence()
+  .add(new MOTION.Tween(...)) 
+  .add(new MOTION.Tween(...))  
   .repeat()
   .play();
 ```
 
 ##How to playback tweens in a timeline
 ```javascript
-Timeline t = new MOTION.Timeline()
-  .add(new MOTION.Tween(50).add("y1",  height).add("c1", color(0))
-  .add(new MOTION.Tween(50).add("y2", -height).add("c2", color(0))
-  .add(new MOTION.Tween(50).add("y3",  height).add("c3", color(0))
-  .add(new MOTION.Tween(50).add("y4", -height).add("c4", color(0))
-  .add(new MOTION.Tween(50).add("y5",  height).add("c5", color(0))
+var t = new MOTION.Timeline()
+  .add(new MOTION.Tween(...)) 
+  .add(new MOTION.Tween(...))  
   .repeat()
   .play();
 ```
