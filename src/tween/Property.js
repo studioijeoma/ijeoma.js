@@ -14,13 +14,11 @@
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-        // if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
-        // _this._easing(this.getTime() / this._duration, 0, 1, 1)
-        // PApplet.lerp(begin, end, this._position); 
-        // this._object[this._field] = easing(this._position, this._begin, this._change, 1);
-        // }
-
-        this._object[this._field] = this._position * (this._end - this._begin) + this._begin
+        if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
+            // _this._easing(this.getTime() / this._duration, 0, 1, 1)  
+            this._object[this._field] = this._position * (this._end - this._begin) + this._begin
+        } else
+            console.log(this._position)
     };
 
     MOTION.Property.prototype.getName = function() {
