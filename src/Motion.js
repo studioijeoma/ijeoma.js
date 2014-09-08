@@ -148,7 +148,7 @@
             return this;
         },
 
-        update: function(time) {   
+        update: function(time) {
             if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
                 this.play();
 
@@ -158,9 +158,9 @@
                 else
                     this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time)) 
                     this.stop();
-
+                 
                 this.dispatchChangedEvent();
             }
         },
@@ -314,15 +314,15 @@
         },
 
         isInsideDelayingTime: function(value) {
-            return (value >= 0 && value < this._delay);
+            return (value > 0 && value < this._delay);
         },
 
         isInsidePlayingTime: function(value) {
-            return (value >= this._delay && value <= this._delay + this._duration);
+            return (value > this._delay && value <= this._delay + this._duration);
         },
 
         isAbovePlayingTime: function(value) {
-            return value >= this._delay + this._duration;
+            return value > this._delay + this._duration;
         },
 
         isTween: function() {
@@ -355,22 +355,22 @@
 
         dispatchStartedEvent: function() {
             if (this._onStart)
-                this._onStart(window);
+                this._onStart(window, this._object);
         },
 
         dispatchEndedEvent: function() {
             if (this._onEnd)
-                this._onEnd(window);
+                this._onEnd(window, this._object);
         },
 
         dispatchChangedEvent: function() {
             if (this._onUpdate)
-                this._onUpdate(window);
+                this._onUpdate(window, this._object);
         },
 
         dispatchRepeatedEvent: function() {
             if (this._onRepeat)
-                this._onRepeat(window);
+                this._onRepeat(window, this._object);
         }
     };
 

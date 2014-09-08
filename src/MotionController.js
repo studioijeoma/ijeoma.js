@@ -31,25 +31,6 @@
         return this;
     };
 
-    MOTION.MotionController.prototype.update = function(time) {
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-
-        if (this._isPlaying) {
-            if (typeof time == 'undefined')
-                this.updateTime();
-            else
-                this.setTime(time);
-
-            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                this.stop();
-
-            this.updateChildren();
-
-            this.dispatchChangedEvent();
-        }
-    };
-
     MOTION.MotionController.prototype.updateChildren = function() {
         for (var i = 0; i < this._children.length; i++)
             this._children[i].update(this.getTime());
@@ -190,4 +171,11 @@
 
         return this;
     };
+
+    MOTION.MotionController.prototype.dispatchChangedEvent = function() {
+        this.updateChildren();
+
+        if (this._onUpdate)
+            this._onUpdate(window);
+    }; 
 })(MOTION)

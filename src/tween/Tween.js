@@ -40,25 +40,6 @@
         return this;
     }
 
-    MOTION.Tween.prototype.update = function(time) {
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-
-        if (this._isPlaying) {
-            if (typeof time == 'undefined')
-                this.updateTime();
-            else
-                this.setTime(time);
-
-            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                this.stop();
-
-            this.updateProperties();
-
-            this.dispatchChangedEvent();
-        }
-    };
-
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
@@ -118,23 +99,10 @@
             return [];
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._onStart)
-            this._onStart(window, this._object);
-    };
+MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        this.updateProperties();
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        if (this._onEnd)
-            this._onEnd(window, this._object);
-    };
-
-    MOTION.Tween.prototype.dispatchChangedEvent = function() {
         if (this._onUpdate)
-            this._onUpdate(window, this._object);
-    };
-
-    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
-        if (this._onRepeat)
-            this._onRepeat(window, this._object);
-    };
+            this._onUpdate(window);
+    }; 
 })(MOTION)

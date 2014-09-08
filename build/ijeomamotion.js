@@ -388,7 +388,7 @@ Sine.easeBoth = function(t, b, c, d) {
             return this;
         },
 
-        update: function(time) {   
+        update: function(time) {
             if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
                 this.play();
 
@@ -398,9 +398,9 @@ Sine.easeBoth = function(t, b, c, d) {
                 else
                     this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time)) 
                     this.stop();
-
+                 
                 this.dispatchChangedEvent();
             }
         },
@@ -554,15 +554,15 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         isInsideDelayingTime: function(value) {
-            return (value >= 0 && value < this._delay);
+            return (value > 0 && value < this._delay);
         },
 
         isInsidePlayingTime: function(value) {
-            return (value >= this._delay && value <= this._delay + this._duration);
+            return (value > this._delay && value <= this._delay + this._duration);
         },
 
         isAbovePlayingTime: function(value) {
-            return value >= this._delay + this._duration;
+            return value > this._delay + this._duration;
         },
 
         isTween: function() {
@@ -595,22 +595,22 @@ Sine.easeBoth = function(t, b, c, d) {
 
         dispatchStartedEvent: function() {
             if (this._onStart)
-                this._onStart(window);
+                this._onStart(window, this._object);
         },
 
         dispatchEndedEvent: function() {
             if (this._onEnd)
-                this._onEnd(window);
+                this._onEnd(window, this._object);
         },
 
         dispatchChangedEvent: function() {
             if (this._onUpdate)
-                this._onUpdate(window);
+                this._onUpdate(window, this._object);
         },
 
         dispatchRepeatedEvent: function() {
             if (this._onRepeat)
-                this._onRepeat(window);
+                this._onRepeat(window, this._object);
         }
     };
 
@@ -646,25 +646,6 @@ Sine.easeBoth = function(t, b, c, d) {
         }
 
         return this;
-    };
-
-    MOTION.MotionController.prototype.update = function(time) {
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-
-        if (this._isPlaying) {
-            if (typeof time == 'undefined')
-                this.updateTime();
-            else
-                this.setTime(time);
-
-            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                this.stop();
-
-            this.updateChildren();
-
-            this.dispatchChangedEvent();
-        }
     };
 
     MOTION.MotionController.prototype.updateChildren = function() {
@@ -807,6 +788,13 @@ Sine.easeBoth = function(t, b, c, d) {
 
         return this;
     };
+
+    MOTION.MotionController.prototype.dispatchChangedEvent = function() {
+        this.updateChildren();
+
+        if (this._onUpdate)
+            this._onUpdate(window);
+    }; 
 })(MOTION);(function(MOTION, undefined) {
 	MOTION.Parallel = function(children) {
 		MOTION.MotionController.call(this, name, children);
@@ -1090,25 +1078,6 @@ Sine.easeBoth = function(t, b, c, d) {
         return this;
     }
 
-    MOTION.Tween.prototype.update = function(time) {
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-
-        if (this._isPlaying) {
-            if (typeof time == 'undefined')
-                this.updateTime();
-            else
-                this.setTime(time);
-
-            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                this.stop();
-
-            this.updateProperties();
-
-            this.dispatchChangedEvent();
-        }
-    };
-
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
@@ -1168,25 +1137,12 @@ Sine.easeBoth = function(t, b, c, d) {
             return [];
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._onStart)
-            this._onStart(window, this._object);
-    };
+MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        this.updateProperties();
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        if (this._onEnd)
-            this._onEnd(window, this._object);
-    };
-
-    MOTION.Tween.prototype.dispatchChangedEvent = function() {
         if (this._onUpdate)
-            this._onUpdate(window, this._object);
-    };
-
-    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
-        if (this._onRepeat)
-            this._onRepeat(window, this._object);
-    };
+            this._onUpdate(window);
+    }; 
 })(MOTION);(function(MOTION, undefined) {
     REVISION = '1';
 
