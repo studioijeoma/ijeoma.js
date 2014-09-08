@@ -398,10 +398,10 @@ Sine.easeBoth = function(t, b, c, d) {
                 else
                     this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time)) 
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
-                 
-                this.dispatchChangedEvent();
+                else
+                    this.dispatchChangedEvent();
             }
         },
 
@@ -461,7 +461,8 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         getPosition: function() {
-            return this._easing(this.getTime() / this._duration, 0, 1, 1)
+            var t = this.getTime();
+            return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1)
         },
 
         setDuration: function(_duration) {
