@@ -11,7 +11,7 @@
             else
                 MOTION.call(this, duration, delay, easing)
 
-            this.addProperty(this._object, property, end);
+                this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2])
@@ -41,28 +41,21 @@
     }
 
     MOTION.Tween.prototype.update = function(time) {
-        if (time) {
-            if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying)
-                    this.play();
+        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+            this.play();
 
-                this.setTime(time);
-                this.updateProperties();
-
-                this.dispatchChangedEvent();
-            } else if (this._isPlaying) {
-                this.stop();
-            }
-        } else {
-            if (this._isPlaying) {
+        if (this._isPlaying) {
+            if (typeof time == 'undefined')
                 this.updateTime();
-                this.updateProperties();
+            else
+                this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                    this.stop();
-                else
-                    this.dispatchChangedEvent();
-            }
+            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                this.stop();
+
+            this.updateProperties();
+
+            this.dispatchChangedEvent();
         }
     };
 

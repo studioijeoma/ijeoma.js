@@ -14,7 +14,7 @@
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.play = function() {
-        MOTION.prototype.play.call(this); 
+        MOTION.prototype.play.call(this);
         return this;
     }
 
@@ -24,7 +24,7 @@
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i];
 
-            if (c.isInsidePlayingTime(this.getTime())) 
+            if (c.isInsidePlayingTime(this.getTime()))
                 c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
         }
 
@@ -32,34 +32,27 @@
     };
 
     MOTION.MotionController.prototype.update = function(time) {
-        if (time) {
-            if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying)
-                    this.play();
+        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+            this.play();
 
-                this.setTime(time);
-                this.updateChildren();
-
-                this.dispatchChangedEvent();
-            } else if (this._isPlaying) {
-                this.stop();
-            }
-        } else {
-            if (this._isPlaying) {
+        if (this._isPlaying) {
+            if (typeof time == 'undefined')
                 this.updateTime();
-                this.updateChildren()
+            else
+                this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                    this.stop();
-                else
-                    this.dispatchChangedEvent();
-            }
+            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                this.stop();
+
+            this.updateChildren();
+
+            this.dispatchChangedEvent();
         }
     };
 
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) 
-            this._children[i].update(this.getTime()); 
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].update(this.getTime());
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {

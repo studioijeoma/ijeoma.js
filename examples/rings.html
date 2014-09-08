@@ -1,0 +1,79 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+var c, t;
+var rings = [];
+var s = 0;
+
+function setup() {
+    console.log('asdf')
+
+    createCanvas(720, 400);
+    noStroke();
+
+    for (var i = 0; i < 1; i++) {  
+        var c = new Ring();
+        rings.push(c)
+
+        // t = new MOTION.Tween(c, random(25, 100))
+        //     .add('r', random(10, 100))
+        //     .repeat()
+        //     .reverse()
+        //     .play();
+    }
+}
+
+function draw() {
+    background(0);
+     for(var i = 0; i < rings.length; i++)
+        rings[i].draw();
+}
+
+function mouseDragged() {
+    t.seek(mouseX / width);
+}
+
+function keyTyped() {
+    if (key == 'a')
+        t.pause();
+    else if (key == 's')
+        t.resume();
+    else if (key == 'd')
+        t.play();
+    else if (key == 'f')
+        t.stop();
+}
+
+Ring = function(x, y, r, color, alpha) {
+    this.x = width/2;
+    this.y = height/2;
+    this.r = 100;
+    this.s = 0;
+    this.color = color;
+    this.alpha = alpha;
+    this.tween = new MOTION.Tween(this,'s', 1, 10).play(); 
+
+    this.draw = function() {
+        // console.log(this.tween.getTime())
+        strokeWeight(5)
+        noFill();
+        stroke(255)
+        push()
+        scale(s)
+        ellipse(this.x, this.y, this.r, this.r);
+        pop()
+    }
+
+    return this;
+}
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+
+<body>
+</body>

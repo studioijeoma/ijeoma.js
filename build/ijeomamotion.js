@@ -244,8 +244,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
     motions = [];
 
-    MOTION = function(duration, delay, easing) { 
-        this._name = ''; 
+    MOTION = function(duration, delay, easing) {
+        this._name = '';
 
         this._playTime = 0;
         this._playCount = 0;
@@ -276,7 +276,7 @@ Sine.easeBoth = function(t, b, c, d) {
         this._onStart = undefined;
         this._onEnd = undefined;
         this._onUpdate = undefined;
-        this._onRepeat = undefined; 
+        this._onRepeat = undefined;
 
         motions.push(this);
     };
@@ -298,7 +298,7 @@ Sine.easeBoth = function(t, b, c, d) {
         constructor: MOTION,
 
         play: function() {
-            this.dispatchStartedEvent(); 
+            this.dispatchStartedEvent();
 
             this.seek(0);
             this.resume();
@@ -388,26 +388,20 @@ Sine.easeBoth = function(t, b, c, d) {
             return this;
         },
 
-        update: function(time) {
-            if (time) {
-                if (this.isInsidePlayingTime(time)) {
-                    if (!this._isPlaying)
-                        this.play();
+        update: function(time) {   
+            if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+                this.play();
 
+            if (this._isPlaying) {
+                if (typeof time == 'undefined')
+                    this.updateTime();
+                else
                     this.setTime(time);
 
-                    this.dispatchChangedEvent();
-                } else if (this._isPlaying)
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
-            } else {
-                if (this._isPlaying) {
-                    this.updateTime();
 
-                    if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                        this.stop();
-                    else
-                        this.dispatchChangedEvent();
-                }
+                this.dispatchChangedEvent();
             }
         },
 
@@ -600,8 +594,8 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         dispatchStartedEvent: function() {
-            if (this._onStart) 
-                this._onStart(window);  
+            if (this._onStart)
+                this._onStart(window);
         },
 
         dispatchEndedEvent: function() {
@@ -637,7 +631,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.play = function() {
-        MOTION.prototype.play.call(this); 
+        MOTION.prototype.play.call(this);
         return this;
     }
 
@@ -647,7 +641,7 @@ Sine.easeBoth = function(t, b, c, d) {
         for (var i = 0; i < this._children.length; i++) {
             var c = this._children[i];
 
-            if (c.isInsidePlayingTime(this.getTime())) 
+            if (c.isInsidePlayingTime(this.getTime()))
                 c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
         }
 
@@ -655,34 +649,27 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.MotionController.prototype.update = function(time) {
-        if (time) {
-            if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying)
-                    this.play();
+        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+            this.play();
 
-                this.setTime(time);
-                this.updateChildren();
-
-                this.dispatchChangedEvent();
-            } else if (this._isPlaying) {
-                this.stop();
-            }
-        } else {
-            if (this._isPlaying) {
+        if (this._isPlaying) {
+            if (typeof time == 'undefined')
                 this.updateTime();
-                this.updateChildren()
+            else
+                this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                    this.stop();
-                else
-                    this.dispatchChangedEvent();
-            }
+            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                this.stop();
+
+            this.updateChildren();
+
+            this.dispatchChangedEvent();
         }
     };
 
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) 
-            this._children[i].update(this.getTime()); 
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].update(this.getTime());
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {
@@ -1074,7 +1061,7 @@ Sine.easeBoth = function(t, b, c, d) {
             else
                 MOTION.call(this, duration, delay, easing)
 
-            this.addProperty(this._object, property, end);
+                this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2])
@@ -1104,28 +1091,21 @@ Sine.easeBoth = function(t, b, c, d) {
     }
 
     MOTION.Tween.prototype.update = function(time) {
-        if (time) {
-            if (this.isInsidePlayingTime(time)) {
-                if (!this._isPlaying)
-                    this.play();
+        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+            this.play();
 
-                this.setTime(time);
-                this.updateProperties();
-
-                this.dispatchChangedEvent();
-            } else if (this._isPlaying) {
-                this.stop();
-            }
-        } else {
-            if (this._isPlaying) {
+        if (this._isPlaying) {
+            if (typeof time == 'undefined')
                 this.updateTime();
-                this.updateProperties();
+            else
+                this.setTime(time);
 
-                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                    this.stop();
-                else
-                    this.dispatchChangedEvent();
-            }
+            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+                this.stop();
+
+            this.updateProperties();
+
+            this.dispatchChangedEvent();
         }
     };
 

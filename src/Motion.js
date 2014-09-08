@@ -4,8 +4,8 @@
 
     motions = [];
 
-    MOTION = function(duration, delay, easing) { 
-        this._name = ''; 
+    MOTION = function(duration, delay, easing) {
+        this._name = '';
 
         this._playTime = 0;
         this._playCount = 0;
@@ -36,7 +36,7 @@
         this._onStart = undefined;
         this._onEnd = undefined;
         this._onUpdate = undefined;
-        this._onRepeat = undefined; 
+        this._onRepeat = undefined;
 
         motions.push(this);
     };
@@ -58,7 +58,7 @@
         constructor: MOTION,
 
         play: function() {
-            this.dispatchStartedEvent(); 
+            this.dispatchStartedEvent();
 
             this.seek(0);
             this.resume();
@@ -148,26 +148,20 @@
             return this;
         },
 
-        update: function(time) {
-            if (time) {
-                if (this.isInsidePlayingTime(time)) {
-                    if (!this._isPlaying)
-                        this.play();
+        update: function(time) {   
+            if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+                this.play();
 
+            if (this._isPlaying) {
+                if (typeof time == 'undefined')
+                    this.updateTime();
+                else
                     this.setTime(time);
 
-                    this.dispatchChangedEvent();
-                } else if (this._isPlaying)
+                if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
-            } else {
-                if (this._isPlaying) {
-                    this.updateTime();
 
-                    if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
-                        this.stop();
-                    else
-                        this.dispatchChangedEvent();
-                }
+                this.dispatchChangedEvent();
             }
         },
 
@@ -360,8 +354,8 @@
         },
 
         dispatchStartedEvent: function() {
-            if (this._onStart) 
-                this._onStart(window);  
+            if (this._onStart)
+                this._onStart(window);
         },
 
         dispatchEndedEvent: function() {
