@@ -15,6 +15,11 @@
 
     MOTION.MotionController.prototype.play = function() {
         MOTION.prototype.play.call(this);
+
+        for (var i = 0; i < this._children.length; i++) {
+            this._children[i].seek(0);
+        }
+
         return this;
     }
 
@@ -26,6 +31,10 @@
 
             if (c.isInsidePlayingTime(this.getTime()))
                 c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
+            else if (c.isAbovePlayingTime(this.getTime()))
+                c.seek(1);
+            else
+                c.seek(0);
         }
 
         return this;
@@ -42,31 +51,29 @@
 
         for (var i = 0; i < this._tweens.length; i++) {
             var t = this._tweens[i];
-            var properties = t.getProperties();
+            var properties = t.get();
 
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getId();
+                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName(); 
+                var order = 0;
 
                 if (name in orderMap) {
-                    var pp = ppropertyMap[name];
-
-                    var order = orderMap[name];
+                    order = orderMap[name]
                     order++;
-
-                    p.setBegin(pp.getEnd());
-                    p.setOrder(order);
-
-                    orderMap[name] = order;
-                    ppropertyMap[name] = p;
-                } else {
+ 
+                    var pp = ppropertyMap[name];
+                    p.setBegin(pp.getEnd()); 
+                } else
                     p.setBegin();
-                    p.setOrder(0);
 
-                    orderMap[name] = 0;
-                    ppropertyMap[name] = p;
-                }
+                p.setOrder(order);
+
+                orderMap[name] = order;
+                ppropertyMap[name] = p;
+
+
             }
         }
     };
@@ -173,9 +180,9 @@
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateChildren(); 
+        this.updateChildren();
 
         if (this._onUpdate)
             this._onUpdate(window);
-    }; 
+    };
 })(MOTION)

@@ -23,7 +23,7 @@
     };
 
     MOTION.Property.prototype.getId = function() {
-        return this._name;
+        return this._id;
     };
 
     MOTION.Property.prototype.getName = function() {

@@ -4,7 +4,16 @@
 
     motions = [];
 
-    MOTION = function(duration, delay, easing) {
+    MOTION = function(duration, delay, easing) { 
+        if (this.isTween())
+            this._id = 'Tween' + id++;
+        else if (this.isParallel())
+            this._id = 'Parallel' + id++;
+        else if (this.isSequence())
+            this._id = 'Sequence' + id++;
+        else if (this.isTimeline())
+            this._id = 'Timeline' + id++;
+ 
         this._name = '';
 
         this._playTime = 0;
@@ -161,7 +170,7 @@
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
                 else
-                    this.dispatchChangedEvent(); 
+                    this.dispatchChangedEvent();
             }
         },
 
