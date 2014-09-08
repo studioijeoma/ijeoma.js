@@ -99,10 +99,10 @@
             return [];
     };
 
-MOTION.Tween.prototype.dispatchChangedEvent = function() {
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
 
         if (this._onUpdate)
             this._onUpdate(window);
-    }; 
+    };
 })(MOTION)

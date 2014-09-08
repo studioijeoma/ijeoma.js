@@ -3,7 +3,8 @@
         this._object = object;
         this._field = field;
 
-        this._name = object + '.' + field;
+        this._id = object + '.' + field;
+        this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -21,12 +22,17 @@
             console.log(this._position)
     };
 
+    MOTION.Property.prototype.getId = function() {
+        return this._name;
+    };
+
     MOTION.Property.prototype.getName = function() {
         return this._name;
     };
 
     MOTION.Property.prototype.setName = function(name) {
         this._name = name;
+        return this;
     };
 
     MOTION.Property.prototype.getBegin = function() {
@@ -38,6 +44,7 @@
             this._begin = begin;
         else
             this._begin = (typeof this._object[this._field] == "undefined") ? 0 : this._object[this._field];
+        return this;
     };
 
     MOTION.Property.prototype.getEnd = function() {
@@ -46,6 +53,7 @@
 
     MOTION.Property.prototype.setEnd = function(end) {
         this._end = end;
+        return this;
     };
 
     MOTION.Property.prototype.getPosition = function() {
@@ -55,6 +63,7 @@
     MOTION.Property.prototype.setPosition = function(position) {
         this._position = position;
         this.update();
+        return this;
     };
 
     MOTION.Property.prototype.getValue = function() {
@@ -71,6 +80,7 @@
 
     MOTION.Property.prototype.setOrder = function(order) {
         this._order = order
+        return this;
     };
 
     MOTION.Property.prototype.getOrder = function() {

@@ -47,7 +47,7 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getName();
+                var name = p.getId();
 
                 if (name in orderMap) {
                     var pp = ppropertyMap[name];
@@ -173,7 +173,7 @@
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateChildren();
+        this.updateChildren(); 
 
         if (this._onUpdate)
             this._onUpdate(window);

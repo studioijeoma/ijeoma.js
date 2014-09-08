@@ -13,37 +13,16 @@ function setup() {
 
     for (var i = 0; i < 10; i++) {
         var c = new Ring(width / 2, height / 2, 500, 255);
-        c.tween = new MOTION.Tween(c, 50*i, 10 * i).add('s', 1).add('alpha', 0).play().reverse().repeat();
+        c.tween = tween(c, 75 * i, 50 * i).add('s', 1).add('alpha', 0).play().reverse().repeat();
 
-        rings.push(c) 
+        rings.push(c)
     }
 }
 
 function draw() {
     background(0);
     for (var i = 0; i < rings.length; i++)
-        rings[i].draw();
-
-
-    // fill(255)
-    // for(var i = 0; i < rings.length; i++) {
-    // text(rings[i].tween.getTime(),10,20*i+20); 
-    // }
-}
-
-function mouseDragged() {
-    t.seek(mouseX / width);
-}
-
-function keyTyped() {
-    if (key == 'a')
-        t.pause();
-    else if (key == 's')
-        t.resume();
-    else if (key == 'd')
-        t.play();
-    else if (key == 'f')
-        t.stop();
+        rings[i].draw(); 
 }
 
 Ring = function(x, y, r, color) {

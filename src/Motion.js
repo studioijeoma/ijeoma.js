@@ -161,7 +161,7 @@
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
                 else
-                    this.dispatchChangedEvent();
+                    this.dispatchChangedEvent(); 
             }
         },
 
@@ -222,7 +222,7 @@
 
         getPosition: function() {
             var t = this.getTime();
-            return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1)
+            return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1);
         },
 
         setDuration: function(_duration) {
@@ -315,15 +315,15 @@
         },
 
         isInsideDelayingTime: function(value) {
-            return (value > 0 && value < this._delay);
+            return (value >= 0 && value < this._delay);
         },
 
         isInsidePlayingTime: function(value) {
-            return (value > this._delay && value <= this._delay + this._duration);
+            return (value >= this._delay && value <= this._delay + this._duration);
         },
 
         isAbovePlayingTime: function(value) {
-            return value > this._delay + this._duration;
+            return value >= this._delay + this._duration;
         },
 
         isTween: function() {

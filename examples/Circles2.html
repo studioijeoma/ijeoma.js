@@ -8,15 +8,21 @@ function setup() {
     createCanvas(720, 400);
     noStroke();
 
-    for (var i = 0; i < 1000; i++) {  
+    for (var i = 0; i < 100; i++) {  
         var c = new Circle(random(width), random(height), 0, random(255), 255);
         circles.push(c)
 
-        t = new MOTION.Tween(c, random(25, 100))
-            .add('r', random(10, 100))
-            .repeat()
-            .reverse()
-            .play();
+        c.tween = new MOTION.Tween(c, random(50, 100))
+            .add('r', random(5, 25))
+            .add('x', random(width))
+            .add('y', random(height)) 
+            .onEnd(function(window,circle){ 
+                this.get('r').setBegin().setEnd(random(100))
+                this.get('x').setBegin().setEnd(random(width))
+                this.get('y').setBegin().setEnd(random(height)) 
+                this.play() 
+            })
+            .play() 
     }
 }
 

@@ -401,7 +401,7 @@ Sine.easeBoth = function(t, b, c, d) {
                 if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
                     this.stop();
                 else
-                    this.dispatchChangedEvent();
+                    this.dispatchChangedEvent(); 
             }
         },
 
@@ -462,7 +462,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
         getPosition: function() {
             var t = this.getTime();
-            return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1)
+            return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1);
         },
 
         setDuration: function(_duration) {
@@ -555,15 +555,15 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         isInsideDelayingTime: function(value) {
-            return (value > 0 && value < this._delay);
+            return (value >= 0 && value < this._delay);
         },
 
         isInsidePlayingTime: function(value) {
-            return (value > this._delay && value <= this._delay + this._duration);
+            return (value >= this._delay && value <= this._delay + this._duration);
         },
 
         isAbovePlayingTime: function(value) {
-            return value > this._delay + this._duration;
+            return value >= this._delay + this._duration;
         },
 
         isTween: function() {
@@ -665,7 +665,7 @@ Sine.easeBoth = function(t, b, c, d) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = p.getName();
+                var name = p.getId();
 
                 if (name in orderMap) {
                     var pp = ppropertyMap[name];
@@ -791,7 +791,7 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateChildren();
+        this.updateChildren(); 
 
         if (this._onUpdate)
             this._onUpdate(window);
@@ -808,7 +808,8 @@ Sine.easeBoth = function(t, b, c, d) {
         this._object = object;
         this._field = field;
 
-        this._name = object + '.' + field;
+        this._id = object + '.' + field;
+        this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -826,12 +827,17 @@ Sine.easeBoth = function(t, b, c, d) {
             console.log(this._position)
     };
 
+    MOTION.Property.prototype.getId = function() {
+        return this._name;
+    };
+
     MOTION.Property.prototype.getName = function() {
         return this._name;
     };
 
     MOTION.Property.prototype.setName = function(name) {
         this._name = name;
+        return this;
     };
 
     MOTION.Property.prototype.getBegin = function() {
@@ -843,6 +849,7 @@ Sine.easeBoth = function(t, b, c, d) {
             this._begin = begin;
         else
             this._begin = (typeof this._object[this._field] == "undefined") ? 0 : this._object[this._field];
+        return this;
     };
 
     MOTION.Property.prototype.getEnd = function() {
@@ -851,6 +858,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Property.prototype.setEnd = function(end) {
         this._end = end;
+        return this;
     };
 
     MOTION.Property.prototype.getPosition = function() {
@@ -860,6 +868,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Property.prototype.setPosition = function(position) {
         this._position = position;
         this.update();
+        return this;
     };
 
     MOTION.Property.prototype.getValue = function() {
@@ -876,6 +885,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Property.prototype.setOrder = function(order) {
         this._order = order
+        return this;
     };
 
     MOTION.Property.prototype.getOrder = function() {
@@ -1138,12 +1148,12 @@ Sine.easeBoth = function(t, b, c, d) {
             return [];
     };
 
-MOTION.Tween.prototype.dispatchChangedEvent = function() {
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
 
         if (this._onUpdate)
             this._onUpdate(window);
-    }; 
+    };
 })(MOTION);(function(MOTION, undefined) {
     REVISION = '1';
 
