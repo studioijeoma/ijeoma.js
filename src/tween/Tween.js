@@ -20,29 +20,12 @@
         }
     };
 
-    
+
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.play = function() {  
-        this.seek(0);
-        this.resume();
-
-        this._playCount++;
-        this._repeatCount = 0;
-
-        this.dispatchStartedEvent();
-
-        for (var i = 0; i < this._properties.length; i++) {
-            // this._properties[i].setBegin();            
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-        }
-
-        return this;
-    }
-
-    MOTION.Tween.prototype.updateProperties = function() { 
+    MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -80,5 +63,13 @@
 
         if (this._onUpdate)
             this._onUpdate(window);
+    };
+
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        for (var i = 0; i < this._properties.length; i++) {
+            // if (this.isRelative())
+            //     this._properties[i].setBegin();
+            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        }
     };
 })(MOTION)

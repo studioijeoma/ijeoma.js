@@ -1137,29 +1137,12 @@ Sine.easeBoth = function(t, b, c, d) {
         }
     };
 
-    
+
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.play = function() {  
-        this.seek(0);
-        this.resume();
-
-        this._playCount++;
-        this._repeatCount = 0;
-
-        this.dispatchStartedEvent();
-
-        for (var i = 0; i < this._properties.length; i++) {
-            // this._properties[i].setBegin();            
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-        }
-
-        return this;
-    }
-
-    MOTION.Tween.prototype.updateProperties = function() { 
+    MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -1198,6 +1181,14 @@ Sine.easeBoth = function(t, b, c, d) {
         if (this._onUpdate)
             this._onUpdate(window);
     };
+
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        for (var i = 0; i < this._properties.length; i++) {
+            // if (this.isRelative())
+            //     this._properties[i].setBegin();
+            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+        }
+    };
 })(MOTION);(function(MOTION, undefined) {
     REVISION = '1';
 
@@ -1228,97 +1219,102 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     _valueMode = MOTION.ABSOLUTE;
+    _current = null;
 
     p5.prototype.relative = function() {
         _valueMode = MOTION.RELATIVE;
 
-        if (current)
-            current.setValueMode(_valueMode)
+        if (_current)
+            _current.setValueMode(_valueMode)
 
         return this;
     };
 
     p5.prototype.absolute = function() {
         _valueMode = MOTION.ABSOLUTE;
+
+        if (_current)
+            _current.setValueMode(_valueMode)
+
         return this;
     };
 
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
         t = new MOTION.Tween(object, property, end, duration, delay, easing).setValueMode(_valueMode);
 
-        if (current)
-            current.add(t);
+        if (_current)
+            _current.add(t);
 
         return t;
     };
 
     p5.prototype.beginParallel = function(name) {
-        current = new MOTION.Parallel();
+        _current = new MOTION.Parallel();
 
         if (typeof name != 'undefined')
-            current.setName(name);
+            _current.setName(name);
 
-        return currentParallel;
+        return _currentParallel;
     };
 
     p5.prototype.endParallel = function() {
-        current.updateTweens();
-        current = null;
+        _current.updateTweens();
+        _current = null;
     };
 
     p5.prototype.beginSequence = function(name) {
-        current = new MOTION.Sequence();
+        _current = new MOTION.Sequence();
 
         if (typeof name != 'undefined')
-            current.setName(name);
+            _current.setName(name);
 
-        return current;
+        return _current;
     };
 
     p5.prototype.endSequence = function() {
-        current.updateTweens();
-        current = null;
+        _current.updateTweens();
+        _current = null;
     };
 
     p5.prototype.beginTimeline = function(name) {
-        current = new MOTION.Timeline();
+        _current = new MOTION.Timeline();
 
         if (typeof name != 'undefined')
-            current.setName(name);
+            _current.setName(name);
 
-        return current;
+        return _current;
     };
 
     p5.prototype.endTimeline = function() {
-        current.updateTweens();
-        current = null;
+        _current.updateTweens();
+        _current = null;
     };
 
-    currentKeyframe = null;
+    _currentKeyframe = null;
 
     p5.prototype.beginKeyframe = function(name, time) {
-        currentKeyframe = new MOTION.keyFrame();
+        _currentKeyframe = new MOTION.keyFrame();
 
         if (arguments.length == 1 && typeof arguments[0] != 'undefined') {
             if (typeof arguments[0] == 'number')
-                currentKeyframe.delay(arguments[0]);
+                _currentKeyframe.delay(arguments[0]);
             else if (typeof arguments[0] == 'string')
-                currentKeyframe.setName(arguments[0]);
+                _currentKeyframe.setName(arguments[0]);
         } else if (arguments.length == 2) {
-            currentKeyframe.setName(name);
-            currentKeyframe.delay(time);
+            _currentKeyframe.setName(name);
+            _currentKeyframe.delay(time);
         }
 
-        return currentKeyframe;
+        return _currentKeyframe;
     };
 
     p5.prototype.endkeyFrame = function() {
-        currentKeyframe.updateTweens();
+        _currentKeyframe.updateTweens();
 
-        if (current.isTimeline())
-            current.add(currentKeyframe);
-        
-        currentKeyframe = null;
+        if (_current.isTimeline())
+            _current.add(_currentKeyframe);
+
+        _currentKeyframe = null;
     };
 
     p5.prototype.play = function(m) {
