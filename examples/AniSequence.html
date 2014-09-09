@@ -12,7 +12,7 @@ function setup() {
     y = 50;
     diameter = 10; 
 
-    // s = new MOTION.Sequence();
+    // s = new MOTION.Sequence().relative();
     // s.add(new MOTION.Tween(100).add('diameter', 55))
     // s.add(new MOTION.Tween(100).add('x', 400).add('y', 100))
     // s.add(new MOTION.Tween(100).add('x', 450).add('y', 400))
@@ -21,8 +21,9 @@ function setup() {
     // s.play();
 
     s = beginSequence();
-    tween(100).add('diameter', 55)
-    tween(100).add('x', 400).add('y', 100) 
+    relative();
+    tween(100).add('diameter', 55) 
+    tween(100).add('x', 400).add('y', 100)
     tween(100).add('x', 450).add('y', 400)
     tween(100).add('x', 100).add('y', 450)
     tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5)

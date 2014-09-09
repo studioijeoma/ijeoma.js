@@ -56,16 +56,16 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName(); 
+                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName();
                 // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
- 
+
                     var pp = ppropertyMap[name];
-                    p.setBegin(pp.getEnd()); 
+                    p.setBegin(pp.getEnd());
                 } else
                     p.setBegin();
 
@@ -90,7 +90,7 @@
 
     MOTION.MotionController.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._children[arguments[0]]
+            return this._children[arguments[0]];
         else
             return this._childrenMap[arguments[0]];
     };
@@ -123,6 +123,15 @@
         return this;
     };
 
+    MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
+        MOTION.prototype.setValueMode.call(this, _valueMode);
+
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].setValueMode(_valueMode);
+
+        return this;
+    };
+
     MOTION.MotionController.prototype.add = function(child) {
         this.insert(child, 0);
         return this;
@@ -130,7 +139,8 @@
 
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
-        child.setTimeMode(this._timeMode);
+        child.setTimeMode(this._timeMode); 
+        child.setValueMode(this._valueMode);
         child.noAutoUpdate();
 
         if (child.isTween()) {

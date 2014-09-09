@@ -2,9 +2,9 @@
     REVISION = '1';
 
     p5.prototype.registerMethod('pre', function() {
-        for (var i = 0; i < motions.length; i++)
-            if (motions[i].isAutoUpdating())
-                motions[i].update()
+        for (var i = 0; i < _motions.length; i++)
+            if (_motions[i].isAutoUpdating())
+                _motions[i].update();
     });
 
     p5.prototype.createMotion = function(duration, delay, easing) {
@@ -27,61 +27,72 @@
         return new MOTION.Timeline(children);
     };
 
-    p5.prototype.tween = function(object, property, end, duration, delay, easing) {
-        t = new MOTION.Tween(object, property, end, duration, delay, easing)
+    _valueMode = MOTION.ABSOLUTE;
 
-        if (currentParallel)
-            currentParallel.add(t)
-        else if (currentSequence)
-            currentSequence.add(t)
+    p5.prototype.relative = function() {
+        _valueMode = MOTION.RELATIVE;
+
+        if (current)
+            current.setValueMode(_valueMode)
+
+        return this;
+    };
+
+    p5.prototype.absolute = function() {
+        _valueMode = MOTION.ABSOLUTE;
+        return this;
+    };
+
+    p5.prototype.tween = function(object, property, end, duration, delay, easing) {
+        t = new MOTION.Tween(object, property, end, duration, delay, easing).setValueMode(_valueMode);
+
+        if (current)
+            current.add(t);
 
         return t;
     };
 
-    currentParallel = null;
-
     p5.prototype.beginParallel = function(name) {
-        currentParallel = new MOTION.Parallel();;
+        current = new MOTION.Parallel();
+
         if (typeof name != 'undefined')
-            currentParallel.setName(name)
+            current.setName(name);
 
         return currentParallel;
-    }
+    };
 
     p5.prototype.endParallel = function() {
-        currentParallel.updateTweens();
-        currentParallel = null
-    }
-
-    currentSequence = null;
+        current.updateTweens();
+        current = null;
+    };
 
     p5.prototype.beginSequence = function(name) {
-        currentSequence = new MOTION.Sequence();
-        if (typeof name != 'undefined')
-            currentSequence.setName(name)
+        current = new MOTION.Sequence();
 
-        return currentSequence;
-    }
+        if (typeof name != 'undefined')
+            current.setName(name);
+
+        return current;
+    };
 
     p5.prototype.endSequence = function() {
-        currentSequence.updateTweens();
-        currentSequence = null
-    }
-
-    currentTimeline = null;
+        current.updateTweens();
+        current = null;
+    };
 
     p5.prototype.beginTimeline = function(name) {
-        currentTimeline = new MOTION.Timeline();
-        if (typeof name != 'undefined')
-            currentTimeline.setName(name)
+        current = new MOTION.Timeline();
 
-        return currentTimeline;
-    }
+        if (typeof name != 'undefined')
+            current.setName(name);
+
+        return current;
+    };
 
     p5.prototype.endTimeline = function() {
-        currentTimeline.updateTweens();
-        currentTimeline = null
-    }
+        current.updateTweens();
+        current = null;
+    };
 
     currentKeyframe = null;
 
@@ -90,22 +101,25 @@
 
         if (arguments.length == 1 && typeof arguments[0] != 'undefined') {
             if (typeof arguments[0] == 'number')
-                currentKeyframe.delay(arguments[0])
+                currentKeyframe.delay(arguments[0]);
             else if (typeof arguments[0] == 'string')
-                currentKeyframe.setName(arguments[0])
+                currentKeyframe.setName(arguments[0]);
         } else if (arguments.length == 2) {
-            currentKeyframe.setName(name)
-            currentKeyframe.delay(time)
+            currentKeyframe.setName(name);
+            currentKeyframe.delay(time);
         }
 
         return currentKeyframe;
-    }
+    };
 
     p5.prototype.endkeyFrame = function() {
         currentKeyframe.updateTweens();
-        currentTimeline.add(currentKeyframe)
-        currentKeyframe = null
-    }
+
+        if (current.isTimeline())
+            current.add(currentKeyframe);
+        
+        currentKeyframe = null;
+    };
 
     p5.prototype.play = function(m) {
         m.play();
@@ -145,7 +159,7 @@
     };
 
     MOTION.ColorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end)
+        MOTION.Property.call(this, object, field, end);
     };
 
     MOTION.ColorProperty.prototype = Object.create(MOTION.Property.prototype);
@@ -157,23 +171,23 @@
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end) 
+        MOTION.Property.call(this, object, field, end);
     };
 
     MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
-    MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
+    MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty;
 
-    MOTION.VectorProperty.prototype.update = function(position) { 
-        this._position = position; 
-        console.log(this._position)
+    MOTION.VectorProperty.prototype.update = function(position) {
+        this._position = position;
+        console.log(this._position);
         this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
-    }; 
+    };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p;
 
         if (typeof arguments[0] == 'string') {
-            var v = this._object[arguments[0]]
+            var v = this._object[arguments[0]];
 
             if (typeof v == 'number')
                 p = new MOTION.NumberProperty(this._object, arguments[0], arguments[1]);
@@ -184,7 +198,7 @@
             else
                 console.warn('Only numbers, p5.colors and p5.vectors are supported.');
         } else {
-            var v = object[property]
+            var v = object[property];
 
             if (typeof v == 'number')
                 p = new MOTION.NumberProperty(object, property, end);

@@ -1,19 +1,19 @@
 (function(window, undefined) {
-    usingP5 = (typeof p5 != "undefined") ? true : false;
-    id = 0;
+    _usingP5 = (typeof p5 != "undefined") ? true : false
 
-    motions = [];
+    _id = 0;
+    _motions = [];
 
-    MOTION = function(duration, delay, easing) { 
+    MOTION = function(duration, delay, easing) {
         if (this.isTween())
-            this._id = 'Tween' + id++;
+            this._id = 'Tween' + _id++;
         else if (this.isParallel())
-            this._id = 'Parallel' + id++;
+            this._id = 'Parallel' + _id++;
         else if (this.isSequence())
-            this._id = 'Sequence' + id++;
+            this._id = 'Sequence' + _id++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + id++;
- 
+            this._id = 'Timeline' + _id++;
+
         this._name = '';
 
         this._playTime = 0;
@@ -47,13 +47,20 @@
         this._onUpdate = undefined;
         this._onRepeat = undefined;
 
-        motions.push(this);
+        this._valueMode = MOTION.ABSOLUTE;
+
+        _motions.push(this);
     };
 
     MOTION.REVISION = '1';
 
     MOTION.SECONDS = "seconds";
-    MOTION.FRAMES = "frames";
+    MOTION.FRAMES = "frames"
+
+    _timeMode = (_usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+
+    MOTION.RELATIVE = 'relative';
+    MOTION.ABSOLUTE = 'absolute';
 
     MOTION.REVERSE = "reverse";
     MOTION.NO_REVERSE = "noReverse";
@@ -61,7 +68,6 @@
     MOTION.ONCE = "once";
     MOTION.REPEAT = "repeat";
 
-    MOTION.timeMode = MOTION.SECONDS;
 
     MOTION.prototype = {
         constructor: MOTION,
@@ -114,7 +120,11 @@
         resume: function() {
             this._isPlaying = true;
 
-            this._playTime = new Date().getTime() - this._playTime * 1000;
+            if (_usingP5) this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
+            else this._playTime = new Date().getTime() - this._playTime * 1000;
+
+            isPlaying = true;
+
 
             return this;
         },
@@ -126,7 +136,7 @@
 
             // if (this._playTime != this._time) {
             if (this.isInsidePlayingTime(this._time)) {
-            // console.log(this._id + ': '+this._time) 
+                // console.log(this._id + ': '+this._time) 
                 this.dispatchChangedEvent();
             }
 
@@ -176,7 +186,8 @@
         },
 
         updateTime: function() {
-            this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+            if (_usingP5) this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
+            else this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
             if (this._isReversing && this._reverseTime != 0)
                 this._time = this._reverseTime - this._time;
@@ -244,6 +255,10 @@
             return this._duration;
         },
 
+        getRepeat: function() {
+            return this._repeatTime;
+        },
+
         delay: function(delay) {
             this._delay = delay;
             return this;
@@ -259,7 +274,7 @@
         },
 
         repeatDelay: function(duration) {
-            this.repeat(duration)
+            this.repeat(duration);
             this._isRepeatingDelay = true;
             return this;
         },
@@ -286,16 +301,39 @@
         },
 
         setTimeMode: function(_timeMode) {
-            MOTION.timeMode = _timeMode;
+            _timeMode = _timeMode;
             return this;
         },
 
         getTimeMode: function() {
-            return MOTION.timeMode;
+            return _timeMode;
         },
 
-        getRepeat: function() {
-            return this._repeatTime;
+        relative: function() {
+            this.setValueMode(MOTION.RELATIVE);
+            return this;
+        },
+
+        absolute: function() {
+            this.setValueMode(MOTION.ABSOLUTE);
+            return this;
+        },
+
+        setValueMode: function(_valueMode) {
+            this._valueMode = _valueMode;
+            return this;
+        },
+
+        getValueMode: function() {
+            return this._valueMode;
+        },
+
+        isRelative: function() {
+            return this._valueMode == MOTION.RELATIVE
+        },
+
+        isAbsolute: function() {
+            return this._valueMode == MOTION.ABSOLUTE
         },
 
         autoUpdate: function() {
@@ -357,11 +395,11 @@
         },
 
         usingSeconds: function() {
-            return MOTION.timeMode == SECONDS;
+            return _timeMode == MOTION.SECONDS;
         },
 
         usingFrames: function() {
-            return MOTION.timeMode == FRAMES;
+            return _timeMode == MOTION.FRAMES;
         },
 
         dispatchStartedEvent: function() {

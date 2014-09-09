@@ -239,21 +239,21 @@ Sine.easeOut = function(t, b, c, d) {
 Sine.easeBoth = function(t, b, c, d) {
 	return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
 };(function(window, undefined) {
-    usingP5 = (typeof p5 != "undefined") ? true : false;
-    id = 0;
+    _usingP5 = (typeof p5 != "undefined") ? true : false
 
-    motions = [];
+    _id = 0;
+    _motions = [];
 
-    MOTION = function(duration, delay, easing) { 
+    MOTION = function(duration, delay, easing) {
         if (this.isTween())
-            this._id = 'Tween' + id++;
+            this._id = 'Tween' + _id++;
         else if (this.isParallel())
-            this._id = 'Parallel' + id++;
+            this._id = 'Parallel' + _id++;
         else if (this.isSequence())
-            this._id = 'Sequence' + id++;
+            this._id = 'Sequence' + _id++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + id++;
- 
+            this._id = 'Timeline' + _id++;
+
         this._name = '';
 
         this._playTime = 0;
@@ -287,13 +287,20 @@ Sine.easeBoth = function(t, b, c, d) {
         this._onUpdate = undefined;
         this._onRepeat = undefined;
 
-        motions.push(this);
+        this._valueMode = MOTION.ABSOLUTE;
+
+        _motions.push(this);
     };
 
     MOTION.REVISION = '1';
 
     MOTION.SECONDS = "seconds";
-    MOTION.FRAMES = "frames";
+    MOTION.FRAMES = "frames"
+
+    _timeMode = (_usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+
+    MOTION.RELATIVE = 'relative';
+    MOTION.ABSOLUTE = 'absolute';
 
     MOTION.REVERSE = "reverse";
     MOTION.NO_REVERSE = "noReverse";
@@ -301,7 +308,6 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.ONCE = "once";
     MOTION.REPEAT = "repeat";
 
-    MOTION.timeMode = MOTION.SECONDS;
 
     MOTION.prototype = {
         constructor: MOTION,
@@ -354,7 +360,11 @@ Sine.easeBoth = function(t, b, c, d) {
         resume: function() {
             this._isPlaying = true;
 
-            this._playTime = new Date().getTime() - this._playTime * 1000;
+            if (_usingP5) this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
+            else this._playTime = new Date().getTime() - this._playTime * 1000;
+
+            isPlaying = true;
+
 
             return this;
         },
@@ -366,7 +376,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
             // if (this._playTime != this._time) {
             if (this.isInsidePlayingTime(this._time)) {
-            // console.log(this._id + ': '+this._time) 
+                // console.log(this._id + ': '+this._time) 
                 this.dispatchChangedEvent();
             }
 
@@ -416,7 +426,8 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         updateTime: function() {
-            this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+            if (_usingP5) this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
+            else this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
             if (this._isReversing && this._reverseTime != 0)
                 this._time = this._reverseTime - this._time;
@@ -484,6 +495,10 @@ Sine.easeBoth = function(t, b, c, d) {
             return this._duration;
         },
 
+        getRepeat: function() {
+            return this._repeatTime;
+        },
+
         delay: function(delay) {
             this._delay = delay;
             return this;
@@ -499,7 +514,7 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         repeatDelay: function(duration) {
-            this.repeat(duration)
+            this.repeat(duration);
             this._isRepeatingDelay = true;
             return this;
         },
@@ -526,16 +541,39 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         setTimeMode: function(_timeMode) {
-            MOTION.timeMode = _timeMode;
+            _timeMode = _timeMode;
             return this;
         },
 
         getTimeMode: function() {
-            return MOTION.timeMode;
+            return _timeMode;
         },
 
-        getRepeat: function() {
-            return this._repeatTime;
+        relative: function() {
+            this.setValueMode(MOTION.RELATIVE);
+            return this;
+        },
+
+        absolute: function() {
+            this.setValueMode(MOTION.ABSOLUTE);
+            return this;
+        },
+
+        setValueMode: function(_valueMode) {
+            this._valueMode = _valueMode;
+            return this;
+        },
+
+        getValueMode: function() {
+            return this._valueMode;
+        },
+
+        isRelative: function() {
+            return this._valueMode == MOTION.RELATIVE
+        },
+
+        isAbsolute: function() {
+            return this._valueMode == MOTION.ABSOLUTE
         },
 
         autoUpdate: function() {
@@ -597,11 +635,11 @@ Sine.easeBoth = function(t, b, c, d) {
         },
 
         usingSeconds: function() {
-            return MOTION.timeMode == SECONDS;
+            return _timeMode == MOTION.SECONDS;
         },
 
         usingFrames: function() {
-            return MOTION.timeMode == FRAMES;
+            return _timeMode == MOTION.FRAMES;
         },
 
         dispatchStartedEvent: function() {
@@ -684,16 +722,16 @@ Sine.easeBoth = function(t, b, c, d) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName(); 
+                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName();
                 // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
- 
+
                     var pp = ppropertyMap[name];
-                    p.setBegin(pp.getEnd()); 
+                    p.setBegin(pp.getEnd());
                 } else
                     p.setBegin();
 
@@ -718,7 +756,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.MotionController.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._children[arguments[0]]
+            return this._children[arguments[0]];
         else
             return this._childrenMap[arguments[0]];
     };
@@ -751,6 +789,15 @@ Sine.easeBoth = function(t, b, c, d) {
         return this;
     };
 
+    MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
+        MOTION.prototype.setValueMode.call(this, _valueMode);
+
+        for (var i = 0; i < this._children.length; i++)
+            this._children[i].setValueMode(_valueMode);
+
+        return this;
+    };
+
     MOTION.MotionController.prototype.add = function(child) {
         this.insert(child, 0);
         return this;
@@ -758,7 +805,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
-        child.setTimeMode(this._timeMode);
+        child.setTimeMode(this._timeMode); 
+        child.setValueMode(this._valueMode);
         child.noAutoUpdate();
 
         if (child.isTween()) {
@@ -826,7 +874,7 @@ Sine.easeBoth = function(t, b, c, d) {
         this._object = object;
         this._field = field;
 
-        this._id = 'Property'+id++;
+        this._id = 'Property'+_id++;
         this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
@@ -922,7 +970,7 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty
 })(MOTION);(function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
-        MOTION.MotionController.call(this, children)
+        MOTION.MotionController.call(this, children);
 
         this._currentChild = null;
         this._currentChildIndex = 0;
@@ -934,11 +982,9 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Sequence.prototype.update = function(time) {
         MOTION.MotionController.prototype.update.call(this, time);
 
-        // console.log(this._time)
-
         if (this._isPlaying) {
             for (var i = 0; i < this._children.length; i++) {
-                var c = this._children[i]
+                var c = this._children[i];
 
                 if (c.isInsidePlayingTime(this._time)) {
                     this._currentChildIndex = i;
@@ -957,7 +1003,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Sequence.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._children[arguments[0]]
+            return this._children[arguments[0]];
         else if (typeof arguments[0] == 'string')
             return this._childrenMap[arguments[0]];
         else
@@ -966,8 +1012,8 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
-    }; 
-})(MOTION);(function(MOTION, undefined) {
+    };
+})(MOTION);;(function(MOTION, undefined) {
     MOTION.Keyframe = function(time, children) {
         MOTION.MotionController.call(this, children)
         this.delay(time);
@@ -1089,12 +1135,9 @@ Sine.easeBoth = function(t, b, c, d) {
             else
                 MOTION.call(this, arguments[1], arguments[2], arguments[3])
         }
-
-        this._valueMode = MOTION.Tween.ABSOLUTE;
     };
 
-    MOTION.Tween.RELATIVE = 'relative';
-    MOTION.Tween.ABSOLUTE = 'absolute';
+    
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
@@ -1149,33 +1192,6 @@ Sine.easeBoth = function(t, b, c, d) {
         return this._properties.length;
     };
 
-    MOTION.Tween.prototype.setValueMode = function(_valueMode) {
-        MOTION.valueMode = _valueMode;
-        return this;
-    };
-
-    MOTION.Tween.prototype.getValueMode = function() {
-        return MOTION.valueMode;
-    };
-
-    MOTION.Tween.prototype.relative = function() {
-        this._valueMode = MOTION.Tween.RELATIVE;
-        return this;
-    };
-
-    MOTION.Tween.prototype.absolute = function() {
-        this._valueMode = MOTION.Tween.ABSOLUTE;
-        return this;
-    };
-
-    MOTION.Tween.prototype.isRelative = function() {
-        return this._valueMode == MOTION.Tween.RELATIVE
-    };
-
-    MOTION.Tween.prototype.isAbsolute = function() {
-        return this._valueMode == MOTION.Tween.ABSOLUTE
-    };
-
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
 
@@ -1186,9 +1202,9 @@ Sine.easeBoth = function(t, b, c, d) {
     REVISION = '1';
 
     p5.prototype.registerMethod('pre', function() {
-        for (var i = 0; i < motions.length; i++)
-            if (motions[i].isAutoUpdating())
-                motions[i].update()
+        for (var i = 0; i < _motions.length; i++)
+            if (_motions[i].isAutoUpdating())
+                _motions[i].update();
     });
 
     p5.prototype.createMotion = function(duration, delay, easing) {
@@ -1211,61 +1227,72 @@ Sine.easeBoth = function(t, b, c, d) {
         return new MOTION.Timeline(children);
     };
 
-    p5.prototype.tween = function(object, property, end, duration, delay, easing) {
-        t = new MOTION.Tween(object, property, end, duration, delay, easing)
+    _valueMode = MOTION.ABSOLUTE;
 
-        if (currentParallel)
-            currentParallel.add(t)
-        else if (currentSequence)
-            currentSequence.add(t)
+    p5.prototype.relative = function() {
+        _valueMode = MOTION.RELATIVE;
+
+        if (current)
+            current.setValueMode(_valueMode)
+
+        return this;
+    };
+
+    p5.prototype.absolute = function() {
+        _valueMode = MOTION.ABSOLUTE;
+        return this;
+    };
+
+    p5.prototype.tween = function(object, property, end, duration, delay, easing) {
+        t = new MOTION.Tween(object, property, end, duration, delay, easing).setValueMode(_valueMode);
+
+        if (current)
+            current.add(t);
 
         return t;
     };
 
-    currentParallel = null;
-
     p5.prototype.beginParallel = function(name) {
-        currentParallel = new MOTION.Parallel();;
+        current = new MOTION.Parallel();
+
         if (typeof name != 'undefined')
-            currentParallel.setName(name)
+            current.setName(name);
 
         return currentParallel;
-    }
+    };
 
     p5.prototype.endParallel = function() {
-        currentParallel.updateTweens();
-        currentParallel = null
-    }
-
-    currentSequence = null;
+        current.updateTweens();
+        current = null;
+    };
 
     p5.prototype.beginSequence = function(name) {
-        currentSequence = new MOTION.Sequence();
-        if (typeof name != 'undefined')
-            currentSequence.setName(name)
+        current = new MOTION.Sequence();
 
-        return currentSequence;
-    }
+        if (typeof name != 'undefined')
+            current.setName(name);
+
+        return current;
+    };
 
     p5.prototype.endSequence = function() {
-        currentSequence.updateTweens();
-        currentSequence = null
-    }
-
-    currentTimeline = null;
+        current.updateTweens();
+        current = null;
+    };
 
     p5.prototype.beginTimeline = function(name) {
-        currentTimeline = new MOTION.Timeline();
-        if (typeof name != 'undefined')
-            currentTimeline.setName(name)
+        current = new MOTION.Timeline();
 
-        return currentTimeline;
-    }
+        if (typeof name != 'undefined')
+            current.setName(name);
+
+        return current;
+    };
 
     p5.prototype.endTimeline = function() {
-        currentTimeline.updateTweens();
-        currentTimeline = null
-    }
+        current.updateTweens();
+        current = null;
+    };
 
     currentKeyframe = null;
 
@@ -1274,22 +1301,25 @@ Sine.easeBoth = function(t, b, c, d) {
 
         if (arguments.length == 1 && typeof arguments[0] != 'undefined') {
             if (typeof arguments[0] == 'number')
-                currentKeyframe.delay(arguments[0])
+                currentKeyframe.delay(arguments[0]);
             else if (typeof arguments[0] == 'string')
-                currentKeyframe.setName(arguments[0])
+                currentKeyframe.setName(arguments[0]);
         } else if (arguments.length == 2) {
-            currentKeyframe.setName(name)
-            currentKeyframe.delay(time)
+            currentKeyframe.setName(name);
+            currentKeyframe.delay(time);
         }
 
         return currentKeyframe;
-    }
+    };
 
     p5.prototype.endkeyFrame = function() {
         currentKeyframe.updateTweens();
-        currentTimeline.add(currentKeyframe)
-        currentKeyframe = null
-    }
+
+        if (current.isTimeline())
+            current.add(currentKeyframe);
+        
+        currentKeyframe = null;
+    };
 
     p5.prototype.play = function(m) {
         m.play();
@@ -1329,7 +1359,7 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.ColorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end)
+        MOTION.Property.call(this, object, field, end);
     };
 
     MOTION.ColorProperty.prototype = Object.create(MOTION.Property.prototype);
@@ -1341,23 +1371,23 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.VectorProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end) 
+        MOTION.Property.call(this, object, field, end);
     };
 
     MOTION.VectorProperty.prototype = Object.create(MOTION.Property.prototype);
-    MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty
+    MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty;
 
-    MOTION.VectorProperty.prototype.update = function(position) { 
-        this._position = position; 
-        console.log(this._position)
+    MOTION.VectorProperty.prototype.update = function(position) {
+        this._position = position;
+        console.log(this._position);
         this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
-    }; 
+    };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p;
 
         if (typeof arguments[0] == 'string') {
-            var v = this._object[arguments[0]]
+            var v = this._object[arguments[0]];
 
             if (typeof v == 'number')
                 p = new MOTION.NumberProperty(this._object, arguments[0], arguments[1]);
@@ -1368,7 +1398,7 @@ Sine.easeBoth = function(t, b, c, d) {
             else
                 console.warn('Only numbers, p5.colors and p5.vectors are supported.');
         } else {
-            var v = object[property]
+            var v = object[property];
 
             if (typeof v == 'number')
                 p = new MOTION.NumberProperty(object, property, end);

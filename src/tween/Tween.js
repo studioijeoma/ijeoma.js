@@ -18,12 +18,9 @@
             else
                 MOTION.call(this, arguments[1], arguments[2], arguments[3])
         }
-
-        this._valueMode = MOTION.Tween.ABSOLUTE;
     };
 
-    MOTION.Tween.RELATIVE = 'relative';
-    MOTION.Tween.ABSOLUTE = 'absolute';
+    
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
@@ -76,33 +73,6 @@
 
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
-    };
-
-    MOTION.Tween.prototype.setValueMode = function(_valueMode) {
-        MOTION.valueMode = _valueMode;
-        return this;
-    };
-
-    MOTION.Tween.prototype.getValueMode = function() {
-        return MOTION.valueMode;
-    };
-
-    MOTION.Tween.prototype.relative = function() {
-        this._valueMode = MOTION.Tween.RELATIVE;
-        return this;
-    };
-
-    MOTION.Tween.prototype.absolute = function() {
-        this._valueMode = MOTION.Tween.ABSOLUTE;
-        return this;
-    };
-
-    MOTION.Tween.prototype.isRelative = function() {
-        return this._valueMode == MOTION.Tween.RELATIVE
-    };
-
-    MOTION.Tween.prototype.isAbsolute = function() {
-        return this._valueMode == MOTION.Tween.ABSOLUTE
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {

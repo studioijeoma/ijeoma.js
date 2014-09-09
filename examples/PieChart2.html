@@ -51,6 +51,14 @@ function draw() {
     pop();
 }
 
+function mousePressed() {
+    s.pause();
+}
+
+function mouseReleased() {
+    s.resume();
+}
+
 function mouseDragged() {
     s.seek(mouseX / width)
 }

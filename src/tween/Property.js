@@ -3,7 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._id = 'Property'+id++;
+        this._id = 'Property'+_id++;
         this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];

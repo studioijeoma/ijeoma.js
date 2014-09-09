@@ -1,6 +1,6 @@
 (function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
-        MOTION.MotionController.call(this, children)
+        MOTION.MotionController.call(this, children);
 
         this._currentChild = null;
         this._currentChildIndex = 0;
@@ -12,11 +12,9 @@
     MOTION.Sequence.prototype.update = function(time) {
         MOTION.MotionController.prototype.update.call(this, time);
 
-        // console.log(this._time)
-
         if (this._isPlaying) {
             for (var i = 0; i < this._children.length; i++) {
-                var c = this._children[i]
+                var c = this._children[i];
 
                 if (c.isInsidePlayingTime(this._time)) {
                     this._currentChildIndex = i;
@@ -35,7 +33,7 @@
 
     MOTION.Sequence.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._children[arguments[0]]
+            return this._children[arguments[0]];
         else if (typeof arguments[0] == 'string')
             return this._childrenMap[arguments[0]];
         else
@@ -44,5 +42,5 @@
 
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
-    }; 
-})(MOTION)
+    };
+})(MOTION);
