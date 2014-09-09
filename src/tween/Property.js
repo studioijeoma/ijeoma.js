@@ -3,7 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._id = object + '.' + field;
+        this._id = 'Property'+id++;
         this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
@@ -15,9 +15,13 @@
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
+
         if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
             // _this._easing(this.getTime() / this._duration, 0, 1, 1)  
             this._object[this._field] = this._position * (this._end - this._begin) + this._begin
+            // console.log(this._id)
+            // console.log(this._position)
+            // console.log(this._object[this._field])
         } else
             console.log(this._position)
     };

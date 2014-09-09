@@ -122,11 +122,12 @@
         seek: function(value) {
             this._playTime = (this._delay + this._duration) * value;
 
-            if (this._playTime != this._time) {
-                this.setTime(this._playTime);
-                // this._isPlaying =true;
-                // this.update(this._playTime);
-                // this._isPlaying =false;
+            this.setTime(this._playTime);
+
+            // if (this._playTime != this._time) {
+            if (this.isInsidePlayingTime(this._time)) {
+            // console.log(this._id + ': '+this._time) 
+                this.dispatchChangedEvent();
             }
 
             return this;

@@ -50,14 +50,6 @@
             this._properties[i].update(this.getPosition());
     };
 
-    MOTION.Tween.prototype.seek = function(value) {
-        MOTION.prototype.seek.call(this, value);
-
-        this.updateProperties();
-
-        return this;
-    };
-
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p = (typeof arguments[0] == 'string') ? new MOTION.NumberProperty(this._object, arguments[0], arguments[1]) : new MOTION.NumberProperty(object, property, end);
 

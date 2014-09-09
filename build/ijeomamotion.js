@@ -362,11 +362,12 @@ Sine.easeBoth = function(t, b, c, d) {
         seek: function(value) {
             this._playTime = (this._delay + this._duration) * value;
 
-            if (this._playTime != this._time) {
-                this.setTime(this._playTime);
-                // this._isPlaying =true;
-                // this.update(this._playTime);
-                // this._isPlaying =false;
+            this.setTime(this._playTime);
+
+            // if (this._playTime != this._time) {
+            if (this.isInsidePlayingTime(this._time)) {
+            // console.log(this._id + ': '+this._time) 
+                this.dispatchChangedEvent();
             }
 
             return this;
@@ -684,6 +685,7 @@ Sine.easeBoth = function(t, b, c, d) {
                 var p = properties[j];
 
                 var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName(); 
+                // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
 
                 if (name in orderMap) {
@@ -824,7 +826,7 @@ Sine.easeBoth = function(t, b, c, d) {
         this._object = object;
         this._field = field;
 
-        this._id = object + '.' + field;
+        this._id = 'Property'+id++;
         this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
@@ -836,9 +838,13 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
+
         if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
             // _this._easing(this.getTime() / this._duration, 0, 1, 1)  
             this._object[this._field] = this._position * (this._end - this._begin) + this._begin
+            // console.log(this._id)
+            // console.log(this._position)
+            // console.log(this._object[this._field])
         } else
             console.log(this._position)
     };
@@ -1113,14 +1119,6 @@ Sine.easeBoth = function(t, b, c, d) {
     MOTION.Tween.prototype.updateProperties = function() { 
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
-    };
-
-    MOTION.Tween.prototype.seek = function(value) {
-        MOTION.prototype.seek.call(this, value);
-
-        this.updateProperties();
-
-        return this;
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {

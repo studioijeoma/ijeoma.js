@@ -57,6 +57,7 @@
                 var p = properties[j];
 
                 var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName(); 
+                // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
 
                 if (name in orderMap) {
