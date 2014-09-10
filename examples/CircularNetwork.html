@@ -54,18 +54,24 @@ function draw() {
 }
 
 function mousePressed() {
-    for (var i = 0; i < nodes.length; i++)
+    for (var i = 0; i < nodes.length; i++){
         nodes[i].angleTween.pause();
+        nodes[i].radiusTween.pause();
+    }
 }
 
 function mouseDragged() {
-    for (var i = 0; i < nodes.length; i++)
+    for (var i = 0; i < nodes.length; i++){
         nodes[i].angleTween.seek(mouseX / width);
+        nodes[i].radiusTween.seek(mouseY / height);
+    }
 }
 
 function mouseReleased() {
-    for (var i = 0; i < nodes.length; i++)
+    for (var i = 0; i < nodes.length; i++){
         nodes[i].angleTween.resume();
+        nodes[i].radiusTween.resume();
+    }
 }
 
 Node = function(s, r, color, alpha, tween) {
