@@ -15,7 +15,8 @@ function setup() {
 
         var duration = round(random(500, 750));
         var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
-        var endRadius = n.radius - circleOffset; //round(random(circleCount))*circleOffset
+        var endRadius = n.radius - circleOffset; 
+        // var endRadius = round(random(1, circleCount)) * circleOffset
 
         n.angleTween = new MOTION.Tween(duration).add(n, 'angle', endAngle).repeat().play();
         n.radiusTween = new MOTION.Tween(100, 0, Quad.easeBoth).add(n, 'radius', endRadius).repeat().reverse().play()
