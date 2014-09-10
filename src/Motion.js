@@ -4,7 +4,7 @@
     _id = 0;
     _motions = [];
 
-    MOTION = function(duration, delay, easing) {  
+    MOTION = function(duration, delay, easing) {
         if (this.isTween())
             this._id = 'Tween' + _id++;
         else if (this.isParallel())
@@ -26,7 +26,7 @@
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
 
-        this._easing = (typeof easing == 'undefined') ? Linear.easeIn : easing;
+        this._easing = (typeof easing == 'undefined') ? (function(t) { return t; }) : easing;
 
         this._repeatCount = 0;
         this._repeatDuration = 0;
@@ -241,7 +241,7 @@
 
     MOTION.prototype.getPosition = function() {
         var t = this.getTime();
-        return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1);
+        return this._easing((t > 0) ? this.getTime() / this._duration : 0);
     };
 
     MOTION.prototype.setDuration = function(_duration) {
@@ -293,8 +293,7 @@
     };
 
     MOTION.prototype.noEasing = function() {
-        this.setEasing(Linear.easeIn);
-
+        this.setEasing(function(t) { return t; });
         return this;
     };
 

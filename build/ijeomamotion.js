@@ -1,250 +1,170 @@
-Back = function Back() {};
+Quad = function(){};
+Quad.In = function(t) {
+    return (t /= 1) * t;
+};
+Quad.Out = function(t) {
+    return -(t /= 1) * (t - 2);
+};
+Quad.InOut = function(t) {
+    if ((t /= 1 / 2) < 1) return .5 * t * t;
+    return -.5 * ((--t) * (t - 2) - 1);
+};
 
-Back.easeIn = function(t, b, c, d) {
-	var s = 1.70158;
-	return c * (t /= d) * t * ((s + 1) * t - s) + b;
-}
+Cubic = function(){};
+Cubic.In = function(t) {
+    return (t /= 1) * t * t;
+};
+Cubic.Out = function(t) {
+    return ((t = t / 1 - 1) * t * t + 1);
+};
+Cubic.InOut = function(t) {
+    if ((t /= 1 / 2) < 1) return .5 * t * t * t;
+    return .5 * ((t -= 2) * t * t + 2);
+};
 
-Back.easeOut = function(t, b, c, d) {
-	var s = 1.70158;
-	return c * ((t = t / d - 1) * t * ((s + 1) * t + s) + 1) + b;
-}
+Quart = function(){};
+Quart.In = function(t) {
+    return (t /= 1) * t * t * t;
+};
+Quart.Out = function(t) {
+    return -((t = t / 1 - 1) * t * t * t - 1);
+};
+Quart.InOut = function(t) {
+    if ((t /= 1 / 2) < 1) return .5 * t * t * t * t;
+    return -.5 * ((t -= 2) * t * t * t - 2);
+};
 
-Back.easeBoth = function(t, b, c, d) {
-	var s = 1.70158;
-	if((t /= d / 2) < 1) return c / 2 * (t * t * (((s *= (1.52)) + 1) * t - s)) + b;
-	return c / 2 * ((t -= 2) * t * (((s *= (1.52)) + 1) * t + s) + 2) + b;
-}
+Quint = function(){};
+Quint.In = function(t) {
+    return (t /= 1) * t * t * t * t;
+};
+Quint.Out = function(t) {
+    return ((t = t / 1 - 1) * t * t * t * t + 1);
+};
+Quint.InOut = function(t) {
+    if ((t /= 1 / 2) < 1) return .5 * t * t * t * t * t;
+    return .5 * ((t -= 2) * t * t * t * t + 2);
+};
 
-Bounce = function Bounce() {};
+Sine = function(){};
+Sine.In = function(t) {
+    return -Math.cos(t / 1 * (Math.PI / 2)) + 1;
+};
+Sine.Out = function(t) {
+    return Math.sin(t / 1 * (Math.PI / 2));
+};
+Sine.InOut = function(t) {
+    return -.5 * (Math.cos(Math.PI * t / 1) - 1);
+};
 
-Bounce.easeIn = function(t, b, c, d) {
-	return c - Bounce.easeOut(d - t, 0, c, d) + b;
-}
+Expo = function(){};
+Expo.In = function(t) {
+    return (t == 0) ? 0 : Math.pow(2, 10 * (t / 1 - 1));
+};
+Expo.Out = function(t) {
+    return (t == 1) ? 1 : (-Math.pow(2, -10 * t / 1) + 1);
+};
+Expo.InOut = function(t) {
+    if (t == 0) return 0;
+    if (t == 1) return 1;
+    if ((t /= 1 / 2) < 1) return .5 * Math.pow(2, 10 * (t - 1));
+    return .5 * (-Math.pow(2, -10 * --t) + 2);
+};
 
-Bounce.easeOut = function(t, b, c, d) {
-	if((t /= d) < (1 / 2.7)) {
-		return c * (7.562 * t * t) + b;
-	} else if(t < (2 / 2.7)) {
-		return c * (7.562 * (t -= (1. / 2.7)) * t + .7) + b;
-	} else if(t < (2.5 / 2.75)) {
-		return c * (7.562 * (t -= (2.2 / 2.7)) * t + .937) + b;
-	} else {
-		return c * (7.562 * (t -= (2.62 / 2.7)) * t + .98437) + b;
-	}
-}
+Circ = function(){};
+Circ.In = function(t) {
+    return -(Math.sqrt(1 - (t /= 1) * t) - 1);
+};
+Circ.Out = function(t) {
+    return Math.sqrt(1 - (t = t / 1 - 1) * t);
+};
+Circ.InOut = function(t) {
+    if ((t /= 1 / 2) < 1) return -.5 * (Math.sqrt(1 - t * t) - 1);
+    return .5 * (Math.sqrt(1 - (t -= 2) * t) + 1);
+};
 
-Bounce.easeBoth = function(t, b, c, d) {
-	if(t < d / 2) return Bounce.easeIn(t * 2, 0, c, d) * .5 + b;
-	else return Bounce.easeOut(t * 2 - d, 0, c, d) * .5 + c * .5 + b;
-}
+Elastic = function(){};
+Elastic.In = function(t) {
+    var s = 1.70158;
+    var p = 0;
+    var a = 1;
+    if (t == 0) return 0;
+    if ((t /= 1) == 1) return 1;
+    if (!p) p = .3;
+    if (a < Math.abs(1)) {
+        a = 1;
+        var s = p / 4;
+    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+    return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
+};
+Elastic.Out = function(t) {
+    var s = 1.70158;
+    var p = 0;
+    var a = 1;
+    if (t == 0) return 0;
+    if ((t /= 1) == 1) return 1;
+    if (!p) p = .3;
+    if (a < Math.abs(1)) {
+        a = 1;
+        var s = p / 4;
+    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+    return a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p) + 1;
+};
+Elastic.InOut = function(t) {
+    var s = 1.70158;
+    var p = 0;
+    var a = 1;
+    if (t == 0) return 0;
+    if ((t /= 1 / 2) == 2) return 1;
+    if (!p) p = (.3 * 1.5);
+    if (a < Math.abs(1)) {
+        a = 1;
+        var s = p / 4;
+    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+    if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
+    return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p) * .5 + 1;
+};
 
-Circ = function Circ() {};
+Back = function(){};
+Back.In = function(t, s) {
+    if (s == undefined) s = 1.70158;
+    return (t /= 1) * t * ((s + 1) * t - s);
+};
+Back.Out = function(t, s) {
+    if (s == undefined) s = 1.70158;
+    return ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
+};
+Back.InOut = function(t, s) {
+    if (s == undefined) s = 1.70158;
+    if ((t /= 1 / 2) < 1) return .5 * (t * t * (((s *= (1.525)) + 1) * t - s));
+    return .5 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2);
+};
 
-Circ.easeIn = function(t, b, c, d) {
-	return -c * (Math.sqrt(1 - (t /= d) * t) - 1) + b;
-}
-
-Circ.easeOut = function(t, b, c, d) {
-	return c * Math.sqrt(1 - (t = t / d - 1) * t) + b;
-}
-
-Circ.easeBoth = function(t, b, c, d) {
-	if((t /= d / 2) < 1) return -c / 2 * (Math.sqrt(1 - t * t) - 1) + b;
-	return c / 2 * (Math.sqrt(1 - (t -= 2) * t) + 1) + b;
-}
-
-Cubic = function Cubic() {};
-
-Cubic.easeIn = function(t, b, c, d) {
-	return c * (t /= d) * t * t + b;
-}
-
-Cubic.easeOut = function(t, b, c, d) {
-	return c * ((t = t / d - 1) * t * t + 1) + b;
-}
-
-Cubic.easeBoth = function(t, b, c, d) {
-	if((t /= d / 2) < 1) return c / 2 * t * t * t + b;
-	return c / 2 * ((t -= 2) * t * t + 2) + b;
-}
-
-CubicBezier = function CubicBezier() {};
-
-// Cubic Bezier tween from b to b+c, influenced by p1 & p2
-// t: current time, b: beginning value, c: total change, d: duration
-// p1, p2: Bezier control point positions
-CubicBezier.easeIn = function(t, b, c, d, p1, p2) {
-	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;
-}
-
-CubicBezier.easeOut = function(t, b, c, d, p1, p2) {
-	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;
-}
-
-CubicBezier.easeBoth = function(t, b, c, d, p1, p2) {
-	return((t /= d) * t * c + 3 * (1 - t) * (t * (p2 - b) + (1 - t) * (p1 - b))) * t + b;
-}
-
-Elastic = function Elastic() {};
-
-Elastic.easeIn = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d) == 1) return b + c;
-	var p = d * .3;
-	var a = c;
-	var s = p / 4;
-	return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-}
-
-Elastic.easeOut = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d) == 1) return b + c;
-	var p = d * .3;
-	var a = c;
-	var s = p / 4;
-	return(a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
-}
-
-Elastic.easeBoth = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d / 2) == 2) return b + c;
-	var p = d * (.3 * 1.);
-	var a = c;
-	var s = p / 4;
-	if(t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-	return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
-}
-
-Elastic = function Elastic() {};
-
-Elastic.easeIn = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d) == 1) return b + c;
-	var p = d * .3;
-	var a = c;
-	var s = p / 4;
-	return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-}
-
-Elastic.easeOut = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d) == 1) return b + c;
-	var p = d * .3;
-	var a = c;
-	var s = p / 4;
-	return(a * Math.pow(2, -10 * t) * Math.sin((t * d - s) * (2 * Math.PI) / p) + c + b);
-}
-
-Elastic.easeBoth = function(t, b, c, d) {
-	if(t == 0) return b;
-	if((t /= d / 2) == 2) return b + c;
-	var p = d * (.3 * 1.);
-	var a = c;
-	var s = p / 4;
-	if(t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p)) + b;
-	return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t * d - s) * (2 * Math.PI) / p) * .5 + c + b;
-}
-
-Expo = function Expo() {};
-
-Expo.easeIn = function(t, b, c, d) {
-	return(t == 0) ? b : c * Math.pow(2, 10 * (t / d - 1)) + b;
-}
-
-Expo.easeOut = function(t, b, c, d) {
-	return(t == d) ? b + c : c * (-Math.pow(2, -10 * t / d) + 1) + b;
-}
-
-Expo.easeBoth = function(t, b, c, d) {
-	if(t == 0) return b;
-	if(t == d) return b + c;
-	if((t /= d / 2) < 1) return c / 2 * Math.pow(2, 10 * (t - 1)) + b;
-	return c / 2 * (-Math.pow(2, -10 * --t) + 2) + b;
-}
-
-Linear = function Linear() {};
-
-Linear.easeNone = function(t, b, c, d) {
-	return c * t / d + b;
-}
-
-Linear.easeIn = function(t, b, c, d) {
-	return c * t / d + b;
-}
-
-Linear.easeOut = function(t, b, c, d) {
-	return c * t / d + b;
-}
-
-Linear.easeBoth = function(t, b, c, d) {
-	return c * t / d + b;
-}
-
-Quad = function Quad() {};
-
-Quad.easeIn = function(t, b, c, d) {
-	return c * (t /= d) * t + b;
-}
-
-Quad.easeOut = function(t, b, c, d) {
-	return -c * (t /= d) * (t - 2) + b;
-}
-
-Quad.easeBoth = function(t, b, c, d) {
-	if((t /= d / 2) < 1) return c / 2 * t * t + b;
-	return -c / 2 * ((--t) * (t - 2) - 1) + b;
-}
-
-Quart = function Quart() {};
-
-Quart.easeIn = function(t, b, c, d) {
-	return c * (t /= d) * t * t * t + b;
-}
-
-Quart.easeOut = function(t, b, c, d) {
-	return -c * ((t = t / d - 1) * t * t * t - 1) + b;
-}
-
-Quart.easeBoth = function(t, b, c, d) {
-	if((t /= d / 2) < 1) return c / 2 * t * t * t * t + b;
-	return -c / 2 * ((t -= 2) * t * t * t - 2) + b;
-}
-
-Quint = function Quint() {};
-
-Quint.easeIn = function(t, b, c, d) {
-	return c * (t /= d) * t * t * t * t + b;
-}
-
-Quint.easeOut = function(t, b, c, d) {
-	return c * ((t = t / d - 1) * t * t * t * t + 1) + b;
-}
-
-Quint.easeBoth = function(t, b, c, d) {
-	if((t /= d / 2) < 1) return c / 2 * t * t * t * t * t + b;
-	return c / 2 * ((t -= 2) * t * t * t * t + 2) + b;
-}
-
-Sine = function Sine() {};
-
-Sine.easeIn = function(t, b, c, d) {
-	return -c * Math.cos(t / d * (Math.PI / 2)) + c + b;
-}
-
-Sine.easeOut = function(t, b, c, d) {
-	return c * Math.sin(t / d * (Math.PI / 2)) + b;
-}
-
-Sine.easeBoth = function(t, b, c, d) {
-	return -c / 2 * (Math.cos(Math.PI * t / d) - 1) + b;
+Bounce = function(){};
+Bounce.In = function(t) {
+    return 1 - Bounce.Out(1 - t, 0);
+};
+Bounce.Out = function(t) {
+    if ((t /= 1) < (1/2.75)) {
+        return (7.5625 * t * t);
+    } else if (t < (2 / 2.75)) {
+        return (7.5625 * (t -= (1.5 / 2.75)) * t + .75);
+    } else if (t < (2.5 / 2.75)) {
+        return (7.5625 * (t -= (2.25 / 2.75)) * t + .9375);
+    } else {
+        return (7.5625 * (t -= (2.625 / 2.75)) * t + .984375);
+    }
+};
+Bounce.InOut = function(t) {
+    if (t < .5) return Bounce.In (t * 2, 0) * .5;
+    return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
 };(function(window, undefined) {
     _usingP5 = (typeof p5 != "undefined") ? true : false;
 
     _id = 0;
     _motions = [];
 
-    MOTION = function(duration, delay, easing) {  
+    MOTION = function(duration, delay, easing) {
         if (this.isTween())
             this._id = 'Tween' + _id++;
         else if (this.isParallel())
@@ -266,7 +186,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
 
-        this._easing = (typeof easing == 'undefined') ? Linear.easeIn : easing;
+        this._easing = (typeof easing == 'undefined') ? (function(t) { return t; }) : easing;
 
         this._repeatCount = 0;
         this._repeatDuration = 0;
@@ -481,7 +401,7 @@ Sine.easeBoth = function(t, b, c, d) {
 
     MOTION.prototype.getPosition = function() {
         var t = this.getTime();
-        return this._easing((t > 0) ? this.getTime() / this._duration : 0, 0, 1, 1);
+        return this._easing((t > 0) ? this.getTime() / this._duration : 0);
     };
 
     MOTION.prototype.setDuration = function(_duration) {
@@ -533,8 +453,7 @@ Sine.easeBoth = function(t, b, c, d) {
     };
 
     MOTION.prototype.noEasing = function() {
-        this.setEasing(Linear.easeIn);
-
+        this.setEasing(function(t) { return t; });
         return this;
     };
 
