@@ -8,16 +8,14 @@ var circleOffset = 45;
 function setup() {
     createCanvas(512, 512);
 
-    angleMode(DEGREES)
-    stroke(100)
-    strokeWeight(1)
+    strokeWeight(.25)
 
-    for (var i = 0; i < 50; i++) {
-        var n = new Node(5, round(random(1, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
+    for (var i = 0; i < 75; i++) {
+        var n = new Node(10, round(random(1, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
 
         var duration = round(random(500, 750));
-        var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -360 : 360);
-        var endRadius = n.radius - round(random(circleCount))*circleOffset
+        var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
+        var endRadius = n.radius - circleOffset; //round(random(circleCount))*circleOffset
 
         n.angleTween = new MOTION.Tween(duration).add(n, 'angle', endAngle).repeat().play();
         n.radiusTween = new MOTION.Tween(100, 0, Quad.easeBoth).add(n, 'radius', endRadius).repeat().reverse().play()
@@ -28,43 +26,44 @@ function setup() {
 
 function draw() {
     background(255)
-    // fill(255,100)
-    // rect(0,0,width,height)
 
+    fill(0)
     text(round(frameRate()), 25, 25);
 
     translate(width / 2, height / 2);
 
-    for (var i = 0; i < nodes.length; i++)
-        nodes[i].draw()
+    stroke(0, 50)
 
     for (var i = 0; i < nodes.length; i++)
-        for (var j = 0; j < nodes.length; j++) { 
+        for (var j = 0; j < nodes.length; j++) {
             var dx = nodes[j].x - nodes[i].x
             var dy = nodes[j].y - nodes[i].y
 
-            if (dx * dx + dy * dy <= circleOffset * circleOffset * 2) {
+            if (dx * dx + dy * dy < circleOffset * circleOffset * 2) {
                 beginShape();
-                stroke(nodes[i].color)
+                // stroke(nodes[i].color)
                 vertex(nodes[i].x, nodes[i].y)
-                stroke(nodes[j].color)
+                // stroke(nodes[j].color)
                 vertex(nodes[j].x, nodes[j].y)
                 endShape();
             }
         }
+
+    for (var i = 0; i < nodes.length; i++)
+        nodes[i].draw()
 }
 
-function mousePressed() { 
-    for (var i = 0; i < nodes.length; i++) 
+function mousePressed() {
+    for (var i = 0; i < nodes.length; i++)
         nodes[i].angleTween.pause();
 }
 
-function mouseDragged() { 
+function mouseDragged() {
     for (var i = 0; i < nodes.length; i++)
         nodes[i].angleTween.seek(mouseX / width);
 }
 
-function mouseReleased() { 
+function mouseReleased() {
     for (var i = 0; i < nodes.length; i++)
         nodes[i].angleTween.resume();
 }
@@ -74,7 +73,7 @@ Node = function(s, r, color, alpha, tween) {
     this.y = 0;
     this.size = s;
     this.radius = r;
-    this.angle = random(360);
+    this.angle = random(TWO_PI);
     this.color = color;
     this.alpha = alpha;
     this.tween = tween
