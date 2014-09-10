@@ -176,7 +176,7 @@
             else
                 this.setTime(time);
 
-            if (!this.isInsideDelayingTime(this._time) && !this.isInsidePlayingTime(this._time))
+            if (!this.isInsidePlayingTime(this._time))
                 this.stop();
             else
                 this.dispatchChangedEvent();

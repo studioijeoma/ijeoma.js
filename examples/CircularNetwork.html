@@ -2,36 +2,36 @@
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
 var nodes = [];
-var offset = 30;
-
-var p;
+var circleCount = 5;
+var circleOffset = 45;
 
 function setup() {
     createCanvas(512, 512);
 
     angleMode(DEGREES)
     stroke(100)
-    strokeWeight(.25)
+    strokeWeight(1)
 
-    p = new MOTION.Parallel();
+    for (var i = 0; i < 50; i++) {
+        var n = new Node(5, round(random(1, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
 
-    for (var i = 0; i < 100; i++) {
-        var n = new Node(5, round(random(2, 10)) * offset, 0, 255)
-        var t = new MOTION.Tween(round(random(1000, 2000))).add(n, 'angle', n.angle + ((round(random(100)) % 2 == 0) ? -360 : 360));
+        var duration = round(random(500, 750));
+        var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -360 : 360);
+        var endRadius = n.radius - round(random(circleCount))*circleOffset
 
-        p.add(t)
+        n.angleTween = new MOTION.Tween(duration).add(n, 'angle', endAngle).repeat().play();
+        n.radiusTween = new MOTION.Tween(100, 0, Quad.easeBoth).add(n, 'radius', endRadius).repeat().reverse().play()
 
         nodes.push(n)
     }
-
-    p.play().repeat();
 }
 
 function draw() {
     background(255)
+    // fill(255,100)
+    // rect(0,0,width,height)
 
-    fill(0);
-    text(p.getTime() + '/' + p.getDuration(), 25, 25);
+    text(round(frameRate()), 25, 25);
 
     translate(width / 2, height / 2);
 
@@ -39,21 +39,34 @@ function draw() {
         nodes[i].draw()
 
     for (var i = 0; i < nodes.length; i++)
-        for (var j = 0; j < nodes.length; j++)
-            if (dist(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y) <= offset * 2)
-                line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+        for (var j = 0; j < nodes.length; j++) { 
+            var dx = nodes[j].x - nodes[i].x
+            var dy = nodes[j].y - nodes[i].y
+
+            if (dx * dx + dy * dy <= circleOffset * circleOffset * 2) {
+                beginShape();
+                stroke(nodes[i].color)
+                vertex(nodes[i].x, nodes[i].y)
+                stroke(nodes[j].color)
+                vertex(nodes[j].x, nodes[j].y)
+                endShape();
+            }
+        }
 }
 
-function mousePressed() {
-    p.pause()
+function mousePressed() { 
+    for (var i = 0; i < nodes.length; i++) 
+        nodes[i].angleTween.pause();
 }
 
-function mouseDragged() {
-    p.seek(mouseX / width)
+function mouseDragged() { 
+    for (var i = 0; i < nodes.length; i++)
+        nodes[i].angleTween.seek(mouseX / width);
 }
 
-function mouseReleased() {
-    p.resume()
+function mouseReleased() { 
+    for (var i = 0; i < nodes.length; i++)
+        nodes[i].angleTween.resume();
 }
 
 Node = function(s, r, color, alpha, tween) {
@@ -70,6 +83,7 @@ Node = function(s, r, color, alpha, tween) {
         this.x = cos(this.angle) * this.radius;
         this.y = sin(this.angle) * this.radius;
 
+        noStroke();
         fill(this.color, this.alpha);
         ellipse(this.x, this.y, this.size, this.size);
     }
