@@ -26,15 +26,16 @@ function setup() {
         var pa = pieArcs[i]
         a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
 
-        s.add(new MOTION.Tween(this, 'rotation', a, 50).relative());
-        s.add(new MOTION.Tween(pa, 50).add('offset', 0).add('alpha', 255)); 
-        s.add(new MOTION(50));
+        s.add(new MOTION.Tween(this, 'rotation', a, 15).relative());
+        s.add(new MOTION.Tween(pa, 15).add('offset', 0).add('alpha', 255)); 
+        s.add(new MOTION(15));
     }
 
     // s.add(new MOTION.Tween(this, 'x', 100, 50).relative());
     // s.add(new MOTION.Tween(this, 'x', 200, 50).relative()); 
 
-    s.setTimeScale(5).play()
+    // s.setTimeScale(5).play()
+    s.play()
 }
 
 function draw() {

@@ -161,18 +161,25 @@ Bounce.InOut = function(t) {
 };(function(window, undefined) {
     _usingP5 = (typeof p5 != "undefined") ? true : false;
 
-    _id = 0;
+    _idMap = [];
+    _idMap['Tween'] = 0;
+    _idMap['Property'] = 0;
+    _idMap['Parallel'] = 0;
+    _idMap['Sequence'] = 0;
+    _idMap['Timeline'] = 0;
+    _idMap['KeyFrame'] = 0;
+
     _motions = [];
 
     MOTION = function(duration, delay, easing) {
         if (this.isTween())
-            this._id = 'Tween' + _id++;
+            this._id = 'Tween' + _idMap['Tween']++;
         else if (this.isParallel())
-            this._id = 'Parallel' + _id++;
+            this._id = 'Parallel' + _idMap['Parallel']++;
         else if (this.isSequence())
-            this._id = 'Sequence' + _id++;
+            this._id = 'Sequence' + _idMap['Sequence']++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + _id++;
+            this._id = 'Timeline' + _idMap['Timeline']++;
 
         this._name = '';
 
@@ -186,7 +193,9 @@ Bounce.InOut = function(t) {
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
 
-        this._easing = (typeof easing == 'undefined') ? (function(t) { return t; }) : easing;
+        this._easing = (typeof easing == 'undefined') ? (function(t) {
+            return t;
+        }) : easing;
 
         this._repeatCount = 0;
         this._repeatDuration = 0;
@@ -453,7 +462,9 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.noEasing = function() {
-        this.setEasing(function(t) { return t; });
+        this.setEasing(function(t) {
+            return t;
+        });
         return this;
     };
 
@@ -790,7 +801,7 @@ Bounce.InOut = function(t) {
         this._object = object;
         this._field = field;
 
-        this._id = 'Property'+_id++;
+        this._id = 'Property' + _idMap['Property']++;
         this._name = field;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
@@ -1057,6 +1068,9 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() {
+        // if(this.get('offset'))
+        //     console.log(this._id + ': '+this.get('offset').getValue())
+
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -1089,19 +1103,27 @@ Bounce.InOut = function(t) {
         return this._properties.length;
     };
 
-    MOTION.Tween.prototype.dispatchChangedEvent = function() {
-        this.updateProperties();
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        MOTION.prototype.dispatchStartedEvent.call(this)
 
-        if (this._onUpdate)
-            this._onUpdate(window);
+        if (this.isAbsolute())
+            for (var i = 0; i < this._properties.length; i++)
+                this._properties[i].setBegin();
+    };
+
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        MOTION.prototype.dispatchChangedEvent.call(this)
+        this.updateProperties();
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        for (var i = 0; i < this._properties.length; i++) {
-            // if (this.isRelative())
-            //     this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-        }
+        MOTION.prototype.dispatchEndedEvent.call(this)
+
+        if (this.isRelative())
+            for (var i = 0; i < this._properties.length; i++) {
+                // this._properties[i].setBegin();
+                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            }
     };
 })(MOTION);;(function(MOTION, undefined) {
     REVISION = '1';
@@ -1288,8 +1310,7 @@ Bounce.InOut = function(t) {
     MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty;
 
     MOTION.VectorProperty.prototype.update = function(position) {
-        this._position = position;
-        console.log(this._position);
+        this._position = position; 
         this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
     };
 

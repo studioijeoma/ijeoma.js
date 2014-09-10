@@ -183,8 +183,7 @@
     MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty;
 
     MOTION.VectorProperty.prototype.update = function(position) {
-        this._position = position;
-        console.log(this._position);
+        this._position = position; 
         this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
     };
 

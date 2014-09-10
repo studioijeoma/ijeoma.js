@@ -1,18 +1,25 @@
 (function(window, undefined) {
     _usingP5 = (typeof p5 != "undefined") ? true : false;
 
-    _id = 0;
+    _idMap = [];
+    _idMap['Tween'] = 0;
+    _idMap['Property'] = 0;
+    _idMap['Parallel'] = 0;
+    _idMap['Sequence'] = 0;
+    _idMap['Timeline'] = 0;
+    _idMap['KeyFrame'] = 0;
+
     _motions = [];
 
     MOTION = function(duration, delay, easing) {
         if (this.isTween())
-            this._id = 'Tween' + _id++;
+            this._id = 'Tween' + _idMap['Tween']++;
         else if (this.isParallel())
-            this._id = 'Parallel' + _id++;
+            this._id = 'Parallel' + _idMap['Parallel']++;
         else if (this.isSequence())
-            this._id = 'Sequence' + _id++;
+            this._id = 'Sequence' + _idMap['Sequence']++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + _id++;
+            this._id = 'Timeline' + _idMap['Timeline']++;
 
         this._name = '';
 
@@ -26,7 +33,9 @@
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
 
-        this._easing = (typeof easing == 'undefined') ? (function(t) { return t; }) : easing;
+        this._easing = (typeof easing == 'undefined') ? (function(t) {
+            return t;
+        }) : easing;
 
         this._repeatCount = 0;
         this._repeatDuration = 0;
@@ -293,7 +302,9 @@
     };
 
     MOTION.prototype.noEasing = function() {
-        this.setEasing(function(t) { return t; });
+        this.setEasing(function(t) {
+            return t;
+        });
         return this;
     };
 

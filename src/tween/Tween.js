@@ -24,6 +24,9 @@
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() {
+        // if(this.get('offset'))
+        //     console.log(this._id + ': '+this.get('offset').getValue())
+
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -56,18 +59,26 @@
         return this._properties.length;
     };
 
-    MOTION.Tween.prototype.dispatchChangedEvent = function() {
-        this.updateProperties();
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        MOTION.prototype.dispatchStartedEvent.call(this)
 
-        if (this._onUpdate)
-            this._onUpdate(window);
+        if (this.isAbsolute())
+            for (var i = 0; i < this._properties.length; i++)
+                this._properties[i].setBegin();
+    };
+
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        MOTION.prototype.dispatchChangedEvent.call(this)
+        this.updateProperties();
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        for (var i = 0; i < this._properties.length; i++) {
-            // if (this.isRelative())
-            //     this._properties[i].setBegin();
-            // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-        }
+        MOTION.prototype.dispatchEndedEvent.call(this)
+
+        if (this.isRelative())
+            for (var i = 0; i < this._properties.length; i++) {
+                // this._properties[i].setBegin();
+                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
+            }
     };
 })(MOTION);

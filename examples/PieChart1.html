@@ -10,7 +10,7 @@
         createCanvas(720, 400);
         noStroke();
  
-        m = new MOTION(100, 0, Elastic.easeBoth).play().repeat().onRepeat(function(){ this.reverse() }); 
+        m = new MOTION(100, 0, Quad.InOut).repeat().reverse().play()
     }
 
     function draw() {

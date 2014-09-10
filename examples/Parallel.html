@@ -27,10 +27,8 @@
         tp = new MOTION.Parallel()
             .add(new MOTION.Tween(this, "x1", width, 100))
             .add(new MOTION.Tween(this, "x2", -width, 200))
-            // .reverse().repeat()
-            .play(); 
-
-        console.log(tp)
+            .reverse().repeat()
+            .play();  
     }
 
     function draw() {

@@ -7,14 +7,15 @@ function setup() {
     createCanvas(720, 400);
     noStroke();
 
-    c = new Circle(width / 2, height / 2, 100, 255, 100); 
+    c = new Circle(width / 2, height / 2, 100, 255, 255); 
 
     var i = 0;
     t = new MOTION.Tween(c, 100)
         .add('alpha', 255)
-        .onStart(function(window, object) {
-            object.alpha = 0;
-        })
+        .onStart(function(window, object) { 
+            object.alpha = 0; 
+        }) 
+        .relative()
         .play();
 }
 
@@ -44,7 +45,7 @@ Circle = function(x, y, r, color, alpha) {
     this.y = y;
     this.r = r;
     this.color = color;
-    this.alpha = 255;
+    this.alpha = alpha;
     this.draw = function() {
         fill(this.color, this.alpha);
         ellipse(this.x, this.y, this.r, this.r);
