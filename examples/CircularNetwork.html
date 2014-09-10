@@ -4,6 +4,8 @@
 var nodes = [];
 var offset = 30;
 
+var p;
+
 function setup() {
     createCanvas(512, 512);
 
@@ -11,12 +13,25 @@ function setup() {
     stroke(100)
     strokeWeight(.25)
 
-    for (var i = 0; i < 100; i++)
-        nodes.push(new Node(5, round(random(2, 10)) * offset, 0, 255))
+    p = new MOTION.Parallel();
+
+    for (var i = 0; i < 100; i++) {
+        var n = new Node(5, round(random(2, 10)) * offset, 0, 255)
+        var t = new MOTION.Tween(round(random(1000, 2000))).add(n, 'angle', n.angle + ((round(random(100)) % 2 == 0) ? -360 : 360));
+
+        p.add(t)
+
+        nodes.push(n)
+    }
+
+    p.play().repeat();
 }
 
 function draw() {
     background(255)
+
+    fill(0);
+    text(p.getTime() + '/' + p.getDuration(), 25, 25);
 
     translate(width / 2, height / 2);
 
@@ -29,7 +44,19 @@ function draw() {
                 line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
 }
 
-Node = function(s, r, color, alpha) {
+function mousePressed() {
+    p.pause()
+}
+
+function mouseDragged() {
+    p.seek(mouseX / width)
+}
+
+function mouseReleased() {
+    p.resume()
+}
+
+Node = function(s, r, color, alpha, tween) {
     this.x = 0;
     this.y = 0;
     this.size = s;
@@ -37,7 +64,7 @@ Node = function(s, r, color, alpha) {
     this.angle = random(360);
     this.color = color;
     this.alpha = alpha;
-    this.tween = tween(round(random(500, 5000))).add(this, 'angle', this.angle + ((round(random(100)) % 2 == 0) ? -360 : 360)).repeat().play()
+    this.tween = tween
 
     this.draw = function() {
         this.x = cos(this.angle) * this.radius;

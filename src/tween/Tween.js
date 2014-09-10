@@ -20,8 +20,6 @@
         }
     };
 
-
-
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
@@ -72,4 +70,4 @@
             // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
         }
     };
-})(MOTION)
+})(MOTION);
