@@ -302,7 +302,8 @@ Bounce.InOut = function(t) {
         this.setTime(this._playTime);
 
         // if (this._playTime != this._time) {
-        if (this.isInsidePlayingTime(this._time)) {
+            console.log(this._id+': '+this.getTime())
+        if (this.isInsidePlayingTime(this.getTime())) {
             // console.log(this._id + ': '+this._time) 
             this.dispatchChangedEvent();
         }
@@ -1069,8 +1070,7 @@ Bounce.InOut = function(t) {
 
     MOTION.Tween.prototype.updateProperties = function() {
         // if(this.get('offset'))
-        //     console.log(this._id + ': '+this.get('offset').getValue())
-
+        //     console.log(this._id + ': '+this.get('offset').getPosition())
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };

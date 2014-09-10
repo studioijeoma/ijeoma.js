@@ -142,7 +142,8 @@
         this.setTime(this._playTime);
 
         // if (this._playTime != this._time) {
-        if (this.isInsidePlayingTime(this._time)) {
+            console.log(this._id+': '+this.getTime())
+        if (this.isInsidePlayingTime(this.getTime())) {
             // console.log(this._id + ': '+this._time) 
             this.dispatchChangedEvent();
         }

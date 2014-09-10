@@ -25,8 +25,7 @@
 
     MOTION.Tween.prototype.updateProperties = function() {
         // if(this.get('offset'))
-        //     console.log(this._id + ': '+this.get('offset').getValue())
-
+        //     console.log(this._id + ': '+this.get('offset').getPosition())
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
