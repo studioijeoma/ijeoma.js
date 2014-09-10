@@ -74,7 +74,7 @@ function mouseReleased() {
     }
 }
 
-Node = function(s, r, color, alpha, tween) {
+Node = function(s, r, color, alpha) {
     this.x = 0;
     this.y = 0;
     this.size = s;
@@ -82,7 +82,6 @@ Node = function(s, r, color, alpha, tween) {
     this.angle = random(TWO_PI);
     this.color = color;
     this.alpha = alpha;
-    this.tween = tween
 
     this.draw = function() {
         this.x = cos(this.angle) * this.radius;
