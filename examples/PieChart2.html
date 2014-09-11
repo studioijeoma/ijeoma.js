@@ -2,7 +2,7 @@
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
 // var angles = [30, 10];
-var angles = [30];//, 10];//, 45, 35, 60, 38, 75, 67];
+var angles = [30, 10, 45, 35, 60, 38, 75, 67];
 var rotation = 270;
 var pieArcs = [];
 var x = 0;
@@ -14,26 +14,27 @@ function setup() {
     var lastAngle = 0;
     for (var i = 0; i < angles.length; i++) {
         var gray = (i < 0) ? 255 : map(i, 0, angles.length, 0, 255);
-        pieArcs.push(new PieArc(i, width / 2, height / 2, 100, 300, angles[i], lastAngle, gray, 255));
+        pieArcs.push(new PieArc(i, width / 2, height / 2, 100, 300, angles[i], lastAngle, gray, 0));
         lastAngle += angles[i];
     }
 
     s = new MOTION.Sequence();
 
     var a = rotation;
-    var d = 100;
+    var d = 15;
 
     for (var i = 0; i < pieArcs.length; i++) {
         var pa = pieArcs[i]
         a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
 
         s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
-        s.add(new MOTION.Tween(pa, d).add('offset', 0));//.add('alpha', 255)); 
-        // s.add(new MOTION(15));
+        s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255)); 
+        s.add(new MOTION(d));
     }
 
     // s.setTimeScale(5).play()
     s.play()
+    // s.seek(0);
 }
 
 function draw() {

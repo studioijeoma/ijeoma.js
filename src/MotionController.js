@@ -13,9 +13,29 @@
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
+    MOTION.MotionController.prototype.seek = function(value) {
+        this._playTime = (this._delay + this._duration) * value;
+
+        this.setTime(this._playTime);
+
+        for (var i = 0; i < this._children.length; i++) {
+            if (this._children[i].isInsidePlayingTime(this.getTime()))
+                this._children[i].seek(this.getTime() / (this.getDelay() + this.getDuration()));
+            else if (this._children[i].isAbovePlayingTime(this.getTime()))
+                this._children[i].seek(1);
+            else
+                this._children[i].seek(0);
+        }
+
+        if (this.isInsidePlayingTime(this._time))
+            this.dispatchChangedEvent();
+
+        return this;
+    };
+
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) {   
-            this._children[i].update(this.getTime()); 
+        for (var i = 0; i < this._children.length; i++) {
+            this._children[i].update(this.getTime(), this._isSeeking);
         }
     };
 
@@ -34,12 +54,17 @@
                 // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
 
+                // console.log(t.isRelative())
+                // console.log(orderMap)
+
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
 
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
+                    // if(p.getName() == 'rotation') 
+                    // console.log(pp.getEnd())
                 } else
                     p.setBegin();
 
@@ -47,8 +72,6 @@
 
                 orderMap[name] = order;
                 ppropertyMap[name] = p;
-
-
             }
         }
     };
@@ -114,7 +137,7 @@
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
         child.setTimeMode(this._timeMode);
-        child.setValueMode(this._valueMode);
+        // child.setValueMode(this._valueMode);
         child.noAutoUpdate();
 
         if (child.isTween()) {
@@ -162,6 +185,13 @@
         this._childrenMap = [];
 
         return this;
+    };
+
+    MOTION.MotionController.prototype.dispatchStartedEvent = function() {
+        this.updateChildren();
+        // for (var i = 0; i < this._children.length; i++) {   
+        //     this._children[i].update(this.getTime()); 
+        MOTION.prototype.dispatchStartedEvent.call(this)
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {

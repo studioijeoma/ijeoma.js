@@ -47,6 +47,7 @@
         this._isRepeating = false;
         this._isRepeatingDelay = false;
         this._isReversing = false;
+        this._isSeeking = false;
 
         this._isAutoUpdating = true;
 
@@ -83,6 +84,7 @@
     MOTION.prototype.constructor = MOTION;
 
     MOTION.prototype.play = function() {
+        // console.log(this._id + ' play')
         this.dispatchStartedEvent();
 
         this.seek(0);
@@ -95,6 +97,7 @@
     };
 
     MOTION.prototype.stop = function() {
+        // console.log(this._id + ' stop')
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
         if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
@@ -139,12 +142,13 @@
         return this;
     };
 
-    MOTION.prototype.seek = function(value) {
+    MOTION.prototype.seek = function(value) {  
         this._playTime = (this._delay + this._duration) * value;
 
-        this.setTime(this._playTime);
-
-        this.dispatchChangedEvent();
+        this.setTime(this._playTime); 
+ 
+        // if (this.isInsidePlayingTime(this._time)) 
+        this.dispatchChangedEvent(); 
 
         return this;
     };
@@ -174,14 +178,8 @@
         return this;
     };
 
-    MOTION.prototype.update = function(time) {
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-        else if (!this.isInsidePlayingTime(this._time)) {
-            this.stop();
-        }
-
-        if (this._isPlaying) {
+    MOTION.prototype.update = function(time, isSeeking) {
+          if (this._isPlaying || this._isSeeking) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
@@ -189,7 +187,13 @@
 
             this.dispatchChangedEvent();
         }
-
+ 
+        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+            this.play();
+        else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
+            this.stop();
+        }
+      
         // if (this.isInsidePlayingTime(this.getTime())) {
         //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
         // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)

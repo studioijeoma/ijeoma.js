@@ -9,23 +9,6 @@
     MOTION.Sequence.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Sequence.prototype.constructor = MOTION.Sequence;
 
-    MOTION.Sequence.prototype.update = function(time) {
-        MOTION.MotionController.prototype.update.call(this, time);
-
-        if (this._isPlaying) {
-            for (var i = 0; i < this._children.length; i++) {
-                var c = this._children[i];
-
-                if (c.isInsidePlayingTime(this._time)) {
-                    this._currentChildIndex = i;
-                    this._currentChild = c;
-
-                    break;
-                }
-            }
-        }
-    };
-
     MOTION.Sequence.prototype.add = function(child) {
         MOTION.MotionController.prototype.insert.call(this, child, this._duration);
         return this;
@@ -42,5 +25,24 @@
 
     MOTION.Sequence.prototype.getIndex = function() {
         return this._currentChildIndex;
+    };
+
+    MOTION.MotionController.prototype.dispatchChangedEvent = function() {
+        this.updateChildren();
+
+         if (this._isPlaying) {
+            for (var i = 0; i < this._children.length; i++) {
+                var c = this._children[i];
+
+                if (c.isInsidePlayingTime(this._time)) {
+                    this._currentChildIndex = i;
+                    this._currentChild = c;
+
+                    break;
+                }
+            }
+        }
+        
+        MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION);
