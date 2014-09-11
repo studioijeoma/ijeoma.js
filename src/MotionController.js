@@ -13,36 +13,10 @@
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
-    MOTION.MotionController.prototype.play = function() {
-        MOTION.prototype.play.call(this);
-
-        for (var i = 0; i < this._children.length; i++) {
-            this._children[i].seek(0);
-        }
-
-        return this;
-    }
-
-    MOTION.MotionController.prototype.seek = function(value) {
-        MOTION.prototype.seek.call(this, value);
-
-        for (var i = 0; i < this._children.length; i++) {
-            var c = this._children[i];
-
-            if (c.isInsidePlayingTime(this.getTime()))
-                c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
-            else if (c.isAbovePlayingTime(this.getTime()))
-                c.seek(1);
-            else
-                c.seek(0);
-        }
-
-        return this;
-    };
-
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++)
-            this._children[i].update(this.getTime());
+        for (var i = 0; i < this._children.length; i++) {   
+            this._children[i].update(this.getTime()); 
+        }
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {
@@ -139,7 +113,7 @@
 
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
-        child.setTimeMode(this._timeMode); 
+        child.setTimeMode(this._timeMode);
         child.setValueMode(this._valueMode);
         child.noAutoUpdate();
 
@@ -192,8 +166,6 @@
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this.updateChildren();
-
-        if (this._onUpdate)
-            this._onUpdate(window);
+        MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION)

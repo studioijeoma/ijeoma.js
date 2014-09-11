@@ -1,26 +1,31 @@
 <head>
-    <script language="javascript" src="p5.js"></script> 
-    <script language="javascript" src="../build/ijeomamotion.js"></script> 
-    <script language="javascript"> 
-    var m; 
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var m;
+    var s;
 
     function setup() {
         createCanvas(720, 400);
-        noStroke(); 
+        noStroke();
 
-        m = new MOTION(100, 0, Elastic.easeBoth).play().repeat().onRepeat(function(){ this.reverse() }); 
+        m = new MOTION(50, 0, Elastic.InOut).repeat().reverse().play()
+        s = 100;
     }
 
-    function draw() {
+    function draw() { 
         background(100);
-        ellipse(width/2,height/2,s*m.getPosition(),s*m.getPosition())
-    } 
+
+        fill(255)
+        text(m.getTime()+'/'+m.getDuration(),25,25)
+        ellipse(width / 2, height / 2, s * m.getPosition(), s * m.getPosition())
+    }
     </script>
     <style>
     body {
         padding: 0;
     }
-    </style> 
+    </style>
 </head>
 
 <body>

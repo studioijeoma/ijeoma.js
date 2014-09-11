@@ -162,6 +162,7 @@ Bounce.InOut = function(t) {
     _usingP5 = (typeof p5 != "undefined") ? true : false;
 
     _idMap = [];
+    _idMap['Motion'] = 0;
     _idMap['Tween'] = 0;
     _idMap['Property'] = 0;
     _idMap['Parallel'] = 0;
@@ -180,6 +181,8 @@ Bounce.InOut = function(t) {
             this._id = 'Sequence' + _idMap['Sequence']++;
         else if (this.isTimeline())
             this._id = 'Timeline' + _idMap['Timeline']++;
+        else
+            this._id = 'Motion' + _idMap['Motion']++;
 
         this._name = '';
 
@@ -301,12 +304,7 @@ Bounce.InOut = function(t) {
 
         this.setTime(this._playTime);
 
-        // if (this._playTime != this._time) {
-            console.log(this._id+': '+this.getTime())
-        if (this.isInsidePlayingTime(this.getTime())) {
-            // console.log(this._id + ': '+this._time) 
-            this.dispatchChangedEvent();
-        }
+        this.dispatchChangedEvent();
 
         return this;
     };
@@ -339,6 +337,9 @@ Bounce.InOut = function(t) {
     MOTION.prototype.update = function(time) {
         if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
             this.play();
+        else if (!this.isInsidePlayingTime(this._time)) {
+            this.stop();
+        }
 
         if (this._isPlaying) {
             if (typeof time == 'undefined')
@@ -346,11 +347,15 @@ Bounce.InOut = function(t) {
             else
                 this.setTime(time);
 
-            if (!this.isInsidePlayingTime(this._time))
-                this.stop();
-            else
-                this.dispatchChangedEvent();
+            this.dispatchChangedEvent();
         }
+
+        // if (this.isInsidePlayingTime(this.getTime())) {
+        //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
+        // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)
+        //     this.play();
+        // else if (this.getPosition() > 0)
+        //     this.seek(0);
     };
 
     MOTION.prototype.updateTime = function() {
@@ -536,7 +541,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.isInsidePlayingTime = function(value) {
-        return (value >= this._delay && value <= this._delay + this._duration);
+        return (value >= this._delay && value < this._delay + this._duration);
     };
 
     MOTION.prototype.isAbovePlayingTime = function(value) {
@@ -607,36 +612,10 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
-    MOTION.MotionController.prototype.play = function() {
-        MOTION.prototype.play.call(this);
-
-        for (var i = 0; i < this._children.length; i++) {
-            this._children[i].seek(0);
-        }
-
-        return this;
-    }
-
-    MOTION.MotionController.prototype.seek = function(value) {
-        MOTION.prototype.seek.call(this, value);
-
-        for (var i = 0; i < this._children.length; i++) {
-            var c = this._children[i];
-
-            if (c.isInsidePlayingTime(this.getTime()))
-                c.seek(this.getTime() / (c.getDelay() + c.getDuration()));
-            else if (c.isAbovePlayingTime(this.getTime()))
-                c.seek(1);
-            else
-                c.seek(0);
-        }
-
-        return this;
-    };
-
     MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++)
-            this._children[i].update(this.getTime());
+        for (var i = 0; i < this._children.length; i++) {   
+            this._children[i].update(this.getTime()); 
+        }
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {
@@ -733,7 +712,7 @@ Bounce.InOut = function(t) {
 
     MOTION.MotionController.prototype.insert = function(child, time) {
         child.delay(time);
-        child.setTimeMode(this._timeMode); 
+        child.setTimeMode(this._timeMode);
         child.setValueMode(this._valueMode);
         child.noAutoUpdate();
 
@@ -786,9 +765,7 @@ Bounce.InOut = function(t) {
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this.updateChildren();
-
-        if (this._onUpdate)
-            this._onUpdate(window);
+        MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION);(function(MOTION, undefined) {
 	MOTION.Parallel = function(children) {
@@ -815,14 +792,16 @@ Bounce.InOut = function(t) {
         this._position = position;
 
 
-        if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
+        // if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
             // _this._easing(this.getTime() / this._duration, 0, 1, 1)  
             this._object[this._field] = this._position * (this._end - this._begin) + this._begin
+            console.log(this._id + ': '+this._position)
+            console.log(this._id + ': '+this._object[this._field])
             // console.log(this._id)
             // console.log(this._position)
             // console.log(this._object[this._field])
-        } else
-            console.log(this._position)
+        // } else
+        //     console.log(this._position)
     };
 
     MOTION.Property.prototype.getId = function() {
@@ -1068,9 +1047,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.updateProperties = function() {
-        // if(this.get('offset'))
-        //     console.log(this._id + ': '+this.get('offset').getPosition())
+    MOTION.Tween.prototype.updateProperties = function() { 
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -1106,24 +1083,24 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
         MOTION.prototype.dispatchStartedEvent.call(this)
 
-        if (this.isAbsolute())
+        if (this.isRelative())
             for (var i = 0; i < this._properties.length; i++)
                 this._properties[i].setBegin();
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
-        MOTION.prototype.dispatchChangedEvent.call(this)
         this.updateProperties();
+        MOTION.prototype.dispatchChangedEvent.call(this)
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        MOTION.prototype.dispatchEndedEvent.call(this)
-
         if (this.isRelative())
             for (var i = 0; i < this._properties.length; i++) {
                 // this._properties[i].setBegin();
                 // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
             }
+
+        MOTION.prototype.dispatchEndedEvent.call(this)
     };
 })(MOTION);;(function(MOTION, undefined) {
     REVISION = '1';

@@ -2,6 +2,7 @@
     _usingP5 = (typeof p5 != "undefined") ? true : false;
 
     _idMap = [];
+    _idMap['Motion'] = 0;
     _idMap['Tween'] = 0;
     _idMap['Property'] = 0;
     _idMap['Parallel'] = 0;
@@ -20,6 +21,8 @@
             this._id = 'Sequence' + _idMap['Sequence']++;
         else if (this.isTimeline())
             this._id = 'Timeline' + _idMap['Timeline']++;
+        else
+            this._id = 'Motion' + _idMap['Motion']++;
 
         this._name = '';
 
@@ -141,12 +144,7 @@
 
         this.setTime(this._playTime);
 
-        // if (this._playTime != this._time) {
-            console.log(this._id+': '+this.getTime())
-        if (this.isInsidePlayingTime(this.getTime())) {
-            // console.log(this._id + ': '+this._time) 
-            this.dispatchChangedEvent();
-        }
+        this.dispatchChangedEvent();
 
         return this;
     };
@@ -179,6 +177,9 @@
     MOTION.prototype.update = function(time) {
         if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
             this.play();
+        else if (!this.isInsidePlayingTime(this._time)) {
+            this.stop();
+        }
 
         if (this._isPlaying) {
             if (typeof time == 'undefined')
@@ -186,11 +187,15 @@
             else
                 this.setTime(time);
 
-            if (!this.isInsidePlayingTime(this._time))
-                this.stop();
-            else
-                this.dispatchChangedEvent();
+            this.dispatchChangedEvent();
         }
+
+        // if (this.isInsidePlayingTime(this.getTime())) {
+        //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
+        // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)
+        //     this.play();
+        // else if (this.getPosition() > 0)
+        //     this.seek(0);
     };
 
     MOTION.prototype.updateTime = function() {
@@ -376,7 +381,7 @@
     };
 
     MOTION.prototype.isInsidePlayingTime = function(value) {
-        return (value >= this._delay && value <= this._delay + this._duration);
+        return (value >= this._delay && value < this._delay + this._duration);
     };
 
     MOTION.prototype.isAbovePlayingTime = function(value) {
