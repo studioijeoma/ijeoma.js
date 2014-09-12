@@ -631,13 +631,15 @@ Bounce.InOut = function(t) {
 
         this.setTime(this._playTime);
 
-        for (var i = 0; i < this._motions.length; i++) {
-            if (this._motions[i].isInsidePlayingTime(this.getTime()))
-                this._motions[i].seek(this.getTime() / (this.getDelay() + this.getDuration()));
-            else if (this._motions[i].isAbovePlayingTime(this.getTime()))
-                this._motions[i].seek(1);
+        for (var i = 0; i < this._motions.length; i++) { 
+            var m = this._motions[i];
+
+            if (m.isInsidePlayingTime(this.getTime()))
+                m.seek(this.getTime() / (this.getDelay() + this.getDuration()));
+            else if (m.isAbovePlayingTime(this.getTime()))
+                m.seek(1);
             else
-                this._motions[i].seek(0);
+                m.seek(0);
         }
 
         if (this.isInsidePlayingTime(this._time))
@@ -651,7 +653,7 @@ Bounce.InOut = function(t) {
             this._motions[i].update(this.getTime());
     };
 
-    MOTION.MotionController.prototype.updateTweens = function() {
+    MOTION.MotionController.prototype.updateTweens = function() {  
         var orderMap = [];
         var ppropertyMap = [];
 
@@ -662,19 +664,13 @@ Bounce.InOut = function(t) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField();
-                // var name =  t._id + '.' + p.getName(); 
+                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField(); 
                 var order = 0;
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
-
-                    // if (name == 'x') {
-                    //     console.log(pp)
-                    //     console.log(p)
-                    // }
-
+ 
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
                 } else
@@ -683,17 +679,8 @@ Bounce.InOut = function(t) {
                 p.setOrder(order);
 
                 orderMap[name] = order;
-                ppropertyMap[name] = p;
-
-                // console.log(ppropertyMap)
-                // console.log(orderMap)
-
-                // console.log(name)
-                // console.log(orderMap)
-            }
-
-
-            console.log(t.get('x'))
+                ppropertyMap[name] = p; 
+            } 
         }
     };
 
@@ -844,7 +831,7 @@ Bounce.InOut = function(t) {
         this._object = object;
         this._field = field;
 
-        this._id = 'Property' + _idMap['Property']++; 
+        this._id = 'Property' + _idMap['Property']++;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -855,11 +842,11 @@ Bounce.InOut = function(t) {
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-
-        // if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) { 
-        this._object[this._field] = this._position * (this._end - this._begin) + this._begin
-        // } else
-        //     console.log(this._position)
+        if ((this._position > 0 && this._position < 1) || (this._position == 0 && this._order == 0)) {
+            this._object[this._field] = this._position * (this._end - this._begin) + this._begin;
+        } else {
+            // console.log(this._position);
+        }
     };
 
     MOTION.Property.prototype.getId = function() {
@@ -1161,9 +1148,9 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
         MOTION.prototype.dispatchStartedEvent.call(this)
 
-        if (this.isRelative())
-            for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setBegin();
+        // if (this.isRelative())
+        //     for (var i = 0; i < this._properties.length; i++)
+        //         this._properties[i].setBegin();
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {

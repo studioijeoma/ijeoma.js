@@ -3,7 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._id = 'Property' + _idMap['Property']++; 
+        this._id = 'Property' + _idMap['Property']++;
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -14,11 +14,11 @@
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-
-        // if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) { 
-        this._object[this._field] = this._position * (this._end - this._begin) + this._begin
-        // } else
-        //     console.log(this._position)
+        if ((this._position > 0 && this._position < 1) || (this._position == 0 && this._order == 0)) {
+            this._object[this._field] = this._position * (this._end - this._begin) + this._begin;
+        } else {
+            // console.log(this._position);
+        }
     };
 
     MOTION.Property.prototype.getId = function() {

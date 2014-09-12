@@ -18,13 +18,15 @@
 
         this.setTime(this._playTime);
 
-        for (var i = 0; i < this._motions.length; i++) {
-            if (this._motions[i].isInsidePlayingTime(this.getTime()))
-                this._motions[i].seek(this.getTime() / (this.getDelay() + this.getDuration()));
-            else if (this._motions[i].isAbovePlayingTime(this.getTime()))
-                this._motions[i].seek(1);
+        for (var i = 0; i < this._motions.length; i++) { 
+            var m = this._motions[i];
+
+            if (m.isInsidePlayingTime(this.getTime()))
+                m.seek(this.getTime() / (this.getDelay() + this.getDuration()));
+            else if (m.isAbovePlayingTime(this.getTime()))
+                m.seek(1);
             else
-                this._motions[i].seek(0);
+                m.seek(0);
         }
 
         if (this.isInsidePlayingTime(this._time))
@@ -38,7 +40,7 @@
             this._motions[i].update(this.getTime());
     };
 
-    MOTION.MotionController.prototype.updateTweens = function() {
+    MOTION.MotionController.prototype.updateTweens = function() {  
         var orderMap = [];
         var ppropertyMap = [];
 
@@ -49,19 +51,13 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField();
-                // var name =  t._id + '.' + p.getName(); 
+                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField(); 
                 var order = 0;
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
-
-                    // if (name == 'x') {
-                    //     console.log(pp)
-                    //     console.log(p)
-                    // }
-
+ 
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
                 } else
@@ -70,17 +66,8 @@
                 p.setOrder(order);
 
                 orderMap[name] = order;
-                ppropertyMap[name] = p;
-
-                // console.log(ppropertyMap)
-                // console.log(orderMap)
-
-                // console.log(name)
-                // console.log(orderMap)
-            }
-
-
-            console.log(t.get('x'))
+                ppropertyMap[name] = p; 
+            } 
         }
     };
 

@@ -81,9 +81,9 @@
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
         MOTION.prototype.dispatchStartedEvent.call(this)
 
-        if (this.isRelative())
-            for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setBegin();
+        // if (this.isRelative())
+        //     for (var i = 0; i < this._properties.length; i++)
+        //         this._properties[i].setBegin();
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
