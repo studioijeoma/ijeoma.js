@@ -691,15 +691,12 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype.getChild = function(name) {
         if (typeof arguments[0] == 'number')
             return this._children[arguments[0]];
-        else
+        else if (typeof arguments[0] == 'string')
             return this._childrenMap[arguments[0]];
+        return this._children;
     };
 
     MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
-
-    MOTION.MotionController.prototype.getChildren = function() {
-        return this._children;
-    };
 
     MOTION.MotionController.prototype.getCount = function() {
         return this._children.length;
@@ -759,18 +756,25 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.MotionController.prototype.remove = function(child) {
+        var child, i;
+
         if (typeof arguments[0] == 'number') {
-            // var c = this.children
-            // this._children.splice()
-            // this._children.splice(arguments[0])
+            i = arguments[0]
+            child = this._children[i] 
         } else if (typeof arguments[0] == 'name') {
-
+            child = this._childrenMap[arguments[0]]
+            i = this._children.indexOf(child); 
         } else if (typeof arguments[0] == 'object') {
-
+            child = arguments[0]
+            i = this._children.indexOf(child);  
         }
 
-        // this._children.remove(child);
-        // childrenLUT.remove(child.name);
+        if (i && i != -1)
+            this._children.splice(i, 1);
+
+        if (child && child.getName() in this._childrenMap)
+            delete this._childrenMap[c.getName()];
+
         return this;
     };
 
@@ -1094,6 +1098,30 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
+
+
+    MOTION.Tween.prototype.remove = function(child) {
+        var property, i;
+
+        if (typeof arguments[0] == 'number') {
+            i = arguments[0]
+            property = this._properties[i] 
+        } else if (typeof arguments[0] == 'name') {
+            property = this._propertyMap[arguments[0]]
+            i = this._properties.indexOf(property); 
+        } else if (typeof arguments[0] == 'object') {
+            property = arguments[0]
+            i = this._properties.indexOf(property);  
+        }
+
+        if (i && i != -1)
+            this._properties.splice(i, 1);
+
+        if (property && property.getName() in this._propertyMap)
+            delete this._propertyMap[c.getName()];
+
+        return this;
+    };
 
     MOTION.Tween.prototype.getProperty = function() {
         if (typeof arguments[0] == 'string')

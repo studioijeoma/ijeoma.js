@@ -9,12 +9,12 @@ var x = 0;
 function setup() {
     createCanvas(720, 400);
     noStroke();
-    angleMode(DEGREES);
+    // angleMode(DEGREES);
 
     var lastAngle = 0;
     for (var i = 0; i < angles.length; i++) {
         var gray = (i < 0) ? 255 : map(i, 0, angles.length, 0, 255);
-        pieArcs.push(new PieArc(i, width / 2, height / 2, 100, 300, angles[i], lastAngle, gray, 255));
+        pieArcs.push(new PieArc(i, width / 2, height / 2, 0, 300, radians(angles[i]), lastAngle, gray, 255));
         lastAngle += angles[i];
     }
 
@@ -27,7 +27,7 @@ function setup() {
         var pa = pieArcs[i]
         a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
 
-        s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
+        // s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
         // s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255)); 
         s.add(new MOTION(d));
     }
@@ -94,8 +94,8 @@ PieArc = function(id, x, y, offset, d, a1, a2, c, a) {
         push();
         translate(this.x, this.y)
         rotate(rotation + this.a2)
-        translate(this.offset * cos(this.a1 / 2), this.offset * sin(this.a1 / 2))
-        arc(0, 0, this.d, this.d, 0, radians(this.a1), PIE);
+        translate(this.offset * cos(this.a1), this.offset * sin(this.a1))
+        arc(0, 0, this.d, this.d, 0, (this.a1), PIE);
         pop();
     };
     return this;

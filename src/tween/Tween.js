@@ -41,6 +41,30 @@
 
     MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
 
+
+    MOTION.Tween.prototype.remove = function(child) {
+        var property, i;
+
+        if (typeof arguments[0] == 'number') {
+            i = arguments[0]
+            property = this._properties[i] 
+        } else if (typeof arguments[0] == 'name') {
+            property = this._propertyMap[arguments[0]]
+            i = this._properties.indexOf(property); 
+        } else if (typeof arguments[0] == 'object') {
+            property = arguments[0]
+            i = this._properties.indexOf(property);  
+        }
+
+        if (i && i != -1)
+            this._properties.splice(i, 1);
+
+        if (property && property.getName() in this._propertyMap)
+            delete this._propertyMap[c.getName()];
+
+        return this;
+    };
+
     MOTION.Tween.prototype.getProperty = function() {
         if (typeof arguments[0] == 'string')
             return this._propertyMap[arguments[0]];
