@@ -1,13 +1,13 @@
 (function(MOTION, undefined) {
-    MOTION.MotionController = function(children) {
+    MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
-        this._children = [];
-        this._childrenMap = [];
+        this._motions = [];
+        this._motionMap = [];
 
         this._tweens = [];
 
-        if (children) this.addAll(children);
+        if (motions) this.addAll(motions);
     };
 
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
@@ -18,13 +18,13 @@
 
         this.setTime(this._playTime);
 
-        for (var i = 0; i < this._children.length; i++) {
-            if (this._children[i].isInsidePlayingTime(this.getTime()))
-                this._children[i].seek(this.getTime() / (this.getDelay() + this.getDuration()));
-            else if (this._children[i].isAbovePlayingTime(this.getTime()))
-                this._children[i].seek(1);
+        for (var i = 0; i < this._motions.length; i++) {
+            if (this._motions[i].isInsidePlayingTime(this.getTime()))
+                this._motions[i].seek(this.getTime() / (this.getDelay() + this.getDuration()));
+            else if (this._motions[i].isAbovePlayingTime(this.getTime()))
+                this._motions[i].seek(1);
             else
-                this._children[i].seek(0);
+                this._motions[i].seek(0);
         }
 
         if (this.isInsidePlayingTime(this._time))
@@ -33,10 +33,9 @@
         return this;
     };
 
-    MOTION.MotionController.prototype.updateChildren = function() {
-        for (var i = 0; i < this._children.length; i++) {
-            this._children[i].update(this.getTime(), this._isSeeking);
-        }
+    MOTION.MotionController.prototype.updateMotions = function() {
+        for (var i = 0; i < this._motions.length; i++)
+            this._motions[i].update(this.getTime());
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {
@@ -50,21 +49,21 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getName() : t._id + '.' + p.getName();
+                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField();
                 // var name =  t._id + '.' + p.getName(); 
                 var order = 0;
-
-                // console.log(t.isRelative())
-                // console.log(orderMap)
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
 
+                    // if (name == 'x') {
+                    //     console.log(pp)
+                    //     console.log(p)
+                    // }
+
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
-                    // if(p.getName() == 'rotation') 
-                    // console.log(pp.getEnd())
                 } else
                     p.setBegin();
 
@@ -72,38 +71,47 @@
 
                 orderMap[name] = order;
                 ppropertyMap[name] = p;
+
+                // console.log(ppropertyMap)
+                // console.log(orderMap)
+
+                // console.log(name)
+                // console.log(orderMap)
             }
+
+
+            console.log(t.get('x'))
         }
     };
 
     MOTION.MotionController.prototype.updateDuration = function() {
-        for (var i = 0; i < this._children.length; i++)
-            this._duration = Math.max(this._duration, this._children[i].getDelay() + this._children[i].getDuration());
+        for (var i = 0; i < this._motions.length; i++)
+            this._duration = Math.max(this._duration, this._motions[i].getDelay() + this._motions[i].getDuration());
     };
 
     MOTION.MotionController.prototype.getPosition = function() {
         return this.getTime() / this._duration;
     };
 
-    MOTION.MotionController.prototype.getChild = function(name) {
+    MOTION.MotionController.prototype.getmotion = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._children[arguments[0]];
+            return this._motions[arguments[0]];
         else if (typeof arguments[0] == 'string')
-            return this._childrenMap[arguments[0]];
-        return this._children;
+            return this._motionMap[arguments[0]];
+        return this._motions;
     };
 
-    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getChild;
+    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getmotion;
 
     MOTION.MotionController.prototype.getCount = function() {
-        return this._children.length;
+        return this._motions.length;
     };
 
     MOTION.MotionController.prototype.setTimeScale = function(timeScale) {
         MOTION.prototype.setTimeScale.call(this, timeScale);
 
-        for (var i = 0; i < this._children.length; i++)
-            this._children[i].setTimeScale(timeScale);
+        for (var i = 0; i < this._motions.length; i++)
+            this._motions[i].setTimeScale(timeScale);
 
         return this;
     };
@@ -111,8 +119,8 @@
     MOTION.MotionController.prototype.setTimeMode = function(_durationMode) {
         MOTION.prototype.setTimeMode.call(this, _durationMode);
 
-        for (var i = 0; i < this._children.length; i++)
-            this._children[i].setTimeMode(_durationMode);
+        for (var i = 0; i < this._motions.length; i++)
+            this._motions[i].setTimeMode(_durationMode);
 
         return this;
     };
@@ -120,86 +128,95 @@
     MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
         MOTION.prototype.setValueMode.call(this, _valueMode);
 
-        for (var i = 0; i < this._children.length; i++)
-            this._children[i].setValueMode(_valueMode);
+        for (var i = 0; i < this._motions.length; i++)
+            this._motions[i].setValueMode(_valueMode);
 
         return this;
     };
 
-    MOTION.MotionController.prototype.add = function(child) {
-        this.insert(child, 0);
+    MOTION.MotionController.prototype.add = function(motion) {
+        this.insert(motion, 0);
         return this;
     };
 
-    MOTION.MotionController.prototype.insert = function(child, time) {
-        child.delay(time);
-        child.setTimeMode(this._timeMode);
-        // child.setValueMode(this._valueMode);
-        child.noAutoUpdate();
+    MOTION.MotionController.prototype.insert = function(motion, time) {
+        motion.delay(time);
+        motion.setTimeMode(this._timeMode);
+        // motion.setValueMode(this._valueMode);
+        motion.noAutoUpdate();
 
-        if (child.isTween()) {
-            this._tweens.push(child);
+        this._motions.push(motion);
+
+        if (motion.getName() != null)
+            this._motionMap[motion.getName()] = motion;
+
+        if (motion.isTween()) {
+            this._tweens.push(motion);
             this.updateTweens();
         }
-
-        this._children.push(child);
-
-        if (child.getName() != null)
-            this._childrenMap[child.getName()] = child;
 
         this.updateDuration();
 
         return this;
     };
 
-    MOTION.MotionController.prototype.remove = function(child) {
-        var child, i;
+    MOTION.MotionController.prototype.remove = function(motion) {
+        var motion, i;
 
         if (typeof arguments[0] == 'number') {
             i = arguments[0]
-            child = this._children[i] 
+            motion = this._motions[i]
         } else if (typeof arguments[0] == 'name') {
-            child = this._childrenMap[arguments[0]]
-            i = this._children.indexOf(child); 
+            motion = this._motionMap[arguments[0]]
+            i = this._motions.indexOf(motion);
         } else if (typeof arguments[0] == 'object') {
-            child = arguments[0]
-            i = this._children.indexOf(child);  
+            motion = arguments[0]
+            i = this._motions.indexOf(motion);
         }
 
-        if (i && i != -1)
-            this._children.splice(i, 1);
+        if (i != -1)
+            this._motions.splice(i, 1);
 
-        if (child && child.getName() in this._childrenMap)
-            delete this._childrenMap[c.getName()];
+        if (motion.getName() in this._motionMap)
+            delete this._motionMap[motion.getName()];
+
+        if (motion.isTween()) {
+            i = this._tweens.indexOf(motion);
+            this._tweens.splice(i, 1);
+
+            this.updateTweens();
+        }
+
+        this.updateDuration();
+
+        motion.kill();
 
         return this;
     };
 
-    MOTION.MotionController.prototype.addAll = function(children) {
-        for (var i = 0; i < children.length; i++)
-            this.add(children[i]);
+    MOTION.MotionController.prototype.addAll = function(motions) {
+        for (var i = 0; i < motions.length; i++)
+            this.add(motions[i]);
 
         return this;
     };
 
     MOTION.MotionController.prototype.removeAll = function() {
-        this._tweens = [];
-
-        this._children = [];
-        this._childrenMap = [];
+        for (var i = 0; i < motions.length; i++)
+            this.remove(motions[i]);
 
         return this;
     };
 
     MOTION.MotionController.prototype.dispatchStartedEvent = function() {
-        this.updateChildren();
-        // for (var i = 0; i < this._children.length; i++) {   
-        //     this._children[i].update(this.getTime()); 
+        this.updateMotions();
+        // for (var i = 0; i < this._motions.length; i++) {   
+        //     this._motions[i].update(this.getTime()); 
         MOTION.prototype.dispatchStartedEvent.call(this)
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateChildren();
+        this.updateMotions();
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION)

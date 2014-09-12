@@ -183,7 +183,7 @@
     MOTION.VectorProperty.prototype.constrctor = MOTION.VectorProperty;
 
     MOTION.VectorProperty.prototype.update = function(position) {
-        this._position = position; 
+        this._position = position;
         this._object[this._field] = p5.Vector.lerp(this._begin, this._end, this._position);
     };
 
@@ -215,9 +215,7 @@
         }
 
         this._properties.push(p);
-
-        if (p.getName())
-            this._propertyMap[p.getName()] = p;
+        this._propertyMap[p.getField()] = p;
 
         return this;
     };

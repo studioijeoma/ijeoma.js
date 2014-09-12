@@ -3,8 +3,7 @@
         this._object = object;
         this._field = field;
 
-        this._id = 'Property' + _idMap['Property']++;
-        this._name = field;
+        this._id = 'Property' + _idMap['Property']++; 
 
         this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
         this._end = (typeof end == "undefined") ? 0 : end;
@@ -17,7 +16,7 @@
 
 
         // if ((this._position >= 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) { 
-        this._object[this._field] = this._position * (this._end - this._begin) + this._begin 
+        this._object[this._field] = this._position * (this._end - this._begin) + this._begin
         // } else
         //     console.log(this._position)
     };
@@ -26,24 +25,20 @@
         return this._id;
     };
 
-    MOTION.Property.prototype.getName = function() {
-        return this._name;
-    };
-
-    MOTION.Property.prototype.setName = function(name) {
-        this._name = name;
-        return this;
-    };
-
     MOTION.Property.prototype.getBegin = function() {
         return this._begin;
     };
 
     MOTION.Property.prototype.setBegin = function(begin) {
-        if (begin)
+        if (typeof begin === 'undefined') {
+            // this._begin = (typeof this._object[this._field] === 'undefined') ? 0 : this._object[this._field];
+            if (typeof this._object[this._field] === 'undefined')
+                this._begin = 0
+            else
+                this._begin = this._object[this._field];
+        } else
             this._begin = begin;
-        else
-            this._begin = (typeof this._object[this._field] == "undefined") ? 0 : this._object[this._field];
+
         return this;
     };
 

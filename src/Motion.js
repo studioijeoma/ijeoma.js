@@ -81,6 +81,11 @@
     MOTION.ONCE = "once";
     MOTION.REPEAT = "repeat";
 
+    MOTION.remove = function(child) {
+        var i = _motions.indexOf(child);
+        _motions.splice(i, 1);
+    };
+
     MOTION.prototype.constructor = MOTION;
 
     MOTION.prototype.play = function() {
@@ -142,13 +147,13 @@
         return this;
     };
 
-    MOTION.prototype.seek = function(value) {  
+    MOTION.prototype.seek = function(value) {
         this._playTime = (this._delay + this._duration) * value;
 
-        this.setTime(this._playTime); 
- 
+        this.setTime(this._playTime);
+
         // if (this.isInsidePlayingTime(this._time)) 
-        this.dispatchChangedEvent(); 
+        this.dispatchChangedEvent();
 
         return this;
     };
@@ -179,7 +184,7 @@
     };
 
     MOTION.prototype.update = function(time, isSeeking) {
-          if (this._isPlaying || this._isSeeking) {
+        if (this._isPlaying || this._isSeeking) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
@@ -187,13 +192,13 @@
 
             this.dispatchChangedEvent();
         }
- 
+
         if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
             this.play();
         else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
             this.stop();
         }
-      
+
         // if (this.isInsidePlayingTime(this.getTime())) {
         //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
         // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)
@@ -438,6 +443,11 @@
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
             this._onRepeat(window, this._object);
+    };
+
+    MOTION.prototype.kill = function() {
+        MOTION.remove(this);
+        delete this;
     };
 
     window.MOTION = MOTION;

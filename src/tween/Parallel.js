@@ -1,6 +1,6 @@
 (function(MOTION, undefined) {
-	MOTION.Parallel = function(children) {
-		MOTION.MotionController.call(this, name, children);
+	MOTION.Parallel = function(motions) {
+		MOTION.MotionController.call(this, name, motions);
 	};
 
 	MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
