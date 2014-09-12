@@ -14,7 +14,7 @@ function setup() {
     var lastAngle = 0;
     for (var i = 0; i < angles.length; i++) {
         var gray = (i < 0) ? 255 : map(i, 0, angles.length, 0, 255);
-        pieArcs.push(new PieArc(i, width / 2, height / 2, 100, 300, angles[i], lastAngle, gray, 0));
+        pieArcs.push(new PieArc(i, width / 2, height / 2, 100, 300, angles[i], lastAngle, gray, 255));
         lastAngle += angles[i];
     }
 
@@ -28,7 +28,7 @@ function setup() {
         a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
 
         s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
-        s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255)); 
+        // s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255)); 
         s.add(new MOTION(d));
     }
 

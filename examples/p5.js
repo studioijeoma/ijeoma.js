@@ -1,4 +1,4 @@
-/*! p5.js v0.3.3 August 17, 2014 */
+/*! p5.js v0.3.6 September 11, 2014 */
 var shim = function (require) {
     window.requestDraw = function () {
       return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
@@ -116,7 +116,8 @@ var core = function (require, shim, constants) {
         'keypress': null,
         'touchstart': null,
         'touchmove': null,
-        'touchend': null
+        'touchend': null,
+        'resize': null
       };
       this._start = function () {
         if (this._userNode) {
@@ -204,6 +205,8 @@ var core = function (require, shim, constants) {
           });
           this.pop();
         }
+        this._updatePMouseCoords();
+        this._updatePTouchCoords();
       }.bind(this);
       this._runFrames = function () {
         if (this._updateInterval) {
@@ -240,8 +243,11 @@ var core = function (require, shim, constants) {
               e.elt.removeEventListener(elt_ev, e._events[elt_ev]);
             }
           }
+          var self = this;
           this._registeredMethods.remove.forEach(function (f) {
-            f.call(this);
+            if (typeof f !== 'undefined') {
+              f.call(self);
+            }
           });
           if (this._isGlobal) {
             for (var p in p5.prototype) {
@@ -262,7 +268,6 @@ var core = function (require, shim, constants) {
             }
           }
         }
-        window.p5 = undefined;
       }.bind(this);
       for (var k in constants) {
         p5.prototype[k] = constants[k];
@@ -512,11 +517,13 @@ var p5Element = function (require, core) {
       this.width = this.elt.offsetWidth;
       this.height = this.elt.offsetHeight;
     };
-    p5.Element.prototype.parent = function (parent) {
-      if (typeof parent === 'string') {
-        parent = document.getElementById(parent);
+    p5.Element.prototype.parent = function (p) {
+      if (typeof p === 'string') {
+        p = document.getElementById(p);
+      } else if (p instanceof p5.Element) {
+        p = p.elt;
       }
-      parent.appendChild(this.elt);
+      p.appendChild(this.elt);
     };
     p5.Element.prototype.id = function (id) {
       this.elt.id = id;
@@ -579,6 +586,14 @@ var p5Graphics = function (require, core, constants) {
       this.drawingContext.lineCap = constants.ROUND;
     };
     p5.Graphics.prototype = Object.create(p5.Element.prototype);
+    p5.Graphics.prototype.resize = function (w, h) {
+      this.width = w;
+      this.height = h;
+      if (this._pInst) {
+        this._pInst._setProperty('width', this.width);
+        this._pInst._setProperty('height', this.height);
+      }
+    };
     return p5.Graphics;
   }({}, core, constants);
 var filters = function (require) {
@@ -996,28 +1011,31 @@ var p5Image = function (require, core, filters) {
     p5.Image.prototype.blend = function () {
       p5.prototype.blend.apply(this, arguments);
     };
-    p5.Image.prototype.save = function (extension) {
+    p5.Image.prototype.save = function (filename, extension) {
       var mimeType;
-      switch (extension.toLowerCase()) {
-      case 'png':
+      if (!extension) {
+        extension = 'png';
         mimeType = 'image/png';
-        break;
-      case 'jpeg':
-        mimeType = 'image/jpeg';
-        break;
-      case 'jpg':
-        mimeType = 'image/jpeg';
-        break;
-      default:
-        mimeType = 'image/png';
-        break;
+      } else {
+        switch (extension.toLowerCase()) {
+        case 'png':
+          mimeType = 'image/png';
+          break;
+        case 'jpeg':
+          mimeType = 'image/jpeg';
+          break;
+        case 'jpg':
+          mimeType = 'image/jpeg';
+          break;
+        default:
+          mimeType = 'image/png';
+          break;
+        }
       }
-      if (mimeType !== undefined) {
-        var downloadMime = 'image/octet-stream';
-        var imageData = this.canvas.toDataURL(mimeType);
-        imageData = imageData.replace(mimeType, downloadMime);
-        window.location.href = imageData;
-      }
+      var downloadMime = 'image/octet-stream';
+      var imageData = this.canvas.toDataURL(mimeType);
+      imageData = imageData.replace(mimeType, downloadMime);
+      p5.prototype.downloadFile(imageData, filename, extension);
     };
     return p5.Image;
   }({}, core, filters);
@@ -1989,10 +2007,18 @@ var environment = function (require, core, constants) {
     p5.prototype.displayHeight = screen.height;
     p5.prototype.windowWidth = window.innerWidth;
     p5.prototype.windowHeight = window.innerHeight;
-    window.addEventListener('resize', function (e) {
-      this.windowWidth = window.innerWidth;
-      this.windowHeight = window.innerHeight;
-    });
+    p5.prototype.onresize = function (e) {
+      this._setProperty('windowWidth', window.innerWidth);
+      this._setProperty('windowHeight', window.innerHeight);
+      var context = this._isGlobal ? window : this;
+      var executeDefault;
+      if (typeof context.windowResized === 'function') {
+        executeDefault = context.windowResized(e);
+        if (executeDefault !== undefined && !executeDefault) {
+          e.preventDefault();
+        }
+      }
+    };
     p5.prototype.width = 0;
     p5.prototype.height = 0;
     p5.prototype.fullscreen = function (val) {
@@ -2771,13 +2797,13 @@ var inputfiles = function (require, core, reqwest) {
       reqwest({
         url: path,
         type: t,
-        success: function (resp) {
-          for (var k in resp) {
-            ret[k] = resp[k];
-          }
-          if (typeof callback !== 'undefined') {
-            callback(ret);
-          }
+        crossOrigin: true
+      }).then(function (resp) {
+        for (var k in resp) {
+          ret[k] = resp[k];
+        }
+        if (typeof callback !== 'undefined') {
+          callback(ret);
         }
       });
       return ret;
@@ -2875,12 +2901,9 @@ var inputfiles = function (require, core, reqwest) {
       reqwest({
         url: path,
         type: 'xml',
-        success: function (resp) {
-          ret[0] = resp;
-          if (typeof callback !== 'undefined') {
-            callback(ret);
-          }
-        }
+        crossOrigin: true
+      }).then(function (resp) {
+        callback(resp);
       });
       return ret;
     };
@@ -2949,21 +2972,23 @@ var inputmouse = function (require, core, constants) {
     p5.prototype.mouseButton = 0;
     p5.prototype.mouseIsPressed = false;
     p5.prototype.isMousePressed = false;
-    p5.prototype.updateMouseCoords = function (e) {
-      var mousePos = getMousePos(this._curElement.elt, e);
-      this._setProperty('pmouseX', this.mouseX);
-      this._setProperty('pmouseY', this.mouseY);
+    p5.prototype._updateMouseCoords = function (e) {
       if (e.type === 'touchstart' || e.type === 'touchmove') {
         this._setProperty('mouseX', this.touchX);
         this._setProperty('mouseY', this.touchY);
       } else {
+        var mousePos = getMousePos(this._curElement.elt, e);
         this._setProperty('mouseX', mousePos.x);
         this._setProperty('mouseY', mousePos.y);
       }
-      this._setProperty('pwinMouseX', this.winMouseX);
-      this._setProperty('pwinMouseY', this.winMouseY);
       this._setProperty('winMouseX', e.pageX);
       this._setProperty('winMouseY', e.pageY);
+    };
+    p5.prototype._updatePMouseCoords = function (e) {
+      this._setProperty('pmouseX', this.mouseX);
+      this._setProperty('pmouseY', this.mouseY);
+      this._setProperty('pwinMouseX', this.winMouseX);
+      this._setProperty('pwinMouseY', this.winMouseY);
     };
     function getMousePos(canvas, evt) {
       var rect = canvas.getBoundingClientRect();
@@ -2972,7 +2997,7 @@ var inputmouse = function (require, core, constants) {
         y: evt.clientY - rect.top
       };
     }
-    p5.prototype.setMouseButton = function (e) {
+    p5.prototype._setMouseButton = function (e) {
       if (e.button === 1) {
         this._setProperty('mouseButton', constants.CENTER);
       } else if (e.button === 2) {
@@ -2987,57 +3012,83 @@ var inputmouse = function (require, core, constants) {
     };
     p5.prototype.onmousemove = function (e) {
       var context = this._isGlobal ? window : this;
-      this.updateMouseCoords(e);
+      var executeDefault;
+      this._updateMouseCoords(e);
       if (!this.isMousePressed) {
         if (typeof context.mouseMoved === 'function') {
-          context.mouseMoved(e);
+          executeDefault = context.mouseMoved(e);
+          if (executeDefault !== undefined && !executeDefault) {
+            e.preventDefault();
+          }
         }
       } else {
         if (typeof context.mouseDragged === 'function') {
-          context.mouseDragged(e);
+          executeDefault = context.mouseDragged(e);
+          if (executeDefault !== undefined && !executeDefault) {
+            e.preventDefault();
+          }
         } else if (typeof context.touchMoved === 'function') {
-          e.preventDefault();
-          this.setTouchPoints(e);
-          context.touchMoved(e);
+          executeDefault = context.touchMoved(e);
+          if (!executeDefault) {
+            e.preventDefault();
+          }
+          this._updateTouchCoords(e);
         }
       }
     };
     p5.prototype.onmousedown = function (e) {
       var context = this._isGlobal ? window : this;
+      var executeDefault;
       this._setProperty('isMousePressed', true);
       this._setProperty('mouseIsPressed', true);
-      this.setMouseButton(e);
+      this._setMouseButton(e);
       if (typeof context.mousePressed === 'function') {
-        context.mousePressed(e);
+        executeDefault = context.mousePressed(e);
+        if (executeDefault !== undefined && !executeDefault) {
+          e.preventDefault();
+        }
       } else if (typeof context.touchStarted === 'function') {
-        e.preventDefault();
-        this.setTouchPoints(e);
-        context.touchStarted(e);
+        executeDefault = context.touchStarted(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
+        this._updateTouchCoords(e);
       }
     };
     p5.prototype.onmouseup = function (e) {
       var context = this._isGlobal ? window : this;
+      var executeDefault;
       this._setProperty('isMousePressed', false);
       this._setProperty('mouseIsPressed', false);
       if (typeof context.mouseReleased === 'function') {
-        context.mouseReleased(e);
+        executeDefault = context.mouseReleased(e);
+        if (executeDefault !== undefined && !executeDefault) {
+          e.preventDefault();
+        }
       } else if (typeof context.touchEnded === 'function') {
-        e.preventDefault();
-        this.setTouchPoints(e);
-        context.touchEnded(e);
+        executeDefault = context.touchEnded(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
+        this._updateTouchCoords(e);
       }
     };
     p5.prototype.onclick = function (e) {
       var context = this._isGlobal ? window : this;
       if (typeof context.mouseClicked === 'function') {
-        context.mouseClicked(e);
+        var executeDefault = context.mouseClicked(e);
+        if (executeDefault !== undefined && !executeDefault) {
+          e.preventDefault();
+        }
       }
     };
     p5.prototype.onmousewheel = function (e) {
       var context = this._isGlobal ? window : this;
       if (typeof context.mouseWheel === 'function') {
-        e.preventDefault();
-        context.mouseWheel(e);
+        var executeDefault = context.mouseWheel(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
       }
     };
     return p5;
@@ -3073,15 +3124,16 @@ var inputtouch = function (require, core) {
     var p5 = core;
     p5.prototype.touchX = 0;
     p5.prototype.touchY = 0;
+    p5.prototype.ptouchX = 0;
+    p5.prototype.ptouchY = 0;
     p5.prototype.touches = [];
-    p5.prototype.setTouchPoints = function (e) {
-      var context = this._isGlobal ? window : this;
+    p5.prototype._updateTouchCoords = function (e) {
       if (e.type === 'mousedown' || e.type === 'mousemove') {
-        context._setProperty('touchX', context.mouseX);
-        context._setProperty('touchY', context.mouseY);
+        this._setProperty('touchX', this.mouseX);
+        this._setProperty('touchY', this.mouseY);
       } else {
-        context._setProperty('touchX', e.changedTouches[0].pageX);
-        context._setProperty('touchY', e.changedTouches[0].pageY);
+        this._setProperty('touchX', e.changedTouches[0].pageX);
+        this._setProperty('touchY', e.changedTouches[0].pageY);
         var touches = [];
         for (var i = 0; i < e.changedTouches.length; i++) {
           var ct = e.changedTouches[i];
@@ -3090,42 +3142,60 @@ var inputtouch = function (require, core) {
             y: ct.pageY
           };
         }
-        context._setProperty('touches', touches);
+        this._setProperty('touches', touches);
       }
+    };
+    p5.prototype._updatePTouchCoords = function () {
+      this._setProperty('ptouchX', this.touchX);
+      this._setProperty('ptouchY', this.touchY);
     };
     p5.prototype.ontouchstart = function (e) {
       var context = this._isGlobal ? window : this;
-      this.setTouchPoints(e);
+      var executeDefault;
+      this._updateTouchCoords(e);
       if (typeof context.touchStarted === 'function') {
-        e.preventDefault();
-        context.touchStarted(e);
+        executeDefault = context.touchStarted(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
       } else if (typeof context.mousePressed === 'function') {
-        e.preventDefault();
-        this.setMouseButton(e);
-        context.mousePressed(e);
+        executeDefault = context.mousePressed(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
       }
     };
     p5.prototype.ontouchmove = function (e) {
       var context = this._isGlobal ? window : this;
-      this.setTouchPoints(e);
+      var executeDefault;
+      this._updateTouchCoords(e);
       if (typeof context.touchMoved === 'function') {
-        e.preventDefault();
-        context.touchMoved(e);
+        executeDefault = context.touchMoved(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
       } else if (typeof context.mouseDragged === 'function') {
-        e.preventDefault();
-        this.updateMouseCoords(e);
-        context.mouseDragged(e);
+        executeDefault = context.mouseDragged(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
+        this._updateMouseCoords(e);
       }
     };
     p5.prototype.ontouchend = function (e) {
       var context = this._isGlobal ? window : this;
+      var executeDefault;
       if (typeof context.touchEnded === 'function') {
-        e.preventDefault();
-        context.touchEnded(e);
+        executeDefault = context.touchEnded(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
       } else if (typeof context.mouseReleased === 'function') {
-        e.preventDefault();
-        this.updateMouseCoords(e);
-        context.mouseReleased(e);
+        executeDefault = context.mouseReleased(e);
+        if (!executeDefault) {
+          e.preventDefault();
+        }
+        this._updateMouseCoords(e);
       }
     };
     return p5;
@@ -3508,6 +3578,41 @@ var outputfiles = function (require, core) {
     p5.prototype.saveBytes = function () {
       throw 'not yet implemented';
     };
+    p5.prototype.save = function (object, _filename, _options) {
+      var args = arguments;
+      var cnv = this._curElement.elt;
+      if (args.length === 0) {
+        p5.prototype.saveCanvas(cnv);
+        return;
+      } else if (args[0] instanceof p5.Graphics) {
+        p5.prototype.saveCanvas(args[0].elt, args[1], args[2]);
+        return;
+      } else if (typeof args[0] === 'string') {
+        p5.prototype.saveCanvas(cnv, args[0]);
+      } else {
+        var extension = _checkFileExtension(args[1], args[2])[1];
+        switch (extension) {
+        case 'json':
+          p5.prototype.saveJSON(args[0], args[1], args[2]);
+          break;
+        case 'txt':
+          p5.prototype.saveStrings(args[0], args[1], args[2]);
+          break;
+        default:
+          if (args[0] instanceof Array) {
+            p5.prototype.saveStrings(args[0], args[1], args[2]);
+          } else if (args[0] instanceof p5.Table) {
+            p5.prototype.saveTable(args[0], args[1], args[2], args[3]);
+          } else if (args[0] instanceof p5.Image) {
+            p5.prototype.saveCanvas(args[0].canvas, args[1]);
+          } else if (args[0] instanceof p5.SoundFile) {
+            p5.prototype.saveSound(args[0], args[1], args[2], args[3]);
+          } else if (args[0] instanceof Object) {
+            p5.prototype.saveJSON(args[0], args[1], args[2]);
+          }
+        }
+      }
+    };
     p5.prototype.saveJSON = function (json, filename, opt) {
       var stringify;
       if (opt) {
@@ -3606,30 +3711,25 @@ var outputfiles = function (require, core) {
       pWriter.flush();
     };
     p5.prototype.writeFile = function (dataToDownload, filename, extension) {
-      var ext = '';
-      var a = document.createElement('a');
       var type = 'application/octet-stream';
-      if (_isSafari()) {
+      if (p5.prototype._isSafari()) {
         type = 'text/plain';
       }
-      if (filename) {
-        ext = _checkFileExtension(filename);
-      } else {
-        filename = 'untitled';
-      }
-      if (extension) {
-        if (ext !== extension) {
-          ext = extension;
-          filename = filename + '.' + ext;
-        }
-      }
       var blob = new Blob(dataToDownload, { 'type': type });
-      a.href = window.URL.createObjectURL(blob);
+      var href = window.URL.createObjectURL(blob);
+      p5.prototype.downloadFile(href, filename, extension);
+    };
+    p5.prototype.downloadFile = function (href, fName, extension) {
+      var fx = _checkFileExtension(fName, extension);
+      var filename = fx[0];
+      var ext = fx[1];
+      var a = document.createElement('a');
+      a.href = href;
       a.download = filename;
       a.onclick = destroyClickedElement;
       a.style.display = 'none';
       document.body.appendChild(a);
-      if (_isSafari()) {
+      if (p5.prototype._isSafari()) {
         var aText = 'Hello, Safari user! To download this file...\n';
         aText += '1. Go to File --> Save As.\n';
         aText += '2. Choose "Page Source" as the Format.\n';
@@ -3637,15 +3737,35 @@ var outputfiles = function (require, core) {
         alert(aText);
       }
       a.click();
-      blob = null;
+      href = null;
     };
-    function _checkFileExtension(filename) {
-      return filename.split('.').pop();
+    function _checkFileExtension(filename, extension) {
+      if (!extension) {
+        extension = '';
+      }
+      if (!filename) {
+        filename = 'untitled';
+      }
+      var ext = '';
+      if (filename && filename.indexOf('.') > -1) {
+        ext = filename.split('.').pop();
+      }
+      if (extension) {
+        if (ext !== extension) {
+          ext = extension;
+          filename = filename + '.' + ext;
+        }
+      }
+      return [
+        filename,
+        ext
+      ];
     }
-    function _isSafari() {
+    p5.prototype._checkFileExtension = _checkFileExtension;
+    p5.prototype._isSafari = function () {
       var x = Object.prototype.toString.call(window.HTMLElement);
       return x.indexOf('Constructor') > 0;
-    }
+    };
     function destroyClickedElement(event) {
       document.body.removeChild(event.target);
     }
@@ -3654,8 +3774,115 @@ var outputfiles = function (require, core) {
 var outputimage = function (require, core) {
     'use strict';
     var p5 = core;
-    p5.prototype.save = function () {
-      window.open(this._curElement.elt.toDataURL('image/png'));
+    var frames = [];
+    p5.prototype.saveCanvas = function (_cnv, filename, extension) {
+      if (!extension) {
+        extension = p5.prototype._checkFileExtension(filename, extension)[1];
+        if (extension === '') {
+          extension = 'png';
+        }
+      }
+      var cnv;
+      if (_cnv) {
+        cnv = _cnv;
+      } else if (this._curElement && this._curElement.elt) {
+        cnv = this._curElement.elt;
+      }
+      if (p5.prototype._isSafari()) {
+        var aText = 'Hello, Safari user!\n';
+        aText += 'Now capturing a screenshot...\n';
+        aText += 'To save this image,\n';
+        aText += 'go to File --> Save As.\n';
+        alert(aText);
+        window.location.href = cnv.toDataURL();
+      } else {
+        var mimeType;
+        if (typeof extension === 'undefined') {
+          extension = 'png';
+          mimeType = 'image/png';
+        } else {
+          switch (extension) {
+          case 'png':
+            mimeType = 'image/png';
+            break;
+          case 'jpeg':
+            mimeType = 'image/jpeg';
+            break;
+          case 'jpg':
+            mimeType = 'image/jpeg';
+            break;
+          default:
+            mimeType = 'image/png';
+            break;
+          }
+        }
+        var downloadMime = 'image/octet-stream';
+        var imageData = cnv.toDataURL(mimeType);
+        imageData = imageData.replace(mimeType, downloadMime);
+        p5.prototype.downloadFile(imageData, filename, extension);
+      }
+    };
+    p5.prototype.saveFrames = function (fName, ext, _duration, _fps, callback) {
+      var duration = _duration || 3;
+      duration = p5.prototype.constrain(duration, 0, 15);
+      duration = duration * 1000;
+      var fps = _fps || 15;
+      fps = p5.prototype.constrain(fps, 0, 22);
+      var count = 0;
+      var makeFrame = p5.prototype._makeFrame;
+      var cnv = this._curElement.elt;
+      var frameFactory = setInterval(function () {
+          makeFrame(fName + count, ext, cnv);
+          count++;
+        }, 1000 / fps);
+      setTimeout(function () {
+        clearInterval(frameFactory);
+        if (callback) {
+          callback(frames);
+        } else {
+          for (var i = 0; i < frames.length; i++) {
+            var f = frames[i];
+            p5.prototype.downloadFile(f.imageData, f.filename, f.ext);
+          }
+        }
+        frames = [];
+      }, duration + 0.01);
+    };
+    p5.prototype._makeFrame = function (filename, extension, _cnv) {
+      var cnv;
+      if (this) {
+        cnv = this._curElement.elt;
+      } else {
+        cnv = _cnv;
+      }
+      var mimeType;
+      if (!extension) {
+        extension = 'png';
+        mimeType = 'image/png';
+      } else {
+        switch (extension.toLowerCase()) {
+        case 'png':
+          mimeType = 'image/png';
+          break;
+        case 'jpeg':
+          mimeType = 'image/jpeg';
+          break;
+        case 'jpg':
+          mimeType = 'image/jpeg';
+          break;
+        default:
+          mimeType = 'image/png';
+          break;
+        }
+      }
+      var downloadMime = 'image/octet-stream';
+      var imageData = cnv.toDataURL(mimeType);
+      imageData = imageData.replace(mimeType, downloadMime);
+      var thisFrame = {};
+      thisFrame.imageData = imageData;
+      thisFrame.filename = filename;
+      thisFrame.ext = extension;
+      frames.push(thisFrame);
     };
     return p5;
   }({}, core);
@@ -3701,12 +3928,32 @@ var renderingrendering = function (require, core, constants) {
       } else {
         document.body.appendChild(c);
       }
-      var pg = new p5.Graphics(c, this);
-      if (isDefault) {
+      var pg = this._defaultGraphics;
+      if (!pg) {
+        pg = new p5.Graphics(c, this);
         this._elements.push(pg);
+        this._defaultGraphics = pg;
+      } else {
+        pg.resize(w * this._pixelDensity, h * this._pixelDensity);
       }
       this.scale(this._pixelDensity, this._pixelDensity);
       return pg;
+    };
+    p5.prototype.resizeCanvas = function (w, h) {
+      var pg = this._defaultGraphics;
+      if (pg) {
+        pg.resize(w * this._pixelDensity, h * this._pixelDensity);
+        pg.elt.setAttribute('width', w * this._pixelDensity);
+        pg.elt.setAttribute('height', h * this._pixelDensity);
+        pg.elt.setAttribute('style', 'width:' + w + 'px !important; height:' + h + 'px !important;');
+        this.scale(this._pixelDensity, this._pixelDensity);
+      }
+    };
+    p5.prototype.noCanvas = function () {
+      var c = document.getElementById('defaultCanvas');
+      if (c) {
+        c.parentNode.removeChild(c);
+      }
     };
     p5.prototype.createGraphics = function (w, h) {
       var c = document.createElement('canvas');
@@ -3747,6 +3994,10 @@ var shape2d_primitives = function (require, core, canvas, constants) {
       if (!this._doStroke && !this._doFill) {
         return;
       }
+      if (this._angleMode === constants.DEGREES) {
+        start = this.radians(start);
+        stop = this.radians(stop);
+      }
       var ctx = this.drawingContext;
       var vals = canvas.arcModeAdjust(x, y, width, height, this._ellipseMode);
       var radius = vals.h > vals.w ? vals.h / 2 : vals.w / 2, xScale = vals.h > vals.w ? vals.w / vals.h : 1, yScale = vals.h > vals.w ? 1 : vals.h / vals.w;
@@ -3770,20 +4021,24 @@ var shape2d_primitives = function (require, core, canvas, constants) {
       }
       return this;
     };
-    p5.prototype.ellipse = function (x, y, width, height) {
+    p5.prototype.ellipse = function (x, y, w, h) {
       if (!this._doStroke && !this._doFill) {
         return;
       }
       var ctx = this.drawingContext;
-      var vals = canvas.modeAdjust(x, y, width, height, this._ellipseMode);
-      var kappa = 0.5522848, ox = vals.w / 2 * kappa, oy = vals.h / 2 * kappa, xe = vals.x + vals.w, ye = vals.y + vals.h, xm = vals.x + vals.w / 2, ym = vals.y + vals.h / 2;
+      var vals = canvas.modeAdjust(x, y, w, h, this._ellipseMode);
       ctx.beginPath();
-      ctx.moveTo(vals.x, ym);
-      ctx.bezierCurveTo(vals.x, ym - oy, xm - ox, vals.y, xm, vals.y);
-      ctx.bezierCurveTo(xm + ox, vals.y, xe, ym - oy, xe, ym);
-      ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
-      ctx.bezierCurveTo(xm - ox, ye, vals.x, ym + oy, vals.x, ym);
-      ctx.closePath();
+      if (w === h) {
+        ctx.arc(vals.x + vals.w / 2, vals.y + vals.w / 2, vals.w / 2, 0, 2 * Math.PI, false);
+      } else {
+        var kappa = 0.5522848, ox = vals.w / 2 * kappa, oy = vals.h / 2 * kappa, xe = vals.x + vals.w, ye = vals.y + vals.h, xm = vals.x + vals.w / 2, ym = vals.y + vals.h / 2;
+        ctx.moveTo(vals.x, ym);
+        ctx.bezierCurveTo(vals.x, ym - oy, xm - ox, vals.y, xm, vals.y);
+        ctx.bezierCurveTo(xm + ox, vals.y, xe, ym - oy, xe, ym);
+        ctx.bezierCurveTo(xe, ym + oy, xm + ox, ye, xm, ye);
+        ctx.bezierCurveTo(xm - ox, ye, vals.x, ym + oy, vals.x, ym);
+        ctx.closePath();
+      }
       if (this._doFill) {
         ctx.fill();
       }
@@ -4196,25 +4451,8 @@ var transform = function (require, core, constants, outputtext_area) {
     'use strict';
     var p5 = core;
     var constants = constants;
-    p5.prototype._matrices = [[
-        1,
-        0,
-        0,
-        1,
-        0,
-        0
-      ]];
     p5.prototype.applyMatrix = function (n00, n01, n02, n10, n11, n12) {
       this.drawingContext.transform(n00, n01, n02, n10, n11, n12);
-      var m = this._matrices[this._matrices.length - 1];
-      m = multiplyMatrix(m, [
-        n00,
-        n01,
-        n02,
-        n10,
-        n11,
-        n12
-      ]);
       return this;
     };
     p5.prototype.popMatrix = function () {
@@ -4228,14 +4466,6 @@ var transform = function (require, core, constants, outputtext_area) {
     };
     p5.prototype.resetMatrix = function () {
       this.drawingContext.setTransform();
-      this._matrices[this._matrices.length - 1] = [
-        1,
-        0,
-        0,
-        1,
-        0,
-        0
-      ];
       return this;
     };
     p5.prototype.rotate = function (r) {
@@ -4243,17 +4473,6 @@ var transform = function (require, core, constants, outputtext_area) {
         r = this.radians(r);
       }
       this.drawingContext.rotate(r);
-      var m = this._matrices[this._matrices.length - 1];
-      var c = Math.cos(r);
-      var s = Math.sin(r);
-      var m11 = m[0] * c + m[2] * s;
-      var m12 = m[1] * c + m[3] * s;
-      var m21 = m[0] * -s + m[2] * c;
-      var m22 = m[1] * -s + m[3] * c;
-      m[0] = m11;
-      m[1] = m12;
-      m[2] = m21;
-      m[3] = m22;
       return this;
     };
     p5.prototype.rotateX = function () {
@@ -4271,11 +4490,6 @@ var transform = function (require, core, constants, outputtext_area) {
         y = arguments[1];
       }
       this.drawingContext.scale(x, y);
-      var m = this._matrices[this._matrices.length - 1];
-      m[0] *= x;
-      m[1] *= x;
-      m[2] *= y;
-      m[3] *= y;
       return this;
     };
     p5.prototype.shearX = function (angle) {
@@ -4283,15 +4497,6 @@ var transform = function (require, core, constants, outputtext_area) {
         angle = this.radians(angle);
       }
       this.drawingContext.transform(1, 0, this.tan(angle), 1, 0, 0);
-      var m = this._matrices[this._matrices.length - 1];
-      m = multiplyMatrix(m, [
-        1,
-        0,
-        this.tan(angle),
-        1,
-        0,
-        0
-      ]);
       return this;
     };
     p5.prototype.shearY = function (angle) {
@@ -4299,41 +4504,12 @@ var transform = function (require, core, constants, outputtext_area) {
         angle = this.radians(angle);
       }
       this.drawingContext.transform(1, this.tan(angle), 0, 1, 0, 0);
-      var m = this._matrices[this._matrices.length - 1];
-      m = multiplyMatrix(m, [
-        1,
-        this.tan(angle),
-        0,
-        1,
-        0,
-        0
-      ]);
       return this;
     };
     p5.prototype.translate = function (x, y) {
       this.drawingContext.translate(x, y);
-      var m = this._matrices[this._matrices.length - 1];
-      m[4] += m[0] * x + m[2] * y;
-      m[5] += m[1] * x + m[3] * y;
       return this;
     };
-    function multiplyMatrix(m1, m2) {
-      var result = [];
-      var m1Length = m1.length;
-      var m2Length = m2.length;
-      var m10Length = m1[0].length;
-      for (var j = 0; j < m2Length; j++) {
-        result[j] = [];
-        for (var k = 0; k < m10Length; k++) {
-          var sum = 0;
-          for (var i = 0; i < m1Length; i++) {
-            sum += m1[i][k] * m2[j][i];
-          }
-          result[j].push(sum);
-        }
-      }
-      return result;
-    }
     return p5;
   }({}, core, constants, outputtext_area);
 var typographyattributes = function (require, core, constants) {
@@ -4357,14 +4533,20 @@ var typographyattributes = function (require, core, constants) {
     };
     p5.prototype.textSize = function (s) {
       this._setProperty('_textSize', s);
+      this._applyTextProperties();
     };
     p5.prototype.textStyle = function (s) {
       if (s === constants.NORMAL || s === constants.ITALIC || s === constants.BOLD) {
         this._setProperty('_textStyle', s);
+        this._applyTextProperties();
       }
     };
     p5.prototype.textWidth = function (s) {
       return this.drawingContext.measureText(s).width;
+    };
+    p5.prototype._applyTextProperties = function () {
+      var str = this._textStyle + ' ' + this._textSize + 'px ' + this._textFont;
+      this.drawingContext.font = str;
     };
     return p5;
   }({}, core, constants);
@@ -4373,7 +4555,6 @@ var typographyloading_displaying = function (require, core, canvas) {
     var p5 = core;
     var canvas = canvas;
     p5.prototype.text = function () {
-      this.drawingContext.font = this._textStyle + ' ' + this._textSize + 'px ' + this._textFont;
       if (arguments.length === 3) {
         if (this._doFill) {
           this.drawingContext.fillText(arguments[0], arguments[1], arguments[2]);
@@ -4385,38 +4566,39 @@ var typographyloading_displaying = function (require, core, canvas) {
         var words = arguments[0].split(' ');
         var line = '';
         var vals = canvas.modeAdjust(arguments[1], arguments[2], arguments[3], arguments[4], this._rectMode);
-        vals.y += this._textLeading;
+        var y = vals.y + this._textLeading;
         for (var n = 0; n < words.length; n++) {
           var testLine = line + words[n] + ' ';
           var metrics = this.drawingContext.measureText(testLine);
           var testWidth = metrics.width;
-          if (vals.y > vals.h) {
+          if (y > vals.y + vals.h) {
             break;
           } else if (testWidth > vals.w && n > 0) {
             if (this._doFill) {
-              this.drawingContext.fillText(line, vals.x, vals.y);
+              this.drawingContext.fillText(line, vals.x, y);
             }
             if (this._doStroke) {
-              this.drawingContext.strokeText(line, vals.x, vals.y);
+              this.drawingContext.strokeText(line, vals.x, y);
             }
             line = words[n] + ' ';
-            vals.y += this._textLeading;
+            y += this._textLeading;
           } else {
             line = testLine;
           }
         }
-        if (vals.y <= vals.h) {
+        if (y <= vals.y + vals.h) {
           if (this._doFill) {
-            this.drawingContext.fillText(line, vals.x, vals.y);
+            this.drawingContext.fillText(line, vals.x, y);
           }
           if (this._doStroke) {
-            this.drawingContext.strokeText(line, vals.x, vals.y);
+            this.drawingContext.strokeText(line, vals.x, y);
           }
         }
       }
     };
     p5.prototype.textFont = function (str) {
       this._setProperty('_textFont', str);
+      this._applyTextProperties();
     };
     return p5;
   }({}, core, canvas);
