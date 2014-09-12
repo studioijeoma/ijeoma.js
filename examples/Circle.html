@@ -12,15 +12,18 @@ function setup() {
     var i = 0;
     t = new MOTION.Tween(c, 100)
         .add('alpha', 255)
-        .onStart(function(window, object) { 
-            object.alpha = 0; 
+        .onStart(function(window, object) {  
+            this.get('alpha').setBegin(0)
         }) 
-        .relative()
+        // .relative()
         .play();
 }
 
 function draw() {
     background(100);
+
+    fill(255, 0, 0)
+    text(t.getTime() + '  ' + t.getPosition(), 25, 25)
 
     c.draw();
 }

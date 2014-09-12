@@ -152,8 +152,8 @@
 
         this.setTime(this._playTime);
 
-        // if (this.isInsidePlayingTime(this._time)) 
-        this.dispatchChangedEvent();
+        if (this.isInsidePlayingTime(this._time))
+            this.dispatchChangedEvent();
 
         return this;
     };
@@ -198,13 +198,6 @@
         else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
             this.stop();
         }
-
-        // if (this.isInsidePlayingTime(this.getTime())) {
-        //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
-        // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)
-        //     this.play();
-        // else if (this.getPosition() > 0)
-        //     this.seek(0);
     };
 
     MOTION.prototype.updateTime = function() {

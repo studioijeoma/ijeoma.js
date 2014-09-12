@@ -312,8 +312,8 @@ Bounce.InOut = function(t) {
 
         this.setTime(this._playTime);
 
-        // if (this.isInsidePlayingTime(this._time)) 
-        this.dispatchChangedEvent();
+        if (this.isInsidePlayingTime(this._time))
+            this.dispatchChangedEvent();
 
         return this;
     };
@@ -358,13 +358,6 @@ Bounce.InOut = function(t) {
         else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
             this.stop();
         }
-
-        // if (this.isInsidePlayingTime(this.getTime())) {
-        //     this.seek(this.getTime() / (this.getDelay() + this.getDuration()));
-        // }else if (this.isAbovePlayingTime(this.getTime()) && this.getPosition() < 1)
-        //     this.play();
-        // else if (this.getPosition() > 0)
-        //     this.seek(0);
     };
 
     MOTION.prototype.updateTime = function() {
@@ -626,34 +619,28 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
-    MOTION.MotionController.prototype.seek = function(value) {
-        this._playTime = (this._delay + this._duration) * value;
+    // MOTION.MotionController.prototype.seek = function(value) {
+    //     this._playTime = (this._delay + this._duration) * value;
 
-        this.setTime(this._playTime);
+    //     this.setTime(this._playTime);
+ 
+    //     for (var i = 0; i < this._motions.length; i++) {
+    //         var m = this._motions[i];
+    //         m.update(this.getTime()) 
+    //     } 
 
-        for (var i = 0; i < this._motions.length; i++) { 
-            var m = this._motions[i];
+    //     if (this.isInsidePlayingTime(this._time))
+    //         this.dispatchChangedEvent();
 
-            if (m.isInsidePlayingTime(this.getTime()))
-                m.seek(this.getTime() / (this.getDelay() + this.getDuration()));
-            else if (m.isAbovePlayingTime(this.getTime()))
-                m.seek(1);
-            else
-                m.seek(0);
-        }
-
-        if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent();
-
-        return this;
-    };
+    //     return this;
+    // };
 
     MOTION.MotionController.prototype.updateMotions = function() {
         for (var i = 0; i < this._motions.length; i++)
             this._motions[i].update(this.getTime());
     };
 
-    MOTION.MotionController.prototype.updateTweens = function() {  
+    MOTION.MotionController.prototype.updateTweens = function() {
         var orderMap = [];
         var ppropertyMap = [];
 
@@ -664,13 +651,13 @@ Bounce.InOut = function(t) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField(); 
+                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField();
                 var order = 0;
 
                 if (name in orderMap) {
                     order = orderMap[name]
                     order++;
- 
+
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
                 } else
@@ -679,8 +666,8 @@ Bounce.InOut = function(t) {
                 p.setOrder(order);
 
                 orderMap[name] = order;
-                ppropertyMap[name] = p; 
-            } 
+                ppropertyMap[name] = p;
+            }
         }
     };
 
@@ -809,9 +796,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.MotionController.prototype.dispatchStartedEvent = function() {
-        this.updateMotions();
-        // for (var i = 0; i < this._motions.length; i++) {   
-        //     this._motions[i].update(this.getTime()); 
+        // this.updateMotions(); 
         MOTION.prototype.dispatchStartedEvent.call(this)
     };
 
