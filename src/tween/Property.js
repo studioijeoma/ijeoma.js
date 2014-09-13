@@ -14,7 +14,7 @@
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-        if ((this._position > 0 && this._position < 1) || (this._position == 0 && this._order == 0)) {
+        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
             this._object[this._field] = this._position * (this._end - this._begin) + this._begin;
         } else {
             // console.log(this._position);

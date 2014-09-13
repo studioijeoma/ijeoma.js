@@ -249,7 +249,7 @@ Bounce.InOut = function(t) {
     MOTION.prototype.constructor = MOTION;
 
     MOTION.prototype.play = function() {
-        // console.log(this._id + ' play')
+        console.log(this._id + ' play')
         this.dispatchStartedEvent();
 
         this.seek(0);
@@ -262,7 +262,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.stop = function() {
-        // console.log(this._id + ' stop')
+        console.log(this._id + ' stop')
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
         if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
@@ -313,7 +313,7 @@ Bounce.InOut = function(t) {
         this.setTime(this._playTime);
 
         if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent();
+            this.dispatchChangedEvent(); 
 
         return this;
     };
@@ -580,22 +580,22 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.dispatchStartedEvent = function() {
         if (this._onStart)
-            this._onStart(window, this._object);
+            this._onStart(window);
     };
 
     MOTION.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
-            this._onEnd(window, this._object);
+            this._onEnd(window);
     };
 
     MOTION.prototype.dispatchChangedEvent = function() {
         if (this._onUpdate)
-            this._onUpdate(window, this._object);
+            this._onUpdate(window);
     };
 
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
-            this._onRepeat(window, this._object);
+            this._onRepeat(window);
     };
 
     MOTION.prototype.kill = function() {
@@ -827,7 +827,7 @@ Bounce.InOut = function(t) {
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-        if ((this._position > 0 && this._position < 1) || (this._position == 0 && this._order == 0)) {
+        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
             this._object[this._field] = this._position * (this._end - this._begin) + this._begin;
         } else {
             // console.log(this._position);
@@ -1076,6 +1076,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() { 
+        console.log(this._time)
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -1131,27 +1132,34 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        MOTION.prototype.dispatchStartedEvent.call(this)
-
         // if (this.isRelative())
         //     for (var i = 0; i < this._properties.length; i++)
         //         this._properties[i].setBegin();
+
+        if (this._onStart)
+            this._onStart(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        // if (this.isRelative())
+        //     for (var i = 0; i < this._properties.length; i++) 
+        //         this._properties[i].setBegin();  
+
+        if (this._onEnd)
+            this._onEnd(window, this._object);
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
-        MOTION.prototype.dispatchChangedEvent.call(this)
+
+        if (this._onUpdate)
+            this._onUpdate(window, this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        if (this.isRelative())
-            for (var i = 0; i < this._properties.length; i++) {
-                // this._properties[i].setBegin();
-                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-            }
-
-        MOTION.prototype.dispatchEndedEvent.call(this)
-    };
+    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
+        if (this._onRepeat)
+            this._onRepeat(window, this._object);
+    }; 
 })(MOTION);;(function(MOTION, undefined) {
     REVISION = '1';
 

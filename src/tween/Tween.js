@@ -24,6 +24,7 @@
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() { 
+        console.log(this._time)
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -79,25 +80,32 @@
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        MOTION.prototype.dispatchStartedEvent.call(this)
-
         // if (this.isRelative())
         //     for (var i = 0; i < this._properties.length; i++)
         //         this._properties[i].setBegin();
+
+        if (this._onStart)
+            this._onStart(window, this._object);
+    };
+
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        // if (this.isRelative())
+        //     for (var i = 0; i < this._properties.length; i++) 
+        //         this._properties[i].setBegin();  
+
+        if (this._onEnd)
+            this._onEnd(window, this._object);
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
-        MOTION.prototype.dispatchChangedEvent.call(this)
+
+        if (this._onUpdate)
+            this._onUpdate(window, this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        if (this.isRelative())
-            for (var i = 0; i < this._properties.length; i++) {
-                // this._properties[i].setBegin();
-                // console.log(this._properties[i].getName() + ': ' + this._properties[i].getValue())
-            }
-
-        MOTION.prototype.dispatchEndedEvent.call(this)
-    };
+    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
+        if (this._onRepeat)
+            this._onRepeat(window, this._object);
+    }; 
 })(MOTION);

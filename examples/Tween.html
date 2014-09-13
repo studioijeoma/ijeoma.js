@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Tween.js / simplest possible example!</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <body>
+        <script type="text/javascript" src="p5.js"></script>
+        <script type="text/javascript" src="../build/ijeomamotion.js"></script>
+        <script type="text/javascript">
+            var t;
+            var x;
+            function setup() {
+                createCanvas(400, 200);
+                smooth();
+                x = -width;
+                t = new MOTION.Tween(this, "x", width, 10).play();
+            }
+            function draw() {
+                background(255);
+
+                stroke(255);
+                fill(255 / 2);
+                rect(x, 0, width, height);
+                fill(0);
+
+                var time = t.getTime() + " / " + t.getDuration();
+                noStroke();
+                fill(0);
+                text(time, 10, 10 + 12);
+            }
+            function keyPressed() {
+                if (keyCode == LEFT_ARROW) {
+                    t.pause();
+                    t.seek(t.getPosition() - .01)
+                } else if (keyCode == RIGHT_ARROW) {
+                    t.pause();
+                    t.seek(t.getPosition() + .01)
+                } else if (key == 'a')
+                    t.pause();
+                else if (key == 's')
+                    t.resume();
+                else if (key == 'd')
+                    t.play();
+                else if (key == 'f')
+                    t.stop();
+            }
+            function mousePressed() {
+                t.pause();
+            }
+            function mouseReleased() {
+                t.resume();
+            }
+            function mouseDragged() {
+                t.seek(mouseX / width);
+            }
+        </script>
+    </body>
+</html>

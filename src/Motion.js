@@ -89,7 +89,7 @@
     MOTION.prototype.constructor = MOTION;
 
     MOTION.prototype.play = function() {
-        // console.log(this._id + ' play')
+        console.log(this._id + ' play')
         this.dispatchStartedEvent();
 
         this.seek(0);
@@ -102,7 +102,7 @@
     };
 
     MOTION.prototype.stop = function() {
-        // console.log(this._id + ' stop')
+        console.log(this._id + ' stop')
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
         if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
@@ -153,7 +153,7 @@
         this.setTime(this._playTime);
 
         if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent();
+            this.dispatchChangedEvent(); 
 
         return this;
     };
@@ -420,22 +420,22 @@
 
     MOTION.prototype.dispatchStartedEvent = function() {
         if (this._onStart)
-            this._onStart(window, this._object);
+            this._onStart(window);
     };
 
     MOTION.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
-            this._onEnd(window, this._object);
+            this._onEnd(window);
     };
 
     MOTION.prototype.dispatchChangedEvent = function() {
         if (this._onUpdate)
-            this._onUpdate(window, this._object);
+            this._onUpdate(window);
     };
 
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
-            this._onRepeat(window, this._object);
+            this._onRepeat(window);
     };
 
     MOTION.prototype.kill = function() {
