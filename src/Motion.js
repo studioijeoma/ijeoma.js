@@ -1,6 +1,4 @@
-(function(window, undefined) {
-    _usingP5 = (typeof p5 != "undefined") ? true : false;
-
+(function(window, undefined) {  
     _idMap = [];
     _idMap['Motion'] = 0;
     _idMap['Tween'] = 0;
@@ -70,7 +68,7 @@
     MOTION.SECONDS = "seconds";
     MOTION.FRAMES = "frames";
 
-    _timeMode = (_usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+    _timeMode = MOTION.SECONDS;
 
     MOTION.RELATIVE = 'relative';
     MOTION.ABSOLUTE = 'absolute';
@@ -138,8 +136,7 @@
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        if (_usingP5) this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
-        else this._playTime = new Date().getTime() - this._playTime * 1000;
+        this._playTime = new Date().getTime() - this._playTime * 1000;
 
         isPlaying = true;
 
@@ -191,21 +188,22 @@
                 this.setTime(time);
 
             this.dispatchChangedEvent();
-        }
+        } 
 
         if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
             this.play();
         else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
             this.stop();
         }
+
+        // console.log(this._time)
     };
 
     MOTION.prototype.updateTime = function() {
-        if (_usingP5) this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
-        else this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+        this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
-            this._time = this._reverseTime - this._time;
+            this._time = this._reverseTime - this._time; 
     };
 
     MOTION.prototype.onStart = function(func) {
@@ -316,8 +314,8 @@
         return this;
     };
 
-    MOTION.prototype.setTimeMode = function(_timeMode) {
-        _timeMode = _timeMode;
+    MOTION.prototype.setTimeMode = function(timeMode) {
+        _timeMode = timeMode;
         return this;
     };
 

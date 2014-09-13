@@ -1,5 +1,8 @@
 (function(MOTION, undefined) {
     REVISION = '1';
+    
+    _timeMode = MOTION.FRAMES;
+    _valueMode = MOTION.ABSOLUTE;
 
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < _motions.length; i++)
@@ -27,7 +30,6 @@
         return new MOTION.Timeline(children);
     };
 
-    _valueMode = MOTION.ABSOLUTE;
     _current = null;
 
     p5.prototype.relative = function() {
@@ -146,20 +148,18 @@
         m.seek(t);
     };
 
-    MOTION.timeMode = MOTION.FRAMES;
-
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
-
-        this._playTime = (MOTION.timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
+ 
+        this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
 
         return this;
     };
 
     MOTION.prototype.updateTime = function() {
-        this._time = ((MOTION.timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
+        this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale; 
 
-        if (this._isReversing && this._reverseTime != 0)
+        if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
     };
 

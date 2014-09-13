@@ -24,7 +24,7 @@
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() { 
-        console.log(this._time)
+        // console.log(this._id + ': '+ this._time)
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };

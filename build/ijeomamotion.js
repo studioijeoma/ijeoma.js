@@ -158,9 +158,7 @@ Bounce.Out = function(t) {
 Bounce.InOut = function(t) {
     if (t < .5) return Bounce.In (t * 2, 0) * .5;
     return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
-};(function(window, undefined) {
-    _usingP5 = (typeof p5 != "undefined") ? true : false;
-
+};(function(window, undefined) {  
     _idMap = [];
     _idMap['Motion'] = 0;
     _idMap['Tween'] = 0;
@@ -230,7 +228,7 @@ Bounce.InOut = function(t) {
     MOTION.SECONDS = "seconds";
     MOTION.FRAMES = "frames";
 
-    _timeMode = (_usingP5) ? MOTION.FRAMES : MOTION.SECONDS;
+    _timeMode = MOTION.SECONDS;
 
     MOTION.RELATIVE = 'relative';
     MOTION.ABSOLUTE = 'absolute';
@@ -298,8 +296,7 @@ Bounce.InOut = function(t) {
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        if (_usingP5) this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
-        else this._playTime = new Date().getTime() - this._playTime * 1000;
+        this._playTime = new Date().getTime() - this._playTime * 1000;
 
         isPlaying = true;
 
@@ -351,21 +348,22 @@ Bounce.InOut = function(t) {
                 this.setTime(time);
 
             this.dispatchChangedEvent();
-        }
+        } 
 
         if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
             this.play();
         else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
             this.stop();
         }
+
+        // console.log(this._time)
     };
 
     MOTION.prototype.updateTime = function() {
-        if (_usingP5) this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
-        else this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+        this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
-            this._time = this._reverseTime - this._time;
+            this._time = this._reverseTime - this._time; 
     };
 
     MOTION.prototype.onStart = function(func) {
@@ -476,8 +474,8 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    MOTION.prototype.setTimeMode = function(_timeMode) {
-        _timeMode = _timeMode;
+    MOTION.prototype.setTimeMode = function(timeMode) {
+        _timeMode = timeMode;
         return this;
     };
 
@@ -1076,7 +1074,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() { 
-        console.log(this._time)
+        // console.log(this._id + ': '+ this._time)
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };
@@ -1162,6 +1160,9 @@ Bounce.InOut = function(t) {
     }; 
 })(MOTION);;(function(MOTION, undefined) {
     REVISION = '1';
+    
+    _timeMode = MOTION.FRAMES;
+    _valueMode = MOTION.ABSOLUTE;
 
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < _motions.length; i++)
@@ -1189,7 +1190,6 @@ Bounce.InOut = function(t) {
         return new MOTION.Timeline(children);
     };
 
-    _valueMode = MOTION.ABSOLUTE;
     _current = null;
 
     p5.prototype.relative = function() {
@@ -1308,20 +1308,18 @@ Bounce.InOut = function(t) {
         m.seek(t);
     };
 
-    MOTION.timeMode = MOTION.FRAMES;
-
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
-
-        this._playTime = (MOTION.timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
+ 
+        this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
 
         return this;
     };
 
     MOTION.prototype.updateTime = function() {
-        this._time = ((MOTION.timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
+        this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale; 
 
-        if (this._isReversing && this._reverseTime != 0)
+        if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
     };
 
