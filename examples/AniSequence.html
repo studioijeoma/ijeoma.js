@@ -20,6 +20,7 @@ function setup() {
     // s.add(new MOTION.Tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5))  
     // s.play();
 
+    frames();
     s = beginSequence();
     relative();
     tween(25).add('diameter', 55)
@@ -29,6 +30,8 @@ function setup() {
     tween(25).add('x', 50).add('y', 50).add(this, 'diameter', 5)
     endSequence();
     play(s);
+
+    console.log(s.getTimeMode())
 }
 
 function draw() {

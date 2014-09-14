@@ -86,8 +86,7 @@
 
     MOTION.prototype.constructor = MOTION;
 
-    MOTION.prototype.play = function() {
-        console.log(this._id + ' play')
+    MOTION.prototype.play = function() { 
         this.dispatchStartedEvent();
 
         this.seek(0);
@@ -99,8 +98,7 @@
         return this;
     };
 
-    MOTION.prototype.stop = function() {
-        console.log(this._id + ' stop')
+    MOTION.prototype.stop = function() { 
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
         if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
@@ -125,26 +123,26 @@
         return this;
     };
 
-    MOTION.prototype.pause = function() {
-        this._isPlaying = false;
+    MOTION.prototype.pause = function() {  
+        this._isPlaying = false; 
+        this._isSeeking = false;
 
         this._playTime = this._time;
 
         return this;
     };
 
-    MOTION.prototype.resume = function() {
-        this._isPlaying = true;
+    MOTION.prototype.resume = function() { 
+        this._isPlaying = true; 
+        this._isSeeking = false;
 
         this._playTime = new Date().getTime() - this._playTime * 1000;
-
-        isPlaying = true;
-
 
         return this;
     };
 
     MOTION.prototype.seek = function(value) {
+        this._isPlaying = false; 
         this._isSeeking = true;
 
         this._playTime = (this._delay + this._duration) * value;
@@ -152,7 +150,7 @@
         this.setTime(this._playTime);
 
         if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent(); 
+            this.dispatchChangedEvent();  
 
         this._isSeeking = false;
 
@@ -184,24 +182,7 @@
         return this;
     };
 
-    MOTION.prototype.update = function(time) {
-        // if (this._isPlaying || this._isSeeking) {
-        //     if (typeof time == 'undefined')
-        //         this.updateTime();
-        //     else
-        //         this.setTime(time);
-
-        //     this.dispatchChangedEvent();
-
-        //     // console.log('frameCount '+frameCount)
-        // } 
-
-        // if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-        //     this.play();
-        // else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
-        //     this.stop();
-        // }
-
+    MOTION.prototype.update = function(time) {  
         if (this._isPlaying || this._isSeeking) {
             if (typeof time == 'undefined')
                 this.updateTime();

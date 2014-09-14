@@ -13,25 +13,9 @@
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
-    // MOTION.MotionController.prototype.seek = function(value) {
-    //     this._playTime = (this._delay + this._duration) * value;
-
-    //     this.setTime(this._playTime);
- 
-    //     for (var i = 0; i < this._motions.length; i++) {
-    //         var m = this._motions[i];
-    //         m.update(this.getTime()) 
-    //     } 
-
-    //     if (this.isInsidePlayingTime(this._time))
-    //         this.dispatchChangedEvent();
-
-    //     return this;
-    // };
-
     MOTION.MotionController.prototype.updateMotions = function() {
         for (var i = 0; i < this._motions.length; i++){
-            var m = this._motions[i]
+            var m = this._motions[i];
 
             if(this._isSeeking) {
                 // m.seek(this.getTime())
@@ -140,8 +124,7 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.setTimeMode(this._timeMode);
-        // motion.setValueMode(this._valueMode);
+        motion.setTimeMode(_timeMode); 
         motion.noAutoUpdate();
 
         this._motions.push(motion);

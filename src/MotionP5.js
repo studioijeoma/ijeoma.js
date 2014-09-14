@@ -30,6 +30,18 @@
         return new MOTION.Timeline(children);
     };
 
+    p5.prototype.seconds = function() {
+        _timeMode = MOTION.SECONDS;
+
+        return this;
+    };
+
+    p5.prototype.frames = function() {
+        _timeMode = MOTION.FRAMES; 
+
+        return this;
+    };
+
     _current = null;
 
     p5.prototype.relative = function() {
@@ -150,6 +162,7 @@
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
+        this._isSeeking = false;
  
         this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
 
