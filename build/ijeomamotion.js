@@ -305,12 +305,16 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.seek = function(value) {
+        this._isSeeking = true;
+
         this._playTime = (this._delay + this._duration) * value;
 
         this.setTime(this._playTime);
 
         if (this.isInsidePlayingTime(this._time))
             this.dispatchChangedEvent(); 
+
+        this._isSeeking = false;
 
         return this;
     };
@@ -340,23 +344,35 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    MOTION.prototype.update = function(time, isSeeking) {
+    MOTION.prototype.update = function(time) {
+        // if (this._isPlaying || this._isSeeking) {
+        //     if (typeof time == 'undefined')
+        //         this.updateTime();
+        //     else
+        //         this.setTime(time);
+
+        //     this.dispatchChangedEvent();
+
+        //     // console.log('frameCount '+frameCount)
+        // } 
+
+        // if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+        //     this.play();
+        // else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
+        //     this.stop();
+        // }
+
         if (this._isPlaying || this._isSeeking) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
                 this.setTime(time);
 
-            this.dispatchChangedEvent();
-        } 
+            this.dispatchChangedEvent(); 
 
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-        else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
-            this.stop();
-        }
-
-        // console.log(this._time)
+             if (!this._isSeeking && !this.isInsidePlayingTime(this._time)) 
+                this.stop();
+        }  
     };
 
     MOTION.prototype.updateTime = function() {
@@ -634,8 +650,26 @@ Bounce.InOut = function(t) {
     // };
 
     MOTION.MotionController.prototype.updateMotions = function() {
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].update(this.getTime());
+        for (var i = 0; i < this._motions.length; i++){
+            var m = this._motions[i]
+
+            if(this._isSeeking) {
+                // m.seek(this.getTime())
+                m._isSeeking = true;
+
+                m.update(this.getTime());
+
+                m._isSeeking = false;
+            } else {
+                if(m.isInsidePlayingTime(this.getTime())){
+                    if(m.isPlaying())
+                        m.update(this.getTime());
+                    else
+                        m.play(); 
+                } else if(m.isPlaying())
+                    m.stop();  
+            }       
+        }
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {

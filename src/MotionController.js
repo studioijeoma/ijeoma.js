@@ -30,8 +30,26 @@
     // };
 
     MOTION.MotionController.prototype.updateMotions = function() {
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].update(this.getTime());
+        for (var i = 0; i < this._motions.length; i++){
+            var m = this._motions[i]
+
+            if(this._isSeeking) {
+                // m.seek(this.getTime())
+                m._isSeeking = true;
+
+                m.update(this.getTime());
+
+                m._isSeeking = false;
+            } else {
+                if(m.isInsidePlayingTime(this.getTime())){
+                    if(m.isPlaying())
+                        m.update(this.getTime());
+                    else
+                        m.play(); 
+                } else if(m.isPlaying())
+                    m.stop();  
+            }       
+        }
     };
 
     MOTION.MotionController.prototype.updateTweens = function() {

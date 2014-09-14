@@ -22,11 +22,11 @@ function setup() {
 
     s = beginSequence();
     relative();
-    tween(100).add('diameter', 55)
-    tween(100).add('x', 400).add('y', 100)
-    tween(100).add('x', 450).add('y', 400)
-    // tween(100).add('x', 100).add('y', 450)
-    // tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5)
+    tween(25).add('diameter', 55)
+    tween(25).add('x', 400).add('y', 100)
+    tween(25).add('x', 450).add('y', 400)
+    tween(25).add('x', 100).add('y', 450)
+    tween(25).add('x', 50).add('y', 50).add(this, 'diameter', 5)
     endSequence();
     play(s);
 }
@@ -41,8 +41,8 @@ function draw() {
     fill(255, 0, 0)
     text(s.getTime() + ' ' + s.getPosition(), 25, 25)
     text(s.get(0).getTime() + ' ' + s.get(0).getPosition(), 25, 50)
-    text(s.get(1).getTime() + ' ' + s.get(1).getPosition(), 25, 75)
-    text(s.get(2).getTime(), 25, 100)
+    // text(s.get(1).getTime() + ' ' + s.get(1).getPosition(), 25, 75)
+    // text(s.get(2).getTime(), 25, 100)
 }
 
 function mouseDragged() {

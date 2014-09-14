@@ -145,12 +145,16 @@
     };
 
     MOTION.prototype.seek = function(value) {
+        this._isSeeking = true;
+
         this._playTime = (this._delay + this._duration) * value;
 
         this.setTime(this._playTime);
 
         if (this.isInsidePlayingTime(this._time))
             this.dispatchChangedEvent(); 
+
+        this._isSeeking = false;
 
         return this;
     };
@@ -180,23 +184,35 @@
         return this;
     };
 
-    MOTION.prototype.update = function(time, isSeeking) {
+    MOTION.prototype.update = function(time) {
+        // if (this._isPlaying || this._isSeeking) {
+        //     if (typeof time == 'undefined')
+        //         this.updateTime();
+        //     else
+        //         this.setTime(time);
+
+        //     this.dispatchChangedEvent();
+
+        //     // console.log('frameCount '+frameCount)
+        // } 
+
+        // if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
+        //     this.play();
+        // else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
+        //     this.stop();
+        // }
+
         if (this._isPlaying || this._isSeeking) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
                 this.setTime(time);
 
-            this.dispatchChangedEvent();
-        } 
+            this.dispatchChangedEvent(); 
 
-        if (typeof time != 'undefined' && !this._isPlaying && this.isInsidePlayingTime(time))
-            this.play();
-        else if (this._isPlaying && !this.isInsidePlayingTime(this._time)) {
-            this.stop();
-        }
-
-        // console.log(this._time)
+             if (!this._isSeeking && !this.isInsidePlayingTime(this._time)) 
+                this.stop();
+        }  
     };
 
     MOTION.prototype.updateTime = function() {
