@@ -137,8 +137,8 @@ s.play();
 ##How to playback tweens in a timeline
 ```javascript
 var t = new MOTION.Timeline()
-  .add(new MOTION.Tween(...)) 
-  .add(new MOTION.Tween(...))  
+  .add(new MOTION.Tween(...), 100) //creates a keyframe at 100 frames and adds that tween object
+  .add(new MOTION.Tween(...), 200)
   .repeat()
   .play();
 
