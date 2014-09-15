@@ -621,10 +621,15 @@ Bounce.InOut = function(t) {
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
-            if (m.isInsidePlayingTime(this.getTime())) {
-                if (this._isSeeking)
+            if (this._isSeeking) {
+                if (m.isInsidePlayingTime(this.getTime()))
                     m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
-                else if (m.isPlaying())
+                else if (m.isAbovePlayingTime(this.getTime()))
+                    m.seek(1);
+                else
+                    m.seek(0);
+            } else if (m.isInsidePlayingTime(this.getTime())) {
+                if (m.isPlaying())
                     m.update(this.getTime());
                 else
                     m.play();
@@ -700,7 +705,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
-        motion.delay(time); 
+        motion.delay(time);
         motion.noAutoUpdate();
 
         this._motions.push(motion);
