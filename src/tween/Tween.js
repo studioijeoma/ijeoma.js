@@ -78,20 +78,12 @@
         return this._properties.length;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        // if (this.isRelative())
-        //     for (var i = 0; i < this._properties.length; i++)
-        //         this._properties[i].setBegin();
-
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
         if (this._onStart)
             this._onStart(window, this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {
-        // if (this.isRelative())
-        //     for (var i = 0; i < this._properties.length; i++) 
-        //         this._properties[i].setBegin();  
-
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {  
         if (this._onEnd)
             this._onEnd(window, this._object);
     };

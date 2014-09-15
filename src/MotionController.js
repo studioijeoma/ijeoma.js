@@ -183,11 +183,6 @@
         return this;
     };
 
-    MOTION.MotionController.prototype.dispatchStartedEvent = function() {
-        // this.updateMotions(); 
-        MOTION.prototype.dispatchStartedEvent.call(this)
-    };
-
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this.updateMotions();
         MOTION.prototype.dispatchChangedEvent.call(this)
