@@ -1,3 +1,7 @@
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,8 +15,8 @@
     <script type="text/javascript" src="../build/ijeomamotion.js"></script>
     <script type="text/javascript">
     // alert('motiontest');
-    var c1, c2, c3, c4, c5;
-    var y1, y2, y3, y4, y5;
+    var c1, c2, c3;
+    var y1, y2, y3;
     var w;
 
     var tl;
@@ -21,34 +25,26 @@
         createCanvas(600, 300);
         smooth();
 
-        c1 = c2 = c3 = c4 = c5 = color(255);
+        c1 = c2 = c3 = color(255);
 
-        y1 = y3 = y5 = -height;
-        y2 = y4 = height;
+        y1 = y2 = y3 = -height; 
 
         w = width / 5;
 
-        var d = 100;
+        var d = 25;
 
         tl = new MOTION.Timeline();
         tl.add(new MOTION.Tween(d)
         	.add("y1", height)
-        	.add("c1", color(0)), 0);
+        	.add("c1", color(0)), 0); 
         tl.add(new MOTION.Tween(d)
-        	.add("y2", -height)
-        	.add("c2", color(0)), d);
+        	.add("y2", height)
+        	.add("c2", color(0)), d * 2); 
         tl.add(new MOTION.Tween(d)
         	.add("y3", height)
-        	.add("c3", color(0)), d * 2);
-        tl.add(new MOTION.Tween(d)
-        	.add("y4", -height)
-        	.add("c4", color(0)), d * 3);
-        tl.add(new MOTION.Tween(d)
-        	.add("y5", height)
-        	.add("c5", color(0)), d * 4);
+        	.add("c3", color(0)), d * 4);
         tl.repeat().reverse().play();
     }
-
 
     function draw() {
         background(255);
@@ -58,15 +54,11 @@
 
         noStroke();
         fill(c1);
-        rect(0, y1, w, height);
+        rect(0, y1, w, height); 
         fill(c2);
-        rect(w, y2, w, height);
+        rect(w * 2, y2, w, height); 
         fill(c3);
-        rect(w * 2, y3, w, height);
-        fill(c4);
-        rect(w * 3, y4, w, height);
-        fill(c5);
-        rect(w * 4, y5, w, height);
+        rect(w * 4, y3, w, height);
 
         var time = tl.get(0).getTime() + " / " + tl.get(0).getDuration();
         fill((tl.get(0).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
@@ -74,19 +66,11 @@
 
         time = tl.get(1).getTime() + " / " + tl.get(1).getDuration();
         fill((tl.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w, height - 10);
+        text(time, w*2, height - 10);
 
         time = tl.get(2).getTime() + " / " + tl.get(2).getDuration();
         fill((tl.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 2, height - 10);
-
-        time = tl.get(3).getTime() + " / " + tl.get(3).getDuration();
-        fill((tl.get(3).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 3, height - 10);
-
-        time = tl.get(4).getTime() + " / " + tl.get(4).getDuration();
-        fill((tl.get(4).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 4, height - 10);
+        text(time, w * 4, height - 10); 
 
         time = tl.getTime() + " / " + tl.getDuration();
         fill(0);
