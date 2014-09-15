@@ -14,11 +14,11 @@ function setup() {
         .add(this, "c1", color(random(255), random(255), random(255)))
         .add(this, "c2", color(random(255), random(255), random(255)))
         .easing(Sine.InOut)
+        .relative()
         .play()
         .onEnd(function() {
             t.get("c1").setEnd(color(random(255), random(255), random(255)));
-            t.get("c2").setEnd(color(random(255), random(255), random(255))); 
-            t.relative()
+            t.get("c2").setEnd(color(random(255), random(255), random(255)));  
             t.play();
         });
 }
@@ -35,6 +35,7 @@ function draw() {
     }
 
     var time = t.getTime() + " / " + t.getDuration();
+    noStroke();
     fill(0);
     text(time, width - textWidth(time) - 10, height - 10);
 }
