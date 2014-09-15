@@ -100,6 +100,18 @@ var p = new MOTION.Parallel()
   .play(); 
 ```
 
+or
+
+```javascript
+//p5.js way
+timeMode(MOTION.FRAMES);
+p = beginParallel()
+  tween(...)
+  tween(...)
+endParallel()
+play(p); 
+```
+
 ##How to playback tweens in a sequence
 ```javascript
 var s = new MOTION.Sequence()
@@ -109,6 +121,16 @@ var s = new MOTION.Sequence()
   .play();
 ```
 
+```javascript
+//p5.js way
+timeMode(MOTION.SECONDS);
+var s = beginSequence()
+  tween(...)
+  tween(...)
+endSequence()
+play(s); 
+```
+
 ##How to playback tweens in a timeline
 ```javascript
 var t = new MOTION.Timeline()
@@ -116,4 +138,25 @@ var t = new MOTION.Timeline()
   .add(new MOTION.Tween(...))  
   .repeat()
   .play();
+
+//or
+
+var t = new MOTION.Timeline();
+var k1 = new MOTION.Keyframe(100).add(new MOTION.Tween(...))
+var k2 = new MOTION.Keyframe(200).add(new MOTION.Tween(...))
+t.add(k1).add(k2).play();
+```
+
+```javascript
+//p5.js way
+timeMode(MOTION.SECONDS);
+var t = beginTimeline()
+beginKeyframe(100);
+tween(...)
+endKeyframe();
+beginKeyframe(200);
+tween(...)
+endKeyframe();
+endTimeline()
+play(); 
 ```
