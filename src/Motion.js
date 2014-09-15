@@ -290,7 +290,7 @@
         return this;
     };
 
-    MOTION.prototype.ease = MOTION.prototype.setEasing;
+    MOTION.prototype.easing = MOTION.prototype.setEasing;
 
     MOTION.prototype.getEasing = function() {
         return this._easing;

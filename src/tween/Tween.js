@@ -11,7 +11,7 @@
             else
                 MOTION.call(this, duration, delay, easing);
 
-                this.addProperty(this._object, property, end);
+            this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
                 MOTION.call(this, arguments[0], arguments[1], arguments[2]);
@@ -45,13 +45,13 @@
 
         if (typeof arguments[0] == 'number') {
             i = arguments[0];
-            property = this._properties[i]; 
+            property = this._properties[i];
         } else if (typeof arguments[0] == 'name') {
             property = this._propertyMap[arguments[0]];
-            i = this._properties.indexOf(property); 
+            i = this._properties.indexOf(property);
         } else if (typeof arguments[0] == 'object') {
             property = arguments[0];
-            i = this._properties.indexOf(property);  
+            i = this._properties.indexOf(property);
         }
 
         if (i && i != -1)
@@ -78,12 +78,16 @@
         return this._properties.length;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        if (this.isRelative())
+            for (var i = 0; i < this._properties.length; i++)
+                this._properties[i].setBegin();
+
         if (this._onStart)
             this._onStart(window, this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {  
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
             this._onEnd(window, this._object);
     };
@@ -98,5 +102,5 @@
     MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
             this._onRepeat(window, this._object);
-    }; 
+    };
 })(MOTION);
