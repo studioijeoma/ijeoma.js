@@ -240,7 +240,68 @@
     MOTION.prototype.getPosition = function() {
         var t = this.getTime();
         return this._easing((t > 0) ? this.getTime() / this._duration : 0);
-    }
+    };
+
+    MOTION.prototype.setDuration = function(_duration) {
+        this._duration = _duration;
+        return this;
+    };
+
+    MOTION.prototype.duration = MOTION.prototype.setDuration;
+
+    MOTION.prototype.getDuration = function() {
+        return this._duration;
+    };
+
+    MOTION.prototype.getRepeat = function() {
+        return this._repeatTime;
+    };
+
+    MOTION.prototype.setDelay = function(delay) {
+        this._delay = delay;
+        return this;
+    };
+
+    MOTION.prototype.delay = MOTION.prototype.setDelay;
+
+    MOTION.prototype.noDelay = function() {
+        this._delay = 0;
+        return this;
+    };
+
+    MOTION.prototype.getDelay = function() {
+        return this._delay;
+    };
+
+    MOTION.prototype.repeatDelay = function(duration) {
+        this.repeat(duration);
+        this._isRepeatingDelay = true;
+        return this;
+    };
+
+    MOTION.prototype.noRepeatDelay = function() {
+        this.noRepeat();
+        this._isRepeatingDelay = false;
+        return this;
+    };
+
+    MOTION.prototype.setEasing = function(easing) {
+        this._easing = easing;
+        return this;
+    };
+
+    MOTION.prototype.ease = MOTION.prototype.setEasing;
+
+    MOTION.prototype.getEasing = function() {
+        return this._easing;
+    };
+
+    MOTION.prototype.noEasing = function() {
+        this.setEasing(function(t) {
+            return t;
+        });
+        return this;
+    };
 
     MOTION.prototype.relative = function() {
         this.setValueMode(MOTION.RELATIVE);
@@ -323,8 +384,8 @@
         return this instanceof MOTION.Timeline;
     };
 
-    MOTION.prototype.isKeyFrame = function() {
-        return this instanceof MOTION.KeyFrame;
+    MOTION.prototype.isKeyframe = function() {
+        return this instanceof MOTION.Keyframe;
     };
 
     MOTION.prototype.usingSeconds = function() {

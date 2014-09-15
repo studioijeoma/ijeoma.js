@@ -400,7 +400,68 @@ Bounce.InOut = function(t) {
     MOTION.prototype.getPosition = function() {
         var t = this.getTime();
         return this._easing((t > 0) ? this.getTime() / this._duration : 0);
-    }
+    };
+
+    MOTION.prototype.setDuration = function(_duration) {
+        this._duration = _duration;
+        return this;
+    };
+
+    MOTION.prototype.duration = MOTION.prototype.setDuration;
+
+    MOTION.prototype.getDuration = function() {
+        return this._duration;
+    };
+
+    MOTION.prototype.getRepeat = function() {
+        return this._repeatTime;
+    };
+
+    MOTION.prototype.setDelay = function(delay) {
+        this._delay = delay;
+        return this;
+    };
+
+    MOTION.prototype.delay = MOTION.prototype.setDelay;
+
+    MOTION.prototype.noDelay = function() {
+        this._delay = 0;
+        return this;
+    };
+
+    MOTION.prototype.getDelay = function() {
+        return this._delay;
+    };
+
+    MOTION.prototype.repeatDelay = function(duration) {
+        this.repeat(duration);
+        this._isRepeatingDelay = true;
+        return this;
+    };
+
+    MOTION.prototype.noRepeatDelay = function() {
+        this.noRepeat();
+        this._isRepeatingDelay = false;
+        return this;
+    };
+
+    MOTION.prototype.setEasing = function(easing) {
+        this._easing = easing;
+        return this;
+    };
+
+    MOTION.prototype.ease = MOTION.prototype.setEasing;
+
+    MOTION.prototype.getEasing = function() {
+        return this._easing;
+    };
+
+    MOTION.prototype.noEasing = function() {
+        this.setEasing(function(t) {
+            return t;
+        });
+        return this;
+    };
 
     MOTION.prototype.relative = function() {
         this.setValueMode(MOTION.RELATIVE);
@@ -483,8 +544,8 @@ Bounce.InOut = function(t) {
         return this instanceof MOTION.Timeline;
     };
 
-    MOTION.prototype.isKeyFrame = function() {
-        return this instanceof MOTION.KeyFrame;
+    MOTION.prototype.isKeyframe = function() {
+        return this instanceof MOTION.Keyframe;
     };
 
     MOTION.prototype.usingSeconds = function() {
@@ -612,7 +673,7 @@ Bounce.InOut = function(t) {
         return this.getTime() / this._duration;
     };
 
-    MOTION.MotionController.prototype.getmotion = function(name) {
+    MOTION.MotionController.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
             return this._motions[arguments[0]];
         else if (typeof arguments[0] == 'string')
@@ -620,21 +681,10 @@ Bounce.InOut = function(t) {
         return this._motions;
     };
 
-    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getmotion;
-
     MOTION.MotionController.prototype.getCount = function() {
         return this._motions.length;
     };
 
-    MOTION.MotionController.prototype.setTimeScale = function(timeScale) {
-        MOTION.prototype.setTimeScale.call(this, timeScale);
-
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].setTimeScale(timeScale);
-
-        return this;
-    }; 
-    
     MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
         MOTION.prototype.setValueMode.call(this, _valueMode);
 
@@ -650,8 +700,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
-        motion.delay(time);
-        motion.setTimeMode(_timeMode);
+        motion.delay(time); 
         motion.noAutoUpdate();
 
         this._motions.push(motion);
@@ -834,7 +883,7 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    MOTION.Sequence.prototype.getChild = function(name) {
+    MOTION.Sequence.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
             return this._motions[arguments[0]];
         else if (typeof arguments[0] == 'string')
@@ -866,76 +915,68 @@ Bounce.InOut = function(t) {
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION);;(function(MOTION, undefined) {
-    MOTION.Keyframe = function(time, children) {
-        MOTION.MotionController.call(this, children)
+    MOTION.Keyframe = function(time, motions) {
+        MOTION.MotionController.call(this, motions)
         this.delay(time);
     };
 
     MOTION.Keyframe.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Keyframe.prototype.constructor = MOTION.Keyframe,
 
     MOTION.Timeline = function() {
         MOTION.MotionController.call(this);
     };
 
     MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
-    MOTION.Timeline.prototype.constructor = MOTION.Timeline,
+    MOTION.Timeline.prototype.constructor = MOTION.Timeline;
 
-    MOTION.Timeline.prototype.add = function(child, time) {
-        if (child.isKeyframe()) {
-            if (typeof time != 'undefined') 
-                this.insert(child, time);
+    MOTION.Timeline.prototype.add = function(motion, time) {
+        if (motion.isKeyframe()) {
+            if (typeof time == 'undefined')
+                this.insert(motion, motion.getDelay());
             else
-                this.insert(child, child.getDelay());
+                this.insert(motion, time);
         } else {
-            if (typeof time != 'undefined') {
-                var k = this.get(time + '');
+            if (typeof time == 'undefined') {
+                var c = this._motionMap.get(motion.getName());
+                c.add(motion);
 
-                if (typeof k != 'undefined') {
-                    k.add(child);
-                } else {
-                    k = new MOTION.Keyframe(time + '', time);
-                    k.add(child);
+                this._motions[this._motions.indexOf(c)] = c;
+            } else {
+                var key = time + '';
+
+                if (key in this._motionMap)
+                    this._motionMap[key].add(motion);
+                else {
+                    var k = new MOTION.Keyframe(time + '');
+                    k.add(motion);
 
                     this.insert(k, time);
                 }
-            } else {
-                var c = this._childrenMap.get(child.getName());
-                c.add(child);
 
-                this._children[children.indexOf(c)] = c;
             }
         }
 
         return this;
     };
 
-    MOTION.Timeline.prototype.getChild = function(index) {
-        if (typeof arguments[0] == 'number') {
-            var k = null;
+    MOTION.Timeline.prototype.get = function(index) {
+        if (typeof arguments[0] == 'number')
+            return this._motions[arguments[0]];
+        else if (typeof arguments == 'string')
+            return this._motionMap[arguments[0]];
+        else {
+            var current = [];
 
-            for (var i = 0; i < children.length; i++) {
-                var c = this.chilren[i];
+            for (var i = 0; i < this._motions.length; i++)
+                if (this._motions[i].isInsidePlayingTime(this.getTime()))
+                    current.push(this._motions[i]);
 
-                if (c.getTime() == arguments[0])
-                    k = c;
-            }
-
-            // return k;
-            return this._childrenMap[arguments[0] + ''];
-        } else if (typeof arguments == 'string')
-            return this._childrenMap[arguments[0]];
-        else
-            return getCurrentChildren();
-    };
-
-    MOTION.Timeline.prototype.getCurrentChildren = function() {
-        var currentKeyframes = [];
-
-        for (var i = 0; i < this._children.length; i++)
-            if (this._children[i].isInsidePlayingTime(this.getTime()))
-                currentKeyFrames.push(children[i]);
-
-        return currentKeyFrames;
+            if (current.length == 0)
+                return null;
+            else
+                return current
+        }
     };
 
     MOTION.Timeline.prototype.gotoAndPlay = function(time) {
@@ -943,7 +984,7 @@ Bounce.InOut = function(t) {
             this.seek(arguments[0] / this._duration);
             this.resume();
         } else if (typeof arguments[0] == 'string') {
-            var k = this.getChild(arguments[0]);
+            var k = this.get(arguments[0]);
 
             this.seek(k.getPlayTime() / this._duration);
             this.resume();
@@ -958,7 +999,7 @@ Bounce.InOut = function(t) {
             this.seek(arguments[0] / this._duration);
             this.pause();
         } else if (typeof arguments[0] == 'string') {
-            var k = getKeyFrame(arguments[0]);
+            var k = this.get(arguments[0]);
 
             this.seek(k.getPlayTime() / this._duration);
             this.pause();
@@ -992,7 +1033,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.updateProperties = function() {  
+    MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };

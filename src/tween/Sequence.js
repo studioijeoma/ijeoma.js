@@ -14,7 +14,7 @@
         return this;
     };
 
-    MOTION.Sequence.prototype.getChild = function(name) {
+    MOTION.Sequence.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
             return this._motions[arguments[0]];
         else if (typeof arguments[0] == 'string')

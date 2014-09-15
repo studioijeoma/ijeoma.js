@@ -23,7 +23,7 @@
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.updateProperties = function() {  
+    MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this.getPosition());
     };

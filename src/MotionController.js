@@ -69,7 +69,7 @@
         return this.getTime() / this._duration;
     };
 
-    MOTION.MotionController.prototype.getmotion = function(name) {
+    MOTION.MotionController.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
             return this._motions[arguments[0]];
         else if (typeof arguments[0] == 'string')
@@ -77,21 +77,10 @@
         return this._motions;
     };
 
-    MOTION.MotionController.prototype.get = MOTION.MotionController.prototype.getmotion;
-
     MOTION.MotionController.prototype.getCount = function() {
         return this._motions.length;
     };
 
-    MOTION.MotionController.prototype.setTimeScale = function(timeScale) {
-        MOTION.prototype.setTimeScale.call(this, timeScale);
-
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].setTimeScale(timeScale);
-
-        return this;
-    }; 
-    
     MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
         MOTION.prototype.setValueMode.call(this, _valueMode);
 
@@ -107,8 +96,7 @@
     };
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
-        motion.delay(time);
-        motion.setTimeMode(_timeMode);
+        motion.delay(time); 
         motion.noAutoUpdate();
 
         this._motions.push(motion);
