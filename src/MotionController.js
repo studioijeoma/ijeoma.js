@@ -90,17 +90,8 @@
             this._motions[i].setTimeScale(timeScale);
 
         return this;
-    };
-
-    MOTION.MotionController.prototype.setTimeMode = function(_durationMode) {
-        MOTION.prototype.setTimeMode.call(this, _durationMode);
-
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].setTimeMode(_durationMode);
-
-        return this;
-    };
-
+    }; 
+    
     MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
         MOTION.prototype.setValueMode.call(this, _valueMode);
 
