@@ -1,0 +1,130 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+var cities = [
+    "NYC", "LA", "Milan", "Venice", "London", "Amsterdam"
+];
+
+var bars = [];
+
+var w = 100;
+var h = 100;
+var low = 250;
+var high = 1000;
+
+var ts;
+var d = 75;
+
+function setup() {
+    createCanvas(800, 600);
+
+    ts = new MOTION.Sequence();
+
+    for (var i = 0; i < cities.length; i++)
+        bars.push(new Bar(cities[i], random(low, high), i * w, 0, w, 0));
+
+    var tp1 = new MOTION.Parallel();
+    for (var i = 0; i < bars.length; i++) {
+        var rh = bars[i].v / high * h;
+
+        tp1.add(new MOTION.Tween(d).add(bars[i], "h", -rh).easing(Expo.Out));
+    }
+
+    var tp2 = new MOTION.Parallel();
+    for (var i = 0; i < bars.length; i++)
+        tp2.add((new MOTION.Tween(d)).add(bars[i], "x", i * w).easing(Expo.Out));
+
+    // Collections.sort(bars, Collections.reverseOrder(new ValueComparator()));
+
+    var tp3 = new MOTION.Parallel();
+    for (var i = 0; i < bars.length; i++)
+        tp3.add((new MOTION.Tween(d)).add(bars[i], "c", color(random(255), random(255), random(255))).easing(Expo.Out));
+
+    var tp4 = new MOTION.Parallel();
+    for (var i = 0; i < bars.length; i++)
+        tp4.add(new MOTION.Tween(d).add(bars[i], "h", 1).easing(Expo.Out));
+
+    ts.add(tp1);
+    ts.add(new MOTION.Tween(d));
+    ts.add(tp2);
+    ts.add(new MOTION.Tween(d));
+    ts.add(tp3);
+    ts.add(new MOTION.Tween(d));
+    ts.add(tp4);
+
+    ts.play();
+}
+
+
+
+
+function draw() {
+    background(255);
+
+    noStroke();
+
+    push();
+    translate(width / 2 - (bars.length * w) / 2, height / 2 + h / 2);
+    for (var i in bars)
+        bars[i].draw();
+    pop();
+
+    var time = ts.getTime() + " / " + ts.getDuration();
+
+    noStroke();
+    fill(0);
+    text(time, width - textWidth(time) - 10, height - 10);
+}
+
+function keyPressed() {
+    if (key == ' ')
+        ts.play();
+    else
+        setupBars();
+}
+
+function mousePressed() {
+    ts.pause();
+}
+
+function mouseReleased() {
+    ts.resume();
+}
+
+function mouseDragged() {
+    ts.seek(mouseX / width);
+}
+
+var Bar = function(name, value, x, y, w, h) { 
+    return {
+        name: name,
+        v: value,
+        x: x,
+        y: y,
+        w: w,
+        h: h,
+        c: color(random(255), random(255), random(255)),
+        draw: function() {
+            noStroke();
+            fill(this.c);
+            rect(this.x, this.y, this.w, this.h);
+
+            textAlign(CENTER);
+            fill(255);
+            text(this.v, this.x + this.w / 2, this.y - 10);
+            fill(0);
+            text(this.name, this.x + this.w / 2, this.y + 25);
+        }
+    }
+}
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+
+<body>
+</body>
