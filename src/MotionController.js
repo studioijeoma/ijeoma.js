@@ -17,21 +17,15 @@
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
-            if (this._isSeeking) {
-                // m._isSeeking = true;
-                // m.update(this.getTime());
-                // m._isSeeking = false; 
-                if (m.isInsidePlayingTime(this.getTime())) 
+            if (m.isInsidePlayingTime(this.getTime())) {
+                if (this._isSeeking)
                     m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
-            } else {
-                if (m.isInsidePlayingTime(this.getTime())) {
-                    if (m.isPlaying())
-                        m.update(this.getTime());
-                    else
-                        m.play();
-                } else if (m.isPlaying())
-                    m.stop();
-            }
+                else if (m.isPlaying())
+                    m.update(this.getTime());
+                else
+                    m.play();
+            } else if (m.isPlaying())
+                m.stop();
         }
     };
 

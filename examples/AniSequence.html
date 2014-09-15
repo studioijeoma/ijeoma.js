@@ -49,8 +49,14 @@ function draw() {
     // text(s.get(3)._id + ': '+ s.get(3).getTime(), 25, 125) 
 }
 
+function mousePressed() {
+    s.pause();
+}
 function mouseDragged() {
     s.seek(constrain(mouseX / width, 0, 1))
+}
+function mouseReleased() {
+    s.resume();
 }
 
 function keyPressed() {

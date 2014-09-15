@@ -7,16 +7,16 @@
 
         if (typeof arguments[1] == 'string') {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
-                MOTION.call(this, arguments[0], arguments[1], arguments[2])
+                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
             else
-                MOTION.call(this, duration, delay, easing)
+                MOTION.call(this, duration, delay, easing);
 
                 this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
-                MOTION.call(this, arguments[0], arguments[1], arguments[2])
+                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
             else
-                MOTION.call(this, arguments[1], arguments[2], arguments[3])
+                MOTION.call(this, arguments[1], arguments[2], arguments[3]);
         }
     };
 
@@ -44,13 +44,13 @@
         var property, i;
 
         if (typeof arguments[0] == 'number') {
-            i = arguments[0]
-            property = this._properties[i] 
+            i = arguments[0];
+            property = this._properties[i]; 
         } else if (typeof arguments[0] == 'name') {
-            property = this._propertyMap[arguments[0]]
+            property = this._propertyMap[arguments[0]];
             i = this._properties.indexOf(property); 
         } else if (typeof arguments[0] == 'object') {
-            property = arguments[0]
+            property = arguments[0];
             i = this._properties.indexOf(property);  
         }
 

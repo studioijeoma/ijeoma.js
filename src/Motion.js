@@ -146,8 +146,7 @@
         this._playTime = (this._delay + this._duration) * value;
 
         this.setTime(this._playTime);
-
-        // if (this.isInsidePlayingTime(this._time)) 
+ 
         this.dispatchChangedEvent();  
 
         this._isSeeking = false;
@@ -181,7 +180,7 @@
     };
 
     MOTION.prototype.update = function(time) {  
-        if (this._isPlaying || this._isSeeking) {
+        if (this._isPlaying) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
@@ -189,7 +188,7 @@
 
             this.dispatchChangedEvent(); 
 
-             if (!this._isSeeking && !this.isInsidePlayingTime(this._time)) 
+             if (!this.isInsidePlayingTime(this._time)) 
                 this.stop();
         }  
     };

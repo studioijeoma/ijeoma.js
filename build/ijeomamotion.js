@@ -306,8 +306,7 @@ Bounce.InOut = function(t) {
         this._playTime = (this._delay + this._duration) * value;
 
         this.setTime(this._playTime);
-
-        // if (this.isInsidePlayingTime(this._time)) 
+ 
         this.dispatchChangedEvent();  
 
         this._isSeeking = false;
@@ -341,7 +340,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.update = function(time) {  
-        if (this._isPlaying || this._isSeeking) {
+        if (this._isPlaying) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
@@ -349,7 +348,7 @@ Bounce.InOut = function(t) {
 
             this.dispatchChangedEvent(); 
 
-             if (!this._isSeeking && !this.isInsidePlayingTime(this._time)) 
+             if (!this.isInsidePlayingTime(this._time)) 
                 this.stop();
         }  
     };
@@ -616,21 +615,15 @@ Bounce.InOut = function(t) {
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
-            if (this._isSeeking) {
-                // m._isSeeking = true;
-                // m.update(this.getTime());
-                // m._isSeeking = false; 
-                if (m.isInsidePlayingTime(this.getTime())) 
+            if (m.isInsidePlayingTime(this.getTime())) {
+                if (this._isSeeking)
                     m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
-            } else {
-                if (m.isInsidePlayingTime(this.getTime())) {
-                    if (m.isPlaying())
-                        m.update(this.getTime());
-                    else
-                        m.play();
-                } else if (m.isPlaying())
-                    m.stop();
-            }
+                else if (m.isPlaying())
+                    m.update(this.getTime());
+                else
+                    m.play();
+            } else if (m.isPlaying())
+                m.stop();
         }
     };
 
@@ -1052,16 +1045,16 @@ Bounce.InOut = function(t) {
 
         if (typeof arguments[1] == 'string') {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
-                MOTION.call(this, arguments[0], arguments[1], arguments[2])
+                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
             else
-                MOTION.call(this, duration, delay, easing)
+                MOTION.call(this, duration, delay, easing);
 
                 this.addProperty(this._object, property, end);
         } else {
             if (typeof object == 'undefined' || typeof arguments[0] == 'number')
-                MOTION.call(this, arguments[0], arguments[1], arguments[2])
+                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
             else
-                MOTION.call(this, arguments[1], arguments[2], arguments[3])
+                MOTION.call(this, arguments[1], arguments[2], arguments[3]);
         }
     };
 
@@ -1089,13 +1082,13 @@ Bounce.InOut = function(t) {
         var property, i;
 
         if (typeof arguments[0] == 'number') {
-            i = arguments[0]
-            property = this._properties[i] 
+            i = arguments[0];
+            property = this._properties[i]; 
         } else if (typeof arguments[0] == 'name') {
-            property = this._propertyMap[arguments[0]]
+            property = this._propertyMap[arguments[0]];
             i = this._properties.indexOf(property); 
         } else if (typeof arguments[0] == 'object') {
-            property = arguments[0]
+            property = arguments[0];
             i = this._properties.indexOf(property);  
         }
 
