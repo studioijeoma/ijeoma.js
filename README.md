@@ -107,16 +107,17 @@ or
 ```javascript
 //p5.js way
 timeMode(MOTION.FRAMES);
-p = beginParallel()
+p = beginParallel() // returns MOTION.Parallel() object
   tween(...) // same arguments and functions as new Motion.Tween()
   tween(...)
-endParallel()
-play(p); 
+endParallel();
+p.play()
+//or play(p); 
 ```
 
 ##How to playback tweens in a sequence
 ```javascript
-var s = new MOTION.Sequence()
+var s = new MOTION.Sequence() 
   .add(new MOTION.Tween(...)) 
   .add(new MOTION.Tween(...))  
   .repeat()
@@ -126,11 +127,11 @@ var s = new MOTION.Sequence()
 ```javascript
 //p5.js way
 timeMode(MOTION.SECONDS);
-var s = beginSequence()
+var s = beginSequence(); // returns MOTION.Sequence() object
   tween(...)
   tween(...)
 endSequence()
-play(s); 
+s.play();
 ```
 
 ##How to playback tweens in a timeline
@@ -152,7 +153,7 @@ t.add(k1).add(k2).play();
 ```javascript
 //p5.js way
 timeMode(MOTION.SECONDS);
-var t = beginTimeline();
+var t = beginTimeline(); // returns MOTION.Timeline() object
   beginKeyframe(100);
     tween(...)
   endKeyframe();
@@ -160,5 +161,5 @@ var t = beginTimeline();
     tween(...)
   endKeyframe();
 endTimeline();
-play(); 
+t.play();
 ```

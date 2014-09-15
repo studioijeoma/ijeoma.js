@@ -926,7 +926,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Keyframe.prototype = Object.create(MOTION.MotionController.prototype);
-    MOTION.Keyframe.prototype.constructor = MOTION.Keyframe,
+    MOTION.Keyframe.prototype.constructor = MOTION.Keyframe;
 
     MOTION.Timeline = function() {
         MOTION.MotionController.call(this);
@@ -980,7 +980,7 @@ Bounce.InOut = function(t) {
             if (current.length == 0)
                 return null;
             else
-                return current
+                return current;
         }
     };
 
