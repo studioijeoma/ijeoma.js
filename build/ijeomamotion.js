@@ -285,7 +285,6 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.pause = function() {  
         this._isPlaying = false; 
-        this._isSeeking = false;
 
         this._playTime = this._time;
 
@@ -293,8 +292,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.resume = function() { 
-        this._isPlaying = true; 
-        this._isSeeking = false;
+        this._isPlaying = true;  
 
         this._playTime = new Date().getTime() - this._playTime * 1000;
 
@@ -309,8 +307,8 @@ Bounce.InOut = function(t) {
 
         this.setTime(this._playTime);
 
-        if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent();  
+        // if (this.isInsidePlayingTime(this._time)) 
+        this.dispatchChangedEvent();  
 
         this._isSeeking = false;
 
@@ -615,25 +613,24 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.updateMotions = function() {
-        for (var i = 0; i < this._motions.length; i++){
+        for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
-            if(this._isSeeking) {
-                // m.seek(this.getTime())
-                m._isSeeking = true;
-
-                m.update(this.getTime());
-
-                m._isSeeking = false;
+            if (this._isSeeking) {
+                // m._isSeeking = true;
+                // m.update(this.getTime());
+                // m._isSeeking = false; 
+                if (m.isInsidePlayingTime(this.getTime())) 
+                    m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
             } else {
-                if(m.isInsidePlayingTime(this.getTime())){
-                    if(m.isPlaying())
+                if (m.isInsidePlayingTime(this.getTime())) {
+                    if (m.isPlaying())
                         m.update(this.getTime());
                     else
-                        m.play(); 
-                } else if(m.isPlaying())
-                    m.stop();  
-            }       
+                        m.play();
+                } else if (m.isPlaying())
+                    m.stop();
+            }
         }
     };
 
@@ -652,7 +649,7 @@ Bounce.InOut = function(t) {
                 var order = 0;
 
                 if (name in orderMap) {
-                    order = orderMap[name]
+                    order = orderMap[name];
                     order++;
 
                     var pp = ppropertyMap[name];
@@ -725,7 +722,7 @@ Bounce.InOut = function(t) {
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.setTimeMode(_timeMode); 
+        motion.setTimeMode(_timeMode);
         motion.noAutoUpdate();
 
         this._motions.push(motion);

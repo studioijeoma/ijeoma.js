@@ -125,7 +125,6 @@
 
     MOTION.prototype.pause = function() {  
         this._isPlaying = false; 
-        this._isSeeking = false;
 
         this._playTime = this._time;
 
@@ -133,8 +132,7 @@
     };
 
     MOTION.prototype.resume = function() { 
-        this._isPlaying = true; 
-        this._isSeeking = false;
+        this._isPlaying = true;  
 
         this._playTime = new Date().getTime() - this._playTime * 1000;
 
@@ -149,8 +147,8 @@
 
         this.setTime(this._playTime);
 
-        if (this.isInsidePlayingTime(this._time))
-            this.dispatchChangedEvent();  
+        // if (this.isInsidePlayingTime(this._time)) 
+        this.dispatchChangedEvent();  
 
         this._isSeeking = false;
 

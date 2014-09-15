@@ -14,25 +14,24 @@
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.updateMotions = function() {
-        for (var i = 0; i < this._motions.length; i++){
+        for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
-            if(this._isSeeking) {
-                // m.seek(this.getTime())
-                m._isSeeking = true;
-
-                m.update(this.getTime());
-
-                m._isSeeking = false;
+            if (this._isSeeking) {
+                // m._isSeeking = true;
+                // m.update(this.getTime());
+                // m._isSeeking = false; 
+                if (m.isInsidePlayingTime(this.getTime())) 
+                    m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
             } else {
-                if(m.isInsidePlayingTime(this.getTime())){
-                    if(m.isPlaying())
+                if (m.isInsidePlayingTime(this.getTime())) {
+                    if (m.isPlaying())
                         m.update(this.getTime());
                     else
-                        m.play(); 
-                } else if(m.isPlaying())
-                    m.stop();  
-            }       
+                        m.play();
+                } else if (m.isPlaying())
+                    m.stop();
+            }
         }
     };
 
@@ -51,7 +50,7 @@
                 var order = 0;
 
                 if (name in orderMap) {
-                    order = orderMap[name]
+                    order = orderMap[name];
                     order++;
 
                     var pp = ppropertyMap[name];
@@ -124,7 +123,7 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.setTimeMode(_timeMode); 
+        motion.setTimeMode(_timeMode);
         motion.noAutoUpdate();
 
         this._motions.push(motion);

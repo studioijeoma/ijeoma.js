@@ -42,10 +42,11 @@ function draw() {
     ellipse(x, y, diameter, diameter);
 
     fill(255, 0, 0)
-    text(s.getTime() + ' ' + s.getPosition(), 25, 25)
-    text(s.get(0).getTime() + ' ' + s.get(0).getPosition(), 25, 50)
-    // text(s.get(1).getTime() + ' ' + s.get(1).getPosition(), 25, 75)
-    // text(s.get(2).getTime(), 25, 100)
+    text(s.getTime(), 25, 25)
+    // text(s.get(0)._id + ': '+ s.get(0).getTime(), 25, 50)
+    // text(s.get(1)._id + ': '+ s.get(1).getTime(), 25, 75) 
+    // text(s.get(2)._id + ': '+ s.get(2).getTime(), 25, 100) 
+    // text(s.get(3)._id + ': '+ s.get(3).getTime(), 25, 125) 
 }
 
 function mouseDragged() {
