@@ -1254,6 +1254,7 @@ Bounce.InOut = function(t) {
             _current.add(_currentKeyframe);
 
         _currentKeyframe = null;
+        
     };
 
     p5.prototype.play = function(m) {

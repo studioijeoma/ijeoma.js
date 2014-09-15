@@ -138,6 +138,7 @@
             _current.add(_currentKeyframe);
 
         _currentKeyframe = null;
+        
     };
 
     p5.prototype.play = function(m) {
