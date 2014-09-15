@@ -42,6 +42,8 @@ The 2nd way lets you chain/add more properties to the Tween. Say we want to twee
 ```javascript
 var t = new MOTION.Tween(this).add("x", 100).add("y", 100).play();
 ```
+
+
  
 ###p5.Colors 
 Say we want to tween a color var c from black to white in 100 frames.
@@ -106,7 +108,7 @@ or
 //p5.js way
 timeMode(MOTION.FRAMES);
 p = beginParallel()
-  tween(...)
+  tween(...) // same arguments and functions as new Motion.Tween()
   tween(...)
 endParallel()
 play(p); 
@@ -150,13 +152,13 @@ t.add(k1).add(k2).play();
 ```javascript
 //p5.js way
 timeMode(MOTION.SECONDS);
-var t = beginTimeline()
-beginKeyframe(100);
-tween(...)
-endKeyframe();
-beginKeyframe(200);
-tween(...)
-endKeyframe();
-endTimeline()
+var t = beginTimeline();
+  beginKeyframe(100);
+    tween(...)
+  endKeyframe();
+  beginKeyframe(200);
+    tween(...)
+  endKeyframe();
+endTimeline();
 play(); 
 ```
