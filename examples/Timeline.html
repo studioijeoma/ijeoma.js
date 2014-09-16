@@ -18,7 +18,7 @@
     var tl;
 
     function setup() {
-        createCanvas(600, 300);
+        createCanvas(windowWidth, windowHeight);
         smooth();
 
         c1 = c2 = c3 = color(255);
@@ -62,19 +62,19 @@
 
         var time = tl.get(0).getTime() + " / " + tl.get(0).getDuration();
         fill((tl.get(0).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, 0, height - 10);
+        text(time, 25, height - 25);
 
         time = tl.get(1).getTime() + " / " + tl.get(1).getDuration();
         fill((tl.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 2, height - 10);
+        text(time, w * 2+25, height - 25);
 
         time = tl.get(2).getTime() + " / " + tl.get(2).getDuration();
         fill((tl.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 4, height - 10);
+        text(time, w * 4+25, height - 25);
 
         time = tl.getTime() + " / " + tl.getDuration();
         fill(0);
-        text(time, width - textWidth(time) - 10, 10 + 12);
+        text(time, width - textWidth(time) - 25, 25 );
     }
 
 
