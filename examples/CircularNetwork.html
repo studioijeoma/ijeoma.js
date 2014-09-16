@@ -2,26 +2,29 @@
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
 var nodes = [];
-var circleCount = 7;
-var circleOffset = 45;
+var circleCount = 15;
+var circleOffset = 50;
 
 var backgroundColor, linkColor, textColor;
 
 function setup() {
-    createCanvas(512, 512);
+    createCanvas(windowWidth, windowHeight);
 
     strokeWeight(.25)
 
-    for (var i = 0; i < 100; i++) {
+    for (var i = 0; i < 300; i++) {
         var n = new Node(10, round(random(2, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
 
-        var duration = round(random(500, 750));
+        var duration1 = round(random(750, 1000));
         var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
+        var duration2 = round(random(250, 500));
         // var endRadius = n.radius - circleOffset;
         var endRadius = round(random(1, circleCount)) * circleOffset 
 
-        n.angleTween = new MOTION.Tween(duration).add(n, 'angle', endAngle).repeat().play();
-        n.radiusTween = new MOTION.Tween(100, 0, Quad.InOut).add(n, 'radius', endRadius).repeat().reverse().play()
+        n.angleTween = new MOTION.Tween(duration1).add(n, 'angle', endAngle).repeat().play();
+        n.radiusTween = new MOTION.Tween(duration2, 0, Quad.InOut).add(n, 'radius', endRadius).repeat().reverse().play().onStart(function() {
+            // this.get('radius').setEnd(round(random(1, circleCount)) * circleOffset) 
+        });
 
         nodes.push(n)
     }
@@ -35,7 +38,7 @@ function draw() {
     background(backgroundColor)
 
     fill(textColor);
-    text(round(frameRate()), 25, 25);
+    text('Press mouse to pause and release resume. Drag around to scrub.', 25, 25);
 
     translate(width / 2, height / 2);
 
