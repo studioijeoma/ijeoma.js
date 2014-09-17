@@ -20,6 +20,8 @@ Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Circ
 
 [Timeline](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Timeline.html)
 
+[Square](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Square.html)
+
 #Getting Started 
 ##How to create Tweens
 
