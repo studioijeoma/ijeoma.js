@@ -39,10 +39,10 @@ function setup() {
     easing(Bounce.InOut);
     tween(this, 'sqScale', 3, 50).relative()
     endSequence();
-    sqSequence.play().repeat().onRepeat(function() {
+    sqSequence.repeat().onRepeat(function() {
         bgColor = sqColor;
         sqColor = randomColor();
-    }) 
+    }).play()
 
     // sqSequence = beginSequence();
     // easing(Quad.Out)
@@ -76,26 +76,27 @@ function draw() {
 
     var j = sqSequence.getIndex();
 
-    if (j < 4) {
-        noFill();
-        stroke(sqColor);
-        beginShape();
-        for (var i = 0; i <= j; i++)
-            vertex(sqPoints[i].x, sqPoints[i].y)
-        endShape();
+    if (sqSequence.getTime() > 1)
+        if (j < 4) {
+            noFill();
+            stroke(sqColor);
+            beginShape();
+            for (var i = 0; i <= j; i++)
+                vertex(sqPoints[i].x, sqPoints[i].y)
+            endShape();
 
-        stroke(sqColor) 
-        line(sqPoints[j].x, sqPoints[j].y, sqPoint.x, sqPoint.y)
-    } else {
-        stroke(sqColor);
-        fill(sqColor);
-        rect(0, 0, sqSize, sqSize)
-    }
+            stroke(sqColor)
+            line(sqPoints[j].x, sqPoints[j].y, sqPoint.x, sqPoint.y)
+        } else {
+            stroke(sqColor);
+            fill(sqColor);
+            rect(0, 0, sqSize, sqSize)
+        }
     pop();
 
     noStroke()
     fill(sqColor);
-    text(sqSequence.getRepeatCount()+1,width/2,height/2+txSize/2-100);  
+    text(sqSequence.getRepeatCount() + 1, width / 2, height / 2 + txSize / 2 - 100);
 }
 
 function randomColor() {
