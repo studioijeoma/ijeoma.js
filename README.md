@@ -9,6 +9,13 @@ https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeom
 Production: 
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.min.js
 
+#Examples
+[Gradients](ekeneijeoma.github.io/ijeomamotion-js/examples/Gradient.html)
+Circular Networks [1](ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork.html) and [2](ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork2.html)
+[Pie Chart](ekeneijeoma.github.io/ijeomamotion-js/examples/PieChart.html)
+[Sequence](ekeneijeoma.github.io/ijeomamotion-js/examples/Sequence.html)
+[Timeline](ekeneijeoma.github.io/ijeomamotion-js/examples/Timeline.html)
+
 #Getting Started 
 ##How to create Tweens
 
