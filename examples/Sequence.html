@@ -12,6 +12,7 @@
     <script type="text/javascript">
     var c1, c2, c3, c4;
     var x1, x2, x3, x4;
+    var a;
     var h;
     var ts;
 
@@ -22,7 +23,8 @@
 
         smooth();
  
-        c1 = c2 = c3 = c4 = color(255);
+        c1 = randomColor(), c2 = randomColor(), c3 = randomColor(), c4 = randomColor();
+        a = 0;
         x1 = x2 = x3 = x4 = -width;
 
         var d = 50;
@@ -30,18 +32,18 @@
         ts = new MOTION.Sequence();
         ts.add(new MOTION.Tween(d)
             .add("x1", width)
-            .add("c1", color(0)));
+            .add("c1", randomColor()))
         ts.add(new MOTION.Tween(d)
             .add("x2", width)
-            .add("c2", color(0)));
+            .add("c2", randomColor()))
         ts.add(new MOTION.Tween(d)
             .add("x3", width)
-            .add("c3", color(0)));
+            .add("c3", randomColor()))
         ts.add(new MOTION.Tween(d)
             .add("x4", width)
-            .add("c4", color(0))); 
+            .add("c4", randomColor())) 
         ts.reverse().repeat().play();
-         ts.play();
+        ts.play();
     }
 
     function draw() {
@@ -102,6 +104,10 @@
 
     function mouseDragged() {
         ts.seek(mouseX / width);
+    }
+
+    function randomColor() {
+        return color(random(255),random(255),random(255));
     }
     </script>
 </body>

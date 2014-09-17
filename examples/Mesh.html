@@ -1,0 +1,88 @@
+<script language="javascript" src="p5.js"></script>
+<script language="javascript" src="../build/ijeomamotion.js"></script>
+<script language="javascript">
+ 
+var nodes = []
+var tweens = []
+var cols, rows;
+var r = 10;
+
+function setup() {
+    createCanvas(720, 400);
+    noStroke();
+    
+     s= 50;
+     cols = width/s;
+     rows = height/s;
+
+    // translate(width/2,height/2);
+    for(var i = 0; i < cols; i++)
+        for(var j = 0; j < rows; j++)
+            nodes.push(new Node(createVector(i*s,j*s), randomColor(), 10));
+
+    for(var i = 0; i < nodes.length; i++) {
+        var offset = random(-s,s)
+        var n = nodes[i]
+        var t = createTween(n,'position',createVector(n.position.x+offset,n.position.y+offset),50)
+            .repeat().reverse().play()
+        tweens.push(t)
+    }
+}
+function draw() {
+    background(100);
+
+    beginShape(QUADS);
+    fill(255);
+    stroke(255,0,0);
+    // for(var i = 0; i < nodes.length;i++) 
+    //     vertex(nodes[i].position.x,nodes[i].position.y);
+    for(var i = 0; i < cols-1; i++)
+        for(var j = 0; j < rows-1; j++){
+            vertex()
+        }
+    endShape();
+    
+    for(var i = 0; i < nodes.length;i++)
+        nodes[i].draw()
+}
+
+var Node = function(p,c,s) {
+    return {
+        position: p,
+        color: c,
+        size: s,
+        draw: function() {
+            noStroke();
+            fill(this.color);
+            ellipse(this.position.x,this.position.y,this.size,this.size);
+        }
+    }
+}
+
+function randomColor() {
+    return color(random(255),random(255),random(255));
+}
+
+function mouseDragged() {
+    // t.seek(mouseX / width)
+}
+function keyTyped() {
+    // if (key == 'a')
+    //     t.pause();
+    // else if (key == 's')
+    //     t.resume();
+    // else if (key == 'd')
+    //     t.play();
+    // else if (key == 'f')
+    //     t.stop();
+} 
+</script>
+<style>
+body {
+    padding: 0;
+}
+</style>
+<!-- this line removes any default padding -->
+</head>
+<body>
+</body>

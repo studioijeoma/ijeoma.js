@@ -21,7 +21,7 @@
         createCanvas(windowWidth, windowHeight);
         smooth();
 
-        c1 = c2 = c3 = color(255);
+        c1 = randomColor(), c2 = randomColor(), c3 = randomColor();
         y1 = y2 = y3 = -height;
         w = width / 5;
 
@@ -31,15 +31,15 @@
 
         tl.add(new MOTION.Tween(d)
             .add("y1", height)
-            .add("c1", color(0)), 0);
+            .add("c1", randomColor()), 0);
 
         tl.add(new MOTION.Tween(d)
             .add("y2", height)
-            .add("c2", color(0)), d * 2);
+            .add("c2", randomColor()), d * 2);
 
         tl.add(new MOTION.Tween(d)
             .add("y3", height)
-            .add("c3", color(0)), d * 4);
+            .add("c3", randomColor()), d * 4);
 
         tl.repeat().reverse().play();
     }
@@ -105,6 +105,10 @@
 
     function mouseDragged() {
         tl.seek(norm(mouseX, 0, width));
+    }
+
+    function randomColor() {
+        return color(random(255),random(255),random(255));
     }
     </script>
 </body>
