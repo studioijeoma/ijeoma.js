@@ -52,6 +52,9 @@ function draw() {
     for (var i = 0; i < pieArcs.length; i++)
         pieArcs[i].draw();
     pop();
+
+    fill(255);
+    text('Drag left to right to scrub.', 25, 25);
 }
 
 function mousePressed() {
