@@ -5,16 +5,22 @@
 var angles = [30, 10, 45, 35, 60, 38, 75, 67];
 var rotation = 270;
 var pieArcs = [];
-var x = 0;
-function setup() {
-    createCanvas(720, 400);
-    noStroke();
-    // angleMode(DEGREES);
 
+function setup() {
+    createCanvas(windowWidth, windowHeight);
+    noStroke();
+    angleMode(DEGREES);
+
+
+    var x = width / 2;
+    var y = height / 2;
+    var offset = height/2;
+    var size = height - height / 3;
     var lastAngle = 0;
+
     for (var i = 0; i < angles.length; i++) {
         var gray = (i < 0) ? 255 : map(i, 0, angles.length, 0, 255);
-        pieArcs.push(new PieArc(i, width / 2, height / 2, 0, 300, radians(angles[i]), lastAngle, gray, 255));
+        pieArcs.push(new PieArc(i, x, y, offset, size, angles[i], lastAngle, gray, 0));
         lastAngle += angles[i];
     }
 
@@ -27,26 +33,16 @@ function setup() {
         var pa = pieArcs[i]
         a -= (i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2;
 
-        // s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
-        // s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255)); 
+        s.add(new MOTION.Tween(this, 'rotation', a, d).relative());
+        s.add(new MOTION.Tween(pa, d).add('offset', 0).add('alpha', 255));
         s.add(new MOTION(d));
     }
 
-    // s.setTimeScale(5).play()
     s.play()
-    // s.seek(0);
 }
 
 function draw() {
     background(100);
-
-    text(s.getTime(), 25, 25)
-    text(s.get(0).getTime(), 25, 50)
-    text(s.get(1).getTime(), 25, 75)
-    // text(s.getTime(), 25, 100)
-    // text(s.get(0).get(0).getPosition(), 25, 50)
-
-    // rect(x,height/2,10,10)
 
     push();
     for (var i = 0; i < pieArcs.length; i++)
@@ -62,7 +58,7 @@ function mouseReleased() {
     // s.resume();
 }
 
-function mouseDragged() { 
+function mouseDragged() {
     s.seek(mouseX / width)
 }
 
@@ -94,7 +90,7 @@ PieArc = function(id, x, y, offset, d, a1, a2, c, a) {
         push();
         translate(this.x, this.y)
         rotate(rotation + this.a2)
-        translate(this.offset * cos(this.a1), this.offset * sin(this.a1))
+        translate(this.offset * cos(this.a1 / 2), this.offset * sin(this.a1 / 2))
         arc(0, 0, this.d, this.d, 0, (this.a1), PIE);
         pop();
     };
