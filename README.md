@@ -14,7 +14,7 @@ https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeom
 
 Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork.html) and [2](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork2.html)
 
-[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion-js/examples/PieChart.html)
+[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion-js/examples/PieChart2.html)
 
 [Sequence](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Sequence.html)
 
