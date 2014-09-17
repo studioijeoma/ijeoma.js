@@ -170,6 +170,12 @@ Bounce.InOut = function(t) {
 
     _motions = [];
 
+    /**
+   * Returns the duration of the HTML5 media element.
+   * 
+   * @method duration
+   * @return {Number} duration
+   */
     MOTION = function(duration, delay, easing) {
         if (this.isTween())
             this._id = 'Tween' + _idMap['Tween']++;
@@ -413,8 +419,8 @@ Bounce.InOut = function(t) {
         return this._duration;
     };
 
-    MOTION.prototype.getRepeat = function() {
-        return this._repeatTime;
+    MOTION.prototype.getRepeatCount = function() {
+        return this._repeatCount;
     };
 
     MOTION.prototype.setDelay = function(delay) {
