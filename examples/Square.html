@@ -30,16 +30,36 @@ function setup() {
     sqPoint = createVector(0, 0);
 
     sqSequence = beginSequence();
-    tween(this, 'sqPoint', sqPoints[1], 25).easing(Quad.Out)
-    tween(this, 'sqPoint', sqPoints[2], 25).relative().easing(Quad.Out)
-    tween(this, 'sqPoint', sqPoints[3], 25).relative().easing(Quad.Out)
-    tween(this, 'sqPoint', sqPoints[0], 25).relative().easing(Quad.Out)
-    tween(this, 'sqScale', 3, 50).relative().easing(Bounce.InOut)
+    easing(Quad.Out)
+    tween(this, 'sqPoint', sqPoints[1], 25)
+    relative();
+    tween(this, 'sqPoint', sqPoints[2], 25)
+    tween(this, 'sqPoint', sqPoints[3], 25)
+    tween(this, 'sqPoint', sqPoints[0], 25)
+    easing(Bounce.InOut);
+    tween(this, 'sqScale', 3, 50).relative()
     endSequence();
     sqSequence.play().repeat().onRepeat(function() {
         bgColor = sqColor;
         sqColor = randomColor();
     }) 
+
+    // sqSequence = beginSequence();
+    // easing(Quad.Out)
+    // tween(this, 'sqPoint', sqPoints[1], 25)
+    // relative();
+    // tween(this, 'sqPoint', sqPoints[2], 25)
+    // tween(this, 'sqPoint', sqPoints[3], 25)
+    // tween(this, 'sqPoint', sqPoints[0], 25)
+    // easing(Bounce.InOut);
+    // tween(this, 'sqScale', 3, 50).relative()
+    // endSequence(); 
+    // repeat();
+    // onRepeat(function() { 
+    //     bgColor = sqColor;
+    //     sqColor = randomColor();
+    // }) 
+    // play();
 
     textAlign(CENTER)
     textSize(txSize);

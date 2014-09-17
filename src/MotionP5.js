@@ -1,6 +1,6 @@
 (function(MOTION, undefined) {
     REVISION = '1';
-    
+
     _timeMode = MOTION.FRAMES;
     _valueMode = MOTION.ABSOLUTE;
 
@@ -37,18 +37,24 @@
     };
 
     p5.prototype.frames = function() {
-        _timeMode = MOTION.FRAMES; 
+        _timeMode = MOTION.FRAMES;
 
         return this;
     };
 
-    _current = null;
+    _currentEasing = null;
+
+    p5.prototype.easing = function(easing) {
+        _currentEasing = easing;
+
+        return this;
+    };
 
     p5.prototype.relative = function() {
         _valueMode = MOTION.RELATIVE;
 
-        if (_current)
-            _current.setValueMode(_valueMode)
+        // if (_current)
+        //     _current.setValueMode(_valueMode)
 
         return this;
     };
@@ -62,8 +68,13 @@
         return this;
     };
 
+    _current = null;
+
     p5.prototype.tween = function(object, property, end, duration, delay, easing) {
         t = new MOTION.Tween(object, property, end, duration, delay, easing).setValueMode(_valueMode);
+
+        if (_currentEasing)
+            t.easing(_currentEasing)
 
         if (_current)
             _current.add(t);
@@ -82,7 +93,6 @@
 
     p5.prototype.endParallel = function() {
         _current.updateTweens();
-        _current = null;
     };
 
     p5.prototype.beginSequence = function(name) {
@@ -96,7 +106,6 @@
 
     p5.prototype.endSequence = function() {
         _current.updateTweens();
-        _current = null;
     };
 
     p5.prototype.beginTimeline = function(name) {
@@ -110,7 +119,6 @@
 
     p5.prototype.endTimeline = function() {
         _current.updateTweens();
-        _current = null;
     };
 
     _currentKeyframe = null;
@@ -138,40 +146,81 @@
             _current.add(_currentKeyframe);
 
         _currentKeyframe = null;
-        
     };
 
-    p5.prototype.play = function(m) {
-        m.play();
-    };
+    // p5.prototype.play = function(m) {
+    //     if (m)
+    //         m.play();
+    //     else
+    //         _current.play();
+    // };
 
-    p5.prototype.stop = function(m) {
-        m.stop();
-    };
+    // p5.prototype.repeat = function(m) { 
+    // if (m)
+    //     m.repeat();
+    // else
+    //     _current.repeat();
+    // };
 
-    p5.prototype.pause = function(m) {
-        m.pause();
-    };
+    // p5.prototype.stop = function(m) {
+    //     if (m)
+    //         m.stop();
+    //     else
+    //         _current.stop();
+    // };
 
-    p5.prototype.resume = function(m) {
-        m.resume();
-    };
+    // p5.prototype.pause = function(m) {
+    //     if (m)
+    //         m.pause();
+    //     else
+    //         _current.pause();
+    // };
 
-    p5.prototype.seek = function(m, t) {
-        m.seek(t);
-    };
+    // p5.prototype.resume = function(m) {
+    //     if (m)
+    //         m.resume();
+    //     else
+    //         _current.resume();
+    // };
+
+    // p5.prototype.seek = function(m, t) {
+    //     if (m)
+    //         m.resume(t);
+    //     else
+    //         _current.resume(arguments[0]);
+    // };
+
+    // p5.prototype.onStart = function(func) {
+    //     _current.onStart(func);
+    //     return this;
+    // };
+
+    // p5.prototype.onEnd = function(func) {
+    //     _current.onEnd(func);
+    //     return this;
+    // };
+
+    // p5.prototype.onUpdate = function(func) {
+    //     _current.onUpdate(func);
+    //     return this;
+    // };
+
+    // p5.prototype.onRepeat = function(func) { 
+    //     _current.onRepeat(func);
+    //     return this;
+    // };
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
         this._isSeeking = false;
- 
+
         this._playTime = (_timeMode == MOTION.SECONDS) ? (millis() - this._playTime * 1000) : (frameCount - this._playTime);
 
         return this;
     };
 
     MOTION.prototype.updateTime = function() {
-        this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale; 
+        this._time = ((_timeMode == MOTION.SECONDS) ? ((millis() - this._playTime) / 1000) : (frameCount - this._playTime)) * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
