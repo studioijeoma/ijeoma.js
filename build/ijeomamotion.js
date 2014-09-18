@@ -1155,6 +1155,11 @@ Bounce.InOut = function(t) {
         return new MOTION.Timeline(children);
     };
 
+    p5.prototype.timeMode = function(mode) {
+        _timeMode = mode;
+        return this;
+    };
+
     p5.prototype.seconds = function() {
         _timeMode = MOTION.SECONDS;
 
