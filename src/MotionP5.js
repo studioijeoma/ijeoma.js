@@ -55,6 +55,12 @@
         return this;
     };
 
+    p5.prototype.easing = function(easing) {
+        _currentEasing = easing;
+
+        return this;
+    };
+
     p5.prototype.relative = function() {
         _valueMode = MOTION.RELATIVE;
 
