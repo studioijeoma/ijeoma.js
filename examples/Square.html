@@ -30,13 +30,13 @@ function setup() {
     sqPoint = createVector(0, 0);
 
     sqSequence = beginSequence();
-    easing(Quad.Out)
+    easingMode(Quad.Out)
     tween(this, 'sqPoint', sqPoints[1], 25)
     relative();
     tween(this, 'sqPoint', sqPoints[2], 25)
     tween(this, 'sqPoint', sqPoints[3], 25)
     tween(this, 'sqPoint', sqPoints[0], 25)
-    easing(Bounce.InOut);
+    easingMode(Bounce.InOut);
     tween(this, 'sqScale', 3, 50).relative()
     endSequence(); 
     repeat();

@@ -1169,7 +1169,7 @@ Bounce.InOut = function(t) {
 
     _currentEasing = null;
 
-    p5.prototype.easing = function(easing) {
+    p5.prototype.easingMode = function(easing) {
         _currentEasing = easing;
 
         return this;
