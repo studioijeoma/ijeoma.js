@@ -17,13 +17,13 @@ function setup() {
     endSequence();
     repeat(5);
     onRepeat(function() {
-        div *= div;
+        div += 10;
     })
     play();
 }
 
 function draw() {
-    background(0);
+    background(0,25);
 
     cols = div;
     rows = div;

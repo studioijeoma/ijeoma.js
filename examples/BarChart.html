@@ -1,10 +1,6 @@
 <script language="javascript" src="p5.js"></script>
 <script language="javascript" src="../build/ijeomamotion.js"></script>
 <script language="javascript">
-var cities = [
-    "NYC", "LA", "Milan", "Venice", "London", "Amsterdam"
-];
-
 var bars = [];
 
 var w = 100;
@@ -20,8 +16,8 @@ function setup() {
 
     ts = new MOTION.Sequence();
 
-    for (var i = 0; i < cities.length; i++)
-        bars.push(new Bar(cities[i], random(low, high), i * w, 0, w, 0));
+    for (var i = 0; i < 5; i++)
+        bars.push(new Bar(i * w, 0, w, 0));
 
     var tp1 = new MOTION.Parallel();
     for (var i = 0; i < bars.length; i++) {
@@ -77,10 +73,7 @@ function draw() {
 }
 
 function keyPressed() {
-    if (key == ' ')
-        ts.play();
-    else
-        setupBars();
+    ts.play();
 }
 
 function mousePressed() {
@@ -95,10 +88,8 @@ function mouseDragged() {
     ts.seek(mouseX / width);
 }
 
-var Bar = function(name, value, x, y, w, h) { 
+var Bar = function(x, y, w, h) {
     return {
-        name: name,
-        v: value,
         x: x,
         y: y,
         w: w,
@@ -108,12 +99,6 @@ var Bar = function(name, value, x, y, w, h) {
             noStroke();
             fill(this.c);
             rect(this.x, this.y, this.w, this.h);
-
-            textAlign(CENTER);
-            fill(255);
-            text(this.v, this.x + this.w / 2, this.y - 10);
-            fill(0);
-            text(this.name, this.x + this.w / 2, this.y + 25);
         }
     }
 }
