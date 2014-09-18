@@ -29,6 +29,7 @@ function setup() {
 
     sqPoint = createVector(0, 0);
 
+    timeMode(FRAMES)
     sqSequence = beginSequence();
     easingMode(Quad.Out)
     tween(this, 'sqPoint', sqPoints[1], 25)
