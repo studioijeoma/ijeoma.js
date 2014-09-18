@@ -44,7 +44,7 @@
             return t;
         }) : easing;
 
-        this._repeatCount = 0;
+        this._repeatTime = 0;
         this._repeatDuration = 0;
 
         this._isPlaying = false;
@@ -108,7 +108,7 @@
         this.resume();
 
         this._playCount++;
-        this._repeatCount = 0;
+        this._repeatTime = 0;
 
         return this;
     };
@@ -116,21 +116,21 @@
     MOTION.prototype.stop = function() { 
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
-        if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
+        if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
             this.seek(0);
             this.resume();
 
             if (!this._isRepeatingDelay)
                 this._delay = 0;
 
-            this._repeatCount++;
+            this._repeatTime++;
 
             this.dispatchRepeatedEvent();
         } else {
             this.seek(1);
             this.pause();
 
-            this._repeatCount = 0;
+            this._repeatTime = 0;
 
             this.dispatchEndedEvent();
         }
@@ -171,13 +171,12 @@
 
     MOTION.prototype.repeat = function(duration) {
         this._isRepeating = true;
-
-        if (typeof repeat != 'undefined') this._repeatDuration = duration;
+        if (typeof duration !== 'undefined') this._repeatDuration = duration;
 
         return this;
     };
 
-    MOTION.prototype.oRepeat = function() {
+    MOTION.prototype.noRepeat = function() {
         this._isRepeating = false;
         this._repeatDuration = 0;
 
@@ -259,8 +258,8 @@
         return this._duration;
     };
 
-    MOTION.prototype.getRepeatCount = function() {
-        return this._repeatCount;
+    MOTION.prototype.getRepeatTime = function() {
+        return this._repeatTime;
     };
 
     MOTION.prototype.setDelay = function(delay) {

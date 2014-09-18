@@ -204,7 +204,7 @@ Bounce.InOut = function(t) {
             return t;
         }) : easing;
 
-        this._repeatCount = 0;
+        this._repeatTime = 0;
         this._repeatDuration = 0;
 
         this._isPlaying = false;
@@ -268,7 +268,7 @@ Bounce.InOut = function(t) {
         this.resume();
 
         this._playCount++;
-        this._repeatCount = 0;
+        this._repeatTime = 0;
 
         return this;
     };
@@ -276,21 +276,21 @@ Bounce.InOut = function(t) {
     MOTION.prototype.stop = function() { 
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
-        if (this._isRepeating && (this._repeatDuration === 0 || this._repeatCount < this._repeatDuration)) {
+        if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
             this.seek(0);
             this.resume();
 
             if (!this._isRepeatingDelay)
                 this._delay = 0;
 
-            this._repeatCount++;
+            this._repeatTime++;
 
             this.dispatchRepeatedEvent();
         } else {
             this.seek(1);
             this.pause();
 
-            this._repeatCount = 0;
+            this._repeatTime = 0;
 
             this.dispatchEndedEvent();
         }
@@ -331,13 +331,12 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.repeat = function(duration) {
         this._isRepeating = true;
-
-        if (typeof repeat != 'undefined') this._repeatDuration = duration;
+        if (typeof duration !== 'undefined') this._repeatDuration = duration;
 
         return this;
     };
 
-    MOTION.prototype.oRepeat = function() {
+    MOTION.prototype.noRepeat = function() {
         this._isRepeating = false;
         this._repeatDuration = 0;
 
@@ -419,8 +418,8 @@ Bounce.InOut = function(t) {
         return this._duration;
     };
 
-    MOTION.prototype.getRepeatCount = function() {
-        return this._repeatCount;
+    MOTION.prototype.getRepeatTime = function() {
+        return this._repeatTime;
     };
 
     MOTION.prototype.setDelay = function(delay) {
@@ -1274,67 +1273,67 @@ Bounce.InOut = function(t) {
         _currentKeyframe = null;
     };
 
-    // p5.prototype.play = function(m) {
-    //     if (m)
-    //         m.play();
-    //     else
-    //         _current.play();
-    // };
+    p5.prototype.play = function(motion) {
+        if (motion)
+            motion.play();
+        else
+            _current.play();
+    };
 
-    // p5.prototype.repeat = function(m) { 
-    // if (m)
-    //     m.repeat();
-    // else
-    //     _current.repeat();
-    // };
+    p5.prototype.repeat = function(motion) {  
+        if (motion)
+            motion.repeat();
+        else
+            _current.repeat();
+    };
 
-    // p5.prototype.stop = function(m) {
-    //     if (m)
-    //         m.stop();
-    //     else
-    //         _current.stop();
-    // };
+    p5.prototype.stop = function(motion) {
+        if (motion)
+            motion.stop();
+        else
+            _current.stop();
+    };
 
-    // p5.prototype.pause = function(m) {
-    //     if (m)
-    //         m.pause();
-    //     else
-    //         _current.pause();
-    // };
+    p5.prototype.pause = function(motion) {
+        if (motion)
+            motion.pause();
+        else
+            _current.pause();
+    };
 
-    // p5.prototype.resume = function(m) {
-    //     if (m)
-    //         m.resume();
-    //     else
-    //         _current.resume();
-    // };
+    p5.prototype.resume = function(motion) {
+        if (motion)
+            motion.resume();
+        else
+            _current.resume();
+    };
 
-    // p5.prototype.seek = function(m, t) {
-    //     if (m)
-    //         m.resume(t);
-    //     else
-    //         _current.resume(arguments[0]);
-    // };
+    p5.prototype.seek = function(motion, t) {
+        if (motion)
+            motion.resume(t);
+        else
+            _current.resume(arguments[0]);
+    };
 
-    // p5.prototype.onStart = function(func) {
-    //     _current.onStart(func);
-    //     return this;
-    // };
+    p5.prototype.onStart = function(func) {
+        _current.onStart(func);
+        return this;
+    };
 
-    // p5.prototype.onEnd = function(func) {
-    //     _current.onEnd(func);
-    //     return this;
-    // };
+    p5.prototype.onEnd = function(func) {
+        _current.onEnd(func);
+        return this;
+    };
 
-    // p5.prototype.onUpdate = function(func) {
-    //     _current.onUpdate(func);
-    //     return this;
-    // };
+    p5.prototype.onUpdate = function(func) {
+        _current.onUpdate(func);
+        return this;
+    };
 
-    // p5.prototype.onRepeat = function(func) { 
-    //     _current.onRepeat(func);
-    //     return this;
-    // };
+    p5.prototype.onRepeat = function(func) { 
+        _current.onRepeat(func);
+        return this;
+    };
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;

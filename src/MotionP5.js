@@ -148,67 +148,67 @@
         _currentKeyframe = null;
     };
 
-    // p5.prototype.play = function(m) {
-    //     if (m)
-    //         m.play();
-    //     else
-    //         _current.play();
-    // };
+    p5.prototype.play = function(motion) {
+        if (motion)
+            motion.play();
+        else
+            _current.play();
+    };
 
-    // p5.prototype.repeat = function(m) { 
-    // if (m)
-    //     m.repeat();
-    // else
-    //     _current.repeat();
-    // };
+    p5.prototype.repeat = function(motion) {  
+        if (motion)
+            motion.repeat();
+        else
+            _current.repeat();
+    };
 
-    // p5.prototype.stop = function(m) {
-    //     if (m)
-    //         m.stop();
-    //     else
-    //         _current.stop();
-    // };
+    p5.prototype.stop = function(motion) {
+        if (motion)
+            motion.stop();
+        else
+            _current.stop();
+    };
 
-    // p5.prototype.pause = function(m) {
-    //     if (m)
-    //         m.pause();
-    //     else
-    //         _current.pause();
-    // };
+    p5.prototype.pause = function(motion) {
+        if (motion)
+            motion.pause();
+        else
+            _current.pause();
+    };
 
-    // p5.prototype.resume = function(m) {
-    //     if (m)
-    //         m.resume();
-    //     else
-    //         _current.resume();
-    // };
+    p5.prototype.resume = function(motion) {
+        if (motion)
+            motion.resume();
+        else
+            _current.resume();
+    };
 
-    // p5.prototype.seek = function(m, t) {
-    //     if (m)
-    //         m.resume(t);
-    //     else
-    //         _current.resume(arguments[0]);
-    // };
+    p5.prototype.seek = function(motion, t) {
+        if (motion)
+            motion.resume(t);
+        else
+            _current.resume(arguments[0]);
+    };
 
-    // p5.prototype.onStart = function(func) {
-    //     _current.onStart(func);
-    //     return this;
-    // };
+    p5.prototype.onStart = function(func) {
+        _current.onStart(func);
+        return this;
+    };
 
-    // p5.prototype.onEnd = function(func) {
-    //     _current.onEnd(func);
-    //     return this;
-    // };
+    p5.prototype.onEnd = function(func) {
+        _current.onEnd(func);
+        return this;
+    };
 
-    // p5.prototype.onUpdate = function(func) {
-    //     _current.onUpdate(func);
-    //     return this;
-    // };
+    p5.prototype.onUpdate = function(func) {
+        _current.onUpdate(func);
+        return this;
+    };
 
-    // p5.prototype.onRepeat = function(func) { 
-    //     _current.onRepeat(func);
-    //     return this;
-    // };
+    p5.prototype.onRepeat = function(func) { 
+        _current.onRepeat(func);
+        return this;
+    };
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;

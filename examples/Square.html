@@ -38,28 +38,13 @@ function setup() {
     tween(this, 'sqPoint', sqPoints[0], 25)
     easing(Bounce.InOut);
     tween(this, 'sqScale', 3, 50).relative()
-    endSequence();
-    sqSequence.repeat().onRepeat(function() {
+    endSequence(); 
+    repeat();
+    onRepeat(function() { 
         bgColor = sqColor;
         sqColor = randomColor();
-    }).play()
-
-    // sqSequence = beginSequence();
-    // easing(Quad.Out)
-    // tween(this, 'sqPoint', sqPoints[1], 25)
-    // relative();
-    // tween(this, 'sqPoint', sqPoints[2], 25)
-    // tween(this, 'sqPoint', sqPoints[3], 25)
-    // tween(this, 'sqPoint', sqPoints[0], 25)
-    // easing(Bounce.InOut);
-    // tween(this, 'sqScale', 3, 50).relative()
-    // endSequence(); 
-    // repeat();
-    // onRepeat(function() { 
-    //     bgColor = sqColor;
-    //     sqColor = randomColor();
-    // }) 
-    // play();
+    }) 
+    play();
 
     textAlign(CENTER)
     textSize(txSize);
@@ -76,19 +61,18 @@ function draw() {
 
     var j = sqSequence.getIndex();
 
+    stroke(sqColor);
+    
     if (sqSequence.getTime() > 1)
-        if (j < 4) {
+        if (j < 4) { 
             noFill();
-            stroke(sqColor);
             beginShape();
             for (var i = 0; i <= j; i++)
                 vertex(sqPoints[i].x, sqPoints[i].y)
             endShape();
-
-            stroke(sqColor)
+ 
             line(sqPoints[j].x, sqPoints[j].y, sqPoint.x, sqPoint.y)
         } else {
-            stroke(sqColor);
             fill(sqColor);
             rect(0, 0, sqSize, sqSize)
         }
@@ -96,34 +80,11 @@ function draw() {
 
     noStroke()
     fill(sqColor);
-    text(sqSequence.getRepeatCount() + 1, width / 2, height / 2 + txSize / 2 - 100);
+    text(sqSequence.getRepeatTime() + 1, width / 2, height / 2 + txSize / 2 - 100);
 }
 
 function randomColor() {
     return color(random(255), random(255), random(255))
-}
-
-function mousePressed() {
-    sqSequence.pause();
-}
-
-function mouseReleased() {
-    sqSequence.resume();
-}
-
-function mouseDragged() {
-    sqSequence.seek(mouseX / width)
-}
-
-function keyTyped() {
-    if (key == 'a')
-        sqSequence.pause();
-    else if (key == 's')
-        sqSequence.resume();
-    else if (key == 'd')
-        sqSequence.play();
-    else if (key == 'f')
-        sqSequence.stop();
 }
 </script>
 <style>
