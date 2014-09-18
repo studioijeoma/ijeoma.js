@@ -169,6 +169,7 @@ Bounce.InOut = function(t) {
     _idMap['KeyFrame'] = 0;
 
     _motions = [];
+    _motionMap = [];
 
     /**
    * Returns the duration of the HTML5 media element.
@@ -331,7 +332,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.repeat = function(duration) {
         this._isRepeating = true;
-        if (typeof duration !== 'undefined') this._repeatDuration = duration;
+        if (typeof duration !== 'undefined' || duration) this._repeatDuration = duration;
 
         return this;
     };
@@ -1136,23 +1137,44 @@ Bounce.InOut = function(t) {
     });
 
     p5.prototype.createMotion = function(duration, delay, easing) {
-        return new MOTION(duration, delay, easing);
+        _current = new MOTION(duration, delay, easing);
+        return _current;
     };
 
     p5.prototype.createTween = function(object, property, end, duration, delay, easing) {
-        return new MOTION.Tween(object, property, end, duration, delay, easing);
+        _current = new MOTION.Tween(object, property, end, duration, delay, easing);
+        return _current;
     };
 
     p5.prototype.createParallel = function(children) {
-        return new MOTION.Parallel(children);
+        _current = new MOTION.Parallel(children);
+        return _current;
     };
 
     p5.prototype.createSequence = function(children) {
-        return new MOTION.Sequence(children);
+        _current = new MOTION.Sequence(children);
+        return _current;
     };
 
     p5.prototype.createTimeline = function(children) {
-        return new MOTION.Timeline(children);
+        _current = new MOTION.Timeline(children);
+        return _current;
+    };
+
+    var find = function() {
+        if (typeof arguments[0] === 'string')
+            for (var i = 0; i < _motions.length; i++)
+                if (_motions.getName() == arguments[0])
+                    return _motions[i];
+    }
+
+    p5.prototype.goto = function(motion) {
+        if (typeof arguments[0] === 'number')
+            _current = _motions[arguments[0]];
+        else if (typeof arguments[0] === 'string')
+            _current = find(arguments[0]);
+        else if (typeof arguments[0] === 'object')
+            _current = arguments[0];
     };
 
     p5.prototype.timeMode = function(mode) {
@@ -1285,45 +1307,57 @@ Bounce.InOut = function(t) {
     };
 
     p5.prototype.play = function(motion) {
-        if (motion)
-            motion.play();
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).play();
+        else if (typeof arguments[0] === 'object')
+            arguments[0].play()
         else
             _current.play();
     };
 
-    p5.prototype.repeat = function(motion) {  
-        if (motion)
-            motion.repeat();
+    p5.prototype.repeat = function(motion, duration) {
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).repeat(arguments[1]);
+        else if (typeof arguments[0] === 'object')
+            arguments[0].repeat(arguments[1]);
         else
-            _current.repeat();
+            _current.repeat(arguments[0]);
     };
 
     p5.prototype.stop = function(motion) {
-        if (motion)
-            motion.stop();
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).stop();
+        else if (typeof arguments[0] === 'object')
+            arguments[0].stop()
         else
             _current.stop();
     };
 
     p5.prototype.pause = function(motion) {
-        if (motion)
-            motion.pause();
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).pause();
+        else if (typeof arguments[0] === 'object')
+            arguments[0].pause()
         else
             _current.pause();
     };
 
     p5.prototype.resume = function(motion) {
-        if (motion)
-            motion.resume();
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).resume();
+        else if (typeof arguments[0] === 'object')
+            arguments[0].resume()
         else
             _current.resume();
     };
 
     p5.prototype.seek = function(motion, t) {
-        if (motion)
-            motion.resume(t);
+        if (typeof arguments[0] === 'string')
+            find(arguments[0]).seek(arguments[1]);
+        else if (typeof arguments[0] === 'object')
+            arguments[0].seek(arguments[1])
         else
-            _current.resume(arguments[0]);
+            _current.seek(arguments[0]);
     };
 
     p5.prototype.onStart = function(func) {
@@ -1341,7 +1375,7 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    p5.prototype.onRepeat = function(func) { 
+    p5.prototype.onRepeat = function(func) {
         _current.onRepeat(func);
         return this;
     };

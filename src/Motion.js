@@ -9,6 +9,7 @@
     _idMap['KeyFrame'] = 0;
 
     _motions = [];
+    _motionMap = [];
 
     /**
    * Returns the duration of the HTML5 media element.
@@ -171,7 +172,7 @@
 
     MOTION.prototype.repeat = function(duration) {
         this._isRepeating = true;
-        if (typeof duration !== 'undefined') this._repeatDuration = duration;
+        if (typeof duration !== 'undefined' || duration) this._repeatDuration = duration;
 
         return this;
     };

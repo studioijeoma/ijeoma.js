@@ -1,92 +1,49 @@
 <script language="javascript" src="p5.js"></script>
 <script language="javascript" src="../build/ijeomamotion.js"></script>
-<script language="javascript">
-// var angles = [30, 10];
-var sqPoint, sqSize, sqScale, sqColor, bgColor;
-var sqPoints = [];
-var sqSequence;
-
-var txSize;
-
+<script language="javascript"> 
+var grid = 100;
+var div = 1;
+var dotSize = 100;
+var dotScale = 0;
 function setup() {
-    createCanvas(windowWidth, windowHeight);
-    // rectMode(CENTER)
+    createCanvas(windowHeight, windowHeight);
 
-    bgColor = color(0);
-    sqColor = randomColor();
-
-    txSize = height - height / 2;
-
-    sqScale = 1;
-    sqSize = height - height / 3;
-    sqPoints = [
-        createVector(0, 0),
-        createVector(sqSize, 0),
-        createVector(sqSize, sqSize),
-        createVector(0, sqSize),
-        createVector(0, 0)
-    ];
-
-    sqPoint = createVector(0, 0);
-
-    timeMode(FRAMES);
-    sqSequence = beginSequence();
-    easingMode(Quad.Out)
-    tween(this, 'sqPoint', sqPoints[1], 25)
-    relative();
-    tween(this, 'sqPoint', sqPoints[2], 25)
-    tween(this, 'sqPoint', sqPoints[3], 25)
-    tween(this, 'sqPoint', sqPoints[0], 25)
-    easingMode(Bounce.InOut);
-    tween(this, 'sqScale', 3, 50).relative()
-    endSequence(); 
-    repeat();
-    onRepeat(function() { 
-        bgColor = sqColor;
-        sqColor = randomColor();
-    }) 
+    createTween(this,'dotScale',1, 50) 
+    repeat(2);
+    onRepeat(function(){
+        div+=10;
+    })
     play();
-
-    textAlign(CENTER)
-    textSize(txSize);
-
-    strokeWeight(5);
 }
 
 function draw() {
-    background(bgColor);
+    background(0); 
 
-    push();
-    translate(width / 2 - sqSize / 2 * sqScale, height / 2 - sqSize / 2 * sqScale)
-    scale(sqScale)
+    cols =  div;
+    rows =  div;
 
-    var j = sqSequence.getIndex();
+    dotSize = height/div;
 
-    stroke(sqColor);
+    translate(0,0)
     
-    if (sqSequence.getTime() > 1)
-        if (j < 4) { 
-            noFill();
-            beginShape();
-            for (var i = 0; i <= j; i++)
-                vertex(sqPoints[i].x, sqPoints[i].y)
-            endShape();
- 
-            line(sqPoints[j].x, sqPoints[j].y, sqPoint.x, sqPoint.y)
-        } else {
-            fill(sqColor);
-            rect(0, 0, sqSize, sqSize)
+    fill(255,dotScale*255);
+    for(var i = 0; i <= cols; i++)
+        for(var j = 0; j <= rows; j++){ 
+            ellipse(i*dotSize,j*dotSize,dotSize,dotSize);
         }
-    pop();
-
-    noStroke()
-    fill(sqColor);
-    text(sqSequence.getRepeatTime() + 1, width / 2, height / 2 + txSize / 2 - 100);
 }
 
 function randomColor() {
     return color(random(255), random(255), random(255))
 }
+
+function keyPressed() {
+    // if (keyCode == MOUSE_LEFT)
+        
+    // else if (keyCode == MOUSE_RIGHT)
+         
+}
+
 </script>
 <style>
 body {
