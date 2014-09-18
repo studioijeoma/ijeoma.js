@@ -197,6 +197,8 @@ Bounce.InOut = function(t) {
         this._time = 0;
         this._timeScale = 1;
 
+        this._reverseTime = 0;
+
         this._duration = (typeof duration == 'undefined') ? 0 : duration;
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
@@ -214,11 +216,11 @@ Bounce.InOut = function(t) {
         this._isReversing = false;
         this._isSeeking = false;
 
-        this._isAutoUpdating = true;
-
-        this._reverseTime = 0;
+        this._isAutoUpdating = true; 
 
         this._order = 0;
+
+        this._hasController = false;
 
         this._onStart = undefined;
         this._onEnd = undefined;
@@ -712,7 +714,7 @@ Bounce.InOut = function(t) {
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.noAutoUpdate();
+        motion._hasController = true;
 
         this._motions.push(motion);
 
@@ -1132,7 +1134,7 @@ Bounce.InOut = function(t) {
 
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < _motions.length; i++)
-            if (_motions[i].isAutoUpdating())
+            if (_motions[i].isAutoUpdating() && !_motions[i]._hasController)
                 _motions[i].update();
     });
 
@@ -1246,7 +1248,7 @@ Bounce.InOut = function(t) {
         if (typeof name != 'undefined')
             _current.setName(name);
 
-        return _currentParallel;
+        return _current;
     };
 
     p5.prototype.endParallel = function() {

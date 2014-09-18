@@ -6,7 +6,7 @@
 
     p5.prototype.registerMethod('pre', function() {
         for (var i = 0; i < _motions.length; i++)
-            if (_motions[i].isAutoUpdating())
+            if (_motions[i].isAutoUpdating() && !_motions[i]._hasController)
                 _motions[i].update();
     });
 
@@ -120,7 +120,7 @@
         if (typeof name != 'undefined')
             _current.setName(name);
 
-        return _currentParallel;
+        return _current;
     };
 
     p5.prototype.endParallel = function() {

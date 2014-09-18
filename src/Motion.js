@@ -37,6 +37,8 @@
         this._time = 0;
         this._timeScale = 1;
 
+        this._reverseTime = 0;
+
         this._duration = (typeof duration == 'undefined') ? 0 : duration;
 
         this._delay = (typeof delay == 'undefined') ? 0 : delay;
@@ -54,11 +56,11 @@
         this._isReversing = false;
         this._isSeeking = false;
 
-        this._isAutoUpdating = true;
-
-        this._reverseTime = 0;
+        this._isAutoUpdating = true; 
 
         this._order = 0;
+
+        this._hasController = false;
 
         this._onStart = undefined;
         this._onEnd = undefined;

@@ -102,7 +102,7 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.noAutoUpdate();
+        motion._hasController = true;
 
         this._motions.push(motion);
 
