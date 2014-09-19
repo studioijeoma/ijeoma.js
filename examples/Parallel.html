@@ -10,34 +10,35 @@
     <script type="text/javascript" src="p5.js"></script>
     <script type="text/javascript" src="../build/ijeomamotion.js"></script>
     <script type="text/javascript">
+    var x1, x2, h;
     var tp;
 
-    var x1;
-    var x2;
-
     function setup() {
-        createCanvas(400, 200);
+        createCanvas(windowWidth, windowHeight);
 
         ellipseMode(CORNER);
         smooth();
 
-        x1 = -width;
-        x2 = width;
+        x1 = -height;
+        x2 = height;
+        w = width / 2;
 
         tp = new MOTION.Parallel()
-            .add(new MOTION.Tween(this, "x1", width, 100))
-            .add(new MOTION.Tween(this, "x2", -width, 200))
+            .add(new MOTION.Tween(this, "x1", height, 1))
+            .add(new MOTION.Tween(this, "x2", -height, 2))
             .reverse().repeat()
-            .play();   
+            .play();
     }
 
     function draw() {
         background(255);
- 
+
+        tp.update();
+
         stroke(255);
         fill(255 / 2);
-        rect(x1, 0, width, height / 2);
-        rect(x2, height / 2, width, height / 2);
+        rect(0, x1, w, height);
+        rect(w, x2, w, height);
 
         var time;
 
@@ -45,17 +46,17 @@
 
         noStroke();
         fill(0);
-        text(time, 10, 10 + 12);
+        text(time, 25, 25 + 12);
 
-        time = tp.get(1).getTime() + " / " + tp.get(1).getDuration(); 
+        time = tp.get(1).getTime() + " / " + tp.get(1).getDuration();
 
         fill(0);
-        text(time, 10, 100 + 10 + 12);
+        text(time, w+25, 25 + 12);
 
         time = tp.getTime() + " / " + tp.getDuration();
 
         fill(0);
-        text(time, width - textWidth(time) - 10, height - 10);
+        text(time, width - textWidth(time) - 25, height - 25);
     }
 
     function keyPressed() {
@@ -74,6 +75,12 @@
         tp.seek(mouseX / width);
     }
     </script>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    </style>
 </body>
 
 </html>

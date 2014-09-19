@@ -10,9 +10,7 @@ function setup() {
 
     for (var i = 0; i < 100; i++) {  
         var c = new Circle(random(width), random(height), 0, random(255), 255);
-        circles.push(c)
-
-        c.tween = new MOTION.Tween(c, random(50, 100))
+        c.tween = new MOTION.Tween(c, random(1, 2))
             .add('r', random(5, 25))
             .add('x', random(width))
             .add('y', random(height)) 
@@ -23,6 +21,8 @@ function setup() {
                 this.play() 
             })
             .play() 
+
+        circles.push(c)
     }
 }
 
@@ -54,7 +54,11 @@ Circle = function(x, y, r, color, alpha) {
     this.r = r;
     this.color = color;
     this.alpha = alpha;
+    this.tween;
+
     this.draw = function() {
+        this.tween.update();
+
         fill(this.color, this.alpha);
         ellipse(this.x, this.y, this.r, this.r);
     }

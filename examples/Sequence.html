@@ -21,27 +21,25 @@
 
         h = height/4;
 
-        smooth();
- 
-        c1 = randomColor(), c2 = randomColor(), c3 = randomColor(), c4 = randomColor();
+        c1 = c2 = c3 = c4 = 255;
         a = 0;
         x1 = x2 = x3 = x4 = -width;
 
-        var d = 50;
+        var d = 1;
 
         ts = new MOTION.Sequence();
         ts.add(new MOTION.Tween(d)
             .add("x1", width)
-            .add("c1", randomColor()))
+            .add("c1", 0))
         ts.add(new MOTION.Tween(d)
             .add("x2", width)
-            .add("c2", randomColor()))
+            .add("c2", 0))
         ts.add(new MOTION.Tween(d)
             .add("x3", width)
-            .add("c3", randomColor()))
+            .add("c3", 0))
         ts.add(new MOTION.Tween(d)
             .add("x4", width)
-            .add("c4", randomColor())) 
+            .add("c4", 0)) 
         ts.reverse().repeat().play();
         ts.play();
     }
@@ -49,11 +47,10 @@
     function draw() {
         background(255);
 
-        // ts.update();
+        ts.update();
 
         noStroke();
-
-        fill(0);
+ 
         fill(c1);
         rect(x1, 0, width, h);
         fill(c2);
@@ -104,11 +101,7 @@
 
     function mouseDragged() {
         ts.seek(mouseX / width);
-    }
-
-    function randomColor() {
-        return color(random(255),random(255),random(255));
-    }
+    } 
     </script>
 </body>
 

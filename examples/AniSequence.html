@@ -12,24 +12,13 @@ function setup() {
     y = 50;
     diameter = 10;
 
-    // s = new MOTION.Sequence().relative();
-    // s.add(new MOTION.Tween(100).add('diameter', 55))
-    // s.add(new MOTION.Tween(100).add('x', 400).add('y', 100))
-    // s.add(new MOTION.Tween(100).add('x', 450).add('y', 400))
-    // s.add(new MOTION.Tween(100).add('x', 100).add('y', 450))
-    // s.add(new MOTION.Tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5))  
-    // s.play();
-
-    frames();
-    s = beginSequence();
-    relative();
-    tween(25).add('diameter', 55)
-    tween(25).add('x', 400).add('y', 100)
-    tween(25).add('x', 450).add('y', 400)
-    tween(25).add('x', 100).add('y', 450)
-    tween(25).add('x', 50).add('y', 50).add(this, 'diameter', 5)
-    endSequence();
-    play(s); 
+    s = new MOTION.Sequence();
+    s.add(new MOTION.Tween(100).add('diameter', 55))
+    s.add(new MOTION.Tween(100).add('x', 400).add('y', 100).relative())
+    s.add(new MOTION.Tween(100).add('x', 450).add('y', 400).relative())
+    s.add(new MOTION.Tween(100).add('x', 100).add('y', 450).relative())
+    s.add(new MOTION.Tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5).relative())  
+    s.play();
 }
 
 function draw() {

@@ -15,9 +15,9 @@ function setup() {
     for (var i = 0; i < 300; i++) {
         var n = new Node(10, round(random(2, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
 
-        var duration1 = round(random(750, 1000));
+        var duration1 = round(random(15, 20));
         var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
-        var duration2 = round(random(250, 500));
+        var duration2 = round(random(5, 10));
         // var endRadius = n.radius - circleOffset;
         var endRadius = round(random(1, circleCount)) * circleOffset 
 
@@ -91,8 +91,13 @@ Node = function(s, r, color, alpha) {
     this.angle = random(TWO_PI);
     this.color = color;
     this.alpha = alpha;
+    this.angleTween
+    this.radiusTween 
 
     this.update = function() { 
+        this.angleTween.update();
+        this.radiusTween.update();
+
         this.x = cos(this.angle) * this.radius;
         this.y = sin(this.angle) * this.radius; 
     }

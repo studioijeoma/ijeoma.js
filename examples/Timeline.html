@@ -9,8 +9,7 @@
 <body>
     <script type="text/javascript" src="p5.js"></script>
     <script type="text/javascript" src="../build/ijeomamotion.js"></script>
-    <script type="text/javascript">
-    // alert('motiontest');
+    <script type="text/javascript"> 
     var c1, c2, c3;
     var y1, y2, y3;
     var w;
@@ -18,34 +17,35 @@
     var tl;
 
     function setup() {
-        createCanvas(windowWidth, windowHeight);
-        smooth();
+        createCanvas(windowWidth, windowHeight); 
 
-        c1 = randomColor(), c2 = randomColor(), c3 = randomColor();
+        c1 = c2 = c3 = 255;
         y1 = y2 = y3 = -height;
         w = width / 5;
 
-        var d = 25;
+        var d = 1;
 
         tl = new MOTION.Timeline();
 
         tl.add(new MOTION.Tween(d)
             .add("y1", height)
-            .add("c1", randomColor()), 0);
+            .add("c1", 0), 0);
 
         tl.add(new MOTION.Tween(d)
             .add("y2", height)
-            .add("c2", randomColor()), d * 2);
+            .add("c2", 0), d * 2);
 
         tl.add(new MOTION.Tween(d)
             .add("y3", height)
-            .add("c3", randomColor()), d * 4);
+            .add("c3", 0), d * 4);
 
         tl.repeat().reverse().play();
     }
 
     function draw() {
         background(255);
+
+        tl.update();
 
         noStroke();
         fill(0);
@@ -82,19 +82,14 @@
         if (key == '1')
             tl.gotoAndPlay(0);
         else if (key == '2')
-            tl.gotoAndPlay(50);
+            tl.gotoAndPlay(2);
         else if (key == '3')
-            tl.gotoAndPlay(100);
-        else if (key == '4')
-            tl.gotoAndPlay(150);
-        else if (key == '5')
-            tl.gotoAndPlay(200);
+            tl.gotoAndPlay(4); 
         else
             tl.play();
     }
 
-    function mousePressed() {
-        // tl.play();
+    function mousePressed() { 
         tl.pause();
     }
 
