@@ -10,7 +10,7 @@
     <script type="text/javascript" src="p5.js"></script>
     <script type="text/javascript" src="../build/ijeomamotion.js"></script>
     <script type="text/javascript">
-    var x1, x2, h;
+    var y1, y2, h;
     var tp;
 
     function setup() {
@@ -19,15 +19,17 @@
         ellipseMode(CORNER);
         smooth();
 
-        x1 = -height;
-        x2 = height;
-        w = width / 2;
+          w = width / 2;
+        y1 = 0;
+        y2 = height-w; 
 
         tp = new MOTION.Parallel()
-            .add(new MOTION.Tween(this, "x1", height, 1))
-            .add(new MOTION.Tween(this, "x2", -height, 2))
+            .add(new MOTION.Tween(this, "y1", height-w, 1))
+            // .add(new MOTION.Tween(this, "y2", 0, 2))
             .reverse().repeat()
             .play();
+
+
     }
 
     function draw() {
@@ -37,8 +39,8 @@
 
         stroke(255);
         fill(255 / 2);
-        rect(0, x1, w, height);
-        rect(w, x2, w, height);
+        ellipse(0, y1, w, w);
+        ellipse(w, y2, w, w);
 
         var time;
 

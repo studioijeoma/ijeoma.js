@@ -641,7 +641,7 @@ Bounce.InOut = function(t) {
                     m.update(this.getTime());
                 else
                     m.play();
-            } else if (m.isPlaying())
+            } else if (!this._isReversing && m.isPlaying())
                 m.stop();
         }
     };
