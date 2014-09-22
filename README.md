@@ -9,9 +9,7 @@ https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeom
 Production: 
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.min.js
 
-#Examples
-[Gradients](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Gradient.html)
-
+#Examples  
 Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork.html) and [2](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork2.html)
 
 [Pie Chart](http://ekeneijeoma.github.io/ijeomamotion-js/examples/PieChart2.html)
