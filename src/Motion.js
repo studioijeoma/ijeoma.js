@@ -123,10 +123,10 @@
             this.seek(0);
             this.resume();
 
+            this._repeatTime++;
+
             if (!this._isRepeatingDelay)
                 this._delay = 0;
-
-            this._repeatTime++;
 
             this.dispatchRepeatedEvent();
         } else {

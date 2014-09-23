@@ -14,7 +14,7 @@
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.reverse = function(_valueMode) {
-        MOTION.prototype.reverse();
+        MOTION.prototype.reverse.call(this)
 
         for (var i = 0; i < this._motions.length; i++)
             this._motions[i].reverse();
@@ -38,8 +38,8 @@
                     m.update(this.getTime());
                 else
                     m.play();
-            } else if (m.isPlaying())
-                m.stop();
+            } else if (m.isPlaying()) 
+                m.stop(); 
         }
     };
 

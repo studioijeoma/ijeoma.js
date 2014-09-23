@@ -283,10 +283,10 @@ Bounce.InOut = function(t) {
             this.seek(0);
             this.resume();
 
+            this._repeatTime++;
+
             if (!this._isRepeatingDelay)
                 this._delay = 0;
-
-            this._repeatTime++;
 
             this.dispatchRepeatedEvent();
         } else {
@@ -626,7 +626,7 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
     MOTION.MotionController.prototype.reverse = function(_valueMode) {
-        MOTION.prototype.reverse();
+        MOTION.prototype.reverse.call(this)
 
         for (var i = 0; i < this._motions.length; i++)
             this._motions[i].reverse();
@@ -650,8 +650,8 @@ Bounce.InOut = function(t) {
                     m.update(this.getTime());
                 else
                     m.play();
-            } else if (m.isPlaying())
-                m.stop();
+            } else if (m.isPlaying()) 
+                m.stop(); 
         }
     };
 
@@ -793,12 +793,39 @@ Bounce.InOut = function(t) {
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 })(MOTION);(function(MOTION, undefined) {
-	MOTION.Parallel = function(motions) {
-		MOTION.MotionController.call(this, name, motions);
-	};
+    MOTION.Parallel = function(motions) {
+        MOTION.MotionController.call(this, name, motions);
+    };
 
-	MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
-	MOTION.Parallel.prototype.constructor = MOTION.Parallel; 
+    MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Parallel.prototype.constructor = MOTION.Parallel;
+
+    MOTION.Parallel.prototype.updateMotions = function() {
+        for (var i = 0; i < this._motions.length; i++) {
+            var m = this._motions[i];
+
+            if (this._isSeeking) {
+                if (m.isInsidePlayingTime(this.getTime()))
+                    m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                else if (m.isAbovePlayingTime(this.getTime()))
+                    m.seek(1);
+                else
+                    m.seek(0);
+            } else if (m.isInsidePlayingTime(this.getTime())) {
+                if (m.isPlaying())
+                    m.update(this.getTime());
+                else
+                    m.play();
+            } else if (m.isPlaying()) {
+                if (this._isReversing && i < this._motions.length - 1)
+                    m.seek(1);
+                else
+                    for (var i = 0; i < _motions.length; i++)
+                        _motions[i].stop();
+            }
+        }
+    };
+
 })(MOTION);(function(MOTION, undefined) {
     MOTION.Property = function(object, field, end) {
         this._object = object;
