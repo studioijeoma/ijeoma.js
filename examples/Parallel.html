@@ -12,6 +12,7 @@
     <script type="text/javascript">
     var y1, y2, h;
     var tp;
+    var s = 0;
 
     function setup() {
         createCanvas(windowWidth, windowHeight);
@@ -19,14 +20,15 @@
         ellipseMode(CORNER);
         smooth();
 
-          w = width / 2;
+        w = width / 2;
         y1 = 0;
-        y2 = height-w; 
+        y2 = height - w;
 
+        // tp = new MOTION.Tween(this, "y1", height-w, .25).play().reverse().repeat();
         tp = new MOTION.Parallel()
-            .add(new MOTION.Tween(this, "y1", height-w, 1))
-            // .add(new MOTION.Tween(this, "y2", 0, 2))
-            .reverse().repeat()
+            .add(new MOTION.Tween(this, "y1", height - w, 1))
+        //     // .add(new MOTION.Tween(this, "y2", 0, 2))
+        .reverse().repeat()
             .play();
 
 
@@ -50,10 +52,10 @@
         fill(0);
         text(time, 25, 25 + 12);
 
-        time = tp.get(1).getTime() + " / " + tp.get(1).getDuration();
+        // time = tp.get(1).getTime() + " / " + tp.get(1).getDuration();
 
-        fill(0);
-        text(time, w+25, 25 + 12);
+        // fill(0);
+        // text(time, w+25, 25 + 12);
 
         time = tp.getTime() + " / " + tp.getDuration();
 
@@ -62,7 +64,10 @@
     }
 
     function keyPressed() {
-        tp.play();
+        if (keyCode == LEFT_ARROW)
+            tp.seek(s -= .1)
+        if (keyCode == RIGHT_ARROW)
+            tp.seek(s += .1)
     }
 
     function mousePressed() {

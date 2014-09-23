@@ -625,6 +625,15 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController
 
+    MOTION.MotionController.prototype.reverse = function(_valueMode) {
+        MOTION.prototype.reverse();
+
+        for (var i = 0; i < this._motions.length; i++)
+            this._motions[i].reverse();
+
+        return this;
+    };
+
     MOTION.MotionController.prototype.updateMotions = function() {
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
@@ -641,7 +650,7 @@ Bounce.InOut = function(t) {
                     m.update(this.getTime());
                 else
                     m.play();
-            } else if (!this._isReversing && m.isPlaying())
+            } else if (m.isPlaying())
                 m.stop();
         }
     };
