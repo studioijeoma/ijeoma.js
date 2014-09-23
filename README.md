@@ -51,20 +51,6 @@ The 2nd way lets you chain/add more properties to the Tween. Say we want to twee
 ```javascript
 var t = new MOTION.Tween(this).add("x", 100).add("y", 100).play();
 ```
- 
-###p5.Colors 
-Say we want to tween a color var c from black to white in 100 frames.
-```javascript
-var c = color(0);
-var t = new MOTION.Tween("c", color(255), 100).play();
-```
- 
-###p5.Vectors
-You can also tween PVectors. Say we want to tween PVectors `v1 = PVector(0,0)` and `v2 = PVector(0,0)` to `v1 = PVector(50, 50)` and `v2 = PVector(100, 100)`.
-```javascript
-var v = createVector(0,0);
-var t = new MOTION.Tween("v", createVector(100,100), 100).play();
-```
 
 ###All in 1!
 You can also tween multiples properties of any type in 1 Tween.
@@ -107,20 +93,7 @@ var p = new MOTION.Parallel()
   .add(new MOTION.Tween(...)) 
   .add(new MOTION.Tween(...)) 
   .play(); 
-```
-
-or
-
-```javascript
-//p5.js way
-timeMode(MOTION.FRAMES); //frames by default
-p = beginParallel() // returns MOTION.Parallel() object
-  tween(...) // same arguments and functions as new Motion.Tween()
-  tween(...)
-endParallel();
-p.play()
-//or play(p); 
-```
+``` 
 
 ##How to playback tweens in a sequence
 ```javascript
@@ -129,16 +102,7 @@ var s = new MOTION.Sequence()
   .add(new MOTION.Tween(...))  
   .repeat()
   .play();
-```
-
-```javascript
-//p5.js way
-var s = beginSequence(); // returns MOTION.Sequence() object
-  tween(...)
-  tween(...)
-endSequence()
-s.play();
-```
+``` 
 
 ##How to playback tweens in a timeline
 ```javascript
@@ -154,17 +118,4 @@ var t = new MOTION.Timeline();
 var k1 = new MOTION.Keyframe(100).add(new MOTION.Tween(...))
 var k2 = new MOTION.Keyframe(200).add(new MOTION.Tween(...))
 t.add(k1).add(k2).play();
-```
-
-```javascript
-//p5.js way
-var t = beginTimeline(); // returns MOTION.Timeline() object
-  beginKeyframe(100);
-    tween(...)
-  endKeyframe();
-  beginKeyframe(200);
-    tween(...)
-  endKeyframe();
-endTimeline();
-t.play();
-```
+``` 
