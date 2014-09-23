@@ -4,19 +4,19 @@ A Javascript library (which supports p5.js) for sketching animations. Ijeoma (ee
 
 #Download 
 Developement: 
-https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.js
+https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.js
 
 Production: 
-https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion-js/master/build/ijeomamotion.min.js
+https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js
 
 #Examples  
-Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork.html) and [2](http://ekeneijeoma.github.io/ijeomamotion-js/examples/CircularNetwork2.html)
+Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/CircularNetwork.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/CircularNetwork2.html)
 
-[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion-js/examples/PieChart2.html)
+[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/PieChart2.html)
 
-[Sequence](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Sequence.html)
+[Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Sequence.html)
 
-[Timeline](http://ekeneijeoma.github.io/ijeomamotion-js/examples/Timeline.html)
+[Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html)
 
 #Getting Started 
 ##How to create Tweens
