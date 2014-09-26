@@ -28,7 +28,7 @@ function setup() {
     s = new MOTION.Sequence();
 
     var a = rotation;
-    var d = 15;
+    var d = .25;
 
     for (var i = 0; i < pieArcs.length; i++) {
         var pa = pieArcs[i]
@@ -46,6 +46,8 @@ function setup() {
 
 function draw() {
     background(100);
+
+    s.update();
 
     push();
     translate(x, y)

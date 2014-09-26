@@ -10,13 +10,16 @@
         createCanvas(720, 400);
         noStroke();
  
-        m = new MOTION(100, 0, Quad.InOut).repeat().reverse().play()
+        m = new MOTION(1, 0, Quad.InOut).repeat().reverse().play();
     }
 
     function draw() {
         background(100);
 
+        m.update();
         pieChart(300, angles, m.getPosition()); 
+
+        text(m.getTime()+'/'+m.getDuration(),25,50)
     }
 
     function pieChart(diameter, data, t) {
