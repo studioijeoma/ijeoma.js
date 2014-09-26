@@ -1,4 +1,4 @@
-/*! p5.js v0.3.6 September 11, 2014 */
+/*! p5.js v0.3.8 September 25, 2014 */
 var shim = function (require) {
     window.requestDraw = function () {
       return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
@@ -168,13 +168,8 @@ var core = function (require, shim, constants) {
         if (typeof context.setup === 'function') {
           context.setup();
         }
-        var reg = new RegExp(/(^|\s)p5_hidden(?!\S)/g);
-        var canvases = document.getElementsByClassName('p5_hidden');
-        for (var i = 0; i < canvases.length; i++) {
-          var k = canvases[i];
-          k.style.visibility = '';
-          k.className = k.className.replace(reg, '');
-        }
+        this.canvas.style.visibility = '';
+        this.canvas.className = this.canvas.className.replace('p5_hidden', '');
         this._setupDone = true;
       }.bind(this);
       this._draw = function () {
@@ -344,19 +339,19 @@ var p5Color = function (require, core, constants) {
       if (vals instanceof Array) {
         this.rgba = vals;
       } else {
-        var norm = p5.Color.getNormalizedColor.apply(pInst, vals);
+        var formatted = p5.Color._getFormattedColor.apply(pInst, vals);
         if (pInst._colorMode === constants.HSB) {
-          this.hsba = norm;
-          this.rgba = p5.Color.getRGB(this.hsba);
+          this.hsba = formatted;
+          this.rgba = p5.Color._getRGB(formatted);
         } else {
-          this.rgba = norm;
+          this.rgba = formatted;
         }
       }
-      this.colorString = p5.Color.getColorString(this.rgba);
+      var c = p5.Color._normalizeColorArray.call(pInst, this.rgba);
+      this.colorString = p5.Color._getColorString(c);
+      return this;
     };
-    p5.Color.getNormalizedColor = function () {
-      var isRGB = this._colorMode === constants.RGB;
-      var maxArr = isRGB ? this._maxRGB : this._maxHSB;
+    p5.Color._getFormattedColor = function () {
       if (arguments[0] instanceof Array) {
         return p5.Color.getNormalizedColor.apply(this, arguments[0]);
       }
@@ -365,20 +360,16 @@ var p5Color = function (require, core, constants) {
         r = arguments[0];
         g = arguments[1];
         b = arguments[2];
-        a = typeof arguments[3] === 'number' ? arguments[3] : maxArr[3];
+        a = typeof arguments[3] === 'number' ? arguments[3] : 255;
       } else {
-        if (isRGB) {
+        if (this._colorMode === constants.RGB) {
           r = g = b = arguments[0];
         } else {
           r = b = arguments[0];
           g = 0;
         }
-        a = typeof arguments[1] === 'number' ? arguments[1] : maxArr[3];
+        a = typeof arguments[1] === 'number' ? arguments[1] : 255;
       }
-      r *= 255 / maxArr[0];
-      g *= 255 / maxArr[1];
-      b *= 255 / maxArr[2];
-      a *= 255 / maxArr[3];
       return [
         r,
         g,
@@ -386,7 +377,16 @@ var p5Color = function (require, core, constants) {
         a
       ];
     };
-    p5.Color.getRGB = function (hsba) {
+    p5.Color._normalizeColorArray = function (arr) {
+      var isRGB = this._colorMode === constants.RGB;
+      var maxArr = isRGB ? this._maxRGB : this._maxHSB;
+      arr[0] *= 255 / maxArr[0];
+      arr[1] *= 255 / maxArr[1];
+      arr[2] *= 255 / maxArr[2];
+      arr[3] *= 255 / maxArr[3];
+      return arr;
+    };
+    p5.Color._getRGB = function (hsba) {
       var h = hsba[0];
       var s = hsba[1];
       var v = hsba[2];
@@ -447,7 +447,7 @@ var p5Color = function (require, core, constants) {
       }
       return RGBA;
     };
-    p5.Color.getHSB = function (rgba) {
+    p5.Color._getHSB = function (rgba) {
       var var_R = rgba[0] / 255;
       var var_G = rgba[1] / 255;
       var var_B = rgba[2] / 255;
@@ -486,24 +486,39 @@ var p5Color = function (require, core, constants) {
         rgba[3]
       ];
     };
-    p5.Color.getColorString = function (a) {
+    p5.Color._getColorString = function (a) {
       for (var i = 0; i < 3; i++) {
         a[i] = Math.floor(a[i]);
       }
       var alpha = typeof a[3] !== 'undefined' ? a[3] / 255 : 1;
       return 'rgba(' + a[0] + ',' + a[1] + ',' + a[2] + ',' + alpha + ')';
     };
-    p5.Color.getColor = function () {
+    p5.Color._getCanvasColor = function () {
       if (arguments[0] instanceof p5.Color) {
-        return arguments[0].colorString;
-      } else if (arguments[0] instanceof Array) {
-        return p5.Color.getColorString(arguments[0]);
-      } else {
-        var c = p5.Color.getNormalizedColor.apply(this, arguments);
-        if (this._colorMode === constants.HSB) {
-          c = p5.Color.getRGB(c);
+        if (arguments.length === 1) {
+          return arguments[0].colorString;
+        } else {
+          var c = arguments[0].rgba;
+          c[3] = arguments[1];
+          c = p5.Color._normalizeColorArray.call(this, c);
+          return p5.Color._getColorString(c);
         }
-        return p5.Color.getColorString(c);
+      } else if (arguments[0] instanceof Array) {
+        if (arguments.length === 1) {
+          return p5.Color._getColorString(arguments[0]);
+        } else {
+          var isRGB = this._colorMode === constants.RGB;
+          var maxA = isRGB ? this._maxRGB[3] : this._maxHSB[3];
+          arguments[0][3] = 255 * arguments[1] / maxA;
+          return p5.Color._getColorString(arguments[0]);
+        }
+      } else {
+        var e = p5.Color._getFormattedColor.apply(this, arguments);
+        e = p5.Color._normalizeColorArray.call(this, e);
+        if (this._colorMode === constants.HSB) {
+          e = p5.Color._getRGB(e);
+        }
+        return p5.Color._getColorString(e);
       }
     };
     return p5.Color;
@@ -568,11 +583,13 @@ var p5Element = function (require, core) {
 var p5Graphics = function (require, core, constants) {
     var p5 = core;
     var constants = constants;
-    p5.Graphics = function (elt, pInst) {
+    p5.Graphics = function (elt, pInst, isMainCanvas) {
       p5.Element.call(this, elt, pInst);
       this.canvas = elt;
       this.drawingContext = this.canvas.getContext('2d');
-      if (this._pInst) {
+      this._pInst = pInst;
+      if (isMainCanvas) {
+        this._isMainCanvas = true;
         this._pInst._setProperty('_curElement', this);
         this._pInst._setProperty('canvas', this.canvas);
         this._pInst._setProperty('drawingContext', this.drawingContext);
@@ -581,17 +598,24 @@ var p5Graphics = function (require, core, constants) {
       } else {
         this.canvas.style.display = 'none';
       }
+    };
+    p5.Graphics.prototype = Object.create(p5.Element.prototype);
+    p5.Graphics.prototype._applyDefaults = function () {
       this.drawingContext.fillStyle = '#FFFFFF';
       this.drawingContext.strokeStyle = '#000000';
       this.drawingContext.lineCap = constants.ROUND;
+      this.drawingContext.font = 'normal 12px sans-serif';
     };
-    p5.Graphics.prototype = Object.create(p5.Element.prototype);
     p5.Graphics.prototype.resize = function (w, h) {
       this.width = w;
       this.height = h;
-      if (this._pInst) {
+      this.elt.setAttribute('width', w * this._pInst._pixelDensity);
+      this.elt.setAttribute('height', h * this._pInst._pixelDensity);
+      this.elt.setAttribute('style', 'width:' + w + 'px !important; height:' + h + 'px !important;');
+      if (this._isMainCanvas) {
         this._pInst._setProperty('width', this.width);
         this._pInst._setProperty('height', this.height);
+        this._pInst.scale(this._pInst._pixelDensity, this._pInst._pixelDensity);
       }
     };
     return p5.Graphics;
@@ -850,7 +874,7 @@ var filters = function (require) {
         }
       }
     }
-    function blurRGB(canvas, radius) {
+    function blurARGB(canvas, radius) {
       var pixels = Filters._toPixels(canvas);
       var width = canvas.width;
       var height = canvas.height;
@@ -859,8 +883,9 @@ var filters = function (require) {
       for (var j = 0; j < numPackedPixels; j++) {
         argb[j] = Filters._getARGB(pixels, j);
       }
-      var sum, cr, cg, cb;
+      var sum, cr, cg, cb, ca;
       var read, ri, ym, ymi, bk0;
+      var a2 = new Int32Array(numPackedPixels);
       var r2 = new Int32Array(numPackedPixels);
       var g2 = new Int32Array(numPackedPixels);
       var b2 = new Int32Array(numPackedPixels);
@@ -870,7 +895,7 @@ var filters = function (require) {
       var bm;
       for (y = 0; y < height; y++) {
         for (x = 0; x < width; x++) {
-          cb = cg = cr = sum = 0;
+          cb = cg = cr = ca = sum = 0;
           read = x - blurRadius;
           if (read < 0) {
             bk0 = -read;
@@ -887,6 +912,7 @@ var filters = function (require) {
             }
             var c = argb[read + yi];
             bm = blurMult[i];
+            ca += bm[(c & -16777216) >>> 24];
             cr += bm[(c & 16711680) >> 16];
             cg += bm[(c & 65280) >> 8];
             cb += bm[c & 255];
@@ -894,6 +920,7 @@ var filters = function (require) {
             read++;
           }
           ri = yi + x;
+          a2[ri] = ca / sum;
           r2[ri] = cr / sum;
           g2[ri] = cg / sum;
           b2[ri] = cb / sum;
@@ -905,7 +932,7 @@ var filters = function (require) {
       ymi = ym * width;
       for (y = 0; y < height; y++) {
         for (x = 0; x < width; x++) {
-          cb = cg = cr = sum = 0;
+          cb = cg = cr = ca = sum = 0;
           if (ym < 0) {
             bk0 = ri = -ym;
             read = x;
@@ -922,6 +949,7 @@ var filters = function (require) {
               break;
             }
             bm = blurMult[i];
+            ca += bm[a2[read]];
             cr += bm[r2[read]];
             cg += bm[g2[read]];
             cb += bm[b2[read]];
@@ -929,7 +957,7 @@ var filters = function (require) {
             ri++;
             read += width;
           }
-          argb[x + yi] = 4278190080 | cr / sum << 16 | cg / sum << 8 | cb / sum;
+          argb[x + yi] = ca / sum << 24 | cr / sum << 16 | cg / sum << 8 | cb / sum;
         }
         yi += width;
         ymi += width;
@@ -938,7 +966,7 @@ var filters = function (require) {
       Filters._setPixels(pixels, argb);
     }
     Filters.blur = function (canvas, radius) {
-      blurRGB(canvas, radius);
+      blurARGB(canvas, radius);
     };
     return Filters;
   }({});
@@ -990,12 +1018,16 @@ var p5Image = function (require, core, filters) {
         p5Image = this;
       }
       var currBlend = this.drawingContext.globalCompositeOperation;
+      var scaleFactor = 1;
+      if (p5Image instanceof p5.Graphics) {
+        scaleFactor = p5Image._pInst._pixelDensity;
+      }
       var copyArgs = [
           p5Image,
           0,
           0,
-          p5Image.width,
-          p5Image.height,
+          scaleFactor * p5Image.width,
+          scaleFactor * p5Image.height,
           0,
           0,
           this.width,
@@ -1718,7 +1750,7 @@ var colorsetting = function (require, core, constants, p5Color) {
       } else {
         var curFill = this.drawingContext.fillStyle;
         var ctx = this.drawingContext;
-        ctx.fillStyle = p5.Color.getColor.apply(this, arguments);
+        ctx.fillStyle = p5.Color._getCanvasColor.apply(this, arguments);
         ctx.fillRect(0, 0, this.width, this.height);
         ctx.fillStyle = curFill;
       }
@@ -1748,7 +1780,7 @@ var colorsetting = function (require, core, constants, p5Color) {
     p5.prototype.fill = function () {
       this._setProperty('_doFill', true);
       var ctx = this.drawingContext;
-      ctx.fillStyle = p5.Color.getColor.apply(this, arguments);
+      ctx.fillStyle = p5.Color._getCanvasColor.apply(this, arguments);
     };
     p5.prototype.noFill = function () {
       this._setProperty('_doFill', false);
@@ -1759,7 +1791,7 @@ var colorsetting = function (require, core, constants, p5Color) {
     p5.prototype.stroke = function () {
       this._setProperty('_doStroke', true);
       var ctx = this.drawingContext;
-      ctx.strokeStyle = p5.Color.getColor.apply(this, arguments);
+      ctx.strokeStyle = p5.Color._getCanvasColor.apply(this, arguments);
     };
     return p5;
   }({}, core, constants, p5Color);
@@ -2173,7 +2205,8 @@ var imageloading_displaying = function (require, core, filters, canvas, constant
       }
     };
     p5.prototype.tint = function () {
-      var c = p5.Color.getNormalizedColor.apply(this, arguments);
+      var c = p5.Color._getFormattedColor.apply(this, arguments);
+      c = p5.Color._normalizeColorArray.call(this, c);
       this._tint = c;
     };
     p5.prototype.noTint = function () {
@@ -2943,6 +2976,12 @@ var inputkeyboard = function (require, core) {
       var keyReleased = this.keyReleased || window.keyReleased;
       this._setProperty('isKeyPressed', false);
       this._setProperty('keyIsPressed', false);
+      var key = String.fromCharCode(e.which);
+      if (!key) {
+        key = e.which;
+      }
+      this._setProperty('key', key);
+      this._setProperty('keyCode', e.which);
       if (typeof keyReleased === 'function') {
         keyReleased(e);
       }
@@ -3017,19 +3056,19 @@ var inputmouse = function (require, core, constants) {
       if (!this.isMousePressed) {
         if (typeof context.mouseMoved === 'function') {
           executeDefault = context.mouseMoved(e);
-          if (executeDefault !== undefined && !executeDefault) {
+          if (executeDefault === false) {
             e.preventDefault();
           }
         }
       } else {
         if (typeof context.mouseDragged === 'function') {
           executeDefault = context.mouseDragged(e);
-          if (executeDefault !== undefined && !executeDefault) {
+          if (executeDefault === false) {
             e.preventDefault();
           }
         } else if (typeof context.touchMoved === 'function') {
           executeDefault = context.touchMoved(e);
-          if (!executeDefault) {
+          if (executeDefault === false) {
             e.preventDefault();
           }
           this._updateTouchCoords(e);
@@ -3044,12 +3083,12 @@ var inputmouse = function (require, core, constants) {
       this._setMouseButton(e);
       if (typeof context.mousePressed === 'function') {
         executeDefault = context.mousePressed(e);
-        if (executeDefault !== undefined && !executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       } else if (typeof context.touchStarted === 'function') {
         executeDefault = context.touchStarted(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
         this._updateTouchCoords(e);
@@ -3062,12 +3101,12 @@ var inputmouse = function (require, core, constants) {
       this._setProperty('mouseIsPressed', false);
       if (typeof context.mouseReleased === 'function') {
         executeDefault = context.mouseReleased(e);
-        if (executeDefault !== undefined && !executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       } else if (typeof context.touchEnded === 'function') {
         executeDefault = context.touchEnded(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
         this._updateTouchCoords(e);
@@ -3077,7 +3116,7 @@ var inputmouse = function (require, core, constants) {
       var context = this._isGlobal ? window : this;
       if (typeof context.mouseClicked === 'function') {
         var executeDefault = context.mouseClicked(e);
-        if (executeDefault !== undefined && !executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       }
@@ -3086,7 +3125,7 @@ var inputmouse = function (require, core, constants) {
       var context = this._isGlobal ? window : this;
       if (typeof context.mouseWheel === 'function') {
         var executeDefault = context.mouseWheel(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       }
@@ -3155,12 +3194,12 @@ var inputtouch = function (require, core) {
       this._updateTouchCoords(e);
       if (typeof context.touchStarted === 'function') {
         executeDefault = context.touchStarted(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       } else if (typeof context.mousePressed === 'function') {
         executeDefault = context.mousePressed(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       }
@@ -3171,12 +3210,12 @@ var inputtouch = function (require, core) {
       this._updateTouchCoords(e);
       if (typeof context.touchMoved === 'function') {
         executeDefault = context.touchMoved(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       } else if (typeof context.mouseDragged === 'function') {
         executeDefault = context.mouseDragged(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
         this._updateMouseCoords(e);
@@ -3187,12 +3226,12 @@ var inputtouch = function (require, core) {
       var executeDefault;
       if (typeof context.touchEnded === 'function') {
         executeDefault = context.touchEnded(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
       } else if (typeof context.mouseReleased === 'function') {
         executeDefault = context.mouseReleased(e);
-        if (!executeDefault) {
+        if (executeDefault === false) {
           e.preventDefault();
         }
         this._updateMouseCoords(e);
@@ -3907,18 +3946,8 @@ var renderingrendering = function (require, core, constants) {
         c = document.createElement('canvas');
         c.id = 'defaultCanvas';
       } else {
-        c = document.getElementById('defaultCanvas');
-        if (c) {
-          c.id = '';
-        } else {
-          var warn = 'Warning: createCanvas more than once NOT recommended.';
-          warn += ' Very unpredictable behavior may result.';
-          console.log(warn);
-        }
+        c = this.canvas;
       }
-      c.setAttribute('width', w * this._pixelDensity);
-      c.setAttribute('height', h * this._pixelDensity);
-      c.setAttribute('style', 'width:' + w + 'px !important; height:' + h + 'px !important;');
       if (!this._setupDone) {
         c.className += ' p5_hidden';
         c.style.visibility = 'hidden';
@@ -3928,25 +3957,18 @@ var renderingrendering = function (require, core, constants) {
       } else {
         document.body.appendChild(c);
       }
-      var pg = this._defaultGraphics;
-      if (!pg) {
-        pg = new p5.Graphics(c, this);
-        this._elements.push(pg);
-        this._defaultGraphics = pg;
-      } else {
-        pg.resize(w * this._pixelDensity, h * this._pixelDensity);
+      if (!this._defaultGraphics) {
+        this._defaultGraphics = new p5.Graphics(c, this, true);
+        this._elements.push(this._defaultGraphics);
       }
-      this.scale(this._pixelDensity, this._pixelDensity);
-      return pg;
+      this._defaultGraphics.resize(w, h);
+      this._defaultGraphics._applyDefaults();
+      return this._defaultGraphics;
     };
     p5.prototype.resizeCanvas = function (w, h) {
-      var pg = this._defaultGraphics;
-      if (pg) {
-        pg.resize(w * this._pixelDensity, h * this._pixelDensity);
-        pg.elt.setAttribute('width', w * this._pixelDensity);
-        pg.elt.setAttribute('height', h * this._pixelDensity);
-        pg.elt.setAttribute('style', 'width:' + w + 'px !important; height:' + h + 'px !important;');
-        this.scale(this._pixelDensity, this._pixelDensity);
+      if (this._defaultGraphics) {
+        this._defaultGraphics.resize(w, h);
+        this._defaultGraphics._applyDefaults();
       }
     };
     p5.prototype.noCanvas = function () {
@@ -3962,7 +3984,7 @@ var renderingrendering = function (require, core, constants) {
       c.setAttribute('style', 'width:' + w + 'px !important; height:' + h + 'px !important;');
       var node = this._userNode || document.body;
       node.appendChild(c);
-      var pg = new p5.Graphics(c);
+      var pg = new p5.Graphics(c, this, false);
       this._elements.push(pg);
       for (var p in p5.prototype) {
         if (!pg.hasOwnProperty(p)) {
@@ -3974,10 +3996,11 @@ var renderingrendering = function (require, core, constants) {
         }
       }
       pg.scale(this._pixelDensity, this._pixelDensity);
+      pg._applyDefaults();
       return pg;
     };
     p5.prototype.blendMode = function (mode) {
-      if (mode === constants.BLEND || mode === constants.DARKEST || mode === constants.LIGHTEST || mode === constants.DIFFERENCE || mode === constants.MULTIPLY || mode === constants.EXCLUSION || mode === constants.SCREEN || mode === constants.REPLACE || mode === constants.OVERLAY || mode === constants.HARD_LIGHT || mode === constants.SOFT_LIGHT || mode === constants.DODGE || mode === constants.BURN) {
+      if (mode === constants.BLEND || mode === constants.DARKEST || mode === constants.LIGHTEST || mode === constants.DIFFERENCE || mode === constants.MULTIPLY || mode === constants.EXCLUSION || mode === constants.SCREEN || mode === constants.REPLACE || mode === constants.OVERLAY || mode === constants.HARD_LIGHT || mode === constants.SOFT_LIGHT || mode === constants.DODGE || mode === constants.BURN || mode === constants.ADDITIVE || mode === constants.NORMAL) {
         this.drawingContext.globalCompositeOperation = mode;
       } else {
         throw new Error('Mode ' + mode + ' not recognized.');
@@ -4520,13 +4543,12 @@ var typographyattributes = function (require, core, constants) {
     p5.prototype._textFont = 'sans-serif';
     p5.prototype._textSize = 12;
     p5.prototype._textStyle = constants.NORMAL;
+    p5.prototype._textAscent = null;
+    p5.prototype._textDescent = null;
     p5.prototype.textAlign = function (a) {
       if (a === constants.LEFT || a === constants.RIGHT || a === constants.CENTER) {
         this.drawingContext.textAlign = a;
       }
-    };
-    p5.prototype.textHeight = function (s) {
-      return this.drawingContext.measureText(s).height;
     };
     p5.prototype.textLeading = function (l) {
       this._setProperty('_textLeading', l);
@@ -4544,9 +4566,67 @@ var typographyattributes = function (require, core, constants) {
     p5.prototype.textWidth = function (s) {
       return this.drawingContext.measureText(s).width;
     };
+    p5.prototype.textAscent = function () {
+      if (this._textAscent == null) {
+        this._updateTextMetrics();
+      }
+      return this._textAscent;
+    };
+    p5.prototype.textDescent = function () {
+      if (this._textDescent == null) {
+        this._updateTextMetrics();
+      }
+      return this._textDescent;
+    };
     p5.prototype._applyTextProperties = function () {
+      this._setProperty('_textAscent', null);
+      this._setProperty('_textDescent', null);
       var str = this._textStyle + ' ' + this._textSize + 'px ' + this._textFont;
       this.drawingContext.font = str;
+    };
+    p5.prototype._updateTextMetrics = function () {
+      var text = document.createElement('span');
+      text.style.fontFamily = this._textFont;
+      text.style.fontSize = this._textSize + 'px';
+      text.innerHTML = 'ABCjgq|';
+      var block = document.createElement('div');
+      block.style.display = 'inline-block';
+      block.style.width = '1px';
+      block.style.height = '0px';
+      var container = document.createElement('div');
+      container.appendChild(text);
+      container.appendChild(block);
+      container.style.height = '0px';
+      container.style.overflow = 'hidden';
+      document.body.appendChild(container);
+      block.style.verticalAlign = 'baseline';
+      var blockOffset = this._calculateOffset(block);
+      var textOffset = this._calculateOffset(text);
+      var ascent = blockOffset[1] - textOffset[1];
+      block.style.verticalAlign = 'bottom';
+      blockOffset = this._calculateOffset(block);
+      textOffset = this._calculateOffset(text);
+      var height = blockOffset[1] - textOffset[1];
+      var descent = height - ascent;
+      document.body.removeChild(container);
+      this._setProperty('_textAscent', ascent);
+      this._setProperty('_textDescent', descent);
+    };
+    p5.prototype._calculateOffset = function (object) {
+      var currentLeft = 0, currentTop = 0;
+      if (object.offsetParent) {
+        do {
+          currentLeft += object.offsetLeft;
+          currentTop += object.offsetTop;
+        } while (object = object.offsetParent);
+      } else {
+        currentLeft += object.offsetLeft;
+        currentTop += object.offsetTop;
+      }
+      return [
+        currentLeft,
+        currentTop
+      ];
     };
     return p5;
   }({}, core, constants);
