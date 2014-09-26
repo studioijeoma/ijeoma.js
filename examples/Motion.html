@@ -9,15 +9,17 @@
         createCanvas(720, 400);
         noStroke();
 
-        m = new MOTION(50, 0, Elastic.InOut).repeat().reverse().play()
+        m = new MOTION(1, 0, Elastic.InOut).repeat().reverse().play()
         s = 100;
     }
 
-    function draw() { 
+    function draw() {
         background(100);
 
+        m.update();
+
         fill(255)
-        text(m.getTime()+'/'+m.getDuration(),25,25)
+        text(m.getTime() + '/' + m.getDuration(), 25, 25)
         ellipse(width / 2, height / 2, s * m.getPosition(), s * m.getPosition())
     }
     </script>

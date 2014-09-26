@@ -1,15 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-    <title>Tween.js / simplest possible example!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-
-<body>
-    <script type="text/javascript" src="p5.js"></script>
-    <script type="text/javascript" src="../build/ijeomamotion.js"></script>
-    <script type="text/javascript"> 
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
     var c1, c2, c3;
     var y1, y2, y3;
     var w;
@@ -17,7 +9,7 @@
     var tl;
 
     function setup() {
-        createCanvas(windowWidth, windowHeight); 
+        createCanvas(windowWidth, windowHeight);
 
         c1 = c2 = c3 = 255;
         y1 = y2 = y3 = -height;
@@ -66,15 +58,15 @@
 
         time = tl.get(1).getTime() + " / " + tl.get(1).getDuration();
         fill((tl.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 2+25, height - 25);
+        text(time, w * 2 + 25, height - 25);
 
         time = tl.get(2).getTime() + " / " + tl.get(2).getDuration();
         fill((tl.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 4+25, height - 25);
+        text(time, w * 4 + 25, height - 25);
 
         time = tl.getTime() + " / " + tl.getDuration();
         fill(0);
-        text(time, width - textWidth(time) - 25, 25 );
+        text(time, width - textWidth(time) - 25, 25);
     }
 
 
@@ -84,12 +76,12 @@
         else if (key == '2')
             tl.gotoAndPlay(2);
         else if (key == '3')
-            tl.gotoAndPlay(4); 
+            tl.gotoAndPlay(4);
         else
             tl.play();
     }
 
-    function mousePressed() { 
+    function mousePressed() {
         tl.pause();
     }
 
@@ -103,9 +95,15 @@
     }
 
     function randomColor() {
-        return color(random(255),random(255),random(255));
+        return color(random(255), random(255), random(255));
     }
     </script>
-</body>
+    <style>
+    body {
+        padding: 0;
+    }
+    </style>
+</head>
 
-</html>
+<body>
+</body>

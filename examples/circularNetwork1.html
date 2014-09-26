@@ -1,122 +1,123 @@
-<script language="javascript" src="p5.js"></script>
-<script language="javascript" src="../build/ijeomamotion.js"></script>
-<script language="javascript">
-var nodes = [];
-var circleCount = 15;
-var circleOffset = 50;
+<head>
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var nodes = [];
+    var circleCount = 15;
+    var circleOffset = 50;
 
-var backgroundColor, linkColor, textColor;
+    var backgroundColor, linkColor, textColor;
 
-function setup() {
-    createCanvas(windowWidth, windowHeight);
+    function setup() {
+        createCanvas(windowWidth, windowHeight);
 
-    strokeWeight(.25)
+        strokeWeight(.25)
 
-    for (var i = 0; i < 300; i++) {
-        var n = new Node(10, round(random(2, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
+        for (var i = 0; i < 300; i++) {
+            var n = new Node(10, round(random(2, circleCount)) * circleOffset, color(random(255), random(255), random(255)), 255)
 
-        var duration1 = round(random(15, 20));
-        var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
-        var duration2 = round(random(5, 10));
-        // var endRadius = n.radius - circleOffset;
-        var endRadius = round(random(1, circleCount)) * circleOffset 
+            var duration1 = round(random(15, 20));
+            var endAngle = n.angle + ((round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
+            var duration2 = round(random(5, 10));
+            // var endRadius = n.radius - circleOffset;
+            var endRadius = round(random(1, circleCount)) * circleOffset
 
-        n.angleTween = new MOTION.Tween(duration1).add(n, 'angle', endAngle).repeat().play();
-        n.radiusTween = new MOTION.Tween(duration2, 0, Quad.InOut).add(n, 'radius', endRadius).repeat().reverse().play().onStart(function() {
-            // this.get('radius').setEnd(round(random(1, circleCount)) * circleOffset) 
-        });
+            n.angleTween = new MOTION.Tween(duration1).add(n, 'angle', endAngle).repeat().play();
+            n.radiusTween = new MOTION.Tween(duration2, 0, Quad.InOut).add(n, 'radius', endRadius).repeat().reverse().play().onStart(function() {
+                // this.get('radius').setEnd(round(random(1, circleCount)) * circleOffset) 
+            });
 
-        nodes.push(n)
-    }
-
-    backgroundColor = color(255);
-    textColor = color(0);
-    linkColor = color(0, 50)
-}
-
-function draw() {
-    background(backgroundColor)
-
-    fill(textColor);
-    text('Press mouse to pause and release resume. Drag around to scrub.', 25, 25);
-
-    translate(width / 2, height / 2);
-
-    stroke(linkColor);
-
-    for (var i = 0; i < nodes.length; i++)
-        for (var j = 0; j < nodes.length; j++) {
-            var dx = nodes[j].x - nodes[i].x
-            var dy = nodes[j].y - nodes[i].y
-
-            if (dx * dx + dy * dy < circleOffset * circleOffset * 2) {
-                line(nodes[i].x, nodes[i].y,nodes[j].x, nodes[j].y)
-                // beginShape();
-                // stroke(nodes[i].color)
-                // vertex(nodes[i].x, nodes[i].y)
-                // stroke(nodes[j].color)
-                // vertex(nodes[j].x, nodes[j].y)
-                // endShape();
-            }
+            nodes.push(n)
         }
 
-    for (var i = 0; i < nodes.length; i++)
-        nodes[i].draw()
-}
-
-function mousePressed() {
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].angleTween.pause();
-        nodes[i].radiusTween.pause();
-    }
-}
-
-function mouseDragged() {
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].angleTween.seek(mouseX / width);
-        nodes[i].radiusTween.seek(mouseY / height);
-    }
-}
-
-function mouseReleased() {
-    for (var i = 0; i < nodes.length; i++) {
-        nodes[i].angleTween.resume();
-        nodes[i].radiusTween.resume();
-    }
-} 
-
-Node = function(s, r, color, alpha) {
-    this.x = 0;
-    this.y = 0;
-    this.size = s;
-    this.radius = r;
-    this.angle = random(TWO_PI);
-    this.color = color;
-    this.alpha = alpha;
-    this.angleTween
-    this.radiusTween
-
-    this.draw = function() {
-        this.angleTween.update();
-        this.radiusTween.update();
-
-        this.x = cos(this.angle) * this.radius;
-        this.y = sin(this.angle) * this.radius;
-
-        noStroke();
-        // fill(this.color, this.alpha);
-        fill(this.color);
-        ellipse(this.x, this.y, this.size, this.size);
+        backgroundColor = color(255);
+        textColor = color(0);
+        linkColor = color(0, 50)
     }
 
-    return this;
-}
-</script>
-<style>
-body {
-    padding: 0;
-}
-</style>
+    function draw() {
+        background(backgroundColor)
+
+        fill(textColor);
+        text('Press mouse to pause and release resume. Drag around to scrub.', 25, 25);
+
+        translate(width / 2, height / 2);
+
+        stroke(linkColor);
+
+        for (var i = 0; i < nodes.length; i++)
+            for (var j = 0; j < nodes.length; j++) {
+                var dx = nodes[j].x - nodes[i].x
+                var dy = nodes[j].y - nodes[i].y
+
+                if (dx * dx + dy * dy < circleOffset * circleOffset * 2) {
+                    line(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y)
+                    // beginShape();
+                    // stroke(nodes[i].color)
+                    // vertex(nodes[i].x, nodes[i].y)
+                    // stroke(nodes[j].color)
+                    // vertex(nodes[j].x, nodes[j].y)
+                    // endShape();
+                }
+            }
+
+        for (var i = 0; i < nodes.length; i++)
+            nodes[i].draw()
+    }
+
+    function mousePressed() {
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].angleTween.pause();
+            nodes[i].radiusTween.pause();
+        }
+    }
+
+    function mouseDragged() {
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].angleTween.seek(mouseX / width);
+            nodes[i].radiusTween.seek(mouseY / height);
+        }
+    }
+
+    function mouseReleased() {
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].angleTween.resume();
+            nodes[i].radiusTween.resume();
+        }
+    }
+
+    Node = function(s, r, color, alpha) {
+        this.x = 0;
+        this.y = 0;
+        this.size = s;
+        this.radius = r;
+        this.angle = random(TWO_PI);
+        this.color = color;
+        this.alpha = alpha;
+        this.angleTween
+        this.radiusTween
+
+        this.draw = function() {
+            this.angleTween.update();
+            this.radiusTween.update();
+
+            this.x = cos(this.angle) * this.radius;
+            this.y = sin(this.angle) * this.radius;
+
+            noStroke();
+            // fill(this.color, this.alpha);
+            fill(this.color);
+            ellipse(this.x, this.y, this.size, this.size);
+        }
+
+        return this;
+    }
+    </script>
+    <style>
+    body {
+        padding: 0;
+    }
+    </style>
 </head>
 
 <body>

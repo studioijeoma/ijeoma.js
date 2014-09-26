@@ -1,61 +1,62 @@
-<script language="javascript" src="p5.js"></script>
-<script language="javascript" src="../build/ijeomamotion.js"></script>
-<script language="javascript">
-var grid = 100;
-var div = 1;
-var dotSize = 100;
-var dotScale = 0;
-var dotAlpha = 0;
+<head>
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var grid = 100;
+    var div = 1;
+    var dotSize = 100;
+    var dotScale = 0;
+    var dotAlpha = 0;
 
-function setup() {
-    createCanvas(windowHeight, windowHeight);
+    function setup() {
+        createCanvas(windowHeight, windowHeight);
 
-    beginSequence();
-    relative()
-    tween(100).add('dotScale', 1).add(this, 'dotAlpha', 255) 
-    tween(100).add('dotAlpha', 0)
-    endSequence();
-    repeat(5);
-    onRepeat(function() {
-        div += 10;
-    })
-    play();
-}
+        beginSequence();
+        relative()
+        tween(100).add('dotScale', 1).add(this, 'dotAlpha', 255)
+        tween(100).add('dotAlpha', 0)
+        endSequence();
+        repeat(5);
+        onRepeat(function() {
+            div += 10;
+        })
+        play();
+    }
 
-function draw() {
-    background(0,25);
+    function draw() {
+        background(0, 25);
 
-    cols = div;
-    rows = div;
+        cols = div;
+        rows = div;
 
-    dotSize = height / div;
+        dotSize = height / div;
 
-    translate(0, 0)
+        translate(0, 0)
 
-    fill(255, dotAlpha);
-    for (var i = 0; i <= cols; i++)
-        for (var j = 0; j <= rows; j++) {
-            ellipse(i * dotSize, j * dotSize, dotSize, dotSize);
-        }
-}
+        fill(255, dotAlpha);
+        for (var i = 0; i <= cols; i++)
+            for (var j = 0; j <= rows; j++) {
+                ellipse(i * dotSize, j * dotSize, dotSize, dotSize);
+            }
+    }
 
-function randomColor() {
-    return color(random(255), random(255), random(255))
-}
+    function randomColor() {
+        return color(random(255), random(255), random(255))
+    }
 
-function keyPressed() {
-    // if (keyCode == MOUSE_LEFT)
+    function keyPressed() {
+        // if (keyCode == MOUSE_LEFT)
 
-    // else if (keyCode == MOUSE_RIGHT)
+        // else if (keyCode == MOUSE_RIGHT)
 
-}
-</script>
-<style>
-body {
-    padding: 0;
-    margin: 0;
-}
-</style>
+    }
+    </script>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    </style>
 </head>
 
 <body>

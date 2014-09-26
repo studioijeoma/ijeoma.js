@@ -1,14 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
-    <title>Tween.js / simplest possible example!</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-
-<body>
-    <script type="text/javascript" src="p5.js"></script>
-    <script type="text/javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script type="text/javascript">
     var t;
 
@@ -23,7 +15,7 @@
 
         t = new MOTION.Timeline();
 
-        y1 =0;
+        y1 = 0;
         k1 = new MOTION.Keyframe(0)
             .add(new MOTION.Tween(this, "y1", height, 100))
 
@@ -37,11 +29,11 @@
             .add(new MOTION.Tween(-height, height, 100))
             .add(new MOTION.Tween(height, -height, 100))
             .add(new MOTION.Tween(-height, height, 100));
- 
+
         t.add(k1, 100);
         t.add(k2, 200);
-        t.add(k3, 300); 
- 
+        t.add(k3, 300);
+
         t.repeat().play();
 
         console.log(t)
@@ -81,6 +73,12 @@
         t.seek(norm(mouseX, 0, width));
     }
     </script>
-</body>
+    <style>
+    body {
+        padding: 0;
+    }
+    </style>
+</head>
 
-</html>
+<body>
+</body>

@@ -1,77 +1,78 @@
-<script language="javascript" src="p5.js"></script>
-<script language="javascript" src="../build/ijeomamotion.js"></script>
-<script language="javascript">
-var c, t;
-var circles = [];
+<head>
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var c, t;
+    var circles = [];
 
-function setup() {
-    createCanvas(windowWidth, windowHeight);
-    noStroke();
+    function setup() {
+        createCanvas(windowWidth, windowHeight);
+        noStroke();
 
-    for (var i = 0; i < 100; i++) {  
-        var c = new Circle(random(width), random(height), 0, random(255), 255);
-        c.tween = new MOTION.Tween(c, random(1, 2))
-            .add('r', random(5, 25))
-            .add('x', random(width))
-            .add('y', random(height)) 
-            .onEnd(function(window,circle){ 
-                this.get('r').setBegin().setEnd(random(100))
-                this.get('x').setBegin().setEnd(random(width))
-                this.get('y').setBegin().setEnd(random(height)) 
-                this.play() 
-            })
-            .play() 
+        for (var i = 0; i < 100; i++) {
+            var c = new Circle(random(width), random(height), 0, random(255), 255);
+            c.tween = new MOTION.Tween(c, random(1, 2))
+                .add('r', random(5, 25))
+                .add('x', random(width))
+                .add('y', random(height))
+                .onEnd(function(window, circle) {
+                    this.get('r').setBegin().setEnd(random(100))
+                    this.get('x').setBegin().setEnd(random(width))
+                    this.get('y').setBegin().setEnd(random(height))
+                    this.play()
+                })
+                .play()
 
-        circles.push(c)
-    }
-}
-
-function draw() {
-    background(100);
-
-    for (var i = 0; i < circles.length; i++)
-        circles[i].draw();
-}
-
-function mouseDragged() {
-    t.seek(mouseX / width);
-}
-
-function keyTyped() {
-    if (key == 'a')
-        t.pause();
-    else if (key == 's')
-        t.resume();
-    else if (key == 'd')
-        t.play();
-    else if (key == 'f')
-        t.stop();
-}
-
-Circle = function(x, y, r, color, alpha) {
-    this.x = x;
-    this.y = y;
-    this.r = r;
-    this.color = color;
-    this.alpha = alpha;
-    this.tween;
-
-    this.draw = function() {
-        this.tween.update();
-
-        fill(this.color, this.alpha);
-        ellipse(this.x, this.y, this.r, this.r);
+            circles.push(c)
+        }
     }
 
-    return this;
-}
-</script>
-<style>
-body {
-    padding: 0;
-}
-</style>
-<!-- this line removes any default padding -->
+    function draw() {
+        background(100);
+
+        for (var i = 0; i < circles.length; i++)
+            circles[i].draw();
+    }
+
+    function mouseDragged() {
+        t.seek(mouseX / width);
+    }
+
+    function keyTyped() {
+        if (key == 'a')
+            t.pause();
+        else if (key == 's')
+            t.resume();
+        else if (key == 'd')
+            t.play();
+        else if (key == 'f')
+            t.stop();
+    }
+
+    Circle = function(x, y, r, color, alpha) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.color = color;
+        this.alpha = alpha;
+        this.tween;
+
+        this.draw = function() {
+            this.tween.update();
+
+            fill(this.color, this.alpha);
+            ellipse(this.x, this.y, this.r, this.r);
+        }
+
+        return this;
+    }
+    </script>
+    <style>
+    body {
+        padding: 0;
+    }
+    </style>
+    <!-- this line removes any default padding -->
 </head>
 
 <body>

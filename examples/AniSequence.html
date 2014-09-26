@@ -1,73 +1,74 @@
-<script language="javascript" src="p5.js"></script>
-<script language="javascript" src="../build/ijeomamotion.js"></script>
-<script language="javascript">
-var x, y, diameter;
-var s;
+<head>
+    <script language="javascript" src="p5.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script type="text/javascript">
+    var x, y, diameter;
+    var s;
 
-function setup() {
-    createCanvas(512, 512);
-    noStroke();
+    function setup() {
+        createCanvas(512, 512);
+        noStroke();
 
-    x = 50;
-    y = 50;
-    diameter = 10;
+        x = 50;
+        y = 50;
+        diameter = 10;
 
-    s = new MOTION.Sequence();
-    s.add(new MOTION.Tween(100).add('diameter', 55))
-    s.add(new MOTION.Tween(100).add('x', 400).add('y', 100).relative())
-    s.add(new MOTION.Tween(100).add('x', 450).add('y', 400).relative())
-    s.add(new MOTION.Tween(100).add('x', 100).add('y', 450).relative())
-    s.add(new MOTION.Tween(100).add('x', 50).add('y', 50).add(this, 'diameter', 5).relative())  
-    s.play();
-}
-
-function draw() {
-    fill(255, 255);
-    rect(0, 0, width, height);
-
-    fill(0);
-    ellipse(x, y, diameter, diameter);
-
-    fill(255, 0, 0)
-    text(s.getTime(), 25, 25)
-    // text(s.get(0)._id + ': '+ s.get(0).getTime(), 25, 50)
-    // text(s.get(1)._id + ': '+ s.get(1).getTime(), 25, 75) 
-    // text(s.get(2)._id + ': '+ s.get(2).getTime(), 25, 100) 
-    // text(s.get(3)._id + ': '+ s.get(3).getTime(), 25, 125) 
-}
-
-function mousePressed() {
-    s.pause();
-}
-function mouseDragged() {
-    s.seek(constrain(mouseX / width, 0, 1))
-}
-function mouseReleased() {
-    s.resume();
-}
-
-function keyPressed() {
-    if (keyCode == LEFT_ARROW) {
-        s.pause();
-        s.seek(s.getPosition() - .01)
-    } else if (keyCode == RIGHT_ARROW) {
-        s.pause();
-        s.seek(s.getPosition() + .01)
-    } else if (key == 'a')
-        s.pause();
-    else if (key == 's')
-        s.resume();
-    else if (key == 'd')
+        s = new MOTION.Sequence();
+        s.add(new MOTION.Tween(1).add('diameter', 55))
+        s.add(new MOTION.Tween(1).add('x', 400).add('y', 100).relative())
+        s.add(new MOTION.Tween(1).add('x', 450).add('y', 400).relative())
+        s.add(new MOTION.Tween(1).add('x', 100).add('y', 450).relative())
+        s.add(new MOTION.Tween(1).add('x', 50).add('y', 50).add(this, 'diameter', 5).relative())
         s.play();
-    else if (key == 'f')
-        s.stop();
-}
-</script>
-<style>
-body {
-    padding: 0;
-}
-</style>
+    }
+
+    function draw() {
+        fill(255, 255);
+        rect(0, 0, width, height);
+
+        fill(0);
+        ellipse(x, y, diameter, diameter);
+
+        s.update();
+
+        fill(255, 0, 0)
+        text(s.getTime(), 25, 25)
+    }
+
+    function mousePressed() {
+        s.pause();
+    }
+
+    function mouseDragged() {
+        s.seek(constrain(mouseX / width, 0, 1))
+    }
+
+    function mouseReleased() {
+        s.resume();
+    }
+
+    function keyPressed() {
+        if (keyCode == LEFT_ARROW) {
+            s.pause();
+            s.seek(s.getPosition() - .01)
+        } else if (keyCode == RIGHT_ARROW) {
+            s.pause();
+            s.seek(s.getPosition() + .01)
+        } else if (key == 'a')
+            s.pause();
+        else if (key == 's')
+            s.resume();
+        else if (key == 'd')
+            s.play();
+        else if (key == 'f')
+            s.stop();
+    }
+    </script>
+    <style>
+    body {
+        padding: 0;
+    }
+    </style>
 </head>
 
 <body>
