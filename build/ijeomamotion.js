@@ -365,7 +365,7 @@ Bounce.InOut = function(t) {
 
             this.dispatchChangedEvent(); 
 
-             if (!this.isInsidePlayingTime(this._time)) 
+             if (!this.isInsidePlayingTime(this._time) && !this.isInsideDelayingTime(this._time)) 
                 this.stop();
         }  
     };
