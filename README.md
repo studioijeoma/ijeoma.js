@@ -64,6 +64,15 @@ t = new MOTION.Tween(100).onStart(func).onUpdate(func).onEnd(func).play();
 ```
 
 ##How to playback Tweens 
+###Updating
+```javascript
+t.update()
+```
+or
+```javascript
+t.update(time)
+```
+
 ###Delaying
 ```javascript
 var t = new MOTION.Tween("w", width, 50, 50).play(); //delay for 50 frames
