@@ -1,6 +1,6 @@
 #ijeomamotion.js
  
-A Javascript library for sketching animations. Ijeoma (ee-JOH-mah) means safe journey in Igbo, the language of my family from Nigeria. This is based on [a library for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from Processing although there is a [addon for p5.js] (https://github.com/ekeneijeoma/p5.ijeomamotion.js).
+A Javascript library for sketching animations. Ijeoma (ee-JOH-mah) means safe journey in Igbo, the language of my family from Nigeria. This is based on [a library for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeomamotion.js).
 
 #Download 
 Developement: 
@@ -10,13 +10,13 @@ Production:
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js
 
 #Examples  
-Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork2.html)
+Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/CircularNetwork2.html)
 
-[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/pieChart2.html)
+[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/PieChart2.html)
 
-[Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/sequence.html)
+[Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Sequence.html)
 
-[Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/timeline.html)
+[Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html)
 
 #Getting Started 
 ##How to create Tweens
@@ -64,6 +64,15 @@ t = new MOTION.Tween(100).onStart(func).onUpdate(func).onEnd(func).play();
 ```
 
 ##How to playback Tweens 
+###Updating
+```javascript
+t.update()
+```
+or
+```javascript
+t.update(time)
+```
+
 ###Delaying
 ```javascript
 var t = new MOTION.Tween("w", width, 50, 50).play(); //delay for 50 frames
