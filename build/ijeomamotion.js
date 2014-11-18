@@ -158,7 +158,7 @@ Bounce.Out = function(t) {
 Bounce.InOut = function(t) {
     if (t < .5) return Bounce.In (t * 2, 0) * .5;
     return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
-};(function(window, undefined) {  
+};(function(window, undefined) {
     _idMap = [];
     _idMap['Motion'] = 0;
     _idMap['Tween'] = 0;
@@ -172,11 +172,11 @@ Bounce.InOut = function(t) {
     _motionMap = [];
 
     /**
-   * Returns the duration of the HTML5 media element.
-   * 
-   * @method duration
-   * @return {Number} duration
-   */
+     * Returns the duration of the HTML5 media element.
+     *
+     * @method duration
+     * @return {Number} duration
+     */
     MOTION = function(duration, delay, easing) {
         if (this.isTween())
             this._id = 'Tween' + _idMap['Tween']++;
@@ -216,7 +216,7 @@ Bounce.InOut = function(t) {
         this._isReversing = false;
         this._isSeeking = false;
 
-        this._isAutoUpdating = true; 
+        this._isAutoUpdating = true;
 
         this._order = 0;
 
@@ -262,9 +262,17 @@ Bounce.InOut = function(t) {
         _motions.splice(i, 1);
     };
 
+    MOTION.isPlaying = function() {
+        for (var i = 0; i < _motions.length; i++)
+            if (_motions[i].isPlaying())
+                return true;
+
+        return false;
+    };
+
     MOTION.prototype.constructor = MOTION;
 
-    MOTION.prototype.play = function() { 
+    MOTION.prototype.play = function() {
         this.dispatchStartedEvent();
 
         this.seek(0);
@@ -276,41 +284,41 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    MOTION.prototype.stop = function() { 
+    MOTION.prototype.stop = function() {
         this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
 
-        if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
-            this.seek(0);
-            this.resume();
+        // if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
+        //     this.seek(0);
+        //     this.resume();
 
-            this._repeatTime++;
+        //     this._repeatTime++;
 
-            if (!this._isRepeatingDelay)
-                this._delay = 0;
+        //     if (!this._isRepeatingDelay)
+        //         this._delay = 0;
 
-            this.dispatchRepeatedEvent();
-        } else {
-            this.seek(1);
-            this.pause();
+        //     this.dispatchRepeatedEvent();
+        // } else {
+        this.seek(1);
+        this.pause();
 
-            this._repeatTime = 0;
+        this._repeatTime = 0;
 
-            this.dispatchEndedEvent();
-        }
+        this.dispatchEndedEvent();
+        // }
 
         return this;
     };
 
-    MOTION.prototype.pause = function() {  
-        this._isPlaying = false; 
+    MOTION.prototype.pause = function() {
+        this._isPlaying = false;
 
         this._playTime = this._time;
 
         return this;
     };
 
-    MOTION.prototype.resume = function() { 
-        this._isPlaying = true;  
+    MOTION.prototype.resume = function() {
+        this._isPlaying = true;
 
         this._playTime = new Date().getTime() - this._playTime * 1000;
 
@@ -318,14 +326,14 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.seek = function(value) {
-        this._isPlaying = false; 
+        this._isPlaying = false;
         this._isSeeking = true;
 
         this._playTime = (this._delay + this._duration) * value;
 
         this.setTime(this._playTime);
- 
-        this.dispatchChangedEvent();  
+
+        this.dispatchChangedEvent();
 
         this._isSeeking = false;
 
@@ -356,25 +364,37 @@ Bounce.InOut = function(t) {
         return this;
     };
 
-    MOTION.prototype.update = function(time) {  
+    MOTION.prototype.update = function(time) {
         if (this._isPlaying) {
             if (typeof time == 'undefined')
                 this.updateTime();
             else
                 this.setTime(time);
 
-            this.dispatchChangedEvent(); 
+            this.dispatchChangedEvent();
 
-             if (!this.isInsidePlayingTime(this._time) && !this.isInsideDelayingTime(this._time)) 
-                this.stop();
-        }  
+            if (!this.isInsidePlayingTime(this._time) && !this.isInsideDelayingTime(this._time)) {
+                if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
+                    this.seek(0);
+                    this.resume();
+
+                    this._repeatTime++;
+
+                    if (!this._isRepeatingDelay)
+                        this._delay = 0;
+
+                    this.dispatchRepeatedEvent();
+                } else this.stop();
+            }
+        }
     };
+
 
     MOTION.prototype.updateTime = function() {
         this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
-            this._time = this._reverseTime - this._time; 
+            this._time = this._reverseTime - this._time;
     };
 
     MOTION.prototype.setName = function(name) {
