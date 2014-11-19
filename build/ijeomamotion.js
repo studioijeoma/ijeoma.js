@@ -250,6 +250,7 @@ Bounce.InOut = function(t) {
 
     MOTION.setTimeMode = function(timeMode) {
         _timeMode = timeMode;
+
         return this;
     };
 
@@ -285,26 +286,13 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.prototype.stop = function() {
-        this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
-
-        // if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
-        //     this.seek(0);
-        //     this.resume();
-
-        //     this._repeatTime++;
-
-        //     if (!this._isRepeatingDelay)
-        //         this._delay = 0;
-
-        //     this.dispatchRepeatedEvent();
-        // } else {
         this.seek(1);
         this.pause();
 
+        this._playCount = 0;
         this._repeatTime = 0;
 
         this.dispatchEndedEvent();
-        // }
 
         return this;
     };
@@ -356,11 +344,13 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.reverse = function() {
         this._isReversing = true;
+
         return this;
     };
 
     MOTION.prototype.noReverse = function() {
         this._isReversing = false;
+
         return this;
     };
 
@@ -374,6 +364,8 @@ Bounce.InOut = function(t) {
             this.dispatchChangedEvent();
 
             if (!this.isInsidePlayingTime(this._time) && !this.isInsideDelayingTime(this._time)) {
+                this._reverseTime = (this._reverseTime === 0) ? this._duration : 0;
+
                 if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
                     this.seek(0);
                     this.resume();
@@ -399,6 +391,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.setName = function(name) {
         this._name = name;
+
         return this;
     };
 
@@ -409,6 +402,7 @@ Bounce.InOut = function(t) {
     MOTION.prototype.setTime = function(time) {
         this._time = time;
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
+
         return this;
     };
 
@@ -418,6 +412,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.setTimeScale = function(_timeScale) {
         this._timeScale = _timeScale;
+
         return this;
     };
 
@@ -432,6 +427,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.setDuration = function(_duration) {
         this._duration = _duration;
+
         return this;
     };
 
@@ -447,6 +443,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.setDelay = function(delay) {
         this._delay = delay;
+
         return this;
     };
 
@@ -454,6 +451,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.noDelay = function() {
         this._delay = 0;
+
         return this;
     };
 
@@ -464,17 +462,20 @@ Bounce.InOut = function(t) {
     MOTION.prototype.repeatDelay = function(duration) {
         this.repeat(duration);
         this._isRepeatingDelay = true;
+
         return this;
     };
 
     MOTION.prototype.noRepeatDelay = function() {
         this.noRepeat();
         this._isRepeatingDelay = false;
+
         return this;
     };
 
     MOTION.prototype.setEasing = function(easing) {
         this._easing = easing;
+
         return this;
     };
 
@@ -488,21 +489,25 @@ Bounce.InOut = function(t) {
         this.setEasing(function(t) {
             return t;
         });
+
         return this;
     };
 
     MOTION.prototype.relative = function() {
         this.setValueMode(MOTION.RELATIVE);
+
         return this;
     };
 
     MOTION.prototype.absolute = function() {
         this.setValueMode(MOTION.ABSOLUTE);
+
         return this;
     };
 
     MOTION.prototype.setValueMode = function(_valueMode) {
         this._valueMode = _valueMode;
+
         return this;
     };
 
@@ -520,11 +525,13 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.autoUpdate = function() {
         this._isAutoUpdating = true;
+
         return this;
     };
 
     MOTION.prototype.noAutoUpdate = function() {
         this._isAutoUpdating = false;
+
         return this;
     };
 
@@ -586,21 +593,25 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.onStart = function(func) {
         this._onStart = func;
+
         return this;
     };
 
     MOTION.prototype.onEnd = function(func) {
         this._onEnd = func;
+
         return this;
     };
 
     MOTION.prototype.onUpdate = function(func) {
         this._onUpdate = func;
+
         return this;
     };
 
     MOTION.prototype.onRepeat = function(func) {
         this._onRepeat = func;
+
         return this;
     };
 
