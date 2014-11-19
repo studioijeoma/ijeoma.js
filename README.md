@@ -19,18 +19,22 @@ Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circ
 [Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html)
 
 #Getting Started 
-##How to create Tweens
-
-###Numbers  
-There are 4 ways to create Tweens.
+MOTION is used to count from a starting time of 0 to an ending time in seconds.
+MOTION.Tween is used to ease between a starting value to an ending value of number variable/property in a duration.
+MOTION.Parallel is used to playback multiple tweens at together. 
+MOTION.Sequence is used to playback tweens one after the other.
+MOTION.Timeline is used to playback all of the above at any time using MOTION.Keyframes.
+  
+There are 4 ways to create (istantiate) Tweens.
 ```javascript
-new MOTION.Tween(duration,delay,easing) //object defaults to window
-new MOTION.Tween(object, duration, delay, easing) 
 new MOTION.Tween(object, property, end, duration, delay, easing)
 new MOTION.Tween(property, end, duration, delay, easing) //object defaults to window
+
+new MOTION.Tween(duration,delay,easing) //object defaults to window
+new MOTION.Tween(object, duration, delay, easing) 
 ```
 
-Say you want to tween x from 0 to 100 in 100 frames. 
+Say you want to ease a variable named x from 0 to 100 in 100 frames. 
 ```javascript
 var x = 0;
 var t = new MOTION.Tween(100).add("x", 100, 100).play();
