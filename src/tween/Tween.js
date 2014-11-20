@@ -6,17 +6,23 @@
         this._propertyMap = [];
 
         if (typeof arguments[1] == 'string') {
-            if (typeof object == 'undefined' || typeof arguments[0] == 'number')
-                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
-            else
-                MOTION.call(this, duration, delay, easing);
+            if (typeof object == 'undefined' || typeof arguments[0] == 'number') {
+                MOTION.call(this, arguments[0], arguments[1]);
+                this.setEasing(arguments[2]);
+            } else {
+                MOTION.call(this, duration, delay);
+                this.setEasing(easing);
+            }
 
             this.addProperty(this._object, property, end);
         } else {
-            if (typeof object == 'undefined' || typeof arguments[0] == 'number')
+            if (typeof object == 'undefined' || typeof arguments[0] == 'number') {
                 MOTION.call(this, arguments[0], arguments[1], arguments[2]);
-            else
+                this.setEasing(arguments[2]);
+            } else {
                 MOTION.call(this, arguments[1], arguments[2], arguments[3]);
+                this.setEasing(arguments[3]);
+            }
         }
     };
 
@@ -25,7 +31,7 @@
 
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
-            this._properties[i].update(this.getPosition());
+            this._properties[i].update(this._easing(this.getPosition()));
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
@@ -76,6 +82,28 @@
 
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
+    };
+
+    MOTION.prototype.setEasing = function(easing) {
+        this._easing = (typeof easing == 'undefined') ? (function(t) {
+            return t;
+        }) : easing;
+
+        return this;
+    };
+
+    MOTION.prototype.easing = MOTION.prototype.setEasing;
+
+    MOTION.prototype.getEasing = function() {
+        return this._easing;
+    };
+
+    MOTION.prototype.noEasing = function() {
+        this.setEasing(function(t) {
+            return t;
+        });
+
+        return this;
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {

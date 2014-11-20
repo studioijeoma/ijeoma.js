@@ -19,16 +19,13 @@ Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circ
 [Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html)
 
 #Getting Started 
-MOTION is used to count from a starting time of 0 to an ending time in seconds.
+The core class MOTION is used to count from a starting time of 0 to an ending time in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
 
-MOTION.Tween is used to ease between a starting value to an ending value of number variable/property in a duration.
+```javascript 
+new MOTION(duration,delay)  
+```
 
-MOTION.Parallel is used to playback multiple tweens at together. 
-
-MOTION.Sequence is used to playback tweens one after the other.
-
-MOTION.Timeline is used to playback all of the above at any time using MOTION.Keyframes.
-
+MOTION.Tween is used to ease a nummber variable or object property from a starting value to an ending value within a duration. MOTION.Tween can tween multiple variables or object properties together. The "motion controller" MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and MOTION.Keyframe are used to playback any MOTION object using the same counter. MOTION.Parallel is used to play multiple tweens together. MOTION.Sequence is used to play tweens one after the other. MOTION.Timeline is used to play all of the above at any time using MOTION.Keyframes.
   
 There are 4 ways to create (istantiate) Tweens.
 ```javascript
