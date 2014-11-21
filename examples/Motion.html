@@ -1,28 +1,4 @@
 <head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>
-    <script language="javascript">
-    var m;
-    var s;
-
-    function setup() {
-        createCanvas(720, 400);
-        noStroke();
-
-        m = new MOTION(1).repeat().reverse().play()
-        s = 100;
-    }
-
-    function draw() {
-        background(100);
-
-        m.update();
-
-        fill(255)
-        text(m.getTime() + '/' + m.getDuration(), 25, 25)
-        ellipse(width / 2, height / 2, s * m.getPosition(), s * m.getPosition())
-    }
-    </script>
     <style>
     body {
         padding: 0;
@@ -31,4 +7,36 @@
 </head>
 
 <body>
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        text = document.createElement('div');
+        text.style.cssText = 'position: absolute; font-face: sans-serif; font-size: 100px; text-align: center';
+
+        document.body.appendChild(text);
+
+        m = new MOTION(5000).repeat().reverse().play()
+            .onUpdate(function() {
+                var c = Math.round(m.getPosition() * 255);
+                var textColor = 255 - c;
+ 
+
+                text.innerHTML = Math.round(m.getTime());
+                text.style.left = window.innerWidth / 2;
+                text.style.top = window.innerHeight / 2;
+                text.style.color = 'rgb(' + textColor + ',' + textColor + ',' + textColor + ')';
+
+                document.body.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            })
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        m.update(time);
+    }
+    </script>
 </body>

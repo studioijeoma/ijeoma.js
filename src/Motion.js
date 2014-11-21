@@ -31,7 +31,7 @@
 
         this._name = '';
 
-        this._playTime = 0;
+        this._playTime;
         this._playCount = 0;
 
         this._time = 0;
@@ -144,7 +144,7 @@
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        this._playTime = new Date().getTime() - this._playTime * 1000;
+        this._playTime = (window.performance !== undefined && window.performance.now !== undefined) ? window.performance.now() : Date.now();
 
         return this;
     };
@@ -204,7 +204,7 @@
 
                 if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
                     this.seek(0);
-                    this.resume();
+                    this.resume(time);
 
                     this._repeatTime++;
 
@@ -217,9 +217,8 @@
         }
     };
 
-
-    MOTION.prototype.updateTime = function() {
-        this._time = (new Date().getTime() - this._playTime) / 1000 * this._timeScale;
+    MOTION.prototype.updateTime = function() { 
+        this._time = ((window.performance !== undefined && window.performance.now !== undefined) ? window.performance.now() : Date.now()) - this._playTime;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
@@ -235,8 +234,9 @@
         return this._name;
     };
 
-    MOTION.prototype.setTime = function(time) {
-        this._time = time;
+    MOTION.prototype.setTime = function(time) { 
+        this._time = time - this._playTime;
+
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
         return this;
