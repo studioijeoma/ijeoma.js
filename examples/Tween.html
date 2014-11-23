@@ -1,68 +1,53 @@
 <head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>  
-    <script type="text/javascript">
-    var t;
-    var x;
-
-    function setup() {
-        createCanvas(400, 200);
-        smooth();
-        x = -width;
-        t = new MOTION.Tween(this, "x", width, 10,10).play();
-    }
-
-    function draw() {
-        background(255);
-
-        t.update();
-
-        stroke(255);
-        fill(255 / 2);
-        rect(x, 0, width, height);
-        fill(0);
-
-        var time = t.getTime() + " / " + t.getDuration();
-        noStroke();
-        fill(0);
-        text(time, 10, 10 + 12);
-    }
-
-    function keyPressed() {
-        if (keyCode == LEFT_ARROW) {
-            t.pause();
-            t.seek(t.getPosition() - .01)
-        } else if (keyCode == RIGHT_ARROW) {
-            t.pause();
-            t.seek(t.getPosition() + .01)
-        } else if (key == 'a')
-            t.pause();
-        else if (key == 's')
-            t.resume();
-        else if (key == 'd')
-            t.play();
-        else if (key == 'f')
-            t.stop();
-    }
-
-    function mousePressed() {
-        t.pause();
-    }
-
-    function mouseReleased() {
-        t.resume();
-    }
-
-    function mouseDragged() {
-        t.seek(mouseX / width);
-    }
-    </script>
     <style>
     body {
         padding: 0;
+    }
+    div {
+        z-index: -100
     }
     </style>
 </head>
 
 <body>
+    <button id="stop">Play</button>
+    <button id="play">Stop</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        rect = document.createElement('div');
+        rect.style.cssText = 'position: absolute; left:0; top:0; width:0; height:100%; background-color:black';
+
+        document.body.appendChild(rect);
+
+        tween = new MOTION.Tween(2500).add('w', 100)
+            .onStart(function() {
+                console.log('start')
+            })
+            .onUpdate(function() {
+                rect.style.width = w + '%';
+            })
+            .onEnd(function() {
+                console.log('end')
+            })
+            .play()
+
+        document.getElementById('play').onclick = function() {
+            tween.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            tween.stop()
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        tween.update(time);
+    }
+    </script>
 </body>

@@ -1,84 +1,60 @@
 <head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>  
-    <script type="text/javascript">
-    var y1, y2, h;
-    var tp;
-    var s = 0;
-
-    function setup() {
-        createCanvas(windowWidth, windowHeight);
-
-        ellipseMode(CORNER);
-        smooth();
-
-        w = width / 2;
-        y1 = 0;
-        y2 = height - w;
-
-        tp = new MOTION.Parallel()
-            .add(new MOTION.Tween(this, "y1", height - w, 1))
-            .add(new MOTION.Tween(this, "y2", 0, 2))
-            .reverse().repeat()
-            .play();
-
-
-    }
-
-    function draw() {
-        background(255);
-
-        tp.update();
-
-        stroke(255);
-        fill(255 / 2);
-        ellipse(0, y1, w, w);
-        ellipse(w, y2, w, w);
-
-        var time;
-
-        time = tp.get(0).getTime() + " / " + tp.get(0).getDuration();
-
-        noStroke();
-        fill(0);
-        text(time, 25, 25 + 12);
-
-        time = tp.get(1).getTime() + " / " + tp.get(1).getDuration();
-
-        fill(0);
-        text(time, w+25, 25 + 12);
-
-        time = tp.getTime() + " / " + tp.getDuration();
-
-        fill(0);
-        text(time, width - textWidth(time) - 25, height - 25);
-    }
-
-    function keyPressed() {
-        if (keyCode == LEFT_ARROW)
-            tp.seek(s -= .1)
-        if (keyCode == RIGHT_ARROW)
-            tp.seek(s += .1)
-    }
-
-    function mousePressed() {
-        tp.pause();
-    }
-
-    function mouseReleased() {
-        tp.resume();
-    }
-
-    function mouseDragged() {
-        tp.seek(mouseX / width);
-    }
-     </script>
     <style>
     body {
         padding: 0;
     }
-    </style> 
+    button {
+        z-index: 100
+    }
+    </style>
 </head>
 
 <body>
+    <button id="stop">Play</button>
+    <button id="play">Stop</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        var rectH = window.innerHeight;
+
+        rect1 = document.createElement('div');
+        rect1.style.cssText = 'position: absolute; left:0; width:50%; height:' + rectH + 'px; background-color:black;';
+
+        rect2 = document.createElement('div');
+        rect2.style.cssText = 'position: absolute; left:50%; width:50%; height:' + rectH + 'px; background-color:black;';
+
+        document.body.appendChild(rect1);
+        document.body.appendChild(rect2);
+
+        parallel = new MOTION.Parallel()
+            .add(new MOTION.Tween('rect1Y', [-rectH, rectH], 1500).onUpdate(function() {
+                rect1.style.top = rect1Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect1.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }))
+            .add(new MOTION.Tween('rect2Y', [rectH, -rectH], 1500).onUpdate(function() {
+                rect2.style.top = rect2Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }))
+            .play();
+
+        document.getElementById('play').onclick = function() {
+            parallel.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            parallel.stop()
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        parallel.update(time);
+    }
+    </script>
 </body>

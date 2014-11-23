@@ -1,105 +1,57 @@
 <head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>  
-    <script type="text/javascript">
-    var c1, c2, c3, c4;
-    var x1, x2, x3, x4;
-    var a;
-    var h;
-    var ts;
-
-    function setup() {
-        createCanvas(windowWidth, windowHeight);
-
-        h = height / 4;
-
-        c1 = c2 = c3 = c4 = 255;
-        a = 0;
-        x1 = x2 = x3 = x4 = -width;
-
-        var d = 1;
-
-        ts = new MOTION.Sequence();
-        ts.add(new MOTION.Tween(d)
-            .add("x1", width)
-            .add("c1", 0))
-        ts.add(new MOTION.Tween(d)
-            .add("x2", width)
-            .add("c2", 0))
-        ts.add(new MOTION.Tween(d)
-            .add("x3", width)
-            .add("c3", 0))
-        ts.add(new MOTION.Tween(d)
-            .add("x4", width)
-            .add("c4", 0))
-        ts.reverse().repeat().play();
-    }
-
-    function draw() {
-        background(255);
-
-        ts.update();
-
-        noStroke();
-
-        fill(c1);
-        rect(x1, 0, width, h);
-        fill(c2);
-        rect(x2, h, width, h);
-        fill(c3);
-        rect(x3, h * 2, width, h);
-        fill(c4);
-        rect(x4, h * 3, width, h);
-
-        fill(0);
-
-        var time = ts.get(0).getTime() + " / " + ts.get(0).getDuration();
-        fill((ts.get(0).isPlaying() ? color(0, 255, 0) : color(255, 0,
-            0)));
-        text(time, 10, 10 + 12);
-
-        time = ts.get(1).getTime() + " / " + ts.get(1).getDuration();
-        fill((ts.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0,
-            0)));
-        text(time, 10, h + 10 + 12);
-
-        time = ts.get(2).getTime() + " / " + ts.get(2).getDuration();
-        fill((ts.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0,
-            0)));
-        text(time, 10, h * 2 + 10 + 12);
-
-        time = ts.get(3).getTime() + " / " + ts.get(3).getDuration();
-        fill((ts.get(3).isPlaying() ? color(0, 255, 0) : color(255, 0,
-            0)));
-        text(time, 10, h * 3 + 10 + 12);
-
-        time = ts.getTime() + " / " + ts.getDuration();
-        fill((ts.isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, width - textWidth(time) - 25, height - 25);
-    }
-
-    function keyPressed() {
-        ts.play();
-    }
-
-    function mousePressed() {
-        ts.pause();
-    }
-
-    function mouseReleased() {
-        ts.resume();
-    }
-
-    function mouseDragged() {
-        ts.seek(mouseX / width);
-    }
-    </script>
     <style>
     body {
         padding: 0;
+    }
+    button {
+        z-index: 100
     }
     </style>
 </head>
 
 <body>
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        var rectH = window.innerHeight;
+
+        rect1 = document.createElement('div');
+        rect1.style.cssText = 'position: absolute; left:0; width:50%; height:' + rectH + 'px; background-color:black;';
+
+        rect2 = document.createElement('div');
+        rect2.style.cssText = 'position: absolute; left:50%; width:50%; height:' + rectH + 'px; background-color:black;';
+
+        document.body.appendChild(rect1);
+        document.body.appendChild(rect2);
+
+        sequence = new MOTION.Sequence()
+            .add(new MOTION.Tween('rect1Y', [-rectH,rectH], 1500).onUpdate(function() {
+                rect1.style.top = rect1Y + 'px'; 
+                var c = Math.round(this.getPosition() * 255);
+                rect1.style.backgroundColor = 'rgb('+c+','+c+','+c+')'; 
+            }))
+            .add(new MOTION.Tween('rect2Y', [rectH,-rectH], 1500).onUpdate(function() {
+                rect2.style.top = rect2Y + 'px'; 
+                var c = Math.round(this.getPosition() * 255);
+                rect2.style.backgroundColor = 'rgb('+c+','+c+','+c+')'; 
+            }))
+            .repeat().play();
+
+            document.getElementById('play').onclick = function() {
+            sequence.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            sequence.stop()
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        sequence.update(time); 
+    }
+    </script>
 </body>

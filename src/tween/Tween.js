@@ -1,33 +1,23 @@
 (function(MOTION, undefined) {
-    MOTION.Tween = function(object, property, end, duration, delay, easing) {
-        this._object = (typeof arguments[0] == 'undefined' || typeof arguments[0] == 'number') ? window : arguments[0];
+        MOTION.Tween = function(object, property, end, duration, delay, easing) {  
+            this._properties = [];
+            this._propertyMap = [];
 
-        this._properties = [];
-        this._propertyMap = [];
-
-        if (typeof arguments[1] == 'string') {
-            if (typeof object == 'undefined' || typeof arguments[0] == 'number') {
-                MOTION.call(this, arguments[0], arguments[1]);
+            if (typeof arguments[0] == 'object') {
+                MOTION.call(this, arguments[3], arguments[4]);
+                this.addProperty(arguments[0], arguments[1], arguments[2])
+                this.setEasing(arguments[5]);
+            } else if (typeof arguments[0] == 'string') {
+                MOTION.call(this, arguments[2], arguments[3]);
+                this.addProperty(arguments[0], arguments[1])
+                this.setEasing(arguments[4]);
+            }else  {
+                MOTION.call(this, arguments[0], arguments[1]); 
                 this.setEasing(arguments[2]);
-            } else {
-                MOTION.call(this, duration, delay);
-                this.setEasing(easing);
-            }
-
-            this.addProperty(this._object, property, end);
-        } else {
-            if (typeof object == 'undefined' || typeof arguments[0] == 'number') {
-                MOTION.call(this, arguments[0], arguments[1], arguments[2]);
-                this.setEasing(arguments[2]);
-            } else {
-                MOTION.call(this, arguments[1], arguments[2], arguments[3]);
-                this.setEasing(arguments[3]);
-            }
-        }
+            } 
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype);
-    MOTION.Tween.prototype.constrctor = MOTION.Tween;
+    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype.updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
@@ -35,7 +25,7 @@
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
-        var p = (typeof arguments[0] == 'string') ? new MOTION.NumberProperty(this._object, arguments[0], arguments[1]) : new MOTION.NumberProperty(object, property, end);
+        var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
 
         this._properties.push(p);
         this._propertyMap[p.getField()] = p;
@@ -112,23 +102,23 @@
                 this._properties[i].setBegin();
 
         if (this._onStart)
-            this._onStart(window, this._object);
+            this._onStart(this._object);
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
-            this._onEnd(window, this._object);
+            this._onEnd(this._object);
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
         this.updateProperties();
 
         if (this._onUpdate)
-            this._onUpdate(window, this._object);
+            this._onUpdate(this._object);
     };
 
     MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
-            this._onRepeat(window, this._object);
+            this._onRepeat(this._object);
     };
 })(MOTION);

@@ -10,23 +10,22 @@ Production:
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js
 
 #Examples  
-Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/CircularNetwork2.html)
+[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/motion.html) The core class MOTION is used to count from a starting time of 0 to an ending time in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
 
-[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/PieChart2.html)
+[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/tween.html) MOTION.Tween is used to ease a nummber variable or object property from a starting value to an ending value within a duration. MOTION.Tween can tween multiple variables or object properties together. 
 
-[Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Sequence.html)
+The "motion controllers" MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and MOTION.Keyframe are used to playback any MOTION object using the same counter.
 
-[Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html)
+[MOTION.Parallel](http://ekeneijeoma.github.io/ijeomamotion.js/examples/parallel.html) MOTION.Parallel is used to play multiple tweens together.
+
+[MOTION.Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/sequence.html) MOTION.Sequence is used to play tweens one after the other.
+
+[MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/timeline.html) MOTION.Timeline is used to play all of the above at any time using MOTION.Keyframes.
+
+Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork2.html)
 
 #Getting Started 
-The core class MOTION is used to count from a starting time of 0 to an ending time in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
-
-```javascript 
-new MOTION(duration,delay)  
-```
-
-MOTION.Tween is used to ease a nummber variable or object property from a starting value to an ending value within a duration. MOTION.Tween can tween multiple variables or object properties together. The "motion controller" MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and MOTION.Keyframe are used to playback any MOTION object using the same counter. MOTION.Parallel is used to play multiple tweens together. MOTION.Sequence is used to play tweens one after the other. MOTION.Timeline is used to play all of the above at any time using MOTION.Keyframes.
-  
+ 
 There are 4 ways to create (istantiate) Tweens.
 ```javascript
 new MOTION.Tween(object, property, end, duration, delay, easing)

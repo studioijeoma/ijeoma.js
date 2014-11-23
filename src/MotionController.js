@@ -28,7 +28,7 @@
 
             if (this._isSeeking) {
                 if (m.isInsidePlayingTime(this.getTime()))
-                    m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m.isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
@@ -179,5 +179,9 @@
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this.updateMotions();
         MOTION.prototype.dispatchChangedEvent.call(this)
+    };
+
+    _map = function(n, start1, stop1, start2, stop2) {
+        return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
     };
 })(MOTION)

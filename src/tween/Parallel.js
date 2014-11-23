@@ -12,12 +12,12 @@
 
             if (this._isSeeking) {
                 if (m.isInsidePlayingTime(this.getTime()))
-                    m.seek(map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m.isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
                     m.seek(0);
-            } else if (m.isInsidePlayingTime(this.getTime())) {
+            } else if (m.isInsidePlayingTime(this.getTime())) { 
                 if (m.isPlaying())
                     m.update(this.getTime());
                 else
@@ -31,5 +31,4 @@
             }
         }
     };
-
 })(MOTION)

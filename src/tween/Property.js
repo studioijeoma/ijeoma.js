@@ -1,12 +1,14 @@
 (function(MOTION, undefined) {
-    MOTION.Property = function(object, field, end) {
-        this._object = object;
-        this._field = field;
+    MOTION.Property = function(object, field, values) {
+        this._object = (typeof arguments[0] == 'object') ? object : window;
+        this._field = (typeof arguments[0] == 'object') ? field : arguments[0];
 
-        this._id = 'Property' + _idMap['Property']++;
+        this._id = 'Property' + _idMap['Property'] ++;
 
-        this._begin = (typeof object[field] == "undefined") ? 0 : object[field];
-        this._end = (typeof end == "undefined") ? 0 : end;
+        var values = (typeof arguments[0] == 'object') ? values : arguments[1]
+
+        this._begin = this._object[this._field] = (typeof values == 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
+        this._end = (typeof values == 'number') ? values : values[1]; 
 
         this._position = 0;
     }
@@ -30,8 +32,7 @@
     };
 
     MOTION.Property.prototype.setBegin = function(begin) {
-        if (typeof begin === 'undefined') {
-            // this._begin = (typeof this._object[this._field] === 'undefined') ? 0 : this._object[this._field];
+        if (typeof begin === 'undefined') { 
             if (typeof this._object[this._field] === 'undefined')
                 this._begin = 0
             else

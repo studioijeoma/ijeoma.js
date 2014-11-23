@@ -1,109 +1,88 @@
 <head>
-    <script language="javascript" src="p5.js"></script>
-    <script language="javascript" src="../build/ijeomamotion.js"></script>
-    <script type="text/javascript">
-    var c1, c2, c3;
-    var y1, y2, y3;
-    var w;
-
-    var tl;
-
-    function setup() {
-        createCanvas(windowWidth, windowHeight);
-
-        c1 = c2 = c3 = 255;
-        y1 = y2 = y3 = -height;
-        w = width / 5;
-
-        var d = 1;
-
-        tl = new MOTION.Timeline();
-
-        tl.add(new MOTION.Tween(d)
-            .add("y1", height)
-            .add("c1", 0), 0);
-
-        tl.add(new MOTION.Tween(d)
-            .add("y2", height)
-            .add("c2", 0), d * 2);
-
-        tl.add(new MOTION.Tween(d)
-            .add("y3", height)
-            .add("c3", 0), d * 4);
-
-        tl.repeat().reverse().play();
-    }
-
-    function draw() {
-        background(255);
-
-        tl.update();
-
-        noStroke();
-        fill(0);
-
-        noStroke();
-        fill(c1);
-        rect(0, y1, w, height);
-
-        fill(c2);
-        rect(w * 2, y2, w, height);
-
-        fill(c3);
-        rect(w * 4, y3, w, height);
-
-        var time = tl.get(0).getTime() + " / " + tl.get(0).getDuration();
-        fill((tl.get(0).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, 25, height - 25);
-
-        time = tl.get(1).getTime() + " / " + tl.get(1).getDuration();
-        fill((tl.get(1).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 2 + 25, height - 25);
-
-        time = tl.get(2).getTime() + " / " + tl.get(2).getDuration();
-        fill((tl.get(2).isPlaying() ? color(0, 255, 0) : color(255, 0, 0)));
-        text(time, w * 4 + 25, height - 25);
-
-        time = tl.getTime() + " / " + tl.getDuration();
-        fill(0);
-        text(time, width - textWidth(time) - 25, 25);
-    }
-
-
-    function keyPressed() {
-        if (key == '1')
-            tl.gotoAndPlay(0);
-        else if (key == '2')
-            tl.gotoAndPlay(2);
-        else if (key == '3')
-            tl.gotoAndPlay(4);
-        else
-            tl.play();
-    }
-
-    function mousePressed() {
-        tl.pause();
-    }
-
-
-    function mouseReleased() {
-        tl.resume();
-    }
-
-    function mouseDragged() {
-        tl.seek(norm(mouseX, 0, width));
-    }
-
-    function randomColor() {
-        return color(random(255), random(255), random(255));
-    }
-    </script>
     <style>
     body {
         padding: 0;
+    }
+    div {
+        z-index: -100
     }
     </style>
 </head>
 
 <body>
+    <button id="one">Play 1st keyframe</button>
+    <button id="two">Play 2nd keyframe</button>
+    <button id="three">Play 3rd keyframe</button>
+    <button id="four">Play 4th keyframe</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        var rectH = window.innerHeight;
+
+        rect1 = document.createElement('div');
+        rect1.style.cssText = 'position: absolute; left:0; width:25%; height:' + rectH + 'px; background-color:black;';
+
+        rect2 = document.createElement('div');
+        rect2.style.cssText = 'position: absolute; left:25%; width:25%; height:' + rectH + 'px; background-color:black;';
+
+        rect3 = document.createElement('div');
+        rect3.style.cssText = 'position: absolute; left:50%; width:25%; height:' + rectH + 'px; background-color:black;';
+
+        rect4 = document.createElement('div');
+        rect4.style.cssText = 'position: absolute; left:75%; width:25%; height:' + rectH + 'px; background-color:black;';
+
+        document.body.appendChild(rect1);
+        document.body.appendChild(rect2);
+        document.body.appendChild(rect3);
+        document.body.appendChild(rect4);
+
+        duration = 1000;
+
+        timeline = new MOTION.Timeline()
+            .add(new MOTION.Tween('rect1Y', [-rectH, rectH], duration).onUpdate(function() {
+                rect1.style.top = rect1Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect1.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }), 0)
+            .add(new MOTION.Tween('rect2Y', [rectH, -rectH], duration).onUpdate(function() {
+                rect2.style.top = rect2Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }), duration)
+            .add(new MOTION.Tween('rect3Y', [-rectH, rectH], duration).onUpdate(function() {
+                rect3.style.top = rect3Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect3.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }), duration * 2)
+            .add(new MOTION.Tween('rect4Y', [rectH, -rectH], duration).onUpdate(function() {
+                rect4.style.top = rect4Y + 'px';
+                var c = Math.round(this.getPosition() * 255);
+                rect4.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            }), duration * 3)
+            .play();
+
+        document.getElementById('one').onclick = function() {
+            timeline.gotoPlay(0)
+        }
+        document.getElementById('two').onclick = function() {
+            timeline.gotoPlay(duration)
+        }
+        document.getElementById('one').onclick = function() {
+            timeline.gotoPlay(duration * 2)
+        }
+        document.getElementById('one').onclick = function() {
+            timeline.gotoPlay(duration * 3)
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        timeline.update(time);
+    }
+    </script>
 </body>

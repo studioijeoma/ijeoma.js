@@ -11,12 +11,8 @@
     _motions = [];
     _motionMap = [];
 
-    /**
-     * Returns the duration of the HTML5 media element.
-     *
-     * @method duration
-     * @return {Number} duration
-     */
+    _usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
+ 
     MOTION = function(duration, delay) {
         if (this.isTween())
             this._id = 'Tween' + _idMap['Tween']++;
@@ -144,7 +140,7 @@
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        this._playTime = (window.performance !== undefined && window.performance.now !== undefined) ? window.performance.now() : Date.now();
+        this._playTime = (_usePerformance) ? window.performance.now() : Date.now();
 
         return this;
     };
@@ -218,7 +214,7 @@
     };
 
     MOTION.prototype.updateTime = function() { 
-        this._time = ((window.performance !== undefined && window.performance.now !== undefined) ? window.performance.now() : Date.now()) - this._playTime;
+        this._time = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
@@ -235,7 +231,8 @@
     };
 
     MOTION.prototype.setTime = function(time) { 
-        this._time = time - this._playTime;
+        // this._time = time - this._playTime;
+        this._time = time;
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
@@ -434,22 +431,22 @@
 
     MOTION.prototype.dispatchStartedEvent = function() {
         if (this._onStart)
-            this._onStart(window);
+            this._onStart();
     };
 
     MOTION.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
-            this._onEnd(window);
+            this._onEnd();
     };
 
     MOTION.prototype.dispatchChangedEvent = function() {
         if (this._onUpdate)
-            this._onUpdate(window);
+            this._onUpdate();
     };
 
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
-            this._onRepeat(window);
+            this._onRepeat();
     };
 
     MOTION.prototype.kill = function() {
