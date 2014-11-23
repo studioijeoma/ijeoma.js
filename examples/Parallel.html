@@ -3,15 +3,16 @@
     body {
         padding: 0;
     }
-    button {
-        z-index: 100
+    div {
+        z-index: -100
     }
     </style>
 </head>
 
 <body>
-    <button id="stop">Play</button>
-    <button id="play">Stop</button>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button>
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
@@ -31,6 +32,8 @@
         document.body.appendChild(rect1);
         document.body.appendChild(rect2);
 
+        time = document.getElementById('time')
+
         parallel = new MOTION.Parallel()
             .add(new MOTION.Tween('rect1Y', [-rectH, rectH], 1500).onUpdate(function() {
                 rect1.style.top = rect1Y + 'px';
@@ -42,6 +45,9 @@
                 var c = Math.round(this.getPosition() * 255);
                 rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
             }))
+            .onUpdate(function() {
+                time.innerHTML = Math.round(this.getTime())
+            })
             .play();
 
         document.getElementById('play').onclick = function() {

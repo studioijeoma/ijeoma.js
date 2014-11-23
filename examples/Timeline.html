@@ -9,11 +9,13 @@
     </style>
 </head>
 
-<body>
+<body> 
     <button id="one">Play 1st keyframe</button>
     <button id="two">Play 2nd keyframe</button>
     <button id="three">Play 3rd keyframe</button>
     <button id="four">Play 4th keyframe</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button>
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
@@ -41,6 +43,8 @@
         document.body.appendChild(rect3);
         document.body.appendChild(rect4);
 
+        time = document.getElementById('time')
+
         duration = 1000;
 
         timeline = new MOTION.Timeline()
@@ -64,19 +68,25 @@
                 var c = Math.round(this.getPosition() * 255);
                 rect4.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
             }), duration * 3)
+            .onUpdate(function() {
+                time.innerHTML = Math.round(this.getTime())
+            })
             .play();
 
         document.getElementById('one').onclick = function() {
-            timeline.gotoPlay(0)
+            timeline.gotoAndPlay(0);
         }
         document.getElementById('two').onclick = function() {
-            timeline.gotoPlay(duration)
+            timeline.gotoAndPlay(duration);
         }
-        document.getElementById('one').onclick = function() {
-            timeline.gotoPlay(duration * 2)
+        document.getElementById('three').onclick = function() {
+            timeline.gotoAndPlay(duration * 2);
         }
-        document.getElementById('one').onclick = function() {
-            timeline.gotoPlay(duration * 3)
+        document.getElementById('four').onclick = function() {
+            timeline.gotoAndPlay(duration * 3);
+        }
+        document.getElementById('stop').onclick = function() {
+            timeline.stop()
         }
     }
 

@@ -35,7 +35,7 @@
                     m.seek(0);
             } else if (m.isInsidePlayingTime(this.getTime())) {
                 if (m.isPlaying())
-                    m.update(this.getTime());
+                    m.update(this.getTime(), false);
                 else
                     m.play();
             } else if (m.isPlaying()) 

@@ -12,18 +12,18 @@
     _motionMap = [];
 
     _usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
- 
+
     MOTION = function(duration, delay) {
         if (this.isTween())
-            this._id = 'Tween' + _idMap['Tween']++;
+            this._id = 'Tween' + _idMap['Tween'] ++;
         else if (this.isParallel())
-            this._id = 'Parallel' + _idMap['Parallel']++;
+            this._id = 'Parallel' + _idMap['Parallel'] ++;
         else if (this.isSequence())
-            this._id = 'Sequence' + _idMap['Sequence']++;
+            this._id = 'Sequence' + _idMap['Sequence'] ++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + _idMap['Timeline']++;
+            this._id = 'Timeline' + _idMap['Timeline'] ++;
         else
-            this._id = 'Motion' + _idMap['Motion']++;
+            this._id = 'Motion' + _idMap['Motion'] ++;
 
         this._name = '';
 
@@ -213,7 +213,7 @@
         }
     };
 
-    MOTION.prototype.updateTime = function() { 
+    MOTION.prototype.updateTime = function() {
         this._time = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
 
         if (this._isReversing && this._reverseTime !== 0)
@@ -230,9 +230,8 @@
         return this._name;
     };
 
-    MOTION.prototype.setTime = function(time) { 
-        // this._time = time - this._playTime;
-        this._time = time;
+    MOTION.prototype.setTime = function(time) {
+        this._time = time - ((this._hasController) ? 0 : this._playTime);
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
@@ -254,7 +253,7 @@
     };
 
     MOTION.prototype.getPosition = function() {
-        var t = this.getTime(); 
+        var t = this.getTime();
 
         return (t > 0) ? t / this._duration : 0;
     };
