@@ -10,17 +10,17 @@ Production:
 https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js
 
 #Examples  
-[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/motion.html) The core class MOTION is used to count from a starting time of 0 to an ending time in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
+[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/motion.html) the core class, is used to count from a starting time of 0 to an ending duration in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
 
-[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/tween.html) MOTION.Tween is used to ease a nummber variable or object property from a starting value to an ending value within a duration. MOTION.Tween can tween multiple variables or object properties together. 
+[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/tween.html) is used to ease a nummber variable or object property from a starting value to an ending value within a duration. MOTION.Tween can tween multiple variables and object properties together. 
 
-The "motion controllers" MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and MOTION.Keyframe are used to playback any MOTION object using the same counter.
+The "motion controllers", MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and MOTION.Keyframe are used to playback any MOTION object using the same MOTION count.
 
-[MOTION.Parallel](http://ekeneijeoma.github.io/ijeomamotion.js/examples/parallel.html) MOTION.Parallel is used to play multiple tweens together.
+[MOTION.Parallel](http://ekeneijeoma.github.io/ijeomamotion.js/examples/parallel.html) is used to play multiple at the same time.
 
-[MOTION.Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/sequence.html) MOTION.Sequence is used to play tweens one after the other.
+[MOTION.Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/sequence.html) is used to play tweens one after the other.
 
-[MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/timeline.html) MOTION.Timeline is used to play all of the above at any time using MOTION.Keyframes.
+[MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/timeline.html) is used to play all of the above at any time using MOTION.Keyframes.
 
 Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork2.html)
 
