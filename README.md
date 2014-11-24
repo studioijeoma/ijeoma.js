@@ -1,17 +1,10 @@
 #ijeomamotion.js
  
-<<<<<<< HEAD
 A Javascript library for creating animations. Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. This library based on [ijeomamotion for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeomamotion.js).
-=======
-A Javascript library (which supports p5.js) for sketching animations. Ijeoma (ee-JOH-mah) means safe journey in Igbo, the language of my family from Nigeria. I started writing this a while back in Java for Processing then ported it to JS for processing.js and recently I've rewrote it for JS and p5.js.
->>>>>>> MotionContoller fixed updateTweens
 
 #Download 
-Developement: 
-https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.js
-
-Production: 
-https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js
+[Developement: ijeomamotion.js](https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.js)
+[Production: ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js)
 
 #Examples  
 [MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/motion.html) the core class, is used to count from a starting time of 0 to an ending duration in seconds and has playback functions to pause, resume, delay, repeat and etc as well as callback functions for start, update and end events. 
