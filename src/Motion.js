@@ -15,20 +15,19 @@
 
     MOTION = function(duration, delay) {
         if (this.isTween())
-            this._id = 'Tween' + _idMap['Tween'] ++;
+            this._id = 'Tween' + _idMap['Tween']++;
         else if (this.isParallel())
-            this._id = 'Parallel' + _idMap['Parallel'] ++;
+            this._id = 'Parallel' + _idMap['Parallel']++;
         else if (this.isSequence())
-            this._id = 'Sequence' + _idMap['Sequence'] ++;
+            this._id = 'Sequence' + _idMap['Sequence']++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + _idMap['Timeline'] ++;
+            this._id = 'Timeline' + _idMap['Timeline']++;
         else
-            this._id = 'Motion' + _idMap['Motion'] ++;
+            this._id = 'Motion' + _idMap['Motion']++;
 
         this._name = '';
 
         this._playTime;
-        this._playCount = 0;
 
         this._time = 0;
         this._timeScale = 1;
@@ -48,16 +47,16 @@
         this._isReversing = false;
         this._isSeeking = false;
 
-        this._isAutoUpdating = true;
+        this._isAutoUpdating = false;
 
         this._order = 0;
 
         this._hasController = false;
 
-        this._onStart = undefined;
-        this._onEnd = undefined;
-        this._onUpdate = undefined;
-        this._onRepeat = undefined;
+        this._onStart = null;
+        this._onEnd = null;
+        this._onUpdate = null;
+        this._onRepeat = null;
 
         this._valueMode = MOTION.ABSOLUTE;
 
@@ -66,33 +65,49 @@
 
     MOTION.REVISION = '1';
 
-    MOTION.SECONDS = "seconds";
-    MOTION.FRAMES = "frames";
-
-    _timeMode = MOTION.SECONDS;
-
     MOTION.RELATIVE = 'relative';
     MOTION.ABSOLUTE = 'absolute';
 
-    MOTION.REVERSE = "reverse";
-    MOTION.NO_REVERSE = "noReverse";
-
-    MOTION.ONCE = "once";
-    MOTION.REPEAT = "repeat";
-
-    MOTION.setTimeMode = function(timeMode) {
-        _timeMode = timeMode;
-
-        return this;
+    MOTION.playAll = function() {
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i].play();
     };
 
-    MOTION.getTimeMode = function() {
-        return _timeMode;
+    MOTION.stopAll = function() {
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i].stop();
+    };
+
+    MOTION.resumeAll = function() {
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i].resume();
+    };
+
+    MOTION.pauseAll = function() {
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i].pause();
+    };
+
+    MOTION.seekAll = function(t) {
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i].seek(t);
     };
 
     MOTION.remove = function(child) {
         var i = _motions.indexOf(child);
         _motions.splice(i, 1);
+    };
+
+    MOTION.removeAll = function(child) {
+        _motions = [];
+        _motionsMap = [];
+
+        _idMap = [];
     };
 
     MOTION.isPlaying = function() {
@@ -111,7 +126,6 @@
         this.seek(0);
         this.resume();
 
-        this._playCount++;
         this._repeatTime = 0;
 
         return this;
@@ -121,7 +135,6 @@
         this.seek(1);
         this.pause();
 
-        this._playCount = 0;
         this._repeatTime = 0;
 
         this.dispatchEndedEvent();
@@ -140,7 +153,7 @@
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        this._playTime = (_usePerformance) ? window.performance.now() : Date.now();
+        this._playTime = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
 
         return this;
     };
@@ -200,7 +213,7 @@
 
                 if (this._isRepeating && (this._repeatDuration === 0 || this._repeatTime < this._repeatDuration)) {
                     this.seek(0);
-                    this.resume(time);
+                    this.resume();
 
                     this._repeatTime++;
 
@@ -231,7 +244,8 @@
     };
 
     MOTION.prototype.setTime = function(time) {
-        this._time = time - ((this._hasController) ? 0 : this._playTime);
+        // this._time = time - ((this._hasController) ? 0 : this._playTime);
+        this._time = time;
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
@@ -328,14 +342,6 @@
         return this._valueMode;
     };
 
-    MOTION.prototype.isRelative = function() {
-        return this._valueMode == MOTION.RELATIVE;
-    };
-
-    MOTION.prototype.isAbsolute = function() {
-        return this._valueMode == MOTION.ABSOLUTE;
-    };
-
     MOTION.prototype.autoUpdate = function() {
         this._isAutoUpdating = true;
 
@@ -348,20 +354,12 @@
         return this;
     };
 
-    MOTION.prototype.isAutoUpdating = function() {
-        return this._isAutoUpdating;
-    };
-
     MOTION.prototype.isDelaying = function() {
         return (this._time <= this._delay);
     };
 
     MOTION.prototype.isPlaying = function() {
         return this._isPlaying;
-    };
-
-    MOTION.prototype.isReversing = function() {
-        return this._isReversing;
     };
 
     MOTION.prototype.isInsideDelayingTime = function(value) {
@@ -394,14 +392,6 @@
 
     MOTION.prototype.isKeyframe = function() {
         return this instanceof MOTION.Keyframe;
-    };
-
-    MOTION.prototype.usingSeconds = function() {
-        return _timeMode == MOTION.SECONDS;
-    };
-
-    MOTION.prototype.usingFrames = function() {
-        return _timeMode == MOTION.FRAMES;
     };
 
     MOTION.prototype.onStart = function(func) {

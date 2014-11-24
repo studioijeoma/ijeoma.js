@@ -12,15 +12,13 @@
 <body>
     <button id="play">Play</button>
     <button id="stop">Stop</button>
-    <button id="time"></button>
+    <button id="time"></button>  
 
-    <script src="js/RequestAnimationFrame.js"></script>
+    <!-- // <script src="js/RequestAnimationFrame.js"></script> -->
     <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script language="javascript">
     setup();
-    draw();
-
-    flag = false;
+    draw(); 
 
     function setup() {
         rect = document.createElement('div');
@@ -44,11 +42,13 @@
             .play()
 
         document.getElementById('play').onclick = function() {
-            tween.resume()
+            tween.play()
         }
         document.getElementById('stop').onclick = function() {
-            tween.pause()
+            tween.stop()
         }
+
+        flag = false;
 
         document.onmousedown = function(e) {
             flag = true;
@@ -56,10 +56,8 @@
         }
 
         document.onmousemove = function(e) {
-            if (flag){
-                console.log(e.clientX / window.innerWidth)
-                tween.seek(e.clientX / window.innerWidth)
-            }
+            if (flag) 
+                tween.seek(e.clientX / window.innerWidth) 
         }
 
         document.onmouseup = function(e) {
@@ -70,7 +68,7 @@
 
     function draw(time) {
         requestAnimationFrame(draw);
-        tween.update(time);
+        tween.update();
     }
     </script>
 </body>

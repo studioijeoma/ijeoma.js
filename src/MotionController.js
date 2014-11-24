@@ -54,7 +54,7 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (t.isRelative()) ? p.getField() : t._id + '.' + p.getField();
+                var name = (this._valueMode == MOTION.RELATIVE) ? p.getField() : t._id + '.' + p.getField();
                 var order = 0;
 
                 if (name in orderMap) {

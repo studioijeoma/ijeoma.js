@@ -16,7 +16,7 @@
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
-    <script language="javascript">
+    <script language="javascript"> 
     setup();
     draw();
 
@@ -56,11 +56,28 @@
         document.getElementById('stop').onclick = function() {
             sequence.stop()
         }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            sequence.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag) 
+                sequence.seek(e.clientX / window.innerWidth) 
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            sequence.resume();
+        }
     }
 
     function draw(time) {
         requestAnimationFrame(draw);
-        sequence.update(time);
+        sequence.update();
     }
     </script>
 </body>
