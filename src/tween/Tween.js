@@ -19,7 +19,7 @@
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype.updateProperties = function() {
+    MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
             this._properties[i].update(this._easing(this.getPosition()));
     };
@@ -111,7 +111,7 @@
     };
 
     MOTION.Tween.prototype.dispatchChangedEvent = function() {
-        this.updateProperties();
+        this._updateProperties();
 
         if (this._onUpdate)
             this._onUpdate(this._object);

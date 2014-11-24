@@ -1,33 +1,34 @@
 (function(window, undefined) {
-    _idMap = [];
-    _idMap['Motion'] = 0;
-    _idMap['Tween'] = 0;
-    _idMap['Property'] = 0;
-    _idMap['Parallel'] = 0;
-    _idMap['Sequence'] = 0;
-    _idMap['Timeline'] = 0;
-    _idMap['KeyFrame'] = 0;
+    _ids = [];
+    _ids['Motion'] = 0;
+    _ids['Tween'] = 0;
+    _ids['Property'] = 0;
+    _ids['Parallel'] = 0;
+    _ids['Sequence'] = 0;
+    _ids['Timeline'] = 0;
+    _ids['KeyFrame'] = 0;
 
     _motions = [];
-    _motionMap = [];
 
     _usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
 
+    _time = 0;
+
     MOTION = function(duration, delay) {
         if (this.isTween())
-            this._id = 'Tween' + _idMap['Tween']++;
+            this._ids = 'Tween' + _ids['Tween']++;
         else if (this.isParallel())
-            this._id = 'Parallel' + _idMap['Parallel']++;
+            this._ids = 'Parallel' + _ids['Parallel']++;
         else if (this.isSequence())
-            this._id = 'Sequence' + _idMap['Sequence']++;
+            this._ids = 'Sequence' + _ids['Sequence']++;
         else if (this.isTimeline())
-            this._id = 'Timeline' + _idMap['Timeline']++;
+            this._ids = 'Timeline' + _ids['Timeline']++;
         else
-            this._id = 'Motion' + _idMap['Motion']++;
+            this._ids = 'Motion' + _ids['Motion']++;
 
         this._name = '';
 
-        this._playTime;
+        this._playTime = 0;
 
         this._time = 0;
         this._timeScale = 1;
@@ -107,8 +108,16 @@
         _motions = [];
         _motionsMap = [];
 
-        _idMap = [];
+        _ids = [];
     };
+
+    MOTION.update = function(time) {
+        _time = time !== undefined ? time : ((_usePerformance) ? window.performance.now() : Date.now());
+
+        for (var i = 0; i < _motions.length; i++)
+            if (!_motions[i]._hasController)
+                _motions[i]._update();
+    }
 
     MOTION.isPlaying = function() {
         for (var i = 0; i < _motions.length; i++)
@@ -153,7 +162,8 @@
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
 
-        this._playTime = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+        // this._playTime = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+        this._playTime = _time - this._playTime;
 
         return this;
     };
@@ -199,10 +209,10 @@
         return this;
     };
 
-    MOTION.prototype.update = function(time) {
+    MOTION.prototype._update = function(time) {
         if (this._isPlaying) {
             if (typeof time == 'undefined')
-                this.updateTime();
+                this._updateTime();
             else
                 this.setTime(time);
 
@@ -226,8 +236,9 @@
         }
     };
 
-    MOTION.prototype.updateTime = function() {
-        this._time = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+    MOTION.prototype._updateTime = function() {
+        // this._time = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+        this._time = _time - this._playTime;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
@@ -436,12 +447,7 @@
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
             this._onRepeat();
-    };
-
-    MOTION.prototype.kill = function() {
-        MOTION.remove(this);
-        delete this;
-    };
+    }; 
 
     window.MOTION = MOTION;
 })(window)

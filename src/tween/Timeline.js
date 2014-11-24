@@ -22,22 +22,18 @@
                 this.insert(motion, time);
         } else {
             if (typeof time == 'undefined') {
-                var c = this._motionMap.get(motion.getName());
-                c.add(motion);
-
                 this._motions[this._motions.indexOf(c)] = c;
             } else {
                 var key = time + '';
 
-                if (key in this._motionMap)
-                    this._motionMap[key].add(motion);
-                else {
-                    var k = new MOTION.Keyframe(time + '');
-                    k.add(motion);
+                // if (key in this._motionMap)
+                //     this._motionMap[key].add(motion);
+                // else {
+                var k = new MOTION.Keyframe(time + '');
+                k.add(motion);
 
-                    this.insert(k, time);
-                }
-
+                this.insert(k, time);
+                // } 
             }
         }
 
@@ -47,8 +43,8 @@
     MOTION.Timeline.prototype.get = function(index) {
         if (typeof arguments[0] == 'number')
             return this._motions[arguments[0]];
-        else if (typeof arguments == 'string')
-            return this._motionMap[arguments[0]];
+        // else if (typeof arguments == 'string')
+        //     return this._motionMap[arguments[0]];
         else {
             var current = [];
 
@@ -67,12 +63,14 @@
         if (typeof arguments[0] == 'number') {
             this.seek(arguments[0] / this._duration);
             this.resume();
-        } else if (typeof arguments[0] == 'string') {
-            var k = this.get(arguments[0]);
+        }
+        // else if (typeof arguments[0] == 'string') {
+        //     var k = this.get(arguments[0]);
 
-            this.seek(k.getPlayTime() / this._duration);
-            this.resume();
-        } else if (typeof arguments[0] == 'object') {
+        //     this.seek(k.getPlayTime() / this._duration);
+        //     this.resume();
+        // } 
+        else if (typeof arguments[0] == 'object') {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.resume();
         }
@@ -82,12 +80,14 @@
         if (typeof arguments[0] == 'number') {
             this.seek(arguments[0] / this._duration);
             this.pause();
-        } else if (typeof arguments[0] == 'string') {
-            var k = this.get(arguments[0]);
+        }
+        // else if (typeof arguments[0] == 'string') {
+        //     var k = this.get(arguments[0]);
 
-            this.seek(k.getPlayTime() / this._duration);
-            this.pause();
-        } else if (typeof arguments[0] == 'object') {
+        //     this.seek(k.getPlayTime() / this._duration);
+        //     this.pause();
+        // } 
+        else if (typeof arguments[0] == 'object') {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.pause();
         }

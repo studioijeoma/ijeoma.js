@@ -16,9 +16,7 @@
 
     MOTION.Sequence.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]];
-        else if (typeof arguments[0] == 'string')
-            return this._motions[arguments[0]];
+            return this._motions[arguments[0]]; 
         else
             return this._current;
     };
@@ -28,7 +26,7 @@
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateMotions();
+        this._updateMotions();
 
          if (this._isPlaying) {
             for (var i = 0; i < this._motions.length; i++) {

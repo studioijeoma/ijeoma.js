@@ -2,9 +2,7 @@
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
-        this._motions = [];
-        this._motionMap = [];
-
+        this._motions = [];  
         this._tweens = [];
 
         if (motions) this.addAll(motions);
@@ -22,7 +20,7 @@
         return this;
     };
 
-    MOTION.MotionController.prototype.updateMotions = function() {
+    MOTION.MotionController.prototype._updateMotions = function() {
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
@@ -35,7 +33,7 @@
                     m.seek(0);
             } else if (m.isInsidePlayingTime(this.getTime())) {
                 if (m.isPlaying())
-                    m.update(this.getTime(), false);
+                    m._update(this.getTime(), false);
                 else
                     m.play();
             } else if (m.isPlaying()) 
@@ -43,7 +41,7 @@
         }
     };
 
-    MOTION.MotionController.prototype.updateTweens = function() {
+    MOTION.MotionController.prototype._updateTweens = function() {
         var orderMap = [];
         var ppropertyMap = [];
 
@@ -74,7 +72,7 @@
         }
     };
 
-    MOTION.MotionController.prototype.updateDuration = function() {
+    MOTION.MotionController.prototype._updateDuration = function() {
         for (var i = 0; i < this._motions.length; i++)
             this._duration = Math.max(this._duration, this._motions[i].getDelay() + this._motions[i].getDuration());
     };
@@ -85,9 +83,7 @@
 
     MOTION.MotionController.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]];
-        else if (typeof arguments[0] == 'string')
-            return this._motionMap[arguments[0]];
+            return this._motions[arguments[0]]; 
         return this._motions;
     };
 
@@ -115,15 +111,12 @@
 
         this._motions.push(motion);
 
-        if (motion.getName() != null)
-            this._motionMap[motion.getName()] = motion;
-
         if (motion.isTween()) {
             this._tweens.push(motion);
-            this.updateTweens();
+            this._updateTweens();
         }
 
-        this.updateDuration();
+        this._updateDuration();
 
         return this;
     };
@@ -134,28 +127,22 @@
         if (typeof arguments[0] == 'number') {
             i = arguments[0]
             motion = this._motions[i]
-        } else if (typeof arguments[0] == 'name') {
-            motion = this._motionMap[arguments[0]]
-            i = this._motions.indexOf(motion);
         } else if (typeof arguments[0] == 'object') {
             motion = arguments[0]
             i = this._motions.indexOf(motion);
         }
 
         if (i != -1)
-            this._motions.splice(i, 1);
-
-        if (motion.getName() in this._motionMap)
-            delete this._motionMap[motion.getName()];
+            this._motions.splice(i, 1); 
 
         if (motion.isTween()) {
             i = this._tweens.indexOf(motion);
             this._tweens.splice(i, 1);
 
-            this.updateTweens();
+            this._updateTweens();
         }
 
-        this.updateDuration();
+        this._updateDuration();
 
         motion.kill();
 
@@ -177,7 +164,7 @@
     };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
-        this.updateMotions();
+        this._updateMotions();
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 

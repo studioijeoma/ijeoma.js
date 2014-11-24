@@ -6,7 +6,7 @@
     MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Parallel.prototype.constructor = MOTION.Parallel;
 
-    MOTION.Parallel.prototype.updateMotions = function() {
+    MOTION.Parallel.prototype._updateMotions = function() {
         for (var i = 0; i < this._motions.length; i++) {
             var m = this._motions[i];
 
@@ -19,7 +19,7 @@
                     m.seek(0);
             } else if (m.isInsidePlayingTime(this.getTime())) {
                 if (m.isPlaying())
-                    m.update(this.getTime(), false);
+                    m._update(this.getTime(), false);
                 else
                     m.play();
             } else if (m.isPlaying()) {
