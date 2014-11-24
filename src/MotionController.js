@@ -2,17 +2,17 @@
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
-        this._motions = [];  
+        this._motions = [];
         this._tweens = [];
 
         if (motions) this.addAll(motions);
     };
 
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
-    MOTION.MotionController.prototype.constructor = MOTION.MotionController
+    MOTION.MotionController.prototype.constructor = MOTION.MotionController;
 
     MOTION.MotionController.prototype.reverse = function(_valueMode) {
-        MOTION.prototype.reverse.call(this)
+        MOTION.prototype.reverse.call(this);
 
         for (var i = 0; i < this._motions.length; i++)
             this._motions[i].reverse();
@@ -36,8 +36,8 @@
                     m._update(this.getTime(), false);
                 else
                     m.play();
-            } else if (m.isPlaying()) 
-                m.stop(); 
+            } else if (m.isPlaying())
+            m.stop();
         }
     };
 
@@ -62,7 +62,7 @@
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
                 } else
-                    p.setBegin();
+                p.setBegin();
 
                 p.setOrder(order);
 
@@ -83,7 +83,7 @@
 
     MOTION.MotionController.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]]; 
+            return this._motions[arguments[0]];
         return this._motions;
     };
 
@@ -125,15 +125,15 @@
         var motion, i;
 
         if (typeof arguments[0] == 'number') {
-            i = arguments[0]
-            motion = this._motions[i]
+            i = arguments[0];
+            motion = this._motions[i];
         } else if (typeof arguments[0] == 'object') {
-            motion = arguments[0]
+            motion = arguments[0];
             i = this._motions.indexOf(motion);
         }
 
         if (i != -1)
-            this._motions.splice(i, 1); 
+            this._motions.splice(i, 1);
 
         if (motion.isTween()) {
             i = this._tweens.indexOf(motion);

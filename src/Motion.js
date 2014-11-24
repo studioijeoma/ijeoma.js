@@ -25,7 +25,7 @@
             this._ids = 'Timeline' + _ids['Timeline']++;
         else
             this._ids = 'Motion' + _ids['Motion']++;
-
+ 
         this._name = '';
 
         this._playTime = 0;

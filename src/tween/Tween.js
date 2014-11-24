@@ -1,4 +1,4 @@
-(function(MOTION, undefined) {
+(function(MOTION, undefined) { 
         MOTION.Tween = function(object, property, end, duration, delay, easing) {  
             this._properties = [];
             this._propertyMap = [];
@@ -17,7 +17,7 @@
             } 
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween;
+    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween
 
     MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
@@ -26,7 +26,7 @@
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
-
+ 
         this._properties.push(p);
         this._propertyMap[p.getField()] = p;
 
@@ -73,7 +73,7 @@
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
     };
-
+ 
     MOTION.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;

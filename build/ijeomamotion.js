@@ -185,7 +185,7 @@ Bounce.InOut = function(t) {
             this._ids = 'Timeline' + _ids['Timeline']++;
         else
             this._ids = 'Motion' + _ids['Motion']++;
-
+ 
         this._name = '';
 
         this._playTime = 0;
@@ -614,17 +614,17 @@ Bounce.InOut = function(t) {
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
-        this._motions = [];  
+        this._motions = [];
         this._tweens = [];
 
         if (motions) this.addAll(motions);
     };
 
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
-    MOTION.MotionController.prototype.constructor = MOTION.MotionController
+    MOTION.MotionController.prototype.constructor = MOTION.MotionController;
 
     MOTION.MotionController.prototype.reverse = function(_valueMode) {
-        MOTION.prototype.reverse.call(this)
+        MOTION.prototype.reverse.call(this);
 
         for (var i = 0; i < this._motions.length; i++)
             this._motions[i].reverse();
@@ -648,8 +648,8 @@ Bounce.InOut = function(t) {
                     m._update(this.getTime(), false);
                 else
                     m.play();
-            } else if (m.isPlaying()) 
-                m.stop(); 
+            } else if (m.isPlaying())
+            m.stop();
         }
     };
 
@@ -674,7 +674,7 @@ Bounce.InOut = function(t) {
                     var pp = ppropertyMap[name];
                     p.setBegin(pp.getEnd());
                 } else
-                    p.setBegin();
+                p.setBegin();
 
                 p.setOrder(order);
 
@@ -695,7 +695,7 @@ Bounce.InOut = function(t) {
 
     MOTION.MotionController.prototype.get = function(name) {
         if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]]; 
+            return this._motions[arguments[0]];
         return this._motions;
     };
 
@@ -737,15 +737,15 @@ Bounce.InOut = function(t) {
         var motion, i;
 
         if (typeof arguments[0] == 'number') {
-            i = arguments[0]
-            motion = this._motions[i]
+            i = arguments[0];
+            motion = this._motions[i];
         } else if (typeof arguments[0] == 'object') {
-            motion = arguments[0]
+            motion = arguments[0];
             i = this._motions.indexOf(motion);
         }
 
         if (i != -1)
-            this._motions.splice(i, 1); 
+            this._motions.splice(i, 1);
 
         if (motion.isTween()) {
             i = this._tweens.indexOf(motion);
@@ -843,7 +843,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Property.prototype.getId = function() {
-        return this._id;
+        return this._id;  
     };
 
     MOTION.Property.prototype.getBegin = function() {
@@ -1047,7 +1047,7 @@ Bounce.InOut = function(t) {
             this.pause();
         }
     };
-})(MOTION);(function(MOTION, undefined) {
+})(MOTION);(function(MOTION, undefined) { 
         MOTION.Tween = function(object, property, end, duration, delay, easing) {  
             this._properties = [];
             this._propertyMap = [];
@@ -1066,7 +1066,7 @@ Bounce.InOut = function(t) {
             } 
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween;
+    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween
 
     MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
@@ -1075,7 +1075,7 @@ Bounce.InOut = function(t) {
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
-
+ 
         this._properties.push(p);
         this._propertyMap[p.getField()] = p;
 
@@ -1122,7 +1122,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
     };
-
+ 
     MOTION.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;

@@ -24,7 +24,7 @@
     };
 
     MOTION.Property.prototype.getId = function() {
-        return this._id;
+        return this._id;  
     };
 
     MOTION.Property.prototype.getBegin = function() {
