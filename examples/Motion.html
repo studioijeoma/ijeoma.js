@@ -3,10 +3,18 @@
     body {
         padding: 0;
     }
+    div {
+        z-index: -100
+    }
     </style>
 </head>
 
 <body>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button>
+    <button>Click and drag left to right to scrub</button>
+
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script language="javascript">
@@ -15,23 +23,44 @@
 
     function setup() {
         text = document.createElement('div');
-        text.style.cssText = 'position: absolute; font-face: sans-serif; font-size: 100px; text-align: center';
+        text.style.cssText = 'position: absolute; font-family: sans-serif; font-size: 100px; text-align: center';
 
         document.body.appendChild(text);
 
-        m = new MOTION(5000).repeat().reverse().play()
+        time = document.getElementById('time')
+
+        motion = new MOTION(5000).repeat().reverse().play()
             .onUpdate(function() {
-                var c = Math.round(m.getPosition() * 255);
-                var textColor = 255 - c;
- 
-
-                text.innerHTML = Math.round(m.getTime());
-                text.style.left = window.innerWidth / 2;
-                text.style.top = window.innerHeight / 2;
-                text.style.color = 'rgb(' + textColor + ',' + textColor + ',' + textColor + ')';
-
+                var c = this.getPosition() * 255 | 0;
                 document.body.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+
+                time.innerHTML = this.getTime() | 0;
             })
+
+        document.getElementById('play').onclick = function() {
+            motion.play()
+        }
+
+        document.getElementById('stop').onclick = function() {
+            motion.stop()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            motion.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                motion.seek(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            motion.resume();
+        }
     }
 
     function draw(time) {

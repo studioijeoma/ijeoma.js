@@ -16,6 +16,7 @@
     <button id="four">Play 4th keyframe</button>
     <button id="stop">Stop</button>
     <button id="time"></button>
+    <button>Click and drag left to right to scrub</button>
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
@@ -69,7 +70,7 @@
                 rect4.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
             }), duration * 3)
             .onUpdate(function() {
-                time.innerHTML = Math.round(this.getTime())
+                time.innerHTML = this.getTime() | 0;
             })
             .play();
 

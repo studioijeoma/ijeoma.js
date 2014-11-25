@@ -236,8 +236,7 @@
         }
     };
 
-    MOTION.prototype._updateTime = function() {
-        // this._time = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+    MOTION.prototype._updateTime = function() { 
         this._time = _time - this._playTime;
 
         if (this._isReversing && this._reverseTime !== 0)
@@ -254,8 +253,7 @@
         return this._name;
     };
 
-    MOTION.prototype.setTime = function(time) {
-        // this._time = time - ((this._hasController) ? 0 : this._playTime);
+    MOTION.prototype.setTime = function(time) { 
         this._time = time;
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;

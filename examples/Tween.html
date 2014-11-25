@@ -13,6 +13,7 @@
     <button id="play">Play</button>
     <button id="stop">Stop</button>
     <button id="time"></button>  
+    <button>Click and drag left to right to scrub</button>
 
     <!-- // <script src="js/RequestAnimationFrame.js"></script> -->
     <script language="javascript" src="../build/ijeomamotion.js"></script>
@@ -34,7 +35,7 @@
             })
             .onUpdate(function() {
                 rect.style.width = w + '%';
-                time.innerHTML = Math.round(this.getTime())
+                time.innerHTML = this.getTime() | 0;
             })
             .onEnd(function() {
                 console.log('end')
