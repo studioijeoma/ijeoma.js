@@ -962,6 +962,45 @@ Bounce.InOut = function(t) {
     MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Timeline.prototype.constructor = MOTION.Timeline;
 
+
+    MOTION.Timeline.prototype.play = function(time) {
+        if (typeof arguments[0] == 'undefined') {
+            MOTION.MotionController.prototype.play.call(this);
+        } else if (typeof arguments[0] == 'number') {
+            this.seek(arguments[0] / this._duration);
+            this.resume();
+        }
+        // else if (typeof arguments[0] == 'string') {
+        //     var k = this.get(arguments[0]);
+
+        //     this.seek(k.getPlayTime() / this._duration);
+        //     this.resume();
+        // } 
+        else if (typeof arguments[0] == 'object') {
+            this.seek(arguments[0].getPlayTime() / this._duration);
+            this.resume();
+        }
+    };
+
+    MOTION.Timeline.prototype.stop = function(time) {
+        if (typeof arguments[0] == 'undefined')
+            MOTION.MotionController.prototype.stop.call(this);
+        else if (typeof arguments[0] == 'number') {
+            this.seek(arguments[0] / this._duration);
+            this.pause();
+        }
+        // else if (typeof arguments[0] == 'string') {
+        //     var k = this.get(arguments[0]);
+
+        //     this.seek(k.getPlayTime() / this._duration);
+        //     this.pause();
+        // } 
+        else if (typeof arguments[0] == 'object') {
+            this.seek(arguments[0].getPlayTime() / this._duration);
+            this.pause();
+        }
+    };
+
     MOTION.Timeline.prototype.add = function(motion, time) {
         if (motion.isKeyframe()) {
             if (typeof time == 'undefined')
@@ -1004,40 +1043,6 @@ Bounce.InOut = function(t) {
                 return null;
             else
                 return current;
-        }
-    };
-
-    MOTION.Timeline.prototype.gotoAndPlay = function(time) {
-        if (typeof arguments[0] == 'number') {
-            this.seek(arguments[0] / this._duration);
-            this.resume();
-        }
-        // else if (typeof arguments[0] == 'string') {
-        //     var k = this.get(arguments[0]);
-
-        //     this.seek(k.getPlayTime() / this._duration);
-        //     this.resume();
-        // } 
-        else if (typeof arguments[0] == 'object') {
-            this.seek(arguments[0].getPlayTime() / this._duration);
-            this.resume();
-        }
-    };
-
-    MOTION.Timeline.prototype.gotoAndStop = function(time) {
-        if (typeof arguments[0] == 'number') {
-            this.seek(arguments[0] / this._duration);
-            this.pause();
-        }
-        // else if (typeof arguments[0] == 'string') {
-        //     var k = this.get(arguments[0]);
-
-        //     this.seek(k.getPlayTime() / this._duration);
-        //     this.pause();
-        // } 
-        else if (typeof arguments[0] == 'object') {
-            this.seek(arguments[0].getPlayTime() / this._duration);
-            this.pause();
         }
     };
 })(MOTION);(function(MOTION, undefined) { 

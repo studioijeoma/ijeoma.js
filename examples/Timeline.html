@@ -94,16 +94,16 @@
             .play();
 
         document.getElementById('one').onclick = function() {
-            timeline.gotoAndPlay(0);
+            timeline.play(0);
         }
         document.getElementById('two').onclick = function() {
-            timeline.gotoAndPlay(duration);
+            timeline.play(duration);
         }
         document.getElementById('three').onclick = function() {
-            timeline.gotoAndPlay(duration * 2);
+            timeline.play(duration * 2);
         }
         document.getElementById('four').onclick = function() {
-            timeline.gotoAndPlay(duration * 3);
+            timeline.play(duration * 3);
         }
         document.getElementById('stop').onclick = function() {
             timeline.stop()
