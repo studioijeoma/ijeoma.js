@@ -8,9 +8,9 @@ Developement: [ijeomamotion.js](https://raw.githubusercontent.com/ekeneijeoma/ij
 Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js)
 
 #Examples  
-[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Motion.html) counts from a starting time of 0 to an ending time/duration. 
+[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Motion.html): counts from a starting time of 0 to an ending duration. 
 
-[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Tween.html) eases multiple number variables and object properties from a starting value to an ending value within a duration. 
+[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Tween.html): eases multiple number variables and object properties from a starting value to an ending value within a duration. 
 
 [MOTION.Parallel](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Parallel.html): plays multiple tweens at the same time.
 
