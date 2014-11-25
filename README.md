@@ -22,65 +22,48 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 #Getting Started 
  
-There are 4 ways to create (istantiate) Tweens.
-```javascript
-new MOTION.Tween(object, property, end, duration, delay, easing)
-new MOTION.Tween(property, end, duration, delay, easing) //object defaults to window
-
-new MOTION.Tween(duration,delay,easing) //object defaults to window
-new MOTION.Tween(object, duration, delay, easing) 
+Long-hand Tweens
+Say you want to ease a variable named x from 0 to 1024 in 1000 millseconds. 
+```javascript 
+var x = 0;
+var t = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
+```
+or
+```javascript 
+var t = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
 ```
 
-Say you want to ease a variable named x from 0 to 100 in 100 frames. 
+Adding more variables
 ```javascript
-var x = 0;
-var t = new MOTION.Tween(100).add("x", 100, 100).play();
+var t = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
 ```
 or
 ```javascript
-var x = 0;
-var t = new MOTION.Tween(this,100).add("x", 100).play();
-```
-
-or
-```javascript
-var x = 0;
-var t = new MOTION.Tween(this, "x", 100, 100).play();
-```
-
-The 2nd way lets you chain/add more properties to the Tween. Say we want to tween a var x from 0 to 100 and var y from 0 to 100 in 100 frames.
-```javascript
-var t = new MOTION.Tween(this).add("x", 100).add("y", 100).play();
-```
-
-###All in 1!
-You can also tween multiples properties of any type in 1 Tween.
-```javascript
-var t = new MOTION.Tween(100).add("x", 100).add("c", color(255)).add("v", createVector(100, 100)).play();
+var t = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
 ```
 
 ###Callbacks 
 ```javascript
-t = new MOTION.Tween(100).onStart(func).onUpdate(func).onEnd(func).play(); 
+t = new MOTION.Tween(...).onStart(func).onUpdate(func).onEnd(func).play(); 
 ```
 
 ##How to playback Tweens 
 ###Updating
-```javascript
-t.update()
+```javascript 
+MOTION.update(time) //best used with requestAnimationFrame
 ```
 or
-```javascript
-t.update(time)
+```javascript 
+MOTION.update() //will use performance.now() or Date.now() if not supported.
 ```
 
 ###Delaying
 ```javascript
-var t = new MOTION.Tween("w", width, 50, 50).play(); //delay for 50 frames
+var t = new MOTION.Tween("w", 1024, 1000, 500).play(); //delay for 500 milliseconds
 ```
 or
 ```javascript
-var t = new MOTION.Tween(this,50,50).add("w", width).delay(50).play();
+var t = new MOTION.Tween("w", 1024, 1000).delay(500).play();
 ```
 ###Pausing, Resuming  
 ```javascript  
@@ -90,11 +73,11 @@ t.seek(time);
 ```
 ###Repeating
 ```javascript
-var t = new MOTION.Tween("w", width, 100).repeat().play();
+var t = new MOTION.Tween(...).repeat().play();
 ```
 ###Reversing
 ```javascript 
-var t = new MOTION.Tween("w", width, 100).repeat().reverse().play();
+var t = new MOTION.Tween(...).repeat().reverse().play();
 ```
 
 ##How to playback tweens in parallel
@@ -117,8 +100,8 @@ var s = new MOTION.Sequence()
 ##How to playback tweens in a timeline
 ```javascript
 var t = new MOTION.Timeline()
-  .add(new MOTION.Tween(...), 100) //creates a keyframe at 100 frames and adds that tween object
-  .add(new MOTION.Tween(...), 200)
+  .add(new MOTION.Tween(...), 1000) //creates a keyframe at 1000 milliseconds and adds that tween object
+  .add(new MOTION.Tween(...), 2000)
   .repeat()
   .play();
 
