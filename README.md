@@ -18,6 +18,8 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 [MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html): plays Tweens, Parallels and Sequences any time using MOTION.Keyframes.
 
+[Lines](http://ekeneijeoma.github.io/ijeomamotion.js/examples/lines.html)
+
 [Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
 
 #Getting Started 
