@@ -22,8 +22,7 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 #Getting Started 
  
-Long-hand Tweens
-Say you want to ease a variable named x from 0 to 1024 in 1000 millseconds. 
+Tweening a variable named x from 0 to 1024 in 1000 millseconds. 
 ```javascript 
 var x = 0;
 var t = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
@@ -33,7 +32,7 @@ or
 var t = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
 ```
 
-Adding more variables
+Tweening multiple variables and object properties
 ```javascript
 var t = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
 ```
