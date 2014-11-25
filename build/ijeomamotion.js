@@ -185,7 +185,7 @@ Bounce.InOut = function(t) {
             this._ids = 'Timeline' + _ids['Timeline']++;
         else
             this._ids = 'Motion' + _ids['Motion']++;
- 
+
         this._name = '';
 
         this._playTime = 0;
@@ -206,7 +206,7 @@ Bounce.InOut = function(t) {
         this._isRepeating = false;
         this._isRepeatingDelay = false;
         this._isReversing = false;
-        this._isSeeking = false; 
+        this._isSeeking = false;
 
         this._order = 0;
 
@@ -331,7 +331,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
- 
+
         this._playTime = _time - this._playTime;
 
         return this;
@@ -405,8 +405,8 @@ Bounce.InOut = function(t) {
         }
     };
 
-    MOTION.prototype._updateTime = function() { 
-        this._time = _time - this._playTime;
+    MOTION.prototype._updateTime = function() {
+        this._time = (_time - this._playTime) * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
@@ -422,8 +422,8 @@ Bounce.InOut = function(t) {
         return this._name;
     };
 
-    MOTION.prototype.setTime = function(time) { 
-        this._time = time;
+    MOTION.prototype.setTime = function(time) {
+        this._time = time * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
@@ -444,8 +444,8 @@ Bounce.InOut = function(t) {
         return this._timeScale;
     };
 
-    MOTION.prototype.getPosition = function() { 
-        return  this.getTime() / this._duration;
+    MOTION.prototype.getPosition = function() {
+        return this.getTime() / this._duration;
     };
 
     MOTION.prototype.setDuration = function(_duration) {
@@ -600,7 +600,7 @@ Bounce.InOut = function(t) {
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
             this._onRepeat();
-    }; 
+    };
 
     window.MOTION = MOTION;
 })(window);(function(MOTION, undefined) {
@@ -657,7 +657,7 @@ Bounce.InOut = function(t) {
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (this._valueMode == MOTION.RELATIVE) ? p.getField() : t._id + '.' + p.getField();
+                var name = (this._valueMode == MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
                 var order = 0;
 
                 if (name in orderMap) {
@@ -665,11 +665,11 @@ Bounce.InOut = function(t) {
                     order++;
 
                     var pp = ppropertyMap[name];
-                    p.setBegin(pp.getEnd());
+                    p.setStart(pp.getEnd());
                 } else
-                p.setBegin();
+                p.setStart();
 
-                p.setOrder(order);
+                p._order = order;
 
                 orderMap[name] = order;
                 ppropertyMap[name] = p;
@@ -819,38 +819,36 @@ Bounce.InOut = function(t) {
 
         var values = (typeof arguments[0] == 'object') ? values : arguments[1]
 
-        this._begin = this._object[this._field] = (typeof values == 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
+        this._start = this._object[this._field] = (typeof values == 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
         this._end = (typeof values == 'number') ? values : values[1];
 
         this._position = 0;
+
+        this._order = 0;
     }
 
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
-            this._object[this._field] = this._position * (this._end - this._begin) + this._begin;
+            this._object[this._field] = this._position * (this._end - this._start) + this._start;
         } else {
             // console.log(this._position);
         }
     };
 
-    MOTION.Property.prototype.getId = function() {
-        return this._id;  
+    MOTION.Property.prototype.getStart = function() {
+        return this._start;
     };
 
-    MOTION.Property.prototype.getBegin = function() {
-        return this._begin;
-    };
-
-    MOTION.Property.prototype.setBegin = function(begin) {
-        if (typeof begin === 'undefined') {
+    MOTION.Property.prototype.setStart = function(start) {
+        if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
-                this._begin = 0;
+                this._start = 0;
             else
-                this._begin = this._object[this._field];
+                this._start = this._object[this._field];
         } else
-            this._begin = begin;
+            this._start = start;
 
         return this;
     };
@@ -876,23 +874,6 @@ Bounce.InOut = function(t) {
 
     MOTION.Property.prototype.getValue = function() {
         return this._object[this._field];
-    };
-
-    MOTION.Property.prototype.getObject = function() {
-        return this._object
-    };
-
-    MOTION.Property.prototype.getField = function() {
-        return this._field
-    };
-
-    MOTION.Property.prototype.setOrder = function(order) {
-        this._order = order
-        return this;
-    };
-
-    MOTION.Property.prototype.getOrder = function() {
-        return this._order
     };
 
     MOTION.NumberProperty = function(object, field, end) {
@@ -1075,7 +1056,7 @@ Bounce.InOut = function(t) {
         var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
  
         this._properties.push(p);
-        this._propertyMap[p.getField()] = p;
+        this._propertyMap[p._field] = p;
 
         return this;
     };

@@ -52,7 +52,7 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (this._valueMode == MOTION.RELATIVE) ? p.getField() : t._id + '.' + p.getField();
+                var name = (this._valueMode == MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
                 var order = 0;
 
                 if (name in orderMap) {
@@ -60,11 +60,11 @@
                     order++;
 
                     var pp = ppropertyMap[name];
-                    p.setBegin(pp.getEnd());
+                    p.setStart(pp.getEnd());
                 } else
-                p.setBegin();
+                p.setStart();
 
-                p.setOrder(order);
+                p._order = order;
 
                 orderMap[name] = order;
                 ppropertyMap[name] = p;

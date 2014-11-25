@@ -28,7 +28,7 @@
         var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
  
         this._properties.push(p);
-        this._propertyMap[p.getField()] = p;
+        this._propertyMap[p._field] = p;
 
         return this;
     };

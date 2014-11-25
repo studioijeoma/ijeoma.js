@@ -25,7 +25,7 @@
             this._ids = 'Timeline' + _ids['Timeline']++;
         else
             this._ids = 'Motion' + _ids['Motion']++;
- 
+
         this._name = '';
 
         this._playTime = 0;
@@ -46,7 +46,7 @@
         this._isRepeating = false;
         this._isRepeatingDelay = false;
         this._isReversing = false;
-        this._isSeeking = false; 
+        this._isSeeking = false;
 
         this._order = 0;
 
@@ -171,7 +171,7 @@
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
- 
+
         this._playTime = _time - this._playTime;
 
         return this;
@@ -245,8 +245,8 @@
         }
     };
 
-    MOTION.prototype._updateTime = function() { 
-        this._time = _time - this._playTime;
+    MOTION.prototype._updateTime = function() {
+        this._time = (_time - this._playTime) * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0)
             this._time = this._reverseTime - this._time;
@@ -262,8 +262,8 @@
         return this._name;
     };
 
-    MOTION.prototype.setTime = function(time) { 
-        this._time = time;
+    MOTION.prototype.setTime = function(time) {
+        this._time = time * this._timeScale;
 
         if (this._isReversing && this._reverseTime !== 0) this._time = this._reverseTime - this._time;
 
@@ -284,8 +284,8 @@
         return this._timeScale;
     };
 
-    MOTION.prototype.getPosition = function() { 
-        return  this.getTime() / this._duration;
+    MOTION.prototype.getPosition = function() {
+        return this.getTime() / this._duration;
     };
 
     MOTION.prototype.setDuration = function(_duration) {
@@ -440,7 +440,7 @@
     MOTION.prototype.dispatchRepeatedEvent = function() {
         if (this._onRepeat)
             this._onRepeat();
-    }; 
+    };
 
     window.MOTION = MOTION;
 })(window)

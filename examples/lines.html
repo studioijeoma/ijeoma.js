@@ -1,0 +1,158 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="colors">Color/Black&White</button>
+    <button id="reset">Reset</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var lines = [];
+    var lineSize = 100;
+    var lineCount = 500;
+
+    var backgroundColor;
+
+    var usingColor = false;
+
+    var Line = function(x1, y1, size, angle, c1, c2) {
+        this.x = x1;
+        this.y = y1;
+        this.size = size;
+        this.angle = angle;
+
+        var a = random(.10, 1)
+        this.color1 = c1;
+        this.color2 = c2;
+
+        var delay = random(0, 10000);
+        var duration = random(7500, 15000); 
+
+        this.tweenX = new MOTION.Tween(this, 'x', [width + lineSize, -lineSize], duration, delay).repeat().play();
+        this.tweenAngle = new MOTION.Tween(this, 'angle', [angle, angle + Math.PI * 2 * random(-1,1)], duration, delay).reverse().repeat().play();
+
+        this.draw = function() {
+            gradient = context.createLinearGradient(0, 0, 0, this.size);
+            gradient.addColorStop(0, this.color1);
+            gradient.addColorStop(1, this.color2);
+
+            context.save();
+            context.translate(this.x, this.y);
+            context.rotate(this.angle);
+            context.beginPath();
+            context.moveTo(0, 0);
+            context.lineTo(0, this.size);
+            context.strokeStyle = gradient;
+            context.stroke();
+            context.restore();
+        }
+
+        return this;
+    };
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+        context.lineWidth = 5;
+
+        backgroundColor = 'black';
+
+        setupLines();
+
+        document.getElementById('colors').onclick = function() {
+            usingColor = !usingColor;
+            setupLines();
+        };
+
+        document.getElementById('reset').onclick = setupLines;
+    }
+
+    function setupLines() {
+        lines = [];
+
+        for (var i = 0; i < lineCount; i++) {
+            var x1 = Math.random() * width;
+            var y1 = Math.random() * height;
+
+            var a = Math.random() * Math.PI * 2;
+
+            lines.push(new Line(x1, y1, lineSize, a, (usingColor) ? randomColor() : randomBW(true), (usingColor) ? randomColor() : randomBW(true)))
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, width, height);
+
+        for (var i = 0; i < lines.length; i++) 
+            lines[i].draw(); 
+    }
+
+    function random(min, max) {
+        if (arguments.length === 0)
+            return Math.random();
+        else if (arguments.length === 1)
+            return Math.random() * min;
+        else
+            return Math.random() * (max - min) + min;
+    };
+
+    function randomColor(useAlpha) {
+        var r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0,
+            a = (!useAlpha) ? 1 : random(0, 1);
+
+        return {
+            r: r,
+            g: g,
+            b: b,
+            a: a,
+            toString: function() {
+                return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
+            }
+        }
+    }
+
+    function randomBW(useAlpha) {
+        var bw = 255 * Math.random() | 0;
+        a = (!useAlpha) ? 1 : random(0, 1);
+
+        return {
+            r: bw,
+            g: bw,
+            b: bw,
+            a: a,
+            toString: function() {
+                return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')';
+            }
+        }
+    }
+    </script>
+</body>
