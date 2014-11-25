@@ -171,7 +171,7 @@ Bounce.InOut = function(t) {
     _motions = [];
 
     _usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
-
+    _isAutoUpdating = false;
     _time = 0;
 
     MOTION = function(duration, delay) {
@@ -206,9 +206,7 @@ Bounce.InOut = function(t) {
         this._isRepeating = false;
         this._isRepeatingDelay = false;
         this._isReversing = false;
-        this._isSeeking = false;
-
-        this._isAutoUpdating = false;
+        this._isSeeking = false; 
 
         this._order = 0;
 
@@ -279,6 +277,18 @@ Bounce.InOut = function(t) {
                 _motions[i]._update();
     }
 
+    MOTION.autoUpdate = function() {
+        _isAutoUpdating = true;
+
+        return this;
+    };
+
+    MOTION.noAutoUpdate = function() {
+        _isAutoUpdating = false;
+
+        return this;
+    };
+
     MOTION.isPlaying = function() {
         for (var i = 0; i < _motions.length; i++)
             if (_motions[i].isPlaying())
@@ -321,8 +331,7 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.resume = function() {
         this._isPlaying = true;
-
-        // this._playTime = ((_usePerformance) ? window.performance.now() : Date.now()) - this._playTime;
+ 
         this._playTime = _time - this._playTime;
 
         return this;
@@ -509,18 +518,6 @@ Bounce.InOut = function(t) {
 
     MOTION.prototype.getValueMode = function() {
         return this._valueMode;
-    };
-
-    MOTION.prototype.autoUpdate = function() {
-        this._isAutoUpdating = true;
-
-        return this;
-    };
-
-    MOTION.prototype.noAutoUpdate = function() {
-        this._isAutoUpdating = false;
-
-        return this;
     };
 
     MOTION.prototype.isDelaying = function() {
