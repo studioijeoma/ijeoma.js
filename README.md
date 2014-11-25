@@ -20,7 +20,7 @@ The "motion controllers", MOTION.Parallel, MOTION.Sequence, MOTION.Timeline and 
 
 [MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/timeline.html) is used to play all of the above at any time using MOTION.Keyframes.
 
-Circular Networks [1](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork1.html) and [2](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork2.html)
+[Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
 
 #Getting Started 
  

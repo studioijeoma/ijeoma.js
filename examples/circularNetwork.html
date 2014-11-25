@@ -1,0 +1,213 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    div {
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="nodes">Hide/Show Nodes</button>
+    <button id="links">Hide/Show Links</button>
+    <button id="colors">Color/Black&White</button> 
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var nodes = [];
+
+    var nodesVisible = true;
+    var linksVisible = true;
+    var usingColor = true;
+
+    var circleCount = 15;
+    var circleOffset = 50;
+
+    var backgroundColor, linkColor, textColor;
+
+    var TWO_PI = Math.PI * 2;
+
+    var Node = function(s, r, color, alpha) {
+        this.x = 0;
+        this.y = 0;
+        this.size = s;
+        this.radius = r;
+        this.angle = random(TWO_PI);
+        this.color = color;
+        this.alpha = alpha;
+        this.angleTween = null;
+        this.radiusTween = null;
+
+        this.update = function() {
+            this.x = Math.cos(this.angle) * this.radius;
+            this.y = Math.sin(this.angle) * this.radius;
+        }
+
+        this.draw = function() {
+            context.beginPath();
+            context.arc(this.x, this.y, this.size, 0, TWO_PI);
+            context.fillStyle = this.color;
+            context.fill();
+        }
+
+        return this;
+    };
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+        context.lineWidth = .5;
+
+        backgroundColor = 'white';
+        textColor = 'black';
+        linkColor = 'black';
+
+        for (var i = 0; i < 300; i++) {
+            var n = new Node(5, Math.round(random(2, circleCount)) * circleOffset, randomColor(), 255);
+
+            var duration1 = Math.round(random(10000, 15000));
+            var endAngle = n.angle + ((Math.round(random(100)) % 2 == 0) ? -TWO_PI : TWO_PI);
+
+            var duration2 = Math.round(random(5000, 5500));
+            var endRadius = Math.round(random(1, circleCount)) * circleOffset
+
+            n.angleTween = new MOTION.Tween(duration1).add(n, 'angle', endAngle).repeat().play();
+            n.radiusTween = new MOTION.Tween(duration2, 0, Quad.InOut).add(n, 'radius', endRadius).repeat().reverse().play()
+
+            nodes.push(n)
+        }
+
+        document.getElementById('play').onclick = function() {
+            MOTION.playAll();
+        };
+
+        document.getElementById('stop').onclick = function() {
+            MOTION.stopAll();
+        };
+
+        document.getElementById('nodes').onclick = function() {
+            nodesVisible = !nodesVisible;
+        };
+
+        document.getElementById('links').onclick = function() {
+            linksVisible = !linksVisible;
+        };
+
+        document.getElementById('colors').onclick = function() {
+            usingColor = !usingColor;
+
+            for (var i = 0; i < nodes.length; i++) 
+                nodes[i].color = (usingColor) ? randomColor() : randomBW();
+        };
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            MOTION.pauseAll();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag) {
+                for (var i = 0; i < nodes.length; i++) {
+                    nodes[i].angleTween.seek(e.clientX / width);
+                    nodes[i].radiusTween.seek(e.clientY / height);
+                }
+            }
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            MOTION.resumeAll();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = backgroundColor;
+        context.fillRect(0, 0, width, height);
+
+        context.save();
+        context.translate(width / 2, height / 2);
+
+        for (var i = 0; i < nodes.length; i++) {
+            nodes[i].update()
+            if (nodesVisible) nodes[i].draw();
+        }
+
+        if (linksVisible)
+            for (var i = 0; i < nodes.length; i++)
+                for (var j = 0; j < nodes.length; j++) {
+                    var dx = nodes[j].x - nodes[i].x
+                    var dy = nodes[j].y - nodes[i].y
+
+                    if (dx * dx + dy * dy < circleOffset * circleOffset * 2) {
+                        context.beginPath();
+                        context.moveTo(nodes[i].x, nodes[i].y);
+                        context.lineTo(nodes[j].x, nodes[j].y);
+
+                        var linkColor = context.createLinearGradient(nodes[i].x, nodes[i].y, nodes[j].x, nodes[j].y);
+                        linkColor.addColorStop(0, nodes[i].color);
+                        linkColor.addColorStop(1, nodes[j].color);
+
+                        context.strokeStyle = linkColor;
+                        context.stroke();
+                    }
+                }
+
+        context.restore();
+    }
+
+    function randomColor() {
+        var r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0;
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    function randomBW() {
+        var gray = Math.random();
+        var r = 255 * gray | 0,
+            g = 255 * gray | 0,
+            b = 255 * gray | 0;
+        return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    function random(min, max) {
+        var rand = Math.random();
+
+        if (arguments.length === 0) {
+            return rand;
+        } else
+        if (arguments.length === 1) {
+            return rand * min;
+        } else {
+            if (min > max) {
+                var tmp = min;
+                min = max;
+                max = tmp;
+            }
+
+            return rand * (max - min) + min;
+        }
+    };
+    </script>
+</body>
