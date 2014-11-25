@@ -1,23 +1,24 @@
-(function(MOTION, undefined) { 
-        MOTION.Tween = function(object, property, end, duration, delay, easing) {  
-            this._properties = [];
-            this._propertyMap = [];
+(function(MOTION, undefined) {
+    MOTION.Tween = function(object, property, end, duration, delay, easing) {
+        this._properties = [];
+        this._propertyMap = [];
 
-            if (typeof arguments[0] == 'object') {
-                MOTION.call(this, arguments[3], arguments[4]);
-                this.addProperty(arguments[0], arguments[1], arguments[2])
-                this.setEasing(arguments[5]);
-            } else if (typeof arguments[0] == 'string') {
-                MOTION.call(this, arguments[2], arguments[3]);
-                this.addProperty(arguments[0], arguments[1])
-                this.setEasing(arguments[4]);
-            }else  {
-                MOTION.call(this, arguments[0], arguments[1]); 
-                this.setEasing(arguments[2]);
-            } 
+        if (typeof arguments[0] == 'object') {
+            MOTION.call(this, arguments[3], arguments[4]);
+            this.addProperty(arguments[0], arguments[1], arguments[2])
+            this.setEasing(arguments[5]);
+        } else if (typeof arguments[0] == 'string') {
+            MOTION.call(this, arguments[2], arguments[3]);
+            this.addProperty(arguments[0], arguments[1])
+            this.setEasing(arguments[4]);
+        } else {
+            MOTION.call(this, arguments[0], arguments[1]);
+            this.setEasing(arguments[2]);
+        }
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype); MOTION.Tween.prototype.constrctor = MOTION.Tween
+    MOTION.Tween.prototype = Object.create(MOTION.prototype);
+    MOTION.Tween.prototype.constrctor = MOTION.Tween
 
     MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
@@ -25,8 +26,13 @@
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
-        var p = (typeof arguments[0] == 'object') ? new MOTION.NumberProperty(object, property, end) : new MOTION.NumberProperty(arguments[0], arguments[1]);
- 
+        if (arguments[0] instanceof MOTION.Property)
+            p = arguments[0]
+        else if (typeof arguments[0] == 'object')
+            p = new MOTION.NumberProperty(object, property, end)
+        else
+            p = new MOTION.NumberProperty(arguments[0], arguments[1]);
+
         this._properties.push(p);
         this._propertyMap[p._field] = p;
 
@@ -73,7 +79,7 @@
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
     };
- 
+
     MOTION.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;
