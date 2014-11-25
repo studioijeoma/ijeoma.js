@@ -444,10 +444,8 @@ Bounce.InOut = function(t) {
         return this._timeScale;
     };
 
-    MOTION.prototype.getPosition = function() {
-        var t = this.getTime();
-
-        return (t > 0) ? t / this._duration : 0;
+    MOTION.prototype.getPosition = function() { 
+        return  this.getTime() / this._duration;
     };
 
     MOTION.prototype.setDuration = function(_duration) {

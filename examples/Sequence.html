@@ -36,15 +36,15 @@
         time = document.getElementById('time');
 
         sequence = new MOTION.Sequence()
-            .add(new MOTION.Tween('rect1Y', [-rectH, rectH], 1500).onUpdate(function() {
-                rect1.style.top = rect1Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect1.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], 1500).onUpdate(function() {
+                rect1.style.top = rect1.y + 'px';
+                var bw = Math.round(this.getPosition() * 255);
+                rect1.style.backgroundColor = 'rgb(' + bw + ',' + bw + ',' + bw + ')';
             }))
-            .add(new MOTION.Tween('rect2Y', [rectH, -rectH], 1500).onUpdate(function() {
-                rect2.style.top = rect2Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect2, 'y', [rectH, -rectH], 1500).onUpdate(function() {
+                rect2.style.top = rect2.y + 'px';
+                var bw = Math.round(this.getPosition() * 255);
+                rect2.style.backgroundColor = 'rgb(' + bw + ',' + bw + ',' + bw + ')';
             }))
             .onUpdate(function() {
                 time.innerHTML = this.getTime() | 0;

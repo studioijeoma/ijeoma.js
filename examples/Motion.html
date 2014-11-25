@@ -29,12 +29,18 @@
 
         time = document.getElementById('time')
 
-        motion = new MOTION(5000).repeat().reverse().play()
-            .onUpdate(function() {
-                var c = this.getPosition() * 255 | 0;
-                document.body.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+        color1 = randomColor();
+        color2 = randomColor();
 
+        motion = new MOTION(2500).play()
+            .onUpdate(function() {
+                document.body.style.backgroundColor = lerpColor(color1, color2, this.getPosition()).toString();
                 time.innerHTML = this.getTime() | 0;
+            })
+            .onEnd(function() {
+                color1 = color2;
+                color2 = randomColor();
+                this.play();
             })
 
         document.getElementById('play').onclick = function() {
@@ -60,6 +66,36 @@
         document.onmouseup = function(e) {
             flag = false;
             motion.resume();
+        }
+    }
+
+    function lerp(start, end, t) {
+        return t * (end - start) + start;
+    };
+
+    function lerpColor(start, end, t) {
+        return {
+            r: lerp(start.r, end.r, t) | 0,
+            g: lerp(start.g, end.g, t) | 0,
+            b: lerp(start.b, end.b, t) | 0,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
+        }
+    }
+
+    function randomColor() {
+        var r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0;
+
+        return {
+            r: r,
+            g: g,
+            b: b,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
         }
     }
 

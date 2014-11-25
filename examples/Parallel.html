@@ -17,7 +17,7 @@
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
-    <script language="javascript">  
+    <script language="javascript">
     setup();
     draw();
 
@@ -25,10 +25,14 @@
         var rectH = window.innerHeight;
 
         rect1 = document.createElement('div');
-        rect1.style.cssText = 'position: absolute; left:0; width:50%; height:' + rectH + 'px; background-color:black;';
+        rect1.style.cssText = 'position: absolute; left:0; width:50%; height:' + rectH + 'px;'; 
+        rect1.startColor = randomColor();
+        rect1.endColor = randomColor();
 
         rect2 = document.createElement('div');
-        rect2.style.cssText = 'position: absolute; left:50%; width:50%; height:' + rectH + 'px; background-color:black;';
+        rect2.style.cssText = 'position: absolute; left:50%; width:50%; height:' + rectH + 'px;'; 
+        rect2.startColor = randomColor();
+        rect2.endColor = randomColor();
 
         document.body.appendChild(rect1);
         document.body.appendChild(rect2);
@@ -36,18 +40,25 @@
         time = document.getElementById('time')
 
         parallel = new MOTION.Parallel()
-            .add(new MOTION.Tween('rect1Y', [-rectH, rectH], 1500).onUpdate(function() {
-                rect1.style.top = rect1Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect1.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], 1500).onUpdate(function() {
+                rect1.style.top = rect1.y + 'px';
+                rect1.style.backgroundColor = lerpColor(rect1.startColor, rect1.endColor, this.getPosition()).toString();
             }))
-            .add(new MOTION.Tween('rect2Y', [rectH, -rectH], 1500).onUpdate(function() {
-                rect2.style.top = rect2Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect2, 'y', [rectH, -rectH], 1500).onUpdate(function() {
+                rect2.style.top = rect2.y + 'px';
+                rect2.style.backgroundColor = lerpColor(rect2.startColor, rect2.endColor, this.getPosition()).toString();
             }))
             .onUpdate(function() {
                 time.innerHTML = this.getTime() | 0;
+            })
+            .onEnd(function() { 
+                rect1.startColor = randomColor();
+                rect1.endColor = randomColor();
+
+                rect2.startColor = randomColor();
+                rect2.endColor = randomColor();
+
+                this.play();
             })
             .play();
 
@@ -58,7 +69,7 @@
             parallel.stop()
         }
 
-         flag = false;
+        flag = false;
 
         document.onmousedown = function(e) {
             flag = true;
@@ -66,8 +77,8 @@
         }
 
         document.onmousemove = function(e) {
-            if (flag) 
-                parallel.seek(e.clientX / window.innerWidth) 
+            if (flag)
+                parallel.seek(e.clientX / window.innerWidth)
         }
 
         document.onmouseup = function(e) {
@@ -79,6 +90,36 @@
     function draw(time) {
         requestAnimationFrame(draw);
         MOTION.update(time);
+    }
+
+    function lerp(start, end, t) {
+        return t * (end - start) + start;
+    };
+
+    function lerpColor(start, end, t) {
+        return {
+            r: lerp(start.r, end.r, t) | 0,
+            g: lerp(start.g, end.g, t) | 0,
+            b: lerp(start.b, end.b, t) | 0,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
+        }
+    }
+
+    function randomColor() {
+        var r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0;
+
+        return {
+            r: r,
+            g: g,
+            b: b,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
+        }
     }
     </script>
 </body>

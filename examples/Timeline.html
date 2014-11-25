@@ -9,7 +9,7 @@
     </style>
 </head>
 
-<body> 
+<body>
     <button id="one">Play 1st keyframe</button>
     <button id="two">Play 2nd keyframe</button>
     <button id="three">Play 3rd keyframe</button>
@@ -21,22 +21,30 @@
     <script src="js/RequestAnimationFrame.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script language="javascript">
-     setup();
+    setup();
     draw();
 
     function setup() {
         var rectH = window.innerHeight;
 
         rect1 = document.createElement('div');
+        rect1.startColor = randomColor();
+        rect1.endColor = randomColor();
         rect1.style.cssText = 'position: absolute; left:0; width:25%; height:' + rectH + 'px; background-color:black;';
 
         rect2 = document.createElement('div');
+        rect2.startColor = randomColor();
+        rect2.endColor = randomColor();
         rect2.style.cssText = 'position: absolute; left:25%; width:25%; height:' + rectH + 'px; background-color:black;';
 
         rect3 = document.createElement('div');
+        rect3.startColor = randomColor();
+        rect3.endColor = randomColor();
         rect3.style.cssText = 'position: absolute; left:50%; width:25%; height:' + rectH + 'px; background-color:black;';
 
         rect4 = document.createElement('div');
+        rect4.startColor = randomColor();
+        rect4.endColor = randomColor();
         rect4.style.cssText = 'position: absolute; left:75%; width:25%; height:' + rectH + 'px; background-color:black;';
 
         document.body.appendChild(rect1);
@@ -49,28 +57,39 @@
         duration = 1000;
 
         timeline = new MOTION.Timeline()
-            .add(new MOTION.Tween('rect1Y', [-rectH, rectH], duration).onUpdate(function() {
-                rect1.style.top = rect1Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect1.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], duration).onUpdate(function() {
+                rect1.style.top = rect1.y + 'px';
+                rect1.style.backgroundColor = lerpColor(rect1.startColor, rect1.endColor, this.getPosition()).toString();
             }), 0)
-            .add(new MOTION.Tween('rect2Y', [rectH, -rectH], duration).onUpdate(function() {
-                rect2.style.top = rect2Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect2.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect2, 'y', [rectH, -rectH], duration).onUpdate(function() {
+                rect2.style.top = rect2.y + 'px';
+                rect2.style.backgroundColor = lerpColor(rect2.startColor, rect2.endColor, this.getPosition()).toString();
             }), duration)
-            .add(new MOTION.Tween('rect3Y', [-rectH, rectH], duration).onUpdate(function() {
-                rect3.style.top = rect3Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect3.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect3, 'y', [-rectH, rectH], duration).onUpdate(function() {
+                rect3.style.top = rect3.y + 'px';
+                rect3.style.backgroundColor = lerpColor(rect3.startColor, rect3.endColor, this.getPosition()).toString();
             }), duration * 2)
-            .add(new MOTION.Tween('rect4Y', [rectH, -rectH], duration).onUpdate(function() {
-                rect4.style.top = rect4Y + 'px';
-                var c = Math.round(this.getPosition() * 255);
-                rect4.style.backgroundColor = 'rgb(' + c + ',' + c + ',' + c + ')';
+            .add(new MOTION.Tween(rect4, 'y', [rectH, -rectH], duration).onUpdate(function() {
+                rect4.style.top = rect4.y + 'px';
+                rect4.style.backgroundColor = lerpColor(rect4.startColor, rect4.endColor, this.getPosition()).toString();
             }), duration * 3)
             .onUpdate(function() {
                 time.innerHTML = this.getTime() | 0;
+            })
+            .onEnd(function() {
+                rect1.startColor = randomColor();
+                rect1.endColor = randomColor();
+
+                rect2.startColor = randomColor();
+                rect2.endColor = randomColor();
+
+                rect3.startColor = randomColor();
+                rect3.endColor = randomColor();
+
+                rect4.startColor = randomColor();
+                rect4.endColor = randomColor();
+
+                this.play();
             })
             .play();
 
@@ -98,8 +117,8 @@
         }
 
         document.onmousemove = function(e) {
-            if (flag) 
-                timeline.seek(e.clientX / window.innerWidth) 
+            if (flag)
+                timeline.seek(e.clientX / window.innerWidth)
         }
 
         document.onmouseup = function(e) {
@@ -111,6 +130,36 @@
     function draw(time) {
         requestAnimationFrame(draw);
         MOTION.update(time);
+    }
+
+    function lerp(start, end, t) {
+        return t * (end - start) + start;
+    };
+
+    function lerpColor(start, end, t) {
+        return {
+            r: lerp(start.r, end.r, t) | 0,
+            g: lerp(start.g, end.g, t) | 0,
+            b: lerp(start.b, end.b, t) | 0,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
+        }
+    }
+
+    function randomColor() {
+        var r = 255 * Math.random() | 0,
+            g = 255 * Math.random() | 0,
+            b = 255 * Math.random() | 0;
+
+        return {
+            r: r,
+            g: g,
+            b: b,
+            toString: function() {
+                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
+            }
+        }
     }
     </script>
 </body>
