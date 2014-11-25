@@ -25,20 +25,20 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 Tweening a variable named x from 0 to 1024 in 1000 millseconds. 
 ```javascript 
 var x = 0;
-var t = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
+var tween = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
 ```
 or
 ```javascript 
-var t = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
+var tween = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
 ```
 
 Tweening multiple variables and object properties
 ```javascript
-var t = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
+var tween = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
 ```
 or
 ```javascript
-var t = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
+var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
 ```
 
 ###Callbacks 
@@ -58,11 +58,11 @@ MOTION.update() //will use performance.now() or Date.now() if not supported.
 
 ###Delaying
 ```javascript
-var t = new MOTION.Tween("w", 1024, 1000, 500).play(); //delay for 500 milliseconds
+var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); //delay for 500 milliseconds
 ```
 or
 ```javascript
-var t = new MOTION.Tween("w", 1024, 1000).delay(500).play();
+var tween = new MOTION.Tween("w", 1024, 1000).delay(500).play();
 ```
 ###Pausing, Resuming  
 ```javascript  
@@ -72,42 +72,49 @@ t.seek(time);
 ```
 ###Repeating
 ```javascript
-var t = new MOTION.Tween(...).repeat().play();
+var tween = new MOTION.Tween(...).repeat().play();
 ```
 ###Reversing
 ```javascript 
-var t = new MOTION.Tween(...).repeat().reverse().play();
+var tween = new MOTION.Tween(...).repeat().reverse().play();
 ```
 
-##How to playback tweens in parallel
+##Playing back tweens in parallel
 ```javascript
-var p = new MOTION.Parallel()
+var parallel = new MOTION.Parallel()
   .add(new MOTION.Tween(...)) 
   .add(new MOTION.Tween(...)) 
   .play(); 
 ``` 
 
-##How to playback tweens in a sequence
+##Playing back tweens in a sequence
 ```javascript
-var s = new MOTION.Sequence() 
+var sequence = new MOTION.Sequence() 
   .add(new MOTION.Tween(...)) 
   .add(new MOTION.Tween(...))  
   .repeat()
   .play();
 ``` 
 
-##How to playback tweens in a timeline
+##Playing back tweens in a timeline
 ```javascript
-var t = new MOTION.Timeline()
+var timeline = new MOTION.Timeline()
   .add(new MOTION.Tween(...), 1000) //creates a keyframe at 1000 milliseconds and adds that tween object
   .add(new MOTION.Tween(...), 2000)
   .repeat()
   .play();
-
-//or
-
-var t = new MOTION.Timeline();
-var k1 = new MOTION.Keyframe(100).add(new MOTION.Tween(...))
-var k2 = new MOTION.Keyframe(200).add(new MOTION.Tween(...))
-t.add(k1).add(k2).play();
 ``` 
+or
+```javascript
+var timeline = new MOTION.Timeline();
+var keyframe1 = new MOTION.Keyframe(1000).add(new MOTION.Tween(...))
+var keyframe2 = new MOTION.Keyframe(2000).add(new MOTION.Tween(...))
+timeline.add(k1).add(k2).play();
+``` 
+
+##Going to and playing or stopping at a keyframe
+```javascript
+timeline.play(time)
+timeline.stop(time)
+```
+
