@@ -837,6 +837,8 @@ Bounce.InOut = function(t) {
         return this;
     };
 
+    MOTION.Property.prototype.start = MOTION.Property.prototype.setStart;
+
     MOTION.Property.prototype.getEnd = function() {
         return this._end;
     };
@@ -846,9 +848,13 @@ Bounce.InOut = function(t) {
         return this;
     };
 
+    MOTION.Property.prototype.end = MOTION.Property.prototype.setEnd;
+
     MOTION.Property.prototype.getPosition = function() {
         return this._position;
     };
+
+    MOTION.Property.prototype.position = MOTION.Property.prototype.getPosition;
 
     MOTION.Property.prototype.setPosition = function(position) {
         this._position = position;
@@ -859,6 +865,8 @@ Bounce.InOut = function(t) {
     MOTION.Property.prototype.getValue = function() {
         return this._object[this._field];
     };
+
+    MOTION.Property.prototype.value = MOTION.Property.prototype.getValue;
 
     MOTION.NumberProperty = function(object, field, end) {
         MOTION.Property.call(this, object, field, end);
