@@ -81,6 +81,11 @@ var tween = new MOTION.Tween(...).repeat().play();
 var tween = new MOTION.Tween(...).repeat().reverse().play();
 ```
 
+###Changing speed/timescale
+```javascript 
+var tween = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
+```
+
 ##Playing back tweens in parallel
 ```javascript
 var parallel = new MOTION.Parallel()
