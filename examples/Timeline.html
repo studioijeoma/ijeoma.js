@@ -3,7 +3,10 @@
     body {
         padding: 0;
     }
-    div {
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
         z-index: -100
     }
     </style>
@@ -107,12 +110,13 @@
             timeline.play(duration * 3);
         }
         document.getElementById('stop').onclick = function() {
-            timeline.stop()
+            timeline.stop();
         }
 
         flag = false;
 
         document.onmousedown = function(e) {
+            console.log(this)
             flag = true;
             timeline.pause();
         }

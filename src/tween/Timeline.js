@@ -32,6 +32,8 @@
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.resume();
         }
+
+        return this;
     };
 
     MOTION.Timeline.prototype.stop = function(time) {
@@ -51,10 +53,12 @@
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.pause();
         }
+
+        return this;
     };
 
     MOTION.Timeline.prototype.add = function(motion, time) {
-        if (motion.isKeyframe()) {
+        if (motion instanceof MOTION.Keyframe) {
             if (typeof time == 'undefined')
                 this.insert(motion, motion.getDelay());
             else

@@ -927,6 +927,8 @@ Bounce.InOut = function(t) {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.resume();
         }
+
+        return this;
     };
 
     MOTION.Timeline.prototype.stop = function(time) {
@@ -946,10 +948,12 @@ Bounce.InOut = function(t) {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.pause();
         }
+
+        return this;
     };
 
     MOTION.Timeline.prototype.add = function(motion, time) {
-        if (motion.isKeyframe()) {
+        if (motion instanceof MOTION.Keyframe) {
             if (typeof time == 'undefined')
                 this.insert(motion, motion.getDelay());
             else
@@ -1101,7 +1105,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
         if (this._valueMode == MOTION.RELATIVE)
             for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setBegin();
+                this._properties[i].setStart();
 
         if (this._onStart)
             this._onStart(this._object);

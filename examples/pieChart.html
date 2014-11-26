@@ -1,0 +1,152 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button>
+    <button>Click and drag left to right to scrub</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    PieArc = function(id, x, y, offset, r, a1, a2, c) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.offset = offset;
+        this.r = r;
+        this.a1 = a1;
+        this.a2 = a2;
+        this.color = c;
+
+        this.draw = function() {
+            context.save();
+            context.translate(this.x, this.y)
+            context.rotate(rotation + this.a2)
+            context.translate(this.offset * Math.cos(this.a1 / 2), this.offset * Math.sin(this.a1 / 2))
+            context.beginPath();
+            context.moveTo(0, 0);
+            context.arc(0, 0, this.r, 0, this.a1);
+            context.lineTo(0, 0);
+            context.fillStyle = this.color;
+            context.fill();
+            context.restore();
+        };
+        return this;
+    }
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        time = document.getElementById('time')
+
+        context = canvas.getContext('2d');
+        context.lineWidth = .5;
+
+        chartX = width / 2;
+        chartY = height / 2;
+
+        var radius = height * .3;
+        var offset = height * .5;
+
+        var angles = [30, 10];//, 45, 35, 60, 38, 75, 67];
+        var pangle = 0;
+
+        pieArcs = [];
+
+        for (var i = 0; i < angles.length; i++) {
+            pieArcs.push(new PieArc(i, 0, 0, offset, radius, radians(angles[i]), radians(pangle), randomColor(), 0));
+            pangle += angles[i];
+        }
+
+        sequence = new MOTION.Sequence();
+
+        rotation = radians(270);
+        var a = rotation;
+        var d = 200;
+
+        for (var i = 0; i < pieArcs.length; i++) {
+            var pa = pieArcs[i]
+            a -= radians(((i > 0) ? (angles[i - 1] / 2 + angles[i] / 2) : angles[i] / 2));
+
+            sequence.add(new MOTION.Tween(this, 'rotation', a, d, 0, Expo.In));
+            sequence.add(new MOTION.Tween(d, 0, Circ.Out).add(pa, 'offset', 0).add(pa.color, 'a', [0,1]));
+            sequence.add(new MOTION(d));
+        }
+
+        sequence.add(new MOTION.Tween(this, 'chartY', height, d / 2).easing(Circ.In));
+
+        sequence
+            .onUpdate(function() {
+                time.innerHTML = this.getTime() | 0;
+            })
+            // .repeat()
+            .play();
+
+        flag = false;
+
+        document.getElementById('play').onclick = function() {
+            sequence.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            sequence.stop()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            sequence.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                sequence.seek(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            sequence.resume();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, width, height);
+
+        context.save();
+        context.translate(chartX, chartY);
+
+        for (var i = 0; i < pieArcs.length; i++)
+            pieArcs[i].draw();
+
+        context.restore();
+    }
+    </script>
+</body>

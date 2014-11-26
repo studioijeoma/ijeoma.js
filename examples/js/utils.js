@@ -1,3 +1,9 @@
+TWO_PI = Math.PI * 2;
+
+function radians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
 function random(min, max) {
     if (arguments.length === 0)
         return Math.random();
