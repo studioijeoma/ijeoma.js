@@ -25,19 +25,19 @@
             var m = this._motions[i];
 
             if (this._isSeeking) {
-                if (m.isInsidePlayingTime(this.getTime()))
+                if (m._isInsidePlayingTime(this.getTime()))
                     m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
-                else if (m.isAbovePlayingTime(this.getTime()))
+                else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
                     m.seek(0);
-            } else if (m.isInsidePlayingTime(this.getTime())) {
+            } else if (m._isInsidePlayingTime(this.getTime())) {
                 if (m.isPlaying())
                     m._update(this.getTime(), false);
                 else
                     m.play();
             } else if (m.isPlaying())
-            m.stop();
+                m.stop();
         }
     };
 
@@ -52,7 +52,7 @@
             for (var j = 0; j < properties.length; j++) {
                 var p = properties[j];
 
-                var name = (this._valueMode == MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
+                var name = (this._valueMode === MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
                 var order = 0;
 
                 if (name in orderMap) {
@@ -62,7 +62,7 @@
                     var pp = ppropertyMap[name];
                     p.setStart(pp.getEnd());
                 } else
-                p.setStart();
+                    p.setStart();
 
                 p._order = order;
 
@@ -82,7 +82,7 @@
     };
 
     MOTION.MotionController.prototype.get = function(name) {
-        if (typeof arguments[0] == 'number')
+        if (typeof arguments[0] === 'number')
             return this._motions[arguments[0]];
         return this._motions;
     };
@@ -109,9 +109,11 @@
         motion.delay(time);
         motion._hasController = true;
 
-        this._motions.push(motion);
+        MOTION.remove(motion);
 
-        if (motion.isTween()) {
+        this._motions.push(motion);
+ 
+        if (motion instanceof MOTION.Tween) {
             this._tweens.push(motion);
             this._updateTweens();
         }
@@ -124,10 +126,10 @@
     MOTION.MotionController.prototype.remove = function(motion) {
         var motion, i;
 
-        if (typeof arguments[0] == 'number') {
+        if (typeof arguments[0] === 'number') {
             i = arguments[0];
             motion = this._motions[i];
-        } else if (typeof arguments[0] == 'object') {
+        } else if (typeof arguments[0] === 'object') {
             motion = arguments[0];
             i = this._motions.indexOf(motion);
         }
@@ -135,7 +137,7 @@
         if (i != -1)
             this._motions.splice(i, 1);
 
-        if (motion.isTween()) {
+        if (motion instanceof MOTION.Tween) {
             i = this._tweens.indexOf(motion);
             this._tweens.splice(i, 1);
 
@@ -165,7 +167,7 @@
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();
-        MOTION.prototype.dispatchChangedEvent.call(this)
+        MOTION.prototype.dispatchChangedEvent.call(this);
     };
 
     _map = function(n, start1, stop1, start2, stop2) {

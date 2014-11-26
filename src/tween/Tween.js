@@ -1,15 +1,17 @@
-(function(MOTION, undefined) {
+(function(MOTION, undefined) { 
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
         this._properties = [];
         this._propertyMap = [];
 
-        if (typeof arguments[0] == 'object') {
+        this._valueMode = MOTION.ABSOLUTE;
+
+        if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
-            this.addProperty(arguments[0], arguments[1], arguments[2])
+            this.addProperty(arguments[0], arguments[1], arguments[2]);
             this.setEasing(arguments[5]);
-        } else if (typeof arguments[0] == 'string') {
+        } else if (typeof arguments[0] === 'string') {
             MOTION.call(this, arguments[2], arguments[3]);
-            this.addProperty(arguments[0], arguments[1])
+            this.addProperty(arguments[0], arguments[1]);
             this.setEasing(arguments[4]);
         } else {
             MOTION.call(this, arguments[0], arguments[1]);
@@ -18,7 +20,7 @@
     };
 
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
-    MOTION.Tween.prototype.constrctor = MOTION.Tween
+    MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
@@ -27,9 +29,9 @@
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
         if (arguments[0] instanceof MOTION.Property)
-            p = arguments[0]
-        else if (typeof arguments[0] == 'object')
-            p = new MOTION.NumberProperty(object, property, end)
+            p = arguments[0];
+        else if (typeof arguments[0] === 'object')
+            p = new MOTION.NumberProperty(object, property, end);
         else
             p = new MOTION.NumberProperty(arguments[0], arguments[1]);
 
@@ -45,13 +47,13 @@
     MOTION.Tween.prototype.remove = function(child) {
         var property, i;
 
-        if (typeof arguments[0] == 'number') {
+        if (typeof arguments[0] === 'number') {
             i = arguments[0];
             property = this._properties[i];
-        } else if (typeof arguments[0] == 'name') {
+        } else if (typeof arguments[0] === 'name') {
             property = this._propertyMap[arguments[0]];
             i = this._properties.indexOf(property);
-        } else if (typeof arguments[0] == 'object') {
+        } else if (typeof arguments[0] === 'object') {
             property = arguments[0];
             i = this._properties.indexOf(property);
         }
@@ -66,9 +68,9 @@
     };
 
     MOTION.Tween.prototype.getProperty = function() {
-        if (typeof arguments[0] == 'string')
+        if (typeof arguments[0] === 'string')
             return this._propertyMap[arguments[0]];
-        else if (typeof arguments[0] == 'number')
+        else if (typeof arguments[0] === 'number')
             return this._properties[arguments[0]];
         else
             return this._properties;

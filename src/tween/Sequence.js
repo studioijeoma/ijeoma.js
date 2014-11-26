@@ -32,7 +32,7 @@
             for (var i = 0; i < this._motions.length; i++) {
                 var c = this._motions[i];
 
-                if (c.isInsidePlayingTime(this._time)) {
+                if (c._isInsidePlayingTime(this._time)) {
                     this._currentIndex = i;
                     this._current = c;
 

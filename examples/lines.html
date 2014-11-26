@@ -14,6 +14,7 @@
 
 <body>
     <button id="colors">Color/Black&White</button>
+    <button id="colors">Click and drag to change speed</button>
     <button id="reset">Reset</button>
 
     <script src="js/RequestAnimationFrame.js"></script>
@@ -36,28 +37,27 @@
         this.size = size;
         this.angle = angle;
 
-        var a = random(.10, 1)
         this.color1 = c1;
         this.color2 = c2;
 
+        this.gradient = context.createLinearGradient(0, 0, 0, this.size);
+        this.gradient.addColorStop(0, this.color1);
+        this.gradient.addColorStop(1, this.color2);
+
         var delay = random(0, 10000);
-        var duration = random(7500, 15000); 
+        var duration = random(7500, 15000);
 
         this.tweenX = new MOTION.Tween(this, 'x', [width + lineSize, -lineSize], duration, delay).repeat().play();
-        this.tweenAngle = new MOTION.Tween(this, 'angle', [angle, angle + Math.PI * 2 * random(-1,1)], duration, delay).reverse().repeat().play();
+        this.tweenAngle = new MOTION.Tween(this, 'angle', [angle, angle + Math.PI * 2 * random(-1, 1)], duration, delay).reverse().repeat().play();
 
         this.draw = function() {
-            gradient = context.createLinearGradient(0, 0, 0, this.size);
-            gradient.addColorStop(0, this.color1);
-            gradient.addColorStop(1, this.color2);
-
             context.save();
             context.translate(this.x, this.y);
             context.rotate(this.angle);
             context.beginPath();
             context.moveTo(0, 0);
             context.lineTo(0, this.size);
-            context.strokeStyle = gradient;
+            context.strokeStyle = this.gradient;
             context.stroke();
             context.restore();
         }
@@ -88,6 +88,21 @@
         };
 
         document.getElementById('reset').onclick = setupLines;
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                MOTION.timeScaleAll(e.clientX / window.innerWidth * 5)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+        }
     }
 
     function setupLines() {
@@ -110,8 +125,8 @@
         context.fillStyle = backgroundColor;
         context.fillRect(0, 0, width, height);
 
-        for (var i = 0; i < lines.length; i++) 
-            lines[i].draw(); 
+        for (var i = 0; i < lines.length; i++)
+            lines[i].draw();
     }
 
     function random(min, max) {

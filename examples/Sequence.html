@@ -36,12 +36,12 @@
         time = document.getElementById('time');
 
         sequence = new MOTION.Sequence()
-            .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], 1500).onUpdate(function() {
+            .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], 1000).onUpdate(function() {
                 rect1.style.top = rect1.y + 'px';
                 var bw = Math.round(this.getPosition() * 255);
                 rect1.style.backgroundColor = 'rgb(' + bw + ',' + bw + ',' + bw + ')';
             }))
-            .add(new MOTION.Tween(rect2, 'y', [rectH, -rectH], 1500).onUpdate(function() {
+            .add(new MOTION.Tween(rect2, 'y', [rectH, -rectH], 1000).onUpdate(function() {
                 rect2.style.top = rect2.y + 'px';
                 var bw = Math.round(this.getPosition() * 255);
                 rect2.style.backgroundColor = 'rgb(' + bw + ',' + bw + ',' + bw + ')';
@@ -49,6 +49,7 @@
             .onUpdate(function() {
                 time.innerHTML = this.getTime() | 0;
             })
+            .repeat()
             .play();
 
         document.getElementById('play').onclick = function() {

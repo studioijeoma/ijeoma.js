@@ -11,13 +11,13 @@
             var m = this._motions[i];
 
             if (this._isSeeking) {
-                if (m.isInsidePlayingTime(this.getTime()))
+                if (m._isInsidePlayingTime(this.getTime()))
                     m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
-                else if (m.isAbovePlayingTime(this.getTime()))
+                else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
                     m.seek(0);
-            } else if (m.isInsidePlayingTime(this.getTime())) {
+            } else if (m._isInsidePlayingTime(this.getTime())) {
                 if (m.isPlaying())
                     m._update(this.getTime(), false);
                 else
@@ -26,9 +26,9 @@
                 if (this._isReversing && i < this._motions.length - 1)
                     m.seek(1);
                 else
-                    for (var i = 0; i < _motions.length; i++)
-                        _motions[i].stop();
+                    for (var i = 0; i < this._motions.length; i++)
+                        this._motions[i].stop();
             }
         }
     };
-})(MOTION)
+})(MOTION);

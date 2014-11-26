@@ -1,19 +1,21 @@
 (function(MOTION, undefined) {
+    _propertyCount = 0;
+
     MOTION.Property = function(object, field, values) {
-        this._object = (typeof arguments[0] == 'object') ? object : window;
-        this._field = (typeof arguments[0] == 'object') ? field : arguments[0];
+        this._object = (typeof arguments[0] === 'object') ? object : window;
+        this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
 
-        this._id = 'Property' + _ids['Property']++;
+        this._id = 'Property' + _propertyCount++;
 
-        var values = (typeof arguments[0] == 'object') ? values : arguments[1]
+        var values = (typeof arguments[0] === 'object') ? values : arguments[1];
 
-        this._start = this._object[this._field] = (typeof values == 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
-        this._end = (typeof values == 'number') ? values : values[1];
+        this._start = this._object[this._field] = (typeof values === 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
+        this._end = (typeof values === 'number') ? values : values[1];
 
         this._position = 0;
 
         this._order = 0;
-    }
+    };
 
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
@@ -51,7 +53,7 @@
     };
 
     MOTION.Property.prototype.getPosition = function() {
-        return this._position
+        return this._position;
     };
 
     MOTION.Property.prototype.setPosition = function(position) {
@@ -65,9 +67,9 @@
     };
 
     MOTION.NumberProperty = function(object, field, end) {
-        MOTION.Property.call(this, object, field, end)
+        MOTION.Property.call(this, object, field, end);
     };
 
     MOTION.NumberProperty.prototype = Object.create(MOTION.Property.prototype);
-    MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty
-})(MOTION)
+    MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty;
+})(MOTION);
