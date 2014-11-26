@@ -3,7 +3,7 @@
         MOTION.MotionController.call(this, name, motions);
     };
 
-    MOTION.Parallel.prototype = MOTION.MotionController.prototype;
+    MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Parallel.prototype.constructor = MOTION.Parallel;
 
     MOTION.Parallel.prototype._updateMotions = function() {
