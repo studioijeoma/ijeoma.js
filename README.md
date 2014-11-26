@@ -26,20 +26,24 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
  
 Tweening a variable named x from 0 to 1024 in 1000 millseconds. 
 ```javascript 
+//new MOTION.Tween(object, property, end, duration, [delay], [easing])
 var x = 0;
 var tween = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
 ```
 or
 ```javascript 
+//new MOTION.Tween(property, [start,end], duration, [delay], [easing])
 var tween = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
 ```
 
 Tweening multiple variables and object properties
 ```javascript
+//new MOTION.Tween(duration, [delay], [easing])
 var tween = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
 ```
 or
 ```javascript
+//new MOTION.Tween(duration, [delay], [easing])
 var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
 ```
 
