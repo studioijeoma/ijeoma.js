@@ -17,6 +17,7 @@
     <button>Click and drag around to scrub</button>
 
     <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script language="javascript">
     var width = window.innerWidth;
@@ -176,39 +177,6 @@
                 }
 
         context.restore();
-    }
-
-    function randomColor() {
-        var r = 255 * Math.random() | 0,
-            g = 255 * Math.random() | 0,
-            b = 255 * Math.random() | 0;
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
-    }
-
-    function randomBW() {
-        var gray = Math.random();
-        var r = 255 * gray | 0,
-            g = 255 * gray | 0,
-            b = 255 * gray | 0;
-        return 'rgb(' + r + ',' + g + ',' + b + ')';
-    }
-
-    function random(min, max) {
-        if (arguments.length === 0)
-            return Math.random();
-        else if (arguments.length === 1)
-            return Math.random() * min;
-        else
-            return Math.random() * (max - min) + min;
-    };
-
-    function roundRandom(min, max) {
-        if (arguments.length === 0)
-            return random() | 0;
-        else if (arguments.length === 1)
-            return random(min) | 0;
-        else
-            return random(min, max) | 0;
     }
     </script>
 </body>

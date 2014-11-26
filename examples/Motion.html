@@ -16,6 +16,7 @@
     <button>Click and drag left to right to scrub</button>
 
     <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
     <script language="javascript" src="../build/ijeomamotion.js"></script>
     <script language="javascript">
     setup();
@@ -34,7 +35,7 @@
 
         motion = new MOTION(2500).play()
             .onUpdate(function() {
-                document.body.style.backgroundColor = lerpColor(color1, color2, this.getPosition()).toString();
+                document.body.style.backgroundColor = lerpColor(color1, color2, this.getPosition());
                 time.innerHTML = this.getTime() | 0;
             })
             .onEnd(function() {
@@ -66,36 +67,6 @@
         document.onmouseup = function(e) {
             flag = false;
             motion.resume();
-        }
-    }
-
-    function lerp(start, end, t) {
-        return t * (end - start) + start;
-    };
-
-    function lerpColor(start, end, t) {
-        return {
-            r: lerp(start.r, end.r, t) | 0,
-            g: lerp(start.g, end.g, t) | 0,
-            b: lerp(start.b, end.b, t) | 0,
-            toString: function() {
-                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-            }
-        }
-    }
-
-    function randomColor() {
-        var r = 255 * Math.random() | 0,
-            g = 255 * Math.random() | 0,
-            b = 255 * Math.random() | 0;
-
-        return {
-            r: r,
-            g: g,
-            b: b,
-            toString: function() {
-                return 'rgb(' + this.r + ',' + this.g + ',' + this.b + ')';
-            }
         }
     }
 
