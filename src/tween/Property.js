@@ -9,8 +9,8 @@
 
         var values = (typeof arguments[0] === 'object') ? values : arguments[1];
 
-        this._start = this._object[this._field] = (typeof values === 'number') ? ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]) : values[0];
-        this._end = (typeof values === 'number') ? values : values[1];
+        this._start = this._object[this._field] = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
+        this._end = (values instanceof Array) ? values[1] : values;
 
         this._position = 0;
 
