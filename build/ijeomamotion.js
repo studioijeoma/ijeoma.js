@@ -565,6 +565,24 @@ Bounce.InOut = function(t) {
     };
 
     window.MOTION = MOTION;
+
+    if (typeof Object.create != 'function') {
+        Object.create = (function() {
+            var Object = function() {};
+            return function(prototype) {
+                if (arguments.length > 1) {
+                    throw Error('Second argument not supported');
+                }
+                if (typeof prototype != 'object') {
+                    throw TypeError('Argument must be an object');
+                }
+                Object.prototype = prototype;
+                var result = new Object();
+                Object.prototype = null;
+                return result;
+            };
+        })();
+    }
 })(window);;(function(MOTION, undefined) {
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
@@ -856,7 +874,7 @@ Bounce.InOut = function(t) {
         this._currentIndex = 0;
     };
 
-    MOTION.Sequence.prototype = MOTION.MotionController.prototype;
+    MOTION.Sequence.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Sequence.prototype.constructor = MOTION.Sequence;
 
     MOTION.Sequence.prototype.add = function(child) {

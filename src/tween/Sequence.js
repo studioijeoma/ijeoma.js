@@ -6,7 +6,7 @@
         this._currentIndex = 0;
     };
 
-    MOTION.Sequence.prototype = MOTION.MotionController.prototype;
+    MOTION.Sequence.prototype = Object.create(MOTION.MotionController.prototype);
     MOTION.Sequence.prototype.constructor = MOTION.Sequence;
 
     MOTION.Sequence.prototype.add = function(child) {
