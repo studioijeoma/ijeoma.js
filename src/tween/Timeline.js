@@ -4,14 +4,14 @@
         this.delay(time);
     };
 
-    MOTION.Keyframe.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Keyframe.prototype = MOTION.MotionController.prototype;
     MOTION.Keyframe.prototype.constructor = MOTION.Keyframe;
 
     MOTION.Timeline = function() {
         MOTION.MotionController.call(this);
     };
 
-    MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Timeline.prototype = MOTION.MotionController.prototype;
     MOTION.Timeline.prototype.constructor = MOTION.Timeline;
 
 

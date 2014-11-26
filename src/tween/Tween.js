@@ -19,7 +19,7 @@
         }
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype);
+    MOTION.Tween.prototype = MOTION.prototype;
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype._updateProperties = function() {

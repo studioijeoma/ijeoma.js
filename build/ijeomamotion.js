@@ -745,7 +745,7 @@ Bounce.InOut = function(t) {
         MOTION.MotionController.call(this, name, motions);
     };
 
-    MOTION.Parallel.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Parallel.prototype = MOTION.MotionController.prototype;
     MOTION.Parallel.prototype.constructor = MOTION.Parallel;
 
     MOTION.Parallel.prototype._updateMotions = function() {
@@ -856,7 +856,7 @@ Bounce.InOut = function(t) {
         this._currentIndex = 0;
     };
 
-    MOTION.Sequence.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Sequence.prototype = MOTION.MotionController.prototype;
     MOTION.Sequence.prototype.constructor = MOTION.Sequence;
 
     MOTION.Sequence.prototype.add = function(child) {
@@ -899,14 +899,14 @@ Bounce.InOut = function(t) {
         this.delay(time);
     };
 
-    MOTION.Keyframe.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Keyframe.prototype = MOTION.MotionController.prototype;
     MOTION.Keyframe.prototype.constructor = MOTION.Keyframe;
 
     MOTION.Timeline = function() {
         MOTION.MotionController.call(this);
     };
 
-    MOTION.Timeline.prototype = Object.create(MOTION.MotionController.prototype);
+    MOTION.Timeline.prototype = MOTION.MotionController.prototype;
     MOTION.Timeline.prototype.constructor = MOTION.Timeline;
 
 
@@ -1017,7 +1017,7 @@ Bounce.InOut = function(t) {
         }
     };
 
-    MOTION.Tween.prototype = Object.create(MOTION.prototype);
+    MOTION.Tween.prototype = MOTION.prototype;
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
     MOTION.Tween.prototype._updateProperties = function() {
