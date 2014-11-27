@@ -1,0 +1,89 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="colors">Color/Black&White</button>
+    <button id="time"></button>
+    <button>Click and drag left to right to scrub</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var usingColor = true;
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+        context.lineWidth = 5;
+
+        c1 = randomColor();
+        c2 = randomColor();
+
+        tween = new MOTION.Tween(1000)
+            .add("position", [0, 1])
+            .play()
+            .onUpdate(function() {
+                c3 = lerpColor(c1, c2, position)
+            })
+            .onEnd(function() {
+                c1 = c2;
+                c2 = (usingColor) ? randomColor() : randomBW();
+                this.play();
+            });
+
+        document.getElementById('colors').onclick = function() {
+            usingColor = !usingColor;
+        };
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            tween.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                tween.seek(e.clientX / window.innerWidth * 5)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            tween.resume();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = c3;
+        context.fillRect(0, 0, width, height);
+
+        document.getElementById('time').innerHTML = tween.time() | 0;
+    }
+    </script>
+</body>

@@ -18,12 +18,16 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 [MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html): plays Tweens, Parallels and Sequences any time using MOTION.Keyframes.
 
+[Colors](http://ekeneijeoma.github.io/ijeomamotion.js/examples/colors.html)
+
+[Gradients](http://ekeneijeoma.github.io/ijeomamotion.js/examples/gradients.html): creates custom property for tweening colors
+
 [Lines](http://ekeneijeoma.github.io/ijeomamotion.js/examples/lines.html)
 
 [Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
 
 #Getting Started 
- 
+###Tweening
 Tweening a variable named x from 0 to 1024 in 1000 millseconds. 
 ```javascript 
 //new MOTION.Tween(object, property, end, duration, [delay], [easing])
@@ -47,12 +51,17 @@ or
 var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
 ```
 
+You can also call play and stop on all motion objects using
+```javascript
+MOTION.playAll()
+MOTION.stopAll()
+```
+
 ###Callbacks 
 ```javascript
 t = new MOTION.Tween(...).onStart(func).onUpdate(func).onEnd(func).play(); 
 ```
 
-##How to playback Tweens 
 ###Updating
 ```javascript 
 MOTION.update(time) //best used with requestAnimationFrame
@@ -74,21 +83,33 @@ var tween = new MOTION.Tween("w", 1024, 1000).delay(500).play();
 ```javascript  
 t.pause(); 
 t.resume(); 
-t.seek(time); 
+t.seek(position); 
+
+MOTION.pauseAll();
+MOTION.resumell();
+MOTION.seekAll(position);
 ```
 ###Repeating
 ```javascript
 var tween = new MOTION.Tween(...).repeat().play();
+
+MOTION.repeatAll([duration]);
 ```
 ###Reversing
 ```javascript 
 var tween = new MOTION.Tween(...).repeat().reverse().play();
+
+MOTION.reverseAll();
 ```
 
 ###Changing speed/timescale
 ```javascript 
 var tween = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
+
+MOTION.timeScaleAll(time);
 ```
+
+###playing
 
 ##Playing back tweens in parallel
 ```javascript
@@ -98,7 +119,7 @@ var parallel = new MOTION.Parallel()
   .play(); 
 ``` 
 
-##Playing back tweens in a sequence
+##Playing back tweens in sequence
 ```javascript
 var sequence = new MOTION.Sequence() 
   .add(new MOTION.Tween(...)) 

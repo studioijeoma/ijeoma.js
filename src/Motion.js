@@ -40,7 +40,6 @@
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
-    MOTION._isAutoUpdating = false;
     MOTION._time = 0;
 
     MOTION.playAll = function() {
@@ -104,6 +103,10 @@
 
         return this;
     };
+
+    MOTION.time = function() {
+        return MOTION._time;
+    }
 
     MOTION.isPlaying = function() {
         for (var i = 0; i < MOTION._motions.length; i++)
@@ -249,6 +252,8 @@
     MOTION.prototype.getTime = function() {
         return (this._time < this._delayTime) ? 0 : (this._time - this._delayTime);
     };
+
+    MOTION.prototype.time = MOTION.prototype.getTime;
 
     MOTION.prototype.setTimeScale = function(timeScale) {
         this._timeScale = timeScale;

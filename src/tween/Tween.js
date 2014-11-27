@@ -4,7 +4,7 @@
         this._propertyMap = [];
 
         this._valueMode = MOTION.ABSOLUTE;
-
+        
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
             this.addProperty(arguments[0], arguments[1], arguments[2]);

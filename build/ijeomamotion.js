@@ -200,7 +200,6 @@ Bounce.InOut = function(t) {
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
-    MOTION._isAutoUpdating = false;
     MOTION._time = 0;
 
     MOTION.playAll = function() {
@@ -264,6 +263,10 @@ Bounce.InOut = function(t) {
 
         return this;
     };
+
+    MOTION.time = function() {
+        return MOTION._time;
+    }
 
     MOTION.isPlaying = function() {
         for (var i = 0; i < MOTION._motions.length; i++)
@@ -409,6 +412,8 @@ Bounce.InOut = function(t) {
     MOTION.prototype.getTime = function() {
         return (this._time < this._delayTime) ? 0 : (this._time - this._delayTime);
     };
+
+    MOTION.prototype.time = MOTION.prototype.getTime;
 
     MOTION.prototype.setTimeScale = function(timeScale) {
         this._timeScale = timeScale;
@@ -1028,7 +1033,7 @@ Bounce.InOut = function(t) {
         this._propertyMap = [];
 
         this._valueMode = MOTION.ABSOLUTE;
-
+        
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
             this.addProperty(arguments[0], arguments[1], arguments[2]);
