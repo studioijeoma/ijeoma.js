@@ -24,7 +24,7 @@
 
     MOTION.Tween.prototype._updateProperties = function() {
         for (var i = 0; i < this._properties.length; i++)
-            this._properties[i].update(this._easing(this.getPosition()));
+            this._properties[i].update(this._easing(this.position()));
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {

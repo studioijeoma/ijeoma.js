@@ -6,7 +6,6 @@
         MOTION.call(this);
 
         this._motions = [];
-        this._tweens = [];
 
         if (motions) this.addAll(motions);
     };
@@ -100,28 +99,22 @@
     };
 
     MOTION.MotionController.prototype.remove = function(motion) {
-        var motion, i;
+        var i;
 
         if (typeof arguments[0] === 'number') {
             i = arguments[0];
-            motion = this._motions[i];
         } else if (typeof arguments[0] === 'string') {
             for (var j = 0; j < this._motions.length; j++)
-                if (this._motions[j]._name === arguments[0]) {
-                    i = j;
+                if (this._motions[j]._name === arguments[0])
                     motion = this._motions[j];
-                }
         } else if (typeof arguments[0] === 'object') {
-            motion = arguments[0];
             i = this._motions.indexOf(motion);
         }
 
-        if (i != -1)
+        if (i != -1) {
             this._motions.splice(i, 1);
-
-        this._updateDuration();
-
-        // motion.kill();
+            this._updateDuration();
+        }
 
         return this;
     };
@@ -138,7 +131,7 @@
             this.remove(this._motions[i]);
 
         return this;
-    }; 
+    };
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();
