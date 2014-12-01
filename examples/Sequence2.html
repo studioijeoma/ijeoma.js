@@ -1,0 +1,96 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button>
+    <button>Click and drag left to right to scrub</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        time = document.getElementById('time')
+
+        context = canvas.getContext('2d');
+        context.lineWidth = .5;
+
+        x = 50;
+        y = 50;
+        radius = 10;
+        duration = 1000;
+         
+        sequence = new MOTION.Sequence().relative();
+        sequence.add(new MOTION.Tween(duration).add('radius', 55))
+        sequence.add(new MOTION.Tween(duration).add('x', 400).add('y', 100))
+        // sequence.add(new MOTION.Tween(duration).add('x', 450).add('y', 400))
+        // sequence.add(new MOTION.Tween(duration).add('x', 100).add('y', 450))
+        sequence.add(new MOTION.Tween(duration).add('x', 50).add('y', 50).add(this, 'radius', 5)) 
+        sequence.play();
+
+        flag = false;
+
+        document.getElementById('play').onclick = function() {
+            sequence.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            sequence.stop()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            sequence.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                sequence.seek(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            sequence.resume();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, width, height);
+
+        context.beginPath();
+        context.arc(x, y, radius, 0, TWO_PI);
+        context.fillStyle = 'white';
+        context.fill();
+    }
+    </script>
+</body>

@@ -11,19 +11,21 @@
 
     MOTION.Sequence.prototype.add = function(child) {
         MOTION.MotionController.prototype.insert.call(this, child, this._duration);
+
         return this;
     };
 
-    MOTION.Sequence.prototype.get = function(name) {
-        if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]]; 
-        else
-            return this._current;
-    };
-
-    MOTION.Sequence.prototype.getIndex = function() {
+    MOTION.Sequence.prototype.getCurrentIndex = function() {
         return this._currentIndex;
     };
+
+    MOTION.Sequence.prototype.currentIndex = MOTION.Sequence.prototype.getCurrentIndex;
+
+    MOTION.Sequence.prototype.getCurrent = function() {
+        return this._current;
+    };
+
+    MOTION.Sequence.prototype.current = MOTION.Sequence.prototype.getCurrent;
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();

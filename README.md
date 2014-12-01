@@ -24,6 +24,8 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 [Lines](http://ekeneijeoma.github.io/ijeomamotion.js/examples/lines.html)
 
+[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/pieChart.html)
+
 [Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
 
 #Getting Started 

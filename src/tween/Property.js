@@ -1,30 +1,38 @@
 (function(MOTION, undefined) {
-    _propertyCount = 0;
+    MOTION._properties = [];
 
     MOTION.Property = function(object, field, values) {
         this._object = (typeof arguments[0] === 'object') ? object : window;
         this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
 
-        this._id = 'Property' + _propertyCount++;
-
         var values = (typeof arguments[0] === 'object') ? values : arguments[1];
 
-        this._start = this._object[this._field] = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
-        this._end = (values instanceof Array) ? values[1] : values;
+        this._start = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
+        this._end = this._object[this._field] = (values instanceof Array) ? values[1] : values;
 
         this._position = 0;
 
-        this._order = 0;
+        var found = MOTION._properties.filter(function(d) {
+            return d.object == this._object && d.field == this._field;
+        }, this);
+
+        if (found.length == 1) {
+            this._order = ++found[0].count;
+        } else {
+            MOTION._properties.push({
+                object: this._object,
+                field: this._field,
+                count: 1
+            })
+            this._order = 1;
+        }
     };
 
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 0)) {
-            this._object[this._field] = this._position * (this._end - this._start) + this._start;
-        } else {
-            // console.log(this._position);
-        }
+        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
+            this._object[this._field] = this._position * (this._end - this._start) + this._start; 
     };
 
     MOTION.Property.prototype.getStart = function() {

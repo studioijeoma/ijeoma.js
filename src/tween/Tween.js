@@ -1,10 +1,10 @@
-(function(MOTION, undefined) { 
+(function(MOTION, undefined) {
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
         this._properties = [];
         this._propertyMap = [];
 
         this._valueMode = MOTION.ABSOLUTE;
-        
+
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
             this.addProperty(arguments[0], arguments[1], arguments[2]);
@@ -50,6 +50,7 @@
         if (typeof arguments[0] === 'number') {
             i = arguments[0];
             property = this._properties[i];
+
         } else if (typeof arguments[0] === 'name') {
             property = this._propertyMap[arguments[0]];
             i = this._properties.indexOf(property);
@@ -105,9 +106,9 @@
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setStart();
+        // if (this._valueMode == MOTION.RELATIVE)
+        //     for (var i = 0; i < this._properties.length; i++)
+        //         this._properties[i].setStart();
 
         if (this._onStart)
             this._onStart(this._object);

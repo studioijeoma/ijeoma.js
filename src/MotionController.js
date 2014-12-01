@@ -1,4 +1,7 @@
 (function(MOTION, undefined) {
+    MOTION.RELATIVE = 'relative';
+    MOTION.ABSOLUTE = 'absolute';
+
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
@@ -11,7 +14,7 @@
     MOTION.MotionController.prototype = Object.create(MOTION.prototype);
     MOTION.MotionController.prototype.constructor = MOTION.MotionController;
 
-    MOTION.MotionController.prototype.reverse = function(_valueMode) {
+    MOTION.MotionController.prototype.reverse = function() {
         MOTION.prototype.reverse.call(this);
 
         for (var i = 0; i < this._motions.length; i++)
@@ -26,7 +29,7 @@
 
             if (this._isSeeking) {
                 if (m._isInsidePlayingTime(this.getTime()))
-                    m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(this._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
@@ -42,34 +45,34 @@
     };
 
     MOTION.MotionController.prototype._updateTweens = function() {
-        var orderMap = [];
-        var ppropertyMap = [];
+        // var orderMap = [];
+        // var ppropertyMap = [];
 
-        for (var i = 0; i < this._tweens.length; i++) {
-            var t = this._tweens[i];
-            var properties = t.get();
+        // for (var i = 0; i < this._tweens.length; i++) {
+        //     var t = this._tweens[i];
+        //     var properties = t.get();
 
-            for (var j = 0; j < properties.length; j++) {
-                var p = properties[j];
+        //     for (var j = 0; j < properties.length; j++) {
+        //         var p = properties[j];
 
-                var name = (this._valueMode === MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
-                var order = 0;
+        //         var name = (this._valueMode === MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
+        //         var order = 0;
 
-                if (name in orderMap) {
-                    order = orderMap[name];
-                    order++;
+        //         if (name in orderMap) {
+        //             order = orderMap[name];
+        //             order++;
 
-                    var pp = ppropertyMap[name];
-                    p.setStart(pp.getEnd());
-                } else
-                    p.setStart();
+        //             var pp = ppropertyMap[name];
+        //             p.setStart(pp.getEnd());
+        //         } else
+        //             p.setStart();
 
-                p._order = order;
+        //         p._order = order;
 
-                orderMap[name] = order;
-                ppropertyMap[name] = p;
-            }
-        }
+        //         orderMap[name] = order;
+        //         ppropertyMap[name] = p;
+        //     }
+        // }
     };
 
     MOTION.MotionController.prototype._updateDuration = function() {
@@ -82,8 +85,14 @@
     };
 
     MOTION.MotionController.prototype.get = function(name) {
-        if (typeof arguments[0] === 'number')
+        if (typeof arguments[0] === 'number') {
             return this._motions[arguments[0]];
+        } else if (typeof arguments[0] === 'string') {
+            for (var j = 0; j < this._motions.length; j++)
+                if (this._motions[j]._name === arguments[0])
+                    return this._motions[j];
+        }
+
         return this._motions;
     };
 
@@ -100,6 +109,8 @@
         return this;
     };
 
+    MOTION.MotionController.prototype.valueMode = MOTION.MotionController.prototype.setValueMode;
+
     MOTION.MotionController.prototype.add = function(motion) {
         this.insert(motion, 0);
         return this;
@@ -107,16 +118,17 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
+        motion.valueMode(this._valueMode);
         motion._hasController = true;
 
-        MOTION.remove(motion);
-
         this._motions.push(motion);
- 
-        if (motion instanceof MOTION.Tween) {
-            this._tweens.push(motion);
-            this._updateTweens();
-        }
+
+        // if (motion instanceof MOTION.Tween) {
+        //     this._tweens.push(motion);
+        //     this._updateTweens();
+        // }
+
+        MOTION.remove(motion);
 
         this._updateDuration();
 
@@ -129,6 +141,12 @@
         if (typeof arguments[0] === 'number') {
             i = arguments[0];
             motion = this._motions[i];
+        } else if (typeof arguments[0] === 'string') {
+            for (var j = 0; j < this._motions.length; j++)
+                if (this._motions[j]._name === arguments[0]) {
+                    i = j;
+                    motion = this._motions[j];
+                }
         } else if (typeof arguments[0] === 'object') {
             motion = arguments[0];
             i = this._motions.indexOf(motion);
@@ -137,16 +155,16 @@
         if (i != -1)
             this._motions.splice(i, 1);
 
-        if (motion instanceof MOTION.Tween) {
-            i = this._tweens.indexOf(motion);
-            this._tweens.splice(i, 1);
+        // if (motion instanceof MOTION.Tween) {
+        //     i = this._tweens.indexOf(motion);
+        //     this._tweens.splice(i, 1);
 
-            this._updateTweens();
-        }
+        //     this._updateTweens();
+        // }
 
         this._updateDuration();
 
-        motion.kill();
+        // motion.kill();
 
         return this;
     };
@@ -159,8 +177,8 @@
     };
 
     MOTION.MotionController.prototype.removeAll = function() {
-        for (var i = 0; i < motions.length; i++)
-            this.remove(motions[i]);
+        for (var i = 0; i < this._motions.length; i++)
+            this.remove(this._motions[i]);
 
         return this;
     };
@@ -170,7 +188,7 @@
         MOTION.prototype.dispatchChangedEvent.call(this);
     };
 
-    _map = function(n, start1, stop1, start2, stop2) {
-        return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+    MOTION.MotionController.prototype._map = function(n, start1, end1, start2, end2) {
+        return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
     };
 })(MOTION)

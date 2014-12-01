@@ -19,16 +19,15 @@
         if (typeof arguments[0] == 'undefined') {
             MOTION.MotionController.prototype.play.call(this);
         } else if (typeof arguments[0] == 'number') {
-            this.seek(arguments[0] / this._duration);
+            this.seek(this._motions[arguments[0]] / this._duration);
             this.resume();
-        }
-        // else if (typeof arguments[0] == 'string') {
-        //     var k = this.get(arguments[0]);
-
-        //     this.seek(k.getPlayTime() / this._duration);
-        //     this.resume();
-        // } 
-        else if (typeof arguments[0] == 'object') {
+        } else if (typeof arguments[0] == 'string') {
+            for (var i = 0; i < this._motions.length; i++)
+                if (this._motions[i]._name === arguments[0]) {
+                    this.seek(this._motions[i] / this._duration);
+                    this.resume();
+                }
+        } else if (typeof arguments[0] == 'object') {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.resume();
         }
@@ -40,16 +39,15 @@
         if (typeof arguments[0] == 'undefined')
             MOTION.MotionController.prototype.stop.call(this);
         else if (typeof arguments[0] == 'number') {
-            this.seek(arguments[0] / this._duration);
+            this.seek(this._motions[arguments[0]] / this._duration);
             this.pause();
-        }
-        // else if (typeof arguments[0] == 'string') {
-        //     var k = this.get(arguments[0]);
-
-        //     this.seek(k.getPlayTime() / this._duration);
-        //     this.pause();
-        // } 
-        else if (typeof arguments[0] == 'object') {
+        } else if (typeof arguments[0] == 'string') {
+            for (var i = 0; i < this._motions.length; i++)
+                if (this._motions[i]._name === arguments[0]) {
+                    this.seek(this._motions[i] / this._duration);
+                    this.pause();
+                }
+        } else if (typeof arguments[0] == 'object') {
             this.seek(arguments[0].getPlayTime() / this._duration);
             this.pause();
         }
@@ -68,37 +66,29 @@
                 this._motions[this._motions.indexOf(c)] = c;
             } else {
                 var key = time + '';
-
-                // if (key in this._motionMap)
-                //     this._motionMap[key].add(motion);
-                // else {
+ 
                 var k = new MOTION.Keyframe(time + '');
                 k.add(motion);
 
                 this.insert(k, time);
-                // } 
             }
         }
 
         return this;
     };
 
-    MOTION.Timeline.prototype.get = function(index) {
-        if (typeof arguments[0] == 'number')
-            return this._motions[arguments[0]];
-        // else if (typeof arguments == 'string')
-        //     return this._motionMap[arguments[0]];
-        else {
-            var current = [];
+    MOTION.Timeline.prototype.getCurrent = function(index) {
+        var current = [];
 
-            for (var i = 0; i < this._motions.length; i++)
-                if (this._motions[i].isInsidePlayingTime(this.getTime()))
-                    current.push(this._motions[i]);
+        for (var i = 0; i < this._motions.length; i++)
+            if (this._motions[i].isInsidePlayingTime(this.getTime()))
+                current.push(this._motions[i]);
 
-            if (current.length == 0)
-                return null;
-            else
-                return current;
-        }
+        if (current.length == 0)
+            return null;
+        else
+            return current;
     };
+
+    MOTION.Timeline.prototype.current = MOTION.Timeline.prototype.getCurrent
 })(MOTION)

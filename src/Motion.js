@@ -34,9 +34,6 @@
 
     MOTION.REVISION = '1';
 
-    MOTION.RELATIVE = 'relative';
-    MOTION.ABSOLUTE = 'absolute';
-
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
@@ -236,6 +233,8 @@
 
         return this;
     };
+
+    MOTION.prototype.name = MOTION.prototype.setName;
 
     MOTION.prototype.getName = function() {
         return this._name;
