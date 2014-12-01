@@ -1,0 +1,78 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="time"></button>
+    <button>Move your mouse around</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        time = document.getElementById('time')
+
+        context = canvas.getContext('2d');
+        context.lineWidth = .5;
+
+        radius = height * .1;
+        x = width / 2;
+        y = -radius;
+        color = 'white'
+        // color1 = randomColor();
+        // color2 = randomColor();
+
+        tween = new MOTION.Tween(200).add('x', x).add('y', y).relative().onUpdate(function() {
+            // console.log(this.position())
+            // color = lerpColor(color1, color2,this.position())
+        }).onEnd(function() {
+            // color1 = color2;
+            // color2 = randomColor();
+        });
+
+        document.onmousemove = function(e) {
+            tween.get('x').end(e.clientX)
+            tween.get('y').end(e.clientY)
+            tween.play();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, width, height);
+
+        context.beginPath();
+        context.arc(x, y, radius, 0, TWO_PI);
+        context.fillStyle = color;
+        context.fill();
+
+        document.getElementById('time').innerHTML = tween.time() | 0;
+    }
+    </script>
+</body>

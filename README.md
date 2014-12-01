@@ -18,7 +18,7 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 [MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html): plays Tweens, Parallels and Sequences any time using MOTION.Keyframes.
 
-[Colors](http://ekeneijeoma.github.io/ijeomamotion.js/examples/colors.html)
+[Mouse](http://ekeneijeoma.github.io/ijeomamotion.js/examples/mouse.html)
 
 [Gradients](http://ekeneijeoma.github.io/ijeomamotion.js/examples/gradients.html): creates custom property for tweening colors
 
