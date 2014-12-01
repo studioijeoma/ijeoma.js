@@ -224,6 +224,16 @@ Bounce.InOut = function(t) {
             MOTION._motions[i].seek(t);
     };
 
+    MOTION.repeatAll = function(duration) {
+        for (var i = 0; i < MOTION._motions.length; i++)
+            MOTION._motions[i].repeat(duration);
+    };
+
+    MOTION.reverseAll = function() {
+        for (var i = 0; i < MOTION._motions.length; i++)
+            MOTION._motions[i].reverse();
+    };
+
     MOTION.timeScaleAll = function(t) {
         for (var i = 0; i < MOTION._motions.length; i++)
             MOTION._motions[i].timeScale(t);
