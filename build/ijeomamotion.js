@@ -253,7 +253,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.update = function(time) {
-        MOTION._time = time !== undefined ? time : ((MOTION._usePerformance) ? window.performance.now() : Date.now());
+        MOTION._time = typeof time !== undefined ? time : ((MOTION._usePerformance) ? window.performance.now() : Date.now());
 
         for (var i = 0; i < MOTION._motions.length; i++)
             MOTION._motions[i]._update();
