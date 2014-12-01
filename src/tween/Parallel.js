@@ -12,7 +12,7 @@
 
             if (this._isSeeking) {
                 if (m._isInsidePlayingTime(this.getTime()))
-                    m.seek(_map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(this._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else

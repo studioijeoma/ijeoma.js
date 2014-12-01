@@ -44,37 +44,6 @@
         }
     };
 
-    MOTION.MotionController.prototype._updateTweens = function() {
-        // var orderMap = [];
-        // var ppropertyMap = [];
-
-        // for (var i = 0; i < this._tweens.length; i++) {
-        //     var t = this._tweens[i];
-        //     var properties = t.get();
-
-        //     for (var j = 0; j < properties.length; j++) {
-        //         var p = properties[j];
-
-        //         var name = (this._valueMode === MOTION.RELATIVE) ? p._field : t._id + '.' + p._field;
-        //         var order = 0;
-
-        //         if (name in orderMap) {
-        //             order = orderMap[name];
-        //             order++;
-
-        //             var pp = ppropertyMap[name];
-        //             p.setStart(pp.getEnd());
-        //         } else
-        //             p.setStart();
-
-        //         p._order = order;
-
-        //         orderMap[name] = order;
-        //         ppropertyMap[name] = p;
-        //     }
-        // }
-    };
-
     MOTION.MotionController.prototype._updateDuration = function() {
         for (var i = 0; i < this._motions.length; i++)
             this._duration = Math.max(this._duration, this._motions[i].getDelay() + this._motions[i].getDuration());
@@ -123,11 +92,6 @@
 
         this._motions.push(motion);
 
-        // if (motion instanceof MOTION.Tween) {
-        //     this._tweens.push(motion);
-        //     this._updateTweens();
-        // }
-
         MOTION.remove(motion);
 
         this._updateDuration();
@@ -155,13 +119,6 @@
         if (i != -1)
             this._motions.splice(i, 1);
 
-        // if (motion instanceof MOTION.Tween) {
-        //     i = this._tweens.indexOf(motion);
-        //     this._tweens.splice(i, 1);
-
-        //     this._updateTweens();
-        // }
-
         this._updateDuration();
 
         // motion.kill();
@@ -181,7 +138,7 @@
             this.remove(this._motions[i]);
 
         return this;
-    };
+    }; 
 
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();

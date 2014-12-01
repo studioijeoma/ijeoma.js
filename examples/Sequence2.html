@@ -43,13 +43,13 @@
         x = 50;
         y = 50;
         radius = 10;
-        duration = 1000;
+        duration = 500;
          
         sequence = new MOTION.Sequence().relative();
         sequence.add(new MOTION.Tween(duration).add('radius', 55))
         sequence.add(new MOTION.Tween(duration).add('x', 400).add('y', 100))
-        // sequence.add(new MOTION.Tween(duration).add('x', 450).add('y', 400))
-        // sequence.add(new MOTION.Tween(duration).add('x', 100).add('y', 450))
+        sequence.add(new MOTION.Tween(duration).add('x', 450).add('y', 400))
+        sequence.add(new MOTION.Tween(duration).add('x', 100).add('y', 450))
         sequence.add(new MOTION.Tween(duration).add('x', 50).add('y', 50).add(this, 'radius', 5)) 
         sequence.play();
 
