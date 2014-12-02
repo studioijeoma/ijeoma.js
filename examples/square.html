@@ -1,0 +1,233 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    canvas {
+        position: absolute;
+        left:0;
+        top:0;
+        z-index: -100;
+    }
+    </style>
+</head>
+
+<body>
+
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time"></button> 
+    <button>Click and drag left to right to scrub</button>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+        context.lineWidth = .5;
+
+        setupSquare();
+
+        document.getElementById('play').onclick = function() {
+            timeline.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            timeline.stop()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            timeline.pause();
+        }
+
+        document.onmousemove = function(e) { 
+            if (flag)
+                timeline.seek(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            timeline.resume();
+        }
+    }
+
+    function setupSquare() {
+        squareW = height * .5;
+        squareH = height * .5;
+        squareR = 0;
+
+        pointSize = 10;
+        pointDuration = 500;
+        pointColor = function() {
+            return {
+                r: 255,
+                g: 255,
+                b: 255,
+                a: 1,
+                toString: function() {
+                    return 'rgba(' + this.r + ',' + this.g + ',' + this.b + ',' + this.a + ')'
+                }
+            }
+        }
+
+        points = [{
+            x: 0,
+            y: 0,
+            size: pointSize,
+            color: pointColor()
+        }, {
+            x: squareW,
+            y: 0,
+            size: pointSize,
+            color: pointColor()
+        }, {
+            x: squareW,
+            y: squareH,
+            size: pointSize,
+            color: pointColor()
+        }, {
+            x: 0,
+            y: squareH,
+            size: pointSize,
+            color: pointColor()
+        }, {
+            x: 0,
+            y: 0,
+            size: pointSize,
+            color: pointColor()
+        }];
+
+        lines = [{
+            x1: points[0].x,
+            y1: points[0].y,
+            x2: points[1].x,
+            y2: points[1].y,
+            color: pointColor()
+        }, {
+            x1: points[1].x,
+            y1: points[1].y,
+            x2: points[2].x,
+            y2: points[2].y,
+            color: pointColor()
+        }, {
+            x1: points[2].x,
+            y1: points[2].y,
+            x2: points[3].x,
+            y2: points[3].y,
+            color: pointColor()
+        }, {
+            x1: points[3].x,
+            y1: points[3].y,
+            x2: points[4].x,
+            y2: points[4].y,
+            color: pointColor()
+        }, {
+            x1: points[3].x,
+            y1: points[3].y,
+            x2: points[0].x,
+            y2: points[0].y,
+            color: pointColor()
+        }];
+
+        pointSequence = new MOTION.Sequence();
+        pointSequence.add(new MOTION.Tween(pointDuration)
+            .add(points[0], 'size', [0, pointSize])
+            .add(points[0].color, 'a', [0, 1]))
+        pointSequence.add(new MOTION.Tween(pointDuration)
+            .add(points[1], 'size', [0, pointSize])
+            .add(points[1].color, 'a', [0, 1]))
+        pointSequence.add(new MOTION.Tween(pointDuration)
+            .add(points[2], 'size', [0, pointSize])
+            .add(points[2].color, 'a', [0, 1]))
+        pointSequence.add(new MOTION.Tween(pointDuration)
+            .add(points[3], 'size', [0, pointSize])
+            .add(points[3].color, 'a', [0, 1]))
+        pointSequence.easing(Bounce.Out)
+
+        lineSequence = new MOTION.Sequence();
+        lineSequence.add(new MOTION.Tween(pointDuration)
+            .add(lines[0], 'x2', [lines[0].x1, lines[0].x2])
+            .add(lines[0], 'y2', [lines[0].y1, lines[0].y2]))
+        lineSequence.add(new MOTION.Tween(pointDuration)
+            .add(lines[1], 'x2', [lines[1].x1, lines[1].x2])
+            .add(lines[1], 'y2', [lines[1].y1, lines[1].y2]))
+        lineSequence.add(new MOTION.Tween(pointDuration)
+            .add(lines[2], 'x2', [lines[2].x1, lines[2].x2])
+            .add(lines[2], 'y2', [lines[2].y1, lines[2].y2]))
+        lineSequence.add(new MOTION.Tween(pointDuration)
+            .add(lines[3], 'x2', [lines[3].x1, lines[3].x2])
+            .add(lines[3], 'y2', [lines[3].y1, lines[3].y2]))
+        lineSequence.easing(Bounce.Out)
+
+        squareTween = new MOTION.Tween(pointDuration * 4).add('squareR', [0, Math.PI]).easing(Bounce.Out)
+
+        timeline = new MOTION.Timeline()
+            .add(pointSequence, 0)
+            .add(lineSequence, 0) 
+            .add(squareTween, 0)
+            .repeat().play()
+    }
+
+    function drawLine(x1, y1, x2, y2, c) {
+        context.beginPath();
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+        context.strokeStyle = c;
+        context.stroke();
+    }
+
+
+    function drawCircle(x, y, s, c) {
+        context.beginPath();
+        context.arc(x, y, s, 0, TWO_PI);
+        context.fillStyle = c;
+        context.fill();
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+
+        if (typeof time === 'undefined')
+            return true;
+
+        MOTION.update(time);
+
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, width, height);
+
+        context.save();
+        context.translate(width / 2, height / 2);
+        context.rotate(squareR);
+        context.translate(-squareW / 2, -squareH / 2);
+
+        drawLine(lines[0].x1, lines[0].y1, lines[0].x2, lines[0].y2, points[0].color);
+        drawLine(lines[1].x1, lines[1].y1, lines[1].x2, lines[1].y2, points[1].color);
+        drawLine(lines[2].x1, lines[2].y1, lines[2].x2, lines[2].y2, points[2].color);
+        drawLine(lines[3].x1, lines[3].y1, lines[3].x2, lines[3].y2, points[3].color);
+
+        drawCircle(points[0].x, points[0].y, points[0].size, points[0].color);
+        drawCircle(points[1].x, points[1].y, points[1].size, points[1].color);
+        drawCircle(points[2].x, points[2].y, points[2].size, points[2].color);
+        drawCircle(points[3].x, points[3].y, points[3].size, points[3].color);
+
+        context.restore();
+
+        document.getElementById('time').innerHTML = timeline.time() | 0; 
+    }
+    </script>
+</body>

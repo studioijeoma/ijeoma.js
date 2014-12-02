@@ -34,6 +34,9 @@
 
     MOTION.REVISION = '1';
 
+    MOTION.ABSOLUTE = 'absolute';
+    MOTION.RELATIVE = 'relative';
+
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
@@ -328,30 +331,6 @@
         this._isRepeatingDelay = false;
 
         return this;
-    };
-
-    MOTION.prototype.relative = function() {
-        this.setValueMode(MOTION.RELATIVE);
-
-        return this;
-    };
-
-    MOTION.prototype.absolute = function() {
-        this.setValueMode(MOTION.ABSOLUTE);
-
-        return this;
-    };
-
-    MOTION.prototype.setValueMode = function(_valueMode) {
-        this._valueMode = _valueMode;
-
-        return this;
-    };
-
-    MOTION.prototype.valueMode = MOTION.prototype.setValueMode;
-
-    MOTION.prototype.getValueMode = function() {
-        return this._valueMode;
     };
 
     MOTION.prototype.isDelaying = function() {

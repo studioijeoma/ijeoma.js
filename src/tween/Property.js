@@ -32,7 +32,7 @@
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = this._position * (this._end - this._start) + this._start; 
+            this._object[this._field] = this._position * (this._end - this._start) + this._start;  
     };
 
     MOTION.Property.prototype.getStart = function() {

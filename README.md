@@ -20,13 +20,15 @@ Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/
 
 [Mouse](http://ekeneijeoma.github.io/ijeomamotion.js/examples/mouse.html)
 
-[Gradients](http://ekeneijeoma.github.io/ijeomamotion.js/examples/gradients.html): creates custom property for tweening colors
+[Gradients](http://ekeneijeoma.github.io/ijeomamotion.js/examples/gradients.html): shows how to create custom property for tweening colors
 
 [Lines](http://ekeneijeoma.github.io/ijeomamotion.js/examples/lines.html)
 
 [Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/pieChart.html)
 
 [Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
+
+[Square](http://ekeneijeoma.github.io/ijeomamotion.js/examples/square.html): shows how to combine sequences and tweens in a timeline
 
 #Getting Started 
 ###Tweening

@@ -1,8 +1,6 @@
 (function(MOTION, undefined) {
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
         this._properties = [];
-        this._propertyMap = [];
-
         this._valueMode = MOTION.ABSOLUTE;
 
         if (typeof arguments[0] === 'object') {
@@ -36,7 +34,6 @@
             p = new MOTION.NumberProperty(arguments[0], arguments[1]);
 
         this._properties.push(p);
-        this._propertyMap[p._field] = p;
 
         return this;
     };
@@ -45,36 +42,34 @@
 
 
     MOTION.Tween.prototype.remove = function(child) {
-        var property, i;
+        var i;
 
         if (typeof arguments[0] === 'number') {
             i = arguments[0];
-            property = this._properties[i];
-
         } else if (typeof arguments[0] === 'name') {
-            property = this._propertyMap[arguments[0]];
             i = this._properties.indexOf(property);
         } else if (typeof arguments[0] === 'object') {
-            property = arguments[0];
-            i = this._properties.indexOf(property);
+            for (var j = 0; j < this._properties.length; j++)
+                if (this._properties[j]._field === arguments[0])
+                    j = i;
         }
 
         if (i && i != -1)
             this._properties.splice(i, 1);
 
-        if (property && property.getName() in this._propertyMap)
-            delete this._propertyMap[c.getName()];
-
         return this;
     };
 
     MOTION.Tween.prototype.getProperty = function() {
-        if (typeof arguments[0] === 'string')
-            return this._propertyMap[arguments[0]];
-        else if (typeof arguments[0] === 'number')
+        if (typeof arguments[0] === 'string') {
+            for (var j = 0; j < this._properties.length; j++)
+                if (this._properties[j]._field === arguments[0])
+                    return this._properties[j];
+        } else if (typeof arguments[0] === 'number') {
             return this._properties[arguments[0]];
-        else
+        } else {
             return this._properties;
+        }
     };
 
     MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
@@ -83,7 +78,7 @@
         return this._properties.length;
     };
 
-    MOTION.prototype.setEasing = function(easing) {
+    MOTION.Tween.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;
         }) : easing;
@@ -91,18 +86,42 @@
         return this;
     };
 
-    MOTION.prototype.easing = MOTION.prototype.setEasing;
+    MOTION.Tween.prototype.easing = MOTION.Tween.prototype.setEasing;
 
-    MOTION.prototype.getEasing = function() {
+    MOTION.Tween.prototype.getEasing = function() {
         return this._easing;
     };
 
-    MOTION.prototype.noEasing = function() {
+    MOTION.Tween.prototype.noEasing = function() {
         this.setEasing(function(t) {
             return t;
         });
 
         return this;
+    };
+
+    MOTION.Tween.prototype.relative = function() {
+        this.setValueMode(MOTION.RELATIVE);
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.absolute = function() {
+        this.setValueMode(MOTION.ABSOLUTE);
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.setValueMode = function(_valueMode) {
+        this._valueMode = _valueMode;
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.valueMode = MOTION.Tween.prototype.setValueMode;
+
+    MOTION.Tween.prototype.getValueMode = function() {
+        return this._valueMode;
     };
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {

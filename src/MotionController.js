@@ -1,11 +1,9 @@
 (function(MOTION, undefined) {
-    MOTION.RELATIVE = 'relative';
-    MOTION.ABSOLUTE = 'absolute';
-
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
         this._motions = [];
+        this._valueMode = null;
 
         if (motions) this.addAll(motions);
     };
@@ -68,6 +66,28 @@
         return this._motions.length;
     };
 
+    MOTION.MotionController.prototype.setEasing = function(easing) {
+        this._easing = (typeof easing == 'undefined') ? (function(t) {
+            return t;
+        }) : easing;
+
+        for (var i = 0; i < this._motions.length; i++) {
+            if (this._motions[i] instanceof MOTION.Tween) {
+                this._motions[i].easing(this._easing);
+            }
+        }
+
+        return this;
+    };
+
+    MOTION.MotionController.prototype.easing = MOTION.MotionController.prototype.setEasing;
+
+    MOTION.MotionController.prototype.getEasing = function() {
+        return this._easing;
+    };
+
+    MOTION.MotionController.prototype.valueMode = MOTION.MotionController.prototype.setValueMode;
+
     MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
         MOTION.prototype.setValueMode.call(this, _valueMode);
 
@@ -86,7 +106,7 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        motion.valueMode(this._valueMode);
+        if (this._valueMode) motion.valueMode(this._valueMode);
         motion._hasController = true;
 
         this._motions.push(motion);
