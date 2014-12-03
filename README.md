@@ -1,34 +1,34 @@
-#ijeomamotion.js
+#ijeoma.js
  
-A Javascript library for creating animations. Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. This library based on [ijeomamotion for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeomamotion.js).
+A Javascript library for creating animations. Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. This library based on [ijeoma for Java/Processing](https://github.com/ekeneijeoma/ijeoma) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js).
 
 #Download 
-Developement: [ijeomamotion.js](https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.js)
+Developement: [ijeoma.js](https://raw.githubusercontent.com/ekeneijeoma/ijeoma.js/master/build/ijeoma.js)
 
-Production: [ijeomamotion.min.js](https://raw.githubusercontent.com/ekeneijeoma/ijeomamotion.js/master/build/ijeomamotion.min.js)
+Production: [ijeoma.min.js](https://raw.githubusercontent.com/ekeneijeoma/ijeoma.js/master/build/ijeoma.min.js)
 
 #Examples  
-[MOTION](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Motion.html): counts from a starting time of 0 to an ending duration. 
+[MOTION](http://ekeneijeoma.github.io/ijeoma.js/examples/Motion.html): counts from a starting time of 0 to an ending duration. 
 
-[MOTION.Tween](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Tween.html): eases multiple number variables and object properties from a starting value to an ending value within a duration. 
+[MOTION.Tween](http://ekeneijeoma.github.io/ijeoma.js/examples/Tween.html): eases multiple number variables and object properties from a starting value to an ending value within a duration. 
 
-[MOTION.Parallel](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Parallel.html): plays multiple tweens at the same time.
+[MOTION.Parallel](http://ekeneijeoma.github.io/ijeoma.js/examples/Parallel.html): plays multiple tweens at the same time.
 
-[MOTION.Sequence](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Sequence.html): plays tweens one after the other.
+[MOTION.Sequence](http://ekeneijeoma.github.io/ijeoma.js/examples/Sequence.html): plays tweens one after the other.
 
-[MOTION.Timeline](http://ekeneijeoma.github.io/ijeomamotion.js/examples/Timeline.html): plays Tweens, Parallels and Sequences any time using MOTION.Keyframes.
+[MOTION.Timeline](http://ekeneijeoma.github.io/ijeoma.js/examples/Timeline.html): plays Tweens, Parallels and Sequences any time using MOTION.Keyframes.
 
-[Mouse](http://ekeneijeoma.github.io/ijeomamotion.js/examples/mouse.html)
+[Mouse](http://ekeneijeoma.github.io/ijeoma.js/examples/mouse.html)
 
-[Gradients](http://ekeneijeoma.github.io/ijeomamotion.js/examples/gradients.html): shows how to create custom property for tweening colors
+[Gradients](http://ekeneijeoma.github.io/ijeoma.js/examples/gradients.html): shows how to create custom property for tweening colors
 
-[Lines](http://ekeneijeoma.github.io/ijeomamotion.js/examples/lines.html)
+[Lines](http://ekeneijeoma.github.io/ijeoma.js/examples/lines.html)
 
-[Pie Chart](http://ekeneijeoma.github.io/ijeomamotion.js/examples/pieChart.html)
+[Pie Chart](http://ekeneijeoma.github.io/ijeoma.js/examples/pieChart.html)
 
-[Circular Network](http://ekeneijeoma.github.io/ijeomamotion.js/examples/circularNetwork.html)
+[Circular Network](http://ekeneijeoma.github.io/ijeoma.js/examples/circularNetwork.html)
 
-[Square](http://ekeneijeoma.github.io/ijeomamotion.js/examples/square.html): shows how to combine sequences and tweens in a timeline
+[Square](http://ekeneijeoma.github.io/ijeoma.js/examples/square.html): shows how to combine sequences and tweens in a timeline
 
 #Getting Started 
 ###Tweening
