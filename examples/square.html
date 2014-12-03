@@ -67,9 +67,8 @@
     }
 
     function setupSquare() {
-        squareW = height * .5;
-        squareH = height * .5;
-        squareR = 0;
+        squareSize = height * .5; 
+        squareRotation = 0;
 
         pointSize = 10;
         pointDuration = 500;
@@ -91,18 +90,18 @@
             size: pointSize,
             color: pointColor()
         }, {
-            x: squareW,
+            x: squareSize,
             y: 0,
             size: pointSize,
             color: pointColor()
         }, {
-            x: squareW,
-            y: squareH,
+            x: squareSize,
+            y: squareSize,
             size: pointSize,
             color: pointColor()
         }, {
             x: 0,
-            y: squareH,
+            y: squareSize,
             size: pointSize,
             color: pointColor()
         }, {
@@ -175,7 +174,7 @@
             .add(lines[3], 'y2', [lines[3].y1, lines[3].y2]))
         lineSequence.easing(Bounce.Out)
 
-        squareTween = new MOTION.Tween(pointDuration * 4).add('squareR', [0, Math.PI]).easing(Bounce.Out)
+        squareTween = new MOTION.Tween(pointDuration * 4).add('squareRotation', [0, Math.PI]).easing(Bounce.Out)
 
         timeline = new MOTION.Timeline()
             .add(pointSequence, 0)
@@ -213,8 +212,8 @@
 
         context.save();
         context.translate(width / 2, height / 2);
-        context.rotate(squareR);
-        context.translate(-squareW / 2, -squareH / 2);
+        context.rotate(squareRotation);
+        context.translate(-squareSize / 2, -squareSize / 2);
 
         drawLine(lines[0].x1, lines[0].y1, lines[0].x2, lines[0].y2, points[0].color);
         drawLine(lines[1].x1, lines[1].y1, lines[1].x2, lines[1].y2, points[1].color);
