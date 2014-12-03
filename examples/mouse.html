@@ -40,18 +40,9 @@
 
         radius = height * .1;
         x = width / 2;
-        y = -radius;
-        color = 'white'
-        // color1 = randomColor();
-        // color2 = randomColor();
+        y = -radius; 
 
-        tween = new MOTION.Tween(200).add('x', x).add('y', y).relative().onUpdate(function() {
-            // console.log(this.position())
-            // color = lerpColor(color1, color2,this.position())
-        }).onEnd(function() {
-            // color1 = color2;
-            // color2 = randomColor();
-        });
+        tween = new MOTION.Tween(1000).add('x', x).add('y', y).easing(Cubic.Out).relative()
 
         document.onmousemove = function(e) {
             tween.get('x').end(e.clientX)
@@ -69,7 +60,7 @@
 
         context.beginPath();
         context.arc(x, y, radius, 0, TWO_PI);
-        context.fillStyle = color;
+        context.fillStyle = 'white';
         context.fill();
 
         document.getElementById('time').innerHTML = tween.time() | 0;

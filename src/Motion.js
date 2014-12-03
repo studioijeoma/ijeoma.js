@@ -20,14 +20,13 @@
         this._isReversing = false;
         this._isSeeking = false;
 
-        this._order = 0;
-
         this._hasController = false;
+        this._useOnce = MOTION._useOnce;
 
         this._onStart = null;
         this._onEnd = null;
         this._onUpdate = null;
-        this._onRepeat = null;
+        this._onRepeat = null; 
 
         MOTION._add(this);
     };
@@ -40,6 +39,7 @@
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
+    MOTION._useOnce = false;
     MOTION._time = 0;
 
     MOTION.playAll = function() {
@@ -80,6 +80,13 @@
     MOTION.timeScaleAll = function(t) {
         for (var i = 0; i < MOTION._motions.length; i++)
             MOTION._motions[i].timeScale(t);
+    };
+
+    MOTION.useOnce = function(useOnce) {
+        MOTION._useOnce = (typeof useOnce !== 'undefined') ? useOnce : true;
+
+        for (var i = 0; i < MOTION._motions.length; i++)
+            MOTION._motions[i].useOnce(MOTION._useOnce);
     };
 
     MOTION._add = function(child) {
@@ -183,7 +190,7 @@
 
     MOTION.prototype.repeat = function(duration) {
         this._isRepeating = true;
-        if (typeof duration !== 'undefined' || duration) this._repeatDuration = duration;
+        this._repeatDuration = (typeof duration !== 'undefined') ? duration : 0;
 
         return this;
     };
@@ -229,7 +236,12 @@
                         this._delayTime = 0;
 
                     this.dispatchRepeatedEvent();
-                } else this.stop();
+                } else {
+                    if(this._useOnce && !this._hasController) 
+                        MOTION.remove(this);
+                    else 
+                        this.stop(); 
+                }
             }
         }
     };
@@ -352,6 +364,12 @@
     MOTION.prototype._isAbovePlayingTime = function(value) {
         return value >= this._delayTime + this._duration;
     };
+
+    MOTION.prototype.useOnce = function(useOnce) { 
+        this._useOnce = (typeof useOnce !== 'undefined') ? useOnce : true;
+    
+        return this;
+    }
 
     MOTION.prototype.onStart = function(func) {
         this._onStart = func;

@@ -1,0 +1,74 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+    }
+    div {
+        z-index: -100
+    }
+    </style>
+</head>
+
+<body>
+    <button id="play">Play</button>
+    <button id="stop">Stop</button>
+    <button id="time1"></button>
+    <button id="time2"></button>
+    <button id="time3"></button>
+    <button>Click and drag left to right to scrub</button>
+
+    <!-- // <script src="js/RequestAnimationFrame.js"></script> -->
+    <script language="javascript" src="../build/ijeomamotion.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        width = window.innerWidth;
+
+        rect = document.createElement('div');
+        rect.style.cssText = 'position: absolute; left:0; top:0; width:' + width + 'px; height:100%; background-color:black';
+
+        document.body.appendChild(rect); 
+
+        callback1 = new MOTION.Tween(1000).onEnd(function(){console.log('callback1')});
+        callback2 = new MOTION.Tween(2000).onEnd(function(){console.log('callback2')});
+        callback3 = new MOTION.Tween(3000).onEnd(function(){console.log('callback3')});
+
+        // MOTION.playAll()
+        
+        document.getElementById('play').onclick = function() {
+            MOTION.playAll()
+        }
+        document.getElementById('stop').onclick = function() {
+            MOTION.stopAll()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            MOTION.pauseAll();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                MOTION.seekAll(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            MOTION.resumeAll();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        document.getElementById('time1').innerHTML = callback1.time()
+        document.getElementById('time2').innerHTML = callback2.time()
+        document.getElementById('time3').innerHTML = callback3.time()
+    }
+    </script>
+</body>

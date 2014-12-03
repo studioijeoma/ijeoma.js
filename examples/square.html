@@ -146,18 +146,19 @@
 
         pointSequence = new MOTION.Sequence();
         pointSequence.add(new MOTION.Tween(pointDuration)
-            .add(points[0], 'size', [0, pointSize])
-            .add(points[0].color, 'a', [0, 1]))
+            .add(points[0], 'size', [0, pointSize]))
         pointSequence.add(new MOTION.Tween(pointDuration)
-            .add(points[1], 'size', [0, pointSize])
-            .add(points[1].color, 'a', [0, 1]))
+            .add(points[1], 'size', [0, pointSize]))
         pointSequence.add(new MOTION.Tween(pointDuration)
-            .add(points[2], 'size', [0, pointSize])
-            .add(points[2].color, 'a', [0, 1]))
+            .add(points[2], 'size', [0, pointSize]))
         pointSequence.add(new MOTION.Tween(pointDuration)
-            .add(points[3], 'size', [0, pointSize])
-            .add(points[3].color, 'a', [0, 1]))
+            .add(points[3], 'size', [0, pointSize]))
         pointSequence.easing(Bounce.Out)
+        pointSequence.add(new MOTION.Tween(pointDuration)   
+            .add(points[0].color, 'a', 0)
+            .add(points[1].color, 'a', 0)
+            .add(points[2].color, 'a', 0)
+            .add(points[3].color, 'a', 0).easing(Circ.Out))
 
         lineSequence = new MOTION.Sequence();
         lineSequence.add(new MOTION.Tween(pointDuration)
@@ -180,7 +181,8 @@
             .add(pointSequence, 0)
             .add(lineSequence, 0) 
             .add(squareTween, 0)
-            .repeat().play()
+            // .repeat()
+            .play().useOnce();
     }
 
     function drawLine(x1, y1, x2, y2, c) {
