@@ -7,9 +7,9 @@ The code is based on [ijeomamotion for Java/Processing](https://github.com/ekene
 While processing.js and Processing Javascript mode were sleeping and p5.js was born. ijeomamotion was being refactored to ijeoma.js which weights a lot less, has more muscle and is independent from processing.js and p5.js. Although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js) because we still love Processing :) 
 
 #Download 
-Developement: [ijeoma.js](https://raw.githubusercontent.com/ekeneijeoma/ijeoma.js/master/build/ijeoma.js)
+Developement: [ijeoma.js](http://goo.gl/04mfZ7)
 
-Production: [ijeoma.min.js](https://raw.githubusercontent.com/ekeneijeoma/ijeoma.js/master/build/ijeoma.min.js)
+Production: [ijeoma.min.js](http://goo.gl/c5OR98)
 
 #Examples  
 [MOTION](http://ekeneijeoma.github.io/ijeoma.js/examples/Motion.html): counts from a starting time of 0 to an ending duration. 

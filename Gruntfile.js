@@ -8,13 +8,13 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: ['src/easing/Easing.js', 'src/Motion.js', 'src/MotionController.js', 'src/tween/*.js'],
-                dest: 'build/ijeomamotion.js',
+                dest: 'build/ijeoma.js',
             },
         },
         uglify: {
             build: {
-                src: 'build/ijeomamotion.js',
-                dest: 'build/ijeomamotion.min.js'
+                src: 'build/ijeoma.js',
+                dest: 'build/ijeoma.min.js'
             }
         },
         watch: {
