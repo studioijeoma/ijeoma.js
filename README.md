@@ -1,6 +1,6 @@
 #ijeoma.js
  
-A Javascript library for creating animations. Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. This library based on [ijeoma for Java/Processing](https://github.com/ekeneijeoma/ijeoma) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js).
+A [fufu-powered](http://en.wikipedia.org/wiki/Fufu) Javascript library for creating animations which look and feel tasty :-J Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. The code is based on [ijeomamotion for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). This is a refactor of the JS port for which designed more of a JS-style and is independent from processing.js and p5.js although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js). 
 
 #Download 
 Developement: [ijeoma.js](https://raw.githubusercontent.com/ekeneijeoma/ijeoma.js/master/build/ijeoma.js)
