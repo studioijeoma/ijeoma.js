@@ -128,9 +128,7 @@ MOTION.reverseAll();
 var tween = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
 
 MOTION.timeScaleAll(time);
-```
-
-###playing
+``` 
 
 ##Playing back tweens in parallel
 ```javascript
