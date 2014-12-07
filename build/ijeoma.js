@@ -199,6 +199,7 @@ Bounce.InOut = function(t) {
     MOTION._motions = [];
 
     MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
+    MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
 
@@ -263,7 +264,7 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.update = function(time) {
-        MOTION._time = typeof time !== undefined ? time : ((MOTION._usePerformance) ? window.performance.now() : Date.now());
+        MOTION._time = typeof time !== undefined ? time : this._performance.now();
 
         for (var i = 0; i < MOTION._motions.length; i++)
             MOTION._motions[i]._update();
