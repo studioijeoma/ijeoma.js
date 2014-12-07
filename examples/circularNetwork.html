@@ -1,20 +1,25 @@
 <head>
-    <style>
+   <style>
     body {
         padding: 0;
+        margin: 0;
     }
-    canvas {
-        z-index: -100
+    div { 
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px; 
     }
     </style>
 </head>
 
 <body> 
-    <button id="nodes">Hide/Show Nodes</button>
-    <button id="links">Hide/Show Links</button>
-    <button id="colors">Color/Black&White</button>
-    <button id="reset">Reset</button>
-    <button>Click and drag around to scrub</button>
+    <div>
+        <button id="nodes">Hide/Show Nodes</button>
+        <button id="links">Hide/Show Links</button>
+        <button id="colors">Color/Black&White</button>
+        <button id="reset">Reset</button>
+        <button>Click and drag around to scrub</button>
+    </div>
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script src="js/utils.js"></script>

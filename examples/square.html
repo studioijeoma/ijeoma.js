@@ -1,23 +1,24 @@
 <head>
-    <style>
+   <style>
     body {
         padding: 0;
+        margin: 0;
     }
-    canvas {
+    div { 
         position: absolute;
-        left:0;
-        top:0;
-        z-index: -100;
+        z-index: 100;
+        padding: 10px 0 0 10px; 
     }
     </style>
 </head>
 
 <body>
-
-    <button id="play">Play</button>
-    <button id="stop">Stop</button>
-    <button id="time"></button> 
-    <button>Click and drag left to right to scrub</button>
+    <div>
+        <button id="play">Play</button>
+        <button id="stop">Stop</button>
+        <button id="time"></button> 
+        <button>Click and drag left to right to scrub</button>
+    </div>
 
     <script src="js/RequestAnimationFrame.js"></script>
     <script src="js/utils.js"></script>
