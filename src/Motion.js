@@ -314,6 +314,8 @@
         return this._repeatTime;
     };
 
+    MOTION.prototype.repeatTime = MOTION.prototype.getRepeatTime;
+
     MOTION.prototype.setDelay = function(delay) {
         this._delayTime = delay;
 
