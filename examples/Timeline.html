@@ -4,7 +4,7 @@
         padding: 0;
         margin: 0;
     }
-    div { 
+    #menu { 
         position: absolute;
         z-index: 100;
         padding: 10px 0 0 10px; 
@@ -13,7 +13,7 @@
 </head>
 
 <body>
-    <div>
+    <div id="menu">
         <button id="one">Play 1st keyframe</button>
         <button id="two">Play 2nd keyframe</button>
         <button id="three">Play 3rd keyframe</button>
@@ -62,7 +62,7 @@
 
         duration = 1000;
 
-        timeline = new MOTION.Timeline()
+        t = new MOTION.Timeline()
             .add(new MOTION.Tween(rect1, 'y', [-rectH, rectH], duration).onUpdate(function() {
                 rect1.style.top = rect1.y + 'px';
                 rect1.style.backgroundColor = lerpColor(rect1.startColor, rect1.endColor, this.getPosition()).toString();
@@ -100,37 +100,36 @@
             .play();
 
         document.getElementById('one').onclick = function() {
-            timeline.play(0);
+            t.play(0);
         }
         document.getElementById('two').onclick = function() {
-            timeline.play(duration);
+            t.play(duration);
         }
         document.getElementById('three').onclick = function() {
-            timeline.play(duration * 2);
+            t.play(duration * 2);
         }
         document.getElementById('four').onclick = function() {
-            timeline.play(duration * 3);
+            t.play(duration * 3);
         }
         document.getElementById('stop').onclick = function() {
-            timeline.stop();
+            t.stop();
         }
 
         flag = false;
 
-        document.onmousedown = function(e) {
-            console.log(this)
+        document.onmousedown = function(e) { 
             flag = true;
-            timeline.pause();
+            t.pause();
         }
 
         document.onmousemove = function(e) {
             if (flag)
-                timeline.seek(e.clientX / window.innerWidth)
+                t.seek(e.clientX / window.innerWidth)
         }
 
         document.onmouseup = function(e) {
             flag = false;
-            timeline.resume();
+            t.resume();
         }
     }
 

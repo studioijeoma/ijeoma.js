@@ -949,10 +949,11 @@ Bounce.InOut = function(t) {
 
 
     MOTION.Timeline.prototype.play = function(time) {
+        console.log(time)
         if (typeof arguments[0] == 'undefined') {
             MOTION.MotionController.prototype.play.call(this);
         } else if (typeof arguments[0] == 'number') {
-            this.seek(this._motions[arguments[0]] / this._duration);
+            this.seek(arguments[0] / this._duration);
             this.resume();
         } else if (typeof arguments[0] == 'string') {
             for (var i = 0; i < this._motions.length; i++)
@@ -972,7 +973,7 @@ Bounce.InOut = function(t) {
         if (typeof arguments[0] == 'undefined')
             MOTION.MotionController.prototype.stop.call(this);
         else if (typeof arguments[0] == 'number') {
-            this.seek(this._motions[arguments[0]] / this._duration);
+            this.seek(arguments[0] / this._duration);
             this.pause();
         } else if (typeof arguments[0] == 'string') {
             for (var i = 0; i < this._motions.length; i++)

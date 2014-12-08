@@ -1,21 +1,26 @@
 <head>
-    <style>
+   <style>
     body {
         padding: 0;
+        margin: 0;
     }
-    div {
-        z-index: -100
+    div { 
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px; 
     }
     </style>
 </head>
 
 <body>
-    <button id="play">Play</button>
-    <button id="stop">Stop</button>
-    <button id="time1"></button>
-    <button id="time2"></button>
-    <button id="time3"></button>
-    <button>Click and drag left to right to scrub</button>
+    <div>
+        <button id="play">Play</button>
+        <button id="stop">Stop</button>
+        <button id="time1"></button>
+        <button id="time2"></button>
+        <button id="time3"></button>
+        <button>Click and drag left to right to scrub</button>
+    </div>
 
     <!-- // <script src="js/RequestAnimationFrame.js"></script> -->
     <script language="javascript" src="../build/ijeoma.js"></script>
