@@ -66,6 +66,8 @@
         return this._motions.length;
     };
 
+    MOTION.MotionController.prototype.count = MOTION.MotionController.prototype.getCount;
+
     MOTION.MotionController.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;

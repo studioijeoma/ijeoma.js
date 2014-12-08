@@ -78,6 +78,8 @@
         return this._properties.length;
     };
 
+    MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
+
     MOTION.Tween.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;

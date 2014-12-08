@@ -665,6 +665,8 @@ Bounce.InOut = function(t) {
         return this._motions.length;
     };
 
+    MOTION.MotionController.prototype.count = MOTION.MotionController.prototype.getCount;
+
     MOTION.MotionController.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {
             return t;
@@ -1104,6 +1106,8 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
     };
+
+    MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
     MOTION.Tween.prototype.setEasing = function(easing) {
         this._easing = (typeof easing == 'undefined') ? (function(t) {

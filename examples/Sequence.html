@@ -52,7 +52,7 @@
                 rect2.style.backgroundColor = 'rgb(' + bw + ',' + bw + ',' + bw + ')';
             }))
             .onUpdate(function() {
-                time.innerHTML = this.getTime() | 0;
+                time.innerHTML = this.time() | 0;
             })
             .repeat()
             .play();

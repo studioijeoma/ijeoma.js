@@ -41,7 +41,7 @@
         motion = new MOTION(2500).play()
             .onUpdate(function() {
                 document.body.style.backgroundColor = lerpColor(color1, color2, this.getPosition());
-                time.innerHTML = this.getTime() | 0;
+                time.innerHTML = this.time() | 0;
             })
             .onEnd(function() {
                 color1 = color2;

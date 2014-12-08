@@ -39,7 +39,7 @@
         tween = new MOTION.Tween(2000).add('x', [-width,width]) 
             .onUpdate(function() {
                 rect.style.left = x + 'px';
-                time.innerHTML = this.getTime() | 0;
+                time.innerHTML = this.time() | 0;
             }) 
             .reverse()
             .repeat()

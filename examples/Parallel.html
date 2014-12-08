@@ -55,7 +55,7 @@
                 rect2.style.backgroundColor = lerpColor(rect2.startColor, rect2.endColor, this.getPosition()).toString();
             }))
             .onUpdate(function() {
-                time.innerHTML = this.getTime() | 0;
+                time.innerHTML = this.time() | 0;
             })
             .onEnd(function() { 
                 rect1.startColor = randomColor();
