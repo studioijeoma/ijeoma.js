@@ -915,6 +915,13 @@ Bounce.InOut = function(t) {
 
     MOTION.Sequence.prototype.current = MOTION.Sequence.prototype.getCurrent;
 
+    MOTION.MotionController.prototype.dispatchStartedEvent = function() {
+        this._current = null;
+        this._currentIndex = 0;
+
+        MOTION.prototype.dispatchStartedEvent.call(this)
+    };
+
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();
 
@@ -932,6 +939,13 @@ Bounce.InOut = function(t) {
         }
         
         MOTION.prototype.dispatchChangedEvent.call(this)
+    };
+
+    MOTION.MotionController.prototype.dispatchRepeatedEvent = function() {
+        this._current = null;
+        this._currentIndex = 0;
+
+        MOTION.prototype.dispatchRepeatedEvent.call(this)
     };
 })(MOTION);;(function(MOTION, undefined) {
     MOTION.Keyframe = function(time, motions) {
