@@ -64,6 +64,8 @@
         for (var i = 0; i < bars.length; i++)
             t1.add(bars[i], 'height', randomBarH());
 
+        t1.play().onEnd(randomBars);
+
         // bars
         //     .sort(function(a, b) {
         //         return a.height - b.height
@@ -82,18 +84,18 @@
 
         s = new MOTION.Sequence()
             .add(t1)
-            .play().onEnd();
+        //         .play().onEnd(randomBars);
     }
 
     function randomBars() {
         var bars = [];
 
-        for (var i = 0; i < barCount; i++)
-            bars.push({
-                'order': i,
-                'x': i * barW,
-                'height': randomBarH()
-            })
+        // for (var i = 0; i < barCount; i++)
+        //     bars.push({
+        //         'order': i,
+        //         'x': i * barW,
+        //         'height': randomBarH()
+        //     })
 
         // bars
         //     .sort(function(a, b) {
@@ -103,12 +105,16 @@
         //         return d;
         //     })
 
-        // var hProperties = s.get('heights').get();
+        // t1.relative();
 
-        // for (var i = 0; i < hProperties.length; i++) {
-        //     hProperties[i].start();
-        //     hProperties[i].end(bars[i].height)
-        // }
+        var hProperties = t1.get();
+
+        console.log(hProperties)
+
+        for (var i = 0; i < hProperties.length; i++) {
+            // hProperties[i].start();
+            hProperties[i].end(randomBarH())
+        }
 
         // var xProperties = s.get('xs').get();
 
@@ -116,11 +122,17 @@
         //     xProperties[i].end(bars[i].order * barW)
         // }
 
-        // s.play();
+        t1.play();
     }
 
     function draw(time) {
         requestAnimationFrame(draw);
+
+        if(!time || typeof time ==='undefined'){ 
+            console.log('asdfas')
+            return false
+        }
+
         MOTION.update(time);
 
         context.fillStyle = 'white';
@@ -141,21 +153,21 @@
 
     document.onmousedown = function(e) {
         flag = true;
-        sequence.pause();
+        s.pause();
     }
 
     document.onmousemove = function(e) {
         if (flag)
-            sequence.seek(e.clientX / window.innerWidth)
+            s.seek(e.clientX / window.innerWidth)
     }
 
     document.onmouseup = function(e) {
         flag = false;
-        sequence.resume();
+        s.resume();
     }
 
     document.getElementById('play').onclick = function() {
-        s.play();
+        t1.play();
     }
 
     document.getElementById('stop').onclick = function() {
