@@ -1,0 +1,165 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    div {
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="play">Play</button>
+        <button id="stop">Stop</button>
+        <button id="time"></button>
+        <button>Click and drag left to right to scrub</button>
+    </div>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeoma.js"></script>
+    <script language="javascript" src="js/utils.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+
+        barCount = 10;
+        barW = width / barCount;
+        randomBarH = function() {
+            return roundRandom(height / 4, height);
+        };
+        bars = [];
+        // barCScale = function(d) {
+        //     return lerp(height / 4, height, 0, 225,d);
+        // }
+
+        for (var i = 0; i < barCount; i++)
+            bars.push({
+                'order': i,
+                'x': i * barW,
+                'height': 0,
+                'color': randomColor()
+            })
+
+        t1 = new MOTION.Tween(1000)
+            .name('heights')
+            .easing(Quart.Out)
+
+        for (var i = 0; i < bars.length; i++)
+            t1.add(bars[i], 'height', randomBarH());
+
+        // bars
+        //     .sort(function(a, b) {
+        //         return a.height - b.height
+        //     }).map(function(d, i) {
+        //         d.order = i;
+        //         return d;
+        //     })
+
+        // t2 = new MOTION.Tween(50)
+        //     .name('xs')
+        //     // .relative()
+        //     .easing(Circ.Out)
+
+        // for (var i = 0; i < bars.length; i++)
+        //     t2.add(bars[i], 'x', bars[i].order * barW);
+
+        s = new MOTION.Sequence()
+            .add(t1)
+            .play().onEnd();
+    }
+
+    function randomBars() {
+        var bars = [];
+
+        for (var i = 0; i < barCount; i++)
+            bars.push({
+                'order': i,
+                'x': i * barW,
+                'height': randomBarH()
+            })
+
+        // bars
+        //     .sort(function(a, b) {
+        //         return a.height - b.height
+        //     }).map(function(d, i) {
+        //         d.order = i;
+        //         return d;
+        //     })
+
+        // var hProperties = s.get('heights').get();
+
+        // for (var i = 0; i < hProperties.length; i++) {
+        //     hProperties[i].start();
+        //     hProperties[i].end(bars[i].height)
+        // }
+
+        // var xProperties = s.get('xs').get();
+
+        // for (var i = 0; i < xProperties.length; i++) { 
+        //     xProperties[i].end(bars[i].order * barW)
+        // }
+
+        // s.play();
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+        MOTION.update(time);
+
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, width, height);
+
+        for (var i = 0; i < barCount; i++) {
+            // var c = barCScale(bars[i].height)
+
+            // context.fillStyle = 'rgb(' + c + ',' + c + ',' + c + ')';
+            context.fillStyle = bars[i].color;
+            context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
+        }
+
+        document.getElementById('time').innerHTML = s.time();
+    }
+
+    flag = false;
+
+    document.onmousedown = function(e) {
+        flag = true;
+        sequence.pause();
+    }
+
+    document.onmousemove = function(e) {
+        if (flag)
+            sequence.seek(e.clientX / window.innerWidth)
+    }
+
+    document.onmouseup = function(e) {
+        flag = false;
+        sequence.resume();
+    }
+
+    document.getElementById('play').onclick = function() {
+        s.play();
+    }
+
+    document.getElementById('stop').onclick = function() {
+        s.stop();
+    }
+    </script>
+</body>
