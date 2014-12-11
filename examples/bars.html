@@ -39,7 +39,7 @@
 
         context = canvas.getContext('2d');
 
-        barCount = 10;
+        barCount = 2;
         barW = width / barCount;
         randomBarH = function() {
             return roundRandom(height / 4, height);
@@ -64,7 +64,7 @@
         for (var i = 0; i < bars.length; i++)
             t1.add(bars[i], 'height', randomBarH());
 
-        t1.play().onEnd(randomBars);
+        t1.play();//.onEnd(randomBars);
 
         // bars
         //     .sort(function(a, b) {
@@ -82,8 +82,8 @@
         // for (var i = 0; i < bars.length; i++)
         //     t2.add(bars[i], 'x', bars[i].order * barW);
 
-        s = new MOTION.Sequence()
-            .add(t1)
+        // s = new MOTION.Sequence()
+        //     .add(t1)
         //         .play().onEnd(randomBars);
     }
 
@@ -105,7 +105,7 @@
         //         return d;
         //     })
 
-        // t1.relative();
+        t1.relative();
 
         var hProperties = t1.get();
 
@@ -128,10 +128,10 @@
     function draw(time) {
         requestAnimationFrame(draw);
 
-        if(!time || typeof time ==='undefined'){ 
-            console.log('asdfas')
-            return false
-        }
+        // if(!time || typeof time ==='undefined'){ 
+        //     console.log('asdfas')
+        //     return false
+        // }
 
         MOTION.update(time);
 
@@ -146,24 +146,24 @@
             context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
         }
 
-        document.getElementById('time').innerHTML = s.time();
+        document.getElementById('time').innerHTML = t1.time();
     }
 
     flag = false;
 
     document.onmousedown = function(e) {
         flag = true;
-        s.pause();
+        // s.pause();
     }
 
     document.onmousemove = function(e) {
-        if (flag)
-            s.seek(e.clientX / window.innerWidth)
+        // if (flag)
+        //     s.seek(e.clientX / window.innerWidth)
     }
 
     document.onmouseup = function(e) {
-        flag = false;
-        s.resume();
+        // flag = false;
+        // s.resume();
     }
 
     document.getElementById('play').onclick = function() {
