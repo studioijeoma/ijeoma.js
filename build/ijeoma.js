@@ -843,8 +843,7 @@ Bounce.InOut = function(t) {
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else {
-                console.log(this._object[this._field])
+            else { 
                 this._start = this._object[this._field];
             }
         } else
@@ -1181,8 +1180,7 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
          if (this._valueMode == MOTION.RELATIVE)
             for (var i = 0; i < this._properties.length; i++){
-                this._properties[i].setStart();
-                console.log([this._properties[i]._start, this._properties[i]._end])
+                this._properties[i].setStart(); 
             }
 
         if (this._onEnd)

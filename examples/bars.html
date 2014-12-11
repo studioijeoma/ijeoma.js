@@ -39,7 +39,7 @@
 
         context = canvas.getContext('2d');
 
-        barCount = 2;
+        barCount = 3;
         barW = width / barCount;
         randomBarH = function() {
             return roundRandom(height / 4, height);
@@ -65,68 +65,74 @@
         for (var i = 0; i < bars.length; i++)
             t1.add(bars[i], 'height', randomBarH());
 
-        t1.play().onEnd(randomBars);
+        bars
+            .sort(function(a, b) {
+                return a.height - b.height
+            }).map(function(d, i) {
+                d.order = i;
+                return d;
+            })
 
-        // bars
-        //     .sort(function(a, b) {
-        //         return a.height - b.height
-        //     }).map(function(d, i) {
-        //         d.order = i;
-        //         return d;
-        //     })
+        t2 = new MOTION.Tween(1000)
+            .name('xs')
+            .relative()
+            .easing(Circ.Out)
 
-        // t2 = new MOTION.Tween(50)
-        //     .name('xs')
-        //     // .relative()
-        //     .easing(Circ.Out)
+        for (var i = 0; i < bars.length; i++)
+            t2.add(bars[i], 'x', bars[i].order * barW);
 
-        // for (var i = 0; i < bars.length; i++)
-        //     t2.add(bars[i], 'x', bars[i].order * barW);
-
-        // s = new MOTION.Sequence()
-        //     .add(t1)
-        //         .play().onEnd(randomBars);
+        s = new MOTION.Sequence()
+            .add(t1)
+            .add(t2)
+            .play().onEnd(randomBars);
+        s.playCount = 0;
     }
 
     function randomBars() {
-        var bars = [];
+        var randomHs = []
 
-        // for (var i = 0; i < barCount; i++)
-        //     bars.push({
-        //         'order': i,
-        //         'x': i * barW,
-        //         'height': randomBarH()
-        //     })
+        for (var i = 0; i < barCount; i++)
+            randomHs.push(randomBarH())
 
-        // bars
+        for (var i = 0; i < bars.length; i++) 
+            bars[i].height = randomHs[i];
+
+        randomHs.sort();
+
+        for (var i = 0; i < bars.length; i++) 
+            bars[i].order = randomHs.indexOf(bars[i].height);  
+
+        // var sortedBars = bars.slice(0);
+
+        // sortedBars
         //     .sort(function(a, b) {
         //         return a.height - b.height
         //     }).map(function(d, i) {
         //         d.order = i;
         //         return d;
-        //     })
+        //     }) 
 
-        // t1.relative();
+        // bars.map(function(d){
 
-        // t1 = s.get('heights') 
+        // })
+
+        t1 = s.get('heights')
 
         var hProperties = t1.get();
 
-        console.log(hProperties)
-
         for (var i = 0; i < hProperties.length; i++) {
-            // hProperties[i].start();
-            hProperties[i].end(randomBarH())
+            hProperties[i].end(bars[i].height)
         }
 
-        // var xProperties = s.get('xs').get();
+        var xProperties = s.get('xs').get();
 
-        // for (var i = 0; i < xProperties.length; i++) { 
-        //     xProperties[i].end(bars[i].order * barW)
-        // }
+        for (var i = 0; i < xProperties.length; i++) {
+            xProperties[i].end(bars[i].order * barW)
+            // xProperties[i].end(random(width))
+        }
 
-        t1.play();
-        // s.play()
+        s.playCount++;
+        s.play()
     }
 
     function draw(time) {
@@ -150,7 +156,7 @@
             context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
         }
 
-        document.getElementById('time').innerHTML = t1.time();
+        document.getElementById('time').innerHTML = t2.get(0).position();
     }
 
     flag = false;

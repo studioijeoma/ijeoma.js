@@ -43,8 +43,7 @@
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else {
-                console.log(this._object[this._field])
+            else { 
                 this._start = this._object[this._field];
             }
         } else
