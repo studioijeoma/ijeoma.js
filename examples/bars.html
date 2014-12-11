@@ -60,11 +60,12 @@
         t1 = new MOTION.Tween(1000)
             .name('heights')
             .easing(Quart.Out)
+            .relative()
 
         for (var i = 0; i < bars.length; i++)
             t1.add(bars[i], 'height', randomBarH());
 
-        t1.play();//.onEnd(randomBars);
+        t1.play().onEnd(randomBars);
 
         // bars
         //     .sort(function(a, b) {
@@ -105,7 +106,9 @@
         //         return d;
         //     })
 
-        t1.relative();
+        // t1.relative();
+
+        // t1 = s.get('heights') 
 
         var hProperties = t1.get();
 
@@ -123,6 +126,7 @@
         // }
 
         t1.play();
+        // s.play()
     }
 
     function draw(time) {
