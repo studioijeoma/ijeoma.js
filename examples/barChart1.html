@@ -14,7 +14,7 @@
 
 <body>
     <div>
-        <button id="time"></button>
+        <button id="time"></button> 
         <button>Click and drag left to right to scrub</button>
     </div>
 
@@ -37,8 +37,13 @@
 
         context = canvas.getContext('2d');
 
-        barCount = 10;
+        barCount = 50;
         barW = width / barCount;
+        barHRange = [height / 4, height]
+
+        barColorScale = function(d) {
+            return 'hsl(' + map(d,barHRange[0],barHRange[1],300,0) + ',75%,50%)';
+        }
 
         randomBarHSort = function(a, b) {
             return (Math.random() < .5) ? function(a, b) {
@@ -54,7 +59,7 @@
             for (var i = 0; i < bars.length; i++)
                 data.push({
                     i: i,
-                    h: roundRandom(height / 4, height),
+                    h: roundRandom(barHRange[0], barHRange[1]),
                     order: i
                 })
 
@@ -88,7 +93,7 @@
 
         t1 = new MOTION.Tween(1000)
             .name('heights')
-            .easing(Quart.Out)
+            .easing(Quad.Out)
             .relative()
 
         for (var i = 0; i < bars.length; i++)
@@ -104,7 +109,9 @@
 
         s = new MOTION.Sequence()
             .add(t1)
+            .add(new MOTION(500))
             .add(t2)
+            .add(new MOTION(500))
             .play().onEnd(randomBars);
     }
 
@@ -135,7 +142,8 @@
         context.fillRect(0, 0, width, height);
 
         for (var i = 0; i < barCount; i++) {
-            context.fillStyle = bars[i].color;
+            // context.fillStyle = bars[i].color;
+            context.fillStyle = barColorScale(bars[i].height)
             context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
         }
 

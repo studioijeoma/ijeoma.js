@@ -54,6 +54,10 @@ function randomBW(useAlpha) {
     }
 }
 
+function map(n, start1, end1, start2, end2) {
+    return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
+};
+
 function lerp(start, end, t) {
     return t * (end - start) + start;
 };

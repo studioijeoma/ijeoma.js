@@ -90,25 +90,34 @@
 
         barData = randomBarData();
 
-        t1 = new MOTION.Tween(1000)
-            .name('heights')
-            .easing(Quart.Out)
+        t1 = new MOTION.Tween(1000) 
+            .easing(Bounce.In)
             .relative()
 
         for (var i = 0; i < bars.length; i++)
             t1.add(bars[i], 'height', barData[i].h);
 
-        t2 = new MOTION.Tween(1000)
-            .name('xs')
+        t2 = new MOTION.Tween(1000) 
             .relative()
-            .easing(Circ.Out)
+            .easing(Quad.InOut)
 
         for (var i = 0; i < bars.length; i++)
             t2.add(bars[i], 'x', barData[i].order * barW);
 
+        t3 = new MOTION.Tween(1000) 
+            .relative()
+            .easing(Bounce.Out)
+
+        for (var i = 0; i < bars.length; i++)
+            t3.add(bars[i], 'height', 0);
+
         s = new MOTION.Sequence()
-            .add(t1)
-            .add(t2)
+            .add(t1) 
+            .add(new MOTION(500))
+            .add(t2) 
+            .add(new MOTION(500))
+            .add(t3)
+            .add(new MOTION(500))
             .play()
             .onEnd(setupBars)
             .useOnce();
