@@ -28,6 +28,8 @@ Production: [ijeoma.min.js](http://goo.gl/c5OR98)
 
 [Lines](http://ekeneijeoma.github.io/ijeoma.js/examples/lines.html)
 
+Bar Charts: [1](http://ekeneijeoma.github.io/ijeoma.js/examples/barChart1.html), [2](http://ekeneijeoma.github.io/ijeoma.js/examples/barChart2.html)
+
 [Pie Chart](http://ekeneijeoma.github.io/ijeoma.js/examples/pieChart.html)
 
 [Circular Network](http://ekeneijeoma.github.io/ijeoma.js/examples/circularNetwork.html)

@@ -26,7 +26,7 @@
         this._onStart = null;
         this._onEnd = null;
         this._onUpdate = null;
-        this._onRepeat = null; 
+        this._onRepeat = null;
 
         MOTION._add(this);
     };
@@ -104,7 +104,7 @@
     };
 
     MOTION.update = function(time) {
-        if(typeof time == 'undefined') return false;
+        if (typeof time == 'undefined') return false;
 
         MOTION._time = typeof time !== undefined ? time : this._performance.now();
 
@@ -157,7 +157,10 @@
 
         this.dispatchEndedEvent();
 
-        return this;
+        if (this._useOnce && !this._hasController)
+            MOTION.remove(this);
+        else
+            return this;
     };
 
     MOTION.prototype.pause = function() {
@@ -240,10 +243,8 @@
 
                     this.dispatchRepeatedEvent();
                 } else {
-                    if(this._useOnce && !this._hasController) 
-                        MOTION.remove(this);
-                    else 
-                        this.stop(); 
+
+                    this.stop();
                 }
             }
         }
@@ -370,9 +371,9 @@
         return value >= this._delayTime + this._duration;
     };
 
-    MOTION.prototype.useOnce = function(useOnce) { 
+    MOTION.prototype.useOnce = function(useOnce) {
         this._useOnce = (typeof useOnce !== 'undefined') ? useOnce : true;
-    
+
         return this;
     }
 

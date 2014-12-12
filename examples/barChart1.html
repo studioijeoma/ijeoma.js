@@ -14,8 +14,6 @@
 
 <body>
     <div>
-        <button id="play">Play</button>
-        <button id="stop">Stop</button>
         <button id="time"></button>
         <button>Click and drag left to right to scrub</button>
     </div>
@@ -39,23 +37,54 @@
 
         context = canvas.getContext('2d');
 
-        barCount = 3;
+        barCount = 10;
         barW = width / barCount;
-        randomBarH = function() {
-            return roundRandom(height / 4, height);
+
+        randomBarHSort = function(a, b) {
+            return (Math.random() < .5) ? function(a, b) {
+                return a.h - b.h;
+            } : function(a, b) {
+                return b.h - a.h;
+            }
+        }
+
+        randomBarData = function() {
+            var data = [];
+
+            for (var i = 0; i < bars.length; i++)
+                data.push({
+                    i: i,
+                    h: roundRandom(height / 4, height),
+                    order: i
+                })
+
+            var barHSort = randomBarHSort();
+
+            data
+                .sort(barHSort)
+                .map(function(d, i) {
+                    d.order = i;
+                    return d;
+                })
+
+            data
+                .sort(function(a, b) {
+                    return a.i - b.i;
+                })
+
+            return data;
         };
+
         bars = [];
-        // barCScale = function(d) {
-        //     return lerp(height / 4, height, 0, 225,d);
-        // }
 
         for (var i = 0; i < barCount; i++)
             bars.push({
-                'order': i,
                 'x': i * barW,
                 'height': 0,
                 'color': randomColor()
             })
+
+        barData = randomBarData();
 
         t1 = new MOTION.Tween(1000)
             .name('heights')
@@ -63,15 +92,7 @@
             .relative()
 
         for (var i = 0; i < bars.length; i++)
-            t1.add(bars[i], 'height', randomBarH());
-
-        bars
-            .sort(function(a, b) {
-                return a.height - b.height
-            }).map(function(d, i) {
-                d.order = i;
-                return d;
-            })
+            t1.add(bars[i], 'height', barData[i].h);
 
         t2 = new MOTION.Tween(1000)
             .name('xs')
@@ -79,69 +100,34 @@
             .easing(Circ.Out)
 
         for (var i = 0; i < bars.length; i++)
-            t2.add(bars[i], 'x', bars[i].order * barW);
+            t2.add(bars[i], 'x', barData[i].order * barW);
 
         s = new MOTION.Sequence()
             .add(t1)
             .add(t2)
             .play().onEnd(randomBars);
-        s.playCount = 0;
     }
 
     function randomBars() {
-        var randomHs = []
-
-        for (var i = 0; i < barCount; i++)
-            randomHs.push(randomBarH())
-
-        for (var i = 0; i < bars.length; i++) 
-            bars[i].height = randomHs[i];
-
-        randomHs.sort();
-
-        for (var i = 0; i < bars.length; i++) 
-            bars[i].order = randomHs.indexOf(bars[i].height);  
-
-        // var sortedBars = bars.slice(0);
-
-        // sortedBars
-        //     .sort(function(a, b) {
-        //         return a.height - b.height
-        //     }).map(function(d, i) {
-        //         d.order = i;
-        //         return d;
-        //     }) 
-
-        // bars.map(function(d){
-
-        // })
+        barData = randomBarData()
 
         t1 = s.get('heights')
 
         var hProperties = t1.get();
 
-        for (var i = 0; i < hProperties.length; i++) {
-            hProperties[i].end(bars[i].height)
-        }
+        for (var i = 0; i < hProperties.length; i++)
+            hProperties[i].end(barData[i].h)
 
         var xProperties = s.get('xs').get();
 
-        for (var i = 0; i < xProperties.length; i++) {
-            xProperties[i].end(bars[i].order * barW)
-            // xProperties[i].end(random(width))
-        }
+        for (var i = 0; i < xProperties.length; i++)
+            xProperties[i].end(barData[i].order * barW)
 
-        s.playCount++;
         s.play()
     }
 
     function draw(time) {
         requestAnimationFrame(draw);
-
-        // if(!time || typeof time ==='undefined'){ 
-        //     console.log('asdfas')
-        //     return false
-        // }
 
         MOTION.update(time);
 
@@ -149,39 +135,28 @@
         context.fillRect(0, 0, width, height);
 
         for (var i = 0; i < barCount; i++) {
-            // var c = barCScale(bars[i].height)
-
-            // context.fillStyle = 'rgb(' + c + ',' + c + ',' + c + ')';
             context.fillStyle = bars[i].color;
             context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
         }
 
-        document.getElementById('time').innerHTML = t2.get(0).position();
+        document.getElementById('time').innerHTML = s.time() | 0;
     }
 
     flag = false;
 
     document.onmousedown = function(e) {
         flag = true;
-        // s.pause();
+        s.pause();
     }
 
     document.onmousemove = function(e) {
-        // if (flag)
-        //     s.seek(e.clientX / window.innerWidth)
+        if (flag)
+            s.seek(e.clientX / window.innerWidth)
     }
 
     document.onmouseup = function(e) {
-        // flag = false;
-        // s.resume();
-    }
-
-    document.getElementById('play').onclick = function() {
-        t1.play();
-    }
-
-    document.getElementById('stop').onclick = function() {
-        s.stop();
+        flag = false;
+        s.resume();
     }
     </script>
 </body>
