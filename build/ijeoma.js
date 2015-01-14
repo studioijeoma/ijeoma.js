@@ -186,7 +186,7 @@ Bounce.InOut = function(t) {
         this._onStart = null;
         this._onEnd = null;
         this._onUpdate = null;
-        this._onRepeat = null; 
+        this._onRepeat = null;
 
         MOTION._add(this);
     };
@@ -263,6 +263,8 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.update = function(time) {
+        if (typeof time == 'undefined') return false;
+
         MOTION._time = typeof time !== undefined ? time : this._performance.now();
 
         for (var i = 0; i < MOTION._motions.length; i++)
@@ -314,7 +316,10 @@ Bounce.InOut = function(t) {
 
         this.dispatchEndedEvent();
 
-        return this;
+        if (this._useOnce && !this._hasController)
+            MOTION.remove(this);
+        else
+            return this;
     };
 
     MOTION.prototype.pause = function() {
@@ -397,10 +402,8 @@ Bounce.InOut = function(t) {
 
                     this.dispatchRepeatedEvent();
                 } else {
-                    if(this._useOnce && !this._hasController) 
-                        MOTION.remove(this);
-                    else 
-                        this.stop(); 
+
+                    this.stop();
                 }
             }
         }
@@ -527,9 +530,9 @@ Bounce.InOut = function(t) {
         return value >= this._delayTime + this._duration;
     };
 
-    MOTION.prototype.useOnce = function(useOnce) { 
+    MOTION.prototype.useOnce = function(useOnce) {
         this._useOnce = (typeof useOnce !== 'undefined') ? useOnce : true;
-    
+
         return this;
     }
 
@@ -829,7 +832,7 @@ Bounce.InOut = function(t) {
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = this._position * (this._end - this._start) + this._start;  
+            this._object[this._field] = this._position * (this._end - this._start) + this._start;
     };
 
     MOTION.Property.prototype.getStart = function() {
@@ -840,8 +843,9 @@ Bounce.InOut = function(t) {
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else
+            else { 
                 this._start = this._object[this._field];
+            }
         } else
             this._start = start;
 
@@ -1168,16 +1172,17 @@ Bounce.InOut = function(t) {
         return this._valueMode;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setStart();
-
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
         if (this._onStart)
             this._onStart(this._object);
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
+         if (this._valueMode == MOTION.RELATIVE)
+            for (var i = 0; i < this._properties.length; i++){
+                this._properties[i].setStart(); 
+            }
+
         if (this._onEnd)
             this._onEnd(this._object);
     };

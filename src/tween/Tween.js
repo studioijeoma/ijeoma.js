@@ -126,16 +126,17 @@
         return this._valueMode;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {
-        if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++)
-                this._properties[i].setStart();
-
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
         if (this._onStart)
             this._onStart(this._object);
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
+         if (this._valueMode == MOTION.RELATIVE)
+            for (var i = 0; i < this._properties.length; i++){
+                this._properties[i].setStart(); 
+            }
+
         if (this._onEnd)
             this._onEnd(this._object);
     };

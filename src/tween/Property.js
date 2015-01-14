@@ -32,7 +32,7 @@
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = this._position * (this._end - this._start) + this._start;  
+            this._object[this._field] = this._position * (this._end - this._start) + this._start;
     };
 
     MOTION.Property.prototype.getStart = function() {
@@ -43,8 +43,9 @@
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else
+            else { 
                 this._start = this._object[this._field];
+            }
         } else
             this._start = start;
 

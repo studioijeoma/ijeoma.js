@@ -1,0 +1,159 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    div {
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="time"></button>
+        <button>Click and drag left to right to scrub</button>
+    </div>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeoma.js"></script>
+    <script language="javascript" src="js/utils.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    setup();
+    draw();
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+
+        randomBarHSort = function(a,b) {  
+            return (Math.random() < .5) ? function(a, b) {
+                return a.h - b.h;
+            } : function(a, b) {
+                return b.h - a.h;
+            }
+        }
+
+        randomBarData = function() {
+            var data = [];
+
+            for (var i = 0; i < bars.length; i++)
+                data.push({
+                    i: i,
+                    h: roundRandom(height / 4, height),
+                    order: i
+                })
+
+            var barHSort = randomBarHSort();
+
+            data
+                .sort(barHSort)
+                .map(function(d, i) {
+                    d.order = i;
+                    return d;
+                })
+
+            data
+                .sort(function(a, b) {
+                    return a.i - b.i;
+                })
+
+            return data;
+        };
+
+        setupBars();
+    }
+
+    function setupBars() {
+        barCount = roundRandom(100);
+        barW = width / barCount;
+
+        bars = [];
+
+        for (var i = 0; i < barCount; i++)
+            bars.push({
+                'x': i * barW,
+                'height': 0,
+                'color': randomColor()
+            })
+
+        barData = randomBarData();
+
+        t1 = new MOTION.Tween(1000) 
+            .easing(Bounce.In)
+            .relative()
+
+        for (var i = 0; i < bars.length; i++)
+            t1.add(bars[i], 'height', barData[i].h);
+
+        t2 = new MOTION.Tween(1000) 
+            .relative()
+            .easing(Quad.InOut)
+
+        for (var i = 0; i < bars.length; i++)
+            t2.add(bars[i], 'x', barData[i].order * barW);
+
+        t3 = new MOTION.Tween(1000) 
+            .relative()
+            .easing(Bounce.Out)
+
+        for (var i = 0; i < bars.length; i++)
+            t3.add(bars[i], 'height', 0);
+
+        s = new MOTION.Sequence()
+            .add(t1) 
+            .add(new MOTION(500))
+            .add(t2) 
+            .add(new MOTION(500))
+            .add(t3)
+            .add(new MOTION(500))
+            .play()
+            .onEnd(setupBars)
+            .useOnce();
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+
+        MOTION.update(time);
+
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, width, height);
+
+        for (var i = 0; i < bars.length; i++) {
+            context.fillStyle = bars[i].color;
+            context.fillRect(bars[i].x, height - bars[i].height, barW, bars[i].height);
+        }
+
+        document.getElementById('time').innerHTML = s.time() | 0;
+    }
+
+    flag = false;
+
+    document.onmousedown = function(e) {
+        flag = true;
+        s.pause();
+    }
+
+    document.onmousemove = function(e) {
+        if (flag)
+            s.seek(e.clientX / window.innerWidth)
+    }
+
+    document.onmouseup = function(e) {
+        flag = false;
+        s.resume();
+    }
+    </script>
+</body>
