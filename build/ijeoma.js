@@ -197,8 +197,7 @@ Bounce.InOut = function(t) {
     MOTION.RELATIVE = 'relative';
 
     MOTION._motions = [];
-
-    MOTION._usePerformance = typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined;
+ 
     MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
