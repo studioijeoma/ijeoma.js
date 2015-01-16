@@ -36,18 +36,34 @@ Bar Charts: [1](http://ekeneijeoma.github.io/ijeoma.js/examples/barChart1.html),
 
 [Square](http://ekeneijeoma.github.io/ijeoma.js/examples/square.html): shows how to combine sequences and tweens in a timeline
 
-#Getting Started 
+#Getting Started  
+
 ###Creating tweens
 Tweening a variable named x from 0 to 1024 in 1000 millseconds. 
 ```javascript 
+//NOTE: vars in brackets are optional
 //new MOTION.Tween(object, property, end, duration, [delay], [easing])
 var x = 0;
-var tween = new MOTION.Tween(window, "x", 1024, 1000).play(); // if no object is passed it will default to window
+// if no object is passed it will default to window
+var tween = new MOTION.Tween(window, "x", 1024, 1000).play(); 
 ```
 or
 ```javascript 
+//NOTE: [start,end] is a required array
 //new MOTION.Tween(property, [start,end], duration, [delay], [easing])
-var tween = new MOTION.Tween("x", [0,1024],1000).play(); // object defaults to window and the variable x is defined in window with a starting value of 0
+// object defaults to window and the variable x is defined in window with 
+var tween = new MOTION.Tween("x", [0,1024],1000).play(); a starting value of 0
+```
+
+Tweening using relative and absolute start and end values
+```javascript
+//the default which tweens from defined start to end values every play
+tween.valueMode(MOTION.ABSOLUTE) 
+```
+or
+```javascript
+//tweens from defined start to end values on first play and from the property's value to a defined end value every play after
+tween.valueMode(MOTION.RELATIVE);
 ```
 
 Tweening multiple variables and object properties
@@ -58,7 +74,8 @@ var tween = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [
 or
 ```javascript
 //new MOTION.Tween(duration, [delay], [easing])
-var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); // object defaults to window
+// object defaults to window
+var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); 
 ```
 
 You can also call play and stop on all motion objects using
@@ -67,7 +84,7 @@ MOTION.playAll()
 MOTION.stopAll()
 ```
 
-##Destroying tweens
+###Destroying tweens
 ```javascript
 Motion.remove(motion)
 ```
@@ -96,7 +113,8 @@ MOTION.update() //will use performance.now() or Date.now() if not supported.
 
 ###Delaying
 ```javascript
-var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); //delay for 500 milliseconds
+//delay for 500 milliseconds
+var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); 
 ```
 or
 ```javascript
