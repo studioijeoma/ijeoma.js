@@ -1239,8 +1239,7 @@
 
     MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
-    MOTION.Tween.prototype.setEasing = function(easing) {
-        console.log(this._easing)
+    MOTION.Tween.prototype.setEasing = function(easing) { 
         this._easing = easing;
         return this;
     };
