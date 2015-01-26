@@ -43,7 +43,7 @@
 
         if (position < 1) {
             segmentPointIndex = Math.floor((this._end.length - 1) * position);
-            segmentT = _map((position % segmentTRange), 0, segmentTRange, 0, 1);
+            segmentT = MOTION._map((position % segmentTRange), 0, segmentTRange, 0, 1);
         } else {
             segmentPointIndex = (this._end.length - 2);
             segmentT = 1;

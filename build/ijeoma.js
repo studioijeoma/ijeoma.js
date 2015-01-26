@@ -829,7 +829,7 @@
 
             if (this._isSeeking) {
                 if (m._isInsidePlayingTime(this.getTime()))
-                    m.seek(this._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(MOTION._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
@@ -894,7 +894,7 @@
 
         if (position < 1) {
             segmentPointIndex = Math.floor((this._end.length - 1) * position);
-            segmentT = _map((position % segmentTRange), 0, segmentTRange, 0, 1);
+            segmentT = MOTION._map((position % segmentTRange), 0, segmentTRange, 0, 1);
         } else {
             segmentPointIndex = (this._end.length - 2);
             segmentT = 1;
