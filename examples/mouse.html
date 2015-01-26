@@ -44,9 +44,10 @@
         x = width / 2;
         y = -radius; 
 
-        tween = new MOTION.Tween(1000).add('x', x).add('y', y).easing(Cubic.Out).relative()
+        tween = new MOTION.Tween(1000).add('x', x).add('y', y).easing(MOTION.Cubic.Out).relative()
 
         document.onmousemove = function(e) {
+            tween.stop()
             tween.get('x').end(e.clientX)
             tween.get('y').end(e.clientY)
             tween.play();

@@ -74,12 +74,12 @@
             var pieArc = pieArcs[i]
             a -= radians((i > 0) ? (pieAngles[i - 1] / 2 + pieAngles[i] / 2) : pieAngles[i] / 2);
 
-            sequence.add(new MOTION.Tween(pieDuration).add(this, 'chartRotation', a).easing(Expo.In));
-            sequence.add(new MOTION.Tween(pieDuration).add(pieArc, 'offset', 0).add(pieArc.color, 'a', [0, 1]).easing(Circ.Out));
+            sequence.add(new MOTION.Tween(pieDuration).add(this, 'chartRotation', a).easing(MOTION.Expo.In));
+            sequence.add(new MOTION.Tween(pieDuration).add(pieArc, 'offset', 0).add(pieArc.color, 'a', [0, 1]).easing(MOTION.Circ.Out));
             sequence.add(new MOTION(pieDuration));
         }
 
-        sequence.add(new MOTION.Tween(this, 'chartY', height + pieRadius, pieDuration / 2).easing(Circ.In));
+        sequence.add(new MOTION.Tween(this, 'chartY', height + pieRadius, pieDuration / 2).easing(MOTION.Circ.In));
         sequence.repeat().play();
     }
 

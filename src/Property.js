@@ -1,4 +1,5 @@
 (function(MOTION, undefined) {
+
     MOTION._properties = [];
 
     MOTION.Property = function(object, field, values) {
@@ -6,7 +7,6 @@
         this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
 
         var values = (typeof arguments[0] === 'object') ? values : arguments[1];
-
         this._start = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
         this._end = this._object[this._field] = (values instanceof Array) ? values[1] : values;
 
@@ -32,7 +32,56 @@
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = this._position * (this._end - this._start) + this._start;
+            this._object[this._field] = MOTION.Linear(this._start, this._end, this._position);
+        else {
+
+        }
+    };
+
+    MOTION.Property.prototype._updateArray = function(position) {
+        var segmentTRange = 1 / (this._end.length - 1);
+
+        if (position < 1) {
+            segmentPointIndex = Math.floor((this._end.length - 1) * position);
+            segmentT = _map((position % segmentTRange), 0, segmentTRange, 0, 1);
+        } else {
+            segmentPointIndex = (this._end.length - 2);
+            segmentT = 1;
+        }
+
+        var v1, v2, v3, v4;
+
+        v2 = this._end[segmentPointIndex];
+        v3 = this._end[segmentPointIndex + 1];
+        v1 = v4 = 0;
+
+        if (segmentPointIndex == 0) {
+            var segmentBegin = this._end[0];
+            var segmentEnd = this._end[1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            v1 = segmentEnd - segmentSlope;
+        } else {
+            v1 = this._end[segmentPointIndex - 1];
+        }
+        
+        if ((segmentPointIndex + 1) == this._end.length - 1) {
+            var segmentBegin = this._end[this._end.length - 2];
+            var segmentEnd = this._end[this._end.length - 1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            v4 = segmentEnd + segmentSlope;
+        } else {
+            v4 = this._end[segmentPointIndex + 2];
+        }
+
+        // if (this._interpolation === MOTION.LINEAR) {
+        return MOTION.Linear(v2.y, v3.y, segmentT);
+        // } else if (this._interpolation === MOTION.COSINE) {
+        // return MOTION.Cosine(v2.y, v3.y, segmentT);
+        // } else if (this._interpolation === MOTION.CUBIC) {
+        //     return MOTION.Cubic(v1.y, v2.y, v3.y, v4.y, segmentT);
+        // } else if (this._interpolation === MOTION.HERMITE) {
+        //     return MOTION.Hermite(v1.y, v2.y, v3.y, v4.y, segmentT, tension, bias);
+        // }
     };
 
     MOTION.Property.prototype.getStart = function() {
@@ -43,14 +92,13 @@
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else { 
+            else
                 this._start = this._object[this._field];
-            }
         } else
             this._start = start;
-
         return this;
     };
+
 
     MOTION.Property.prototype.start = MOTION.Property.prototype.setStart;
 

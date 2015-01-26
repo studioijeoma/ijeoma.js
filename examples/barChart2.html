@@ -91,7 +91,7 @@
         barData = randomBarData();
 
         t1 = new MOTION.Tween(1000) 
-            .easing(Bounce.In)
+            .easing(MOTION.Bounce.In)
             .relative()
 
         for (var i = 0; i < bars.length; i++)
@@ -99,14 +99,14 @@
 
         t2 = new MOTION.Tween(1000) 
             .relative()
-            .easing(Quad.InOut)
+            .easing(MOTION.Quad.InOut)
 
         for (var i = 0; i < bars.length; i++)
             t2.add(bars[i], 'x', barData[i].order * barW);
 
         t3 = new MOTION.Tween(1000) 
             .relative()
-            .easing(Bounce.Out)
+            .easing(MOTION.Bounce.Out)
 
         for (var i = 0; i < bars.length; i++)
             t3.add(bars[i], 'height', 0);

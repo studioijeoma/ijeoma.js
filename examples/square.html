@@ -153,12 +153,12 @@
             .add(points[2], 'size', [0, pointSize]))
         pointSequence.add(new MOTION.Tween(pointDuration)
             .add(points[3], 'size', [0, pointSize]))
-        pointSequence.easing(Bounce.Out)
+        pointSequence.easing(MOTION.Bounce.Out)
         pointSequence.add(new MOTION.Tween(pointDuration)   
             .add(points[0].color, 'a', 0)
             .add(points[1].color, 'a', 0)
             .add(points[2].color, 'a', 0)
-            .add(points[3].color, 'a', 0).easing(Circ.Out))
+            .add(points[3].color, 'a', 0).easing(MOTION.Circ.Out))
 
         lineSequence = new MOTION.Sequence();
         lineSequence.add(new MOTION.Tween(pointDuration)
@@ -173,9 +173,9 @@
         lineSequence.add(new MOTION.Tween(pointDuration)
             .add(lines[3], 'x2', [lines[3].x1, lines[3].x2])
             .add(lines[3], 'y2', [lines[3].y1, lines[3].y2]))
-        lineSequence.easing(Bounce.Out)
+        lineSequence.easing(MOTION.Bounce.Out)
 
-        squareTween = new MOTION.Tween(pointDuration * 4).add('squareRotation', [0, Math.PI]).easing(Bounce.Out)
+        squareTween = new MOTION.Tween(pointDuration * 4).add('squareRotation', [0, Math.PI]).easing(MOTION.Bounce.Out)
 
         timeline = new MOTION.Timeline()
             .add(pointSequence, 0)

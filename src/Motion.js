@@ -36,8 +36,13 @@
     MOTION.ABSOLUTE = 'absolute';
     MOTION.RELATIVE = 'relative';
 
+    MOTION.LINEAR = 'linear';
+    MOTION.COSINE = 'cosine';
+    MOTION.CUBIC = 'cubic';
+    MOTION.HERMITE = 'hermite';
+
     MOTION._motions = [];
- 
+
     MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
@@ -375,6 +380,10 @@
 
         return this;
     }
+
+    MOTION._map = function(n, start1, end1, start2, end2) {
+        return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
+    };
 
     MOTION.prototype.onStart = function(func) {
         this._onStart = func;

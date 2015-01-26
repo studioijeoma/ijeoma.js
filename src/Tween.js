@@ -3,17 +3,28 @@
         this._properties = [];
         this._valueMode = MOTION.ABSOLUTE;
 
+        this._easing = function(t) {
+            return t;
+        };
+        this._inpterpolation = MOTION.Linear;
+
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
             this.addProperty(arguments[0], arguments[1], arguments[2]);
-            this.setEasing(arguments[5]);
+
+            if (typeof arguments[5] !== 'undefined')
+                this.setEasing(arguments[5]);
         } else if (typeof arguments[0] === 'string') {
             MOTION.call(this, arguments[2], arguments[3]);
             this.addProperty(arguments[0], arguments[1]);
-            this.setEasing(arguments[4]);
+
+            if (typeof arguments[4] !== 'undefined')
+                this.setEasing(arguments[4]);
         } else {
             MOTION.call(this, arguments[0], arguments[1]);
-            this.setEasing(arguments[2]);
+
+            if (typeof arguments[2] !== 'undefined')
+                this.setEasing(arguments[2]);
         }
     };
 
@@ -81,10 +92,8 @@
     MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
     MOTION.Tween.prototype.setEasing = function(easing) {
-        this._easing = (typeof easing == 'undefined') ? (function(t) {
-            return t;
-        }) : easing;
-
+        console.log(this._easing)
+        this._easing = easing;
         return this;
     };
 
@@ -95,11 +104,21 @@
     };
 
     MOTION.Tween.prototype.noEasing = function() {
-        this.setEasing(function(t) {
+        this._easing = function(t) {
             return t;
-        });
-
+        };
         return this;
+    };
+
+    MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
+        this._inpterpolation = inpterpolation;
+        return this;
+    };
+
+    MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
+
+    MOTION.Tween.prototype.getInterpolation = function() {
+        return this._inpterpolation;
     };
 
     MOTION.Tween.prototype.relative = function() {
@@ -126,15 +145,15 @@
         return this._valueMode;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
         if (this._onStart)
             this._onStart(this._object);
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
-         if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++){
-                this._properties[i].setStart(); 
+        if (this._valueMode == MOTION.RELATIVE)
+            for (var i = 0; i < this._properties.length; i++) {
+                this._properties[i].setStart();
             }
 
         if (this._onEnd)

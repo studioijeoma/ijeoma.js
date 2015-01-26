@@ -67,7 +67,7 @@
                 this._motions[this._motions.indexOf(c)] = c;
             } else {
                 var key = time + '';
- 
+
                 var k = new MOTION.Keyframe(time + '');
                 k.add(motion);
 

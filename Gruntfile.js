@@ -7,7 +7,7 @@ module.exports = function(grunt) {
                 separator: ';',
             },
             dist: {
-                src: ['src/easing/Easing.js', 'src/Motion.js', 'src/MotionController.js', 'src/tween/*.js'],
+                src: ['src/Motion.js','src/*.js'],
                 dest: 'build/ijeoma.js',
             },
         },
@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         },
         watch: {
             scripts: {
-                files: ['*.js', 'src/*.js', 'src/easing/*.js', 'src/tween/*.js', 'test/*.html', 'examples/*.html'],
+                files: ['*.js', 'src/*.js', 'examples/*.html'],
                 tasks: ['concat', 'uglify'],
                 options: { 
                     spawn: false,

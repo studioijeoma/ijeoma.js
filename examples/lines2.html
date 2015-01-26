@@ -59,10 +59,10 @@
         var duration = random(7500, 15000);
 
         // this.tweenColor = new MOTION.Tween(this, 'angle', [angle, angle + Math.PI * 2 * random(-1,1)], duration, delay).reverse().repeat().play();
-        this.tweenColor = new MOTION.Tween(10000)
-            .add(new ColorProperty(this, 'color1', randomColor()))
-            .add(new ColorProperty(this, 'color2', randomColor()))
-            .play()
+        // this.tweenColor = new MOTION.Tween(10000)
+        //     .add(new ColorProperty(this, 'color1', randomColor()))
+        //     .add(new ColorProperty(this, 'color2', randomColor()))
+        //     .play()
 
         this.draw = function() {
             gradient = context.createLinearGradient(0, 0, 0, this.size);

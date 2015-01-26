@@ -55,7 +55,7 @@ or
 var tween = new MOTION.Tween("x", [0,1024],1000).play(); a starting value of 0
 ```
 
-Tweening using relative and absolute start and end values
+###Tweening using relative and absolute start and end values
 ```javascript
 //the default which tweens from defined start to end values every play
 tween.valueMode(MOTION.ABSOLUTE) 
@@ -66,7 +66,7 @@ or
 tween.valueMode(MOTION.RELATIVE);
 ```
 
-Tweening multiple variables and object properties
+###Tweening multiple variables and object properties
 ```javascript
 //new MOTION.Tween(duration, [delay], [easing])
 var tween = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
@@ -84,22 +84,24 @@ MOTION.playAll()
 MOTION.stopAll()
 ```
 
-###Destroying tweens
+###Delaying
 ```javascript
-Motion.remove(motion)
+//delay for 500 milliseconds
+var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); 
 ```
-
-If you're creating and playing a lot of tweens that you're only using once you should can call useOnce() which will automatically destroy them after. It's set to false by default.
-```javascript
-new Motion(...).useOnce();
 or
-//applies call to all tween instances
-MOTION.useOnce();
+```javascript
+var tween = new MOTION.Tween("w", 1024, 1000).delay(500).play();
 ```
 
-###Calling functions on start, update and end events 
+###Easing
+You can add easing to to Tweens using the MOTION.Quad, MOTION.Cubic, MOTION.Quart, MOTION.Quint, MOTION.Sine, MOTION.Expo, MOTION.Circ, MOTION.Elastic, MOTION.Back, MOTION.Bounce classes. Each of them have In, Out, and InOut functions. 
 ```javascript
-t = new MOTION.Tween(...).onStart(func).onUpdate(func).onEnd(func).play(); 
+var t = new MOTION.Tween("w", 1024, 100, 0, MOTION.Quad.In).play(); 
+```
+or
+```javascript
+var t = new MOTION.Tween("w", 1024, 100).easing(MOTION.Quad.In).play(); 
 ```
 
 ###Updating
@@ -111,15 +113,6 @@ or
 MOTION.update() //will use performance.now() or Date.now() if not supported.
 ```
 
-###Delaying
-```javascript
-//delay for 500 milliseconds
-var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); 
-```
-or
-```javascript
-var tween = new MOTION.Tween("w", 1024, 1000).delay(500).play();
-```
 ###Pausing, Resuming  
 ```javascript  
 t.pause(); 
@@ -143,12 +136,30 @@ var tween = new MOTION.Tween(...).repeat().reverse().play();
 MOTION.reverseAll();
 ```
 
+###Calling functions on start, update and end events 
+```javascript
+t = new MOTION.Tween(...).onStart(func).onUpdate(func).onEnd(func).play(); 
+```
+
 ###Changing speed/timescale
 ```javascript 
 var tween = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
 
 MOTION.timeScaleAll(time);
 ``` 
+
+###Destroying tweens
+```javascript
+Motion.remove(motion)
+```
+
+If you're creating and playing a lot of tweens that you're only using once you should can call useOnce() which will automatically destroy them after. It's set to false by default.
+```javascript
+new Motion(...).useOnce();
+or
+//applies call to all tween instances
+MOTION.useOnce();
+```
 
 ##Playing back tweens in parallel
 ```javascript

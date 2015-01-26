@@ -1,164 +1,4 @@
-Quad = function(){};
-Quad.In = function(t) {
-    return (t /= 1) * t;
-};
-Quad.Out = function(t) {
-    return -(t /= 1) * (t - 2);
-};
-Quad.InOut = function(t) {
-    if ((t /= 1 / 2) < 1) return .5 * t * t;
-    return -.5 * ((--t) * (t - 2) - 1);
-};
-
-Cubic = function(){};
-Cubic.In = function(t) {
-    return (t /= 1) * t * t;
-};
-Cubic.Out = function(t) {
-    return ((t = t / 1 - 1) * t * t + 1);
-};
-Cubic.InOut = function(t) {
-    if ((t /= 1 / 2) < 1) return .5 * t * t * t;
-    return .5 * ((t -= 2) * t * t + 2);
-};
-
-Quart = function(){};
-Quart.In = function(t) {
-    return (t /= 1) * t * t * t;
-};
-Quart.Out = function(t) {
-    return -((t = t / 1 - 1) * t * t * t - 1);
-};
-Quart.InOut = function(t) {
-    if ((t /= 1 / 2) < 1) return .5 * t * t * t * t;
-    return -.5 * ((t -= 2) * t * t * t - 2);
-};
-
-Quint = function(){};
-Quint.In = function(t) {
-    return (t /= 1) * t * t * t * t;
-};
-Quint.Out = function(t) {
-    return ((t = t / 1 - 1) * t * t * t * t + 1);
-};
-Quint.InOut = function(t) {
-    if ((t /= 1 / 2) < 1) return .5 * t * t * t * t * t;
-    return .5 * ((t -= 2) * t * t * t * t + 2);
-};
-
-Sine = function(){};
-Sine.In = function(t) {
-    return -Math.cos(t / 1 * (Math.PI / 2)) + 1;
-};
-Sine.Out = function(t) {
-    return Math.sin(t / 1 * (Math.PI / 2));
-};
-Sine.InOut = function(t) {
-    return -.5 * (Math.cos(Math.PI * t / 1) - 1);
-};
-
-Expo = function(){};
-Expo.In = function(t) {
-    return (t == 0) ? 0 : Math.pow(2, 10 * (t / 1 - 1));
-};
-Expo.Out = function(t) {
-    return (t == 1) ? 1 : (-Math.pow(2, -10 * t / 1) + 1);
-};
-Expo.InOut = function(t) {
-    if (t == 0) return 0;
-    if (t == 1) return 1;
-    if ((t /= 1 / 2) < 1) return .5 * Math.pow(2, 10 * (t - 1));
-    return .5 * (-Math.pow(2, -10 * --t) + 2);
-};
-
-Circ = function(){};
-Circ.In = function(t) {
-    return -(Math.sqrt(1 - (t /= 1) * t) - 1);
-};
-Circ.Out = function(t) {
-    return Math.sqrt(1 - (t = t / 1 - 1) * t);
-};
-Circ.InOut = function(t) {
-    if ((t /= 1 / 2) < 1) return -.5 * (Math.sqrt(1 - t * t) - 1);
-    return .5 * (Math.sqrt(1 - (t -= 2) * t) + 1);
-};
-
-Elastic = function(){};
-Elastic.In = function(t) {
-    var s = 1.70158;
-    var p = 0;
-    var a = 1;
-    if (t == 0) return 0;
-    if ((t /= 1) == 1) return 1;
-    if (!p) p = .3;
-    if (a < Math.abs(1)) {
-        a = 1;
-        var s = p / 4;
-    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
-    return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
-};
-Elastic.Out = function(t) {
-    var s = 1.70158;
-    var p = 0;
-    var a = 1;
-    if (t == 0) return 0;
-    if ((t /= 1) == 1) return 1;
-    if (!p) p = .3;
-    if (a < Math.abs(1)) {
-        a = 1;
-        var s = p / 4;
-    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
-    return a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p) + 1;
-};
-Elastic.InOut = function(t) {
-    var s = 1.70158;
-    var p = 0;
-    var a = 1;
-    if (t == 0) return 0;
-    if ((t /= 1 / 2) == 2) return 1;
-    if (!p) p = (.3 * 1.5);
-    if (a < Math.abs(1)) {
-        a = 1;
-        var s = p / 4;
-    } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
-    if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
-    return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p) * .5 + 1;
-};
-
-Back = function(){};
-Back.In = function(t, s) {
-    if (s == undefined) s = 1.70158;
-    return (t /= 1) * t * ((s + 1) * t - s);
-};
-Back.Out = function(t, s) {
-    if (s == undefined) s = 1.70158;
-    return ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
-};
-Back.InOut = function(t, s) {
-    if (s == undefined) s = 1.70158;
-    if ((t /= 1 / 2) < 1) return .5 * (t * t * (((s *= (1.525)) + 1) * t - s));
-    return .5 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2);
-};
-
-Bounce = function(){};
-Bounce.In = function(t) {
-    return 1 - Bounce.Out(1 - t, 0);
-};
-Bounce.Out = function(t) {
-    if ((t /= 1) < (1/2.75)) {
-        return (7.5625 * t * t);
-    } else if (t < (2 / 2.75)) {
-        return (7.5625 * (t -= (1.5 / 2.75)) * t + .75);
-    } else if (t < (2.5 / 2.75)) {
-        return (7.5625 * (t -= (2.25 / 2.75)) * t + .9375);
-    } else {
-        return (7.5625 * (t -= (2.625 / 2.75)) * t + .984375);
-    }
-};
-Bounce.InOut = function(t) {
-    if (t < .5) return Bounce.In (t * 2, 0) * .5;
-    return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
-};(function(window, undefined) {
+(function(window, undefined) {
     MOTION = function(duration, delay) {
         this._name = '';
 
@@ -196,8 +36,13 @@ Bounce.InOut = function(t) {
     MOTION.ABSOLUTE = 'absolute';
     MOTION.RELATIVE = 'relative';
 
+    MOTION.LINEAR = 'linear';
+    MOTION.COSINE = 'cosine';
+    MOTION.CUBIC = 'cubic';
+    MOTION.HERMITE = 'hermite';
+
     MOTION._motions = [];
- 
+
     MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
@@ -536,6 +381,10 @@ Bounce.InOut = function(t) {
         return this;
     }
 
+    MOTION._map = function(n, start1, end1, start2, end2) {
+        return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
+    };
+
     MOTION.prototype.onStart = function(func) {
         this._onStart = func;
 
@@ -599,7 +448,212 @@ Bounce.InOut = function(t) {
             };
         })();
     }
-})(window);;(function(MOTION, undefined) {
+})(window);
+;(function(MOTION, undefined) {
+    MOTION.Quad = function() {};
+    MOTION.Quad.In = function(t) {
+        return (t /= 1) * t;
+    };
+    MOTION.Quad.Out = function(t) {
+        return -(t /= 1) * (t - 2);
+    };
+    MOTION.Quad.InOut = function(t) {
+        if ((t /= 1 / 2) < 1) return .5 * t * t;
+        return -.5 * ((--t) * (t - 2) - 1);
+    };
+    MOTION.Cubic = function() {};
+    MOTION.Cubic.In = function(t) {
+        return (t /= 1) * t * t;
+    };
+    MOTION.Cubic.Out = function(t) {
+        return ((t = t / 1 - 1) * t * t + 1);
+    };
+    MOTION.Cubic.InOut = function(t) {
+        if ((t /= 1 / 2) < 1) return .5 * t * t * t;
+        return .5 * ((t -= 2) * t * t + 2);
+    };
+    MOTION.Quart = function() {};
+    MOTION.Quart.In = function(t) {
+        return (t /= 1) * t * t * t;
+    };
+    MOTION.Quart.Out = function(t) {
+        return -((t = t / 1 - 1) * t * t * t - 1);
+    };
+    MOTION.Quart.InOut = function(t) {
+        if ((t /= 1 / 2) < 1) return .5 * t * t * t * t;
+        return -.5 * ((t -= 2) * t * t * t - 2);
+    };
+    MOTION.Quint = function() {};
+    MOTION.Quint.In = function(t) {
+        return (t /= 1) * t * t * t * t;
+    };
+    MOTION.Quint.Out = function(t) {
+        return ((t = t / 1 - 1) * t * t * t * t + 1);
+    };
+    MOTION.Quint.InOut = function(t) {
+        if ((t /= 1 / 2) < 1) return .5 * t * t * t * t * t;
+        return .5 * ((t -= 2) * t * t * t * t + 2);
+    };
+    MOTION.Sine = function() {};
+    MOTION.Sine.In = function(t) {
+        return -Math.cos(t / 1 * (Math.PI / 2)) + 1;
+    };
+    MOTION.Sine.Out = function(t) {
+        return Math.sin(t / 1 * (Math.PI / 2));
+    };
+    MOTION.Sine.InOut = function(t) {
+        return -.5 * (Math.cos(Math.PI * t / 1) - 1);
+    };
+    MOTION.Expo = function() {};
+    MOTION.Expo.In = function(t) {
+        return (t == 0) ? 0 : Math.pow(2, 10 * (t / 1 - 1));
+    };
+    MOTION.Expo.Out = function(t) {
+        return (t == 1) ? 1 : (-Math.pow(2, -10 * t / 1) + 1);
+    };
+    MOTION.Expo.InOut = function(t) {
+        if (t == 0) return 0;
+        if (t == 1) return 1;
+        if ((t /= 1 / 2) < 1) return .5 * Math.pow(2, 10 * (t - 1));
+        return .5 * (-Math.pow(2, -10 * --t) + 2);
+    };
+    MOTION.Circ = function() {};
+    MOTION.Circ.In = function(t) {
+        return -(Math.sqrt(1 - (t /= 1) * t) - 1);
+    };
+    MOTION.Circ.Out = function(t) {
+        return Math.sqrt(1 - (t = t / 1 - 1) * t);
+    };
+    MOTION.Circ.InOut = function(t) {
+        if ((t /= 1 / 2) < 1) return -.5 * (Math.sqrt(1 - t * t) - 1);
+        return .5 * (Math.sqrt(1 - (t -= 2) * t) + 1);
+    };
+    MOTION.Elastic = function() {};
+    MOTION.Elastic.In = function(t) {
+        var s = 1.70158;
+        var p = 0;
+        var a = 1;
+        if (t == 0) return 0;
+        if ((t /= 1) == 1) return 1;
+        if (!p) p = .3;
+        if (a < Math.abs(1)) {
+            a = 1;
+            var s = p / 4;
+        } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+        return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
+    };
+    MOTION.Elastic.Out = function(t) {
+        var s = 1.70158;
+        var p = 0;
+        var a = 1;
+        if (t == 0) return 0;
+        if ((t /= 1) == 1) return 1;
+        if (!p) p = .3;
+        if (a < Math.abs(1)) {
+            a = 1;
+            var s = p / 4;
+        } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+        return a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p) + 1;
+    };
+    MOTION.Elastic.InOut = function(t) {
+        var s = 1.70158;
+        var p = 0;
+        var a = 1;
+        if (t == 0) return 0;
+        if ((t /= 1 / 2) == 2) return 1;
+        if (!p) p = (.3 * 1.5);
+        if (a < Math.abs(1)) {
+            a = 1;
+            var s = p / 4;
+        } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
+        if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
+        return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p) * .5 + 1;
+    };
+    MOTION.Back = function() {};
+    MOTION.Back.In = function(t, s) {
+        if (s == undefined) s = 1.70158;
+        return (t /= 1) * t * ((s + 1) * t - s);
+    };
+    MOTION.Back.Out = function(t, s) {
+        if (s == undefined) s = 1.70158;
+        return ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
+    };
+    MOTION.Back.InOut = function(t, s) {
+        if (s == undefined) s = 1.70158;
+        if ((t /= 1 / 2) < 1) return .5 * (t * t * (((s *= (1.525)) + 1) * t - s));
+        return .5 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2);
+    };
+    MOTION.Bounce = function() {};
+    MOTION.Bounce.In = function(t) {
+        return 1 - Bounce.Out(1 - t, 0);
+    };
+    MOTION.Bounce.Out = function(t) {
+        if ((t /= 1) < (1 / 2.75)) {
+            return (7.5625 * t * t);
+        } else if (t < (2 / 2.75)) {
+            return (7.5625 * (t -= (1.5 / 2.75)) * t + .75);
+        } else if (t < (2.5 / 2.75)) {
+            return (7.5625 * (t -= (2.25 / 2.75)) * t + .9375);
+        } else {
+            return (7.5625 * (t -= (2.625 / 2.75)) * t + .984375);
+        }
+    };
+    MOTION.Bounce.InOut = function(t) {
+        if (t < .5) return Bounce.In(t * 2, 0) * .5;
+        return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
+    }
+})(MOTION);
+;(function(MOTION, undefined) {  
+    MOTION.Linear = function(y1, y2, t) {
+        return (y1 * (1 - t) + y2 * t);
+    };
+
+    MOTION.Smoothstep = function(y1, y2, t) {
+        // return (y1 * (1 - t) + y2 * t);
+        // ((x) * (x) * (3 - 2 * (x)))
+    };
+
+    MOTION.Cosine = function(y1, y2, t) {
+        var t2 = (1 - PApplet.cos(t * PConstants.PI)) / 2;
+        return (y1 * (1 - t2) + y2 * t2);
+    };
+
+    MOTION.Cubic = function(y0, y1, y2, y3, t) {
+        var a0, a1, a2, a3, t2;
+        t2 = t * t;
+        a0 = y3 - y2 - y0 + y1;
+        a1 = y0 - y1 - a0;
+        a2 = y2 - y0;
+        a3 = y1;
+        //http://paulbourke.net/miscellaneous/interpolation/
+        //     a0 = -0.5*y0 + 1.5*y1 - 1.5*y2 + 0.5*y3;
+        // a1 = y0 - 2.5*y1 + 2*y2 - 0.5*y3;
+        // a2 = -0.5*y0 + 0.5*y2;
+        // a3 = y1;
+        return (a0 * t * t2 + a1 * t2 + a2 * t + a3);
+    };
+
+    /*
+     * Tension: 1 is high, 0 normal, -1 is low Bias: 0 is even, positive is
+     * towards first segment, negative towards the other
+     */
+    MOTION.Hermite = function(y0, y1, y2, y3, t, tension, bias) {
+        var m0, m1, t2, t3;
+        var a0, a1, a2, a3;
+        t2 = t * t;
+        t3 = t2 * t;
+        m0 = (y1 - y0) * (1 + bias) * (1 - tension) / 2;
+        m0 += (y2 - y1) * (1 - bias) * (1 - tension) / 2;
+        m1 = (y2 - y1) * (1 + bias) * (1 - tension) / 2;
+        m1 += (y3 - y2) * (1 - bias) * (1 - tension) / 2;
+        a0 = 2 * t3 - 3 * t2 + 1;
+        a1 = t3 - 2 * t2 + t;
+        a2 = t3 - t2;
+        a3 = -2 * t3 + 3 * t2;
+        return (a0 * y1 + a1 * m0 + a2 * m1 + a3 * y2);
+    };
+})(MOTION);
+;(function(MOTION, undefined) {
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
@@ -627,7 +681,7 @@ Bounce.InOut = function(t) {
 
             if (this._isSeeking) {
                 if (m._isInsidePlayingTime(this.getTime()))
-                    m.seek(this._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
+                    m.seek(MOTION._map(this.getTime(), 0, m.getDelay() + m.getDuration(), 0, 1));
                 else if (m._isAbovePlayingTime(this.getTime()))
                     m.seek(1);
                 else
@@ -760,11 +814,8 @@ Bounce.InOut = function(t) {
         this._updateMotions();
         MOTION.prototype.dispatchChangedEvent.call(this);
     };
-
-    MOTION.MotionController.prototype._map = function(n, start1, end1, start2, end2) {
-        return ((n - start1) / (end1 - start1)) * (end2 - start2) + start2;
-    };
-})(MOTION);(function(MOTION, undefined) {
+})(MOTION)
+;(function(MOTION, undefined) {
     MOTION.Parallel = function(motions) {
         MOTION.MotionController.call(this, name, motions);
     };
@@ -799,6 +850,7 @@ Bounce.InOut = function(t) {
     };
 })(MOTION);
 ;(function(MOTION, undefined) {
+
     MOTION._properties = [];
 
     MOTION.Property = function(object, field, values) {
@@ -806,7 +858,6 @@ Bounce.InOut = function(t) {
         this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
 
         var values = (typeof arguments[0] === 'object') ? values : arguments[1];
-
         this._start = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
         this._end = this._object[this._field] = (values instanceof Array) ? values[1] : values;
 
@@ -832,7 +883,56 @@ Bounce.InOut = function(t) {
         this._position = position;
 
         if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = this._position * (this._end - this._start) + this._start;
+            this._object[this._field] = MOTION.Linear(this._start, this._end, this._position);
+        else {
+
+        }
+    };
+
+    MOTION.Property.prototype._updateArray = function(position) {
+        var segmentTRange = 1 / (this._end.length - 1);
+
+        if (position < 1) {
+            segmentPointIndex = Math.floor((this._end.length - 1) * position);
+            segmentT = _map((position % segmentTRange), 0, segmentTRange, 0, 1);
+        } else {
+            segmentPointIndex = (this._end.length - 2);
+            segmentT = 1;
+        }
+
+        var v1, v2, v3, v4;
+
+        v2 = this._end[segmentPointIndex];
+        v3 = this._end[segmentPointIndex + 1];
+        v1 = v4 = 0;
+
+        if (segmentPointIndex == 0) {
+            var segmentBegin = this._end[0];
+            var segmentEnd = this._end[1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            v1 = segmentEnd - segmentSlope;
+        } else {
+            v1 = this._end[segmentPointIndex - 1];
+        }
+        
+        if ((segmentPointIndex + 1) == this._end.length - 1) {
+            var segmentBegin = this._end[this._end.length - 2];
+            var segmentEnd = this._end[this._end.length - 1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            v4 = segmentEnd + segmentSlope;
+        } else {
+            v4 = this._end[segmentPointIndex + 2];
+        }
+
+        // if (this._interpolation === MOTION.LINEAR) {
+        return MOTION.Linear(v2.y, v3.y, segmentT);
+        // } else if (this._interpolation === MOTION.COSINE) {
+        // return MOTION.Cosine(v2.y, v3.y, segmentT);
+        // } else if (this._interpolation === MOTION.CUBIC) {
+        //     return MOTION.Cubic(v1.y, v2.y, v3.y, v4.y, segmentT);
+        // } else if (this._interpolation === MOTION.HERMITE) {
+        //     return MOTION.Hermite(v1.y, v2.y, v3.y, v4.y, segmentT, tension, bias);
+        // }
     };
 
     MOTION.Property.prototype.getStart = function() {
@@ -843,14 +943,13 @@ Bounce.InOut = function(t) {
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
-            else { 
+            else
                 this._start = this._object[this._field];
-            }
         } else
             this._start = start;
-
         return this;
     };
+
 
     MOTION.Property.prototype.start = MOTION.Property.prototype.setStart;
 
@@ -889,7 +988,8 @@ Bounce.InOut = function(t) {
 
     MOTION.NumberProperty.prototype = Object.create(MOTION.Property.prototype);
     MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty;
-})(MOTION);;(function(MOTION, undefined) {
+})(MOTION);
+;(function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
         MOTION.MotionController.call(this, children);
 
@@ -928,7 +1028,7 @@ Bounce.InOut = function(t) {
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();
 
-         if (this._isPlaying) {
+        if (this._isPlaying) {
             for (var i = 0; i < this._motions.length; i++) {
                 var c = this._motions[i];
 
@@ -940,7 +1040,7 @@ Bounce.InOut = function(t) {
                 }
             }
         }
-        
+
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 
@@ -950,7 +1050,8 @@ Bounce.InOut = function(t) {
 
         MOTION.prototype.dispatchRepeatedEvent.call(this)
     };
-})(MOTION);;(function(MOTION, undefined) {
+})(MOTION);
+;(function(MOTION, undefined) {
     MOTION.Keyframe = function(time, motions) {
         MOTION.MotionController.call(this, motions)
         this.delay(time);
@@ -1019,7 +1120,7 @@ Bounce.InOut = function(t) {
                 this._motions[this._motions.indexOf(c)] = c;
             } else {
                 var key = time + '';
- 
+
                 var k = new MOTION.Keyframe(time + '');
                 k.add(motion);
 
@@ -1044,22 +1145,34 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Timeline.prototype.current = MOTION.Timeline.prototype.getCurrent
-})(MOTION);(function(MOTION, undefined) {
+})(MOTION)
+;(function(MOTION, undefined) {
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
         this._properties = [];
         this._valueMode = MOTION.ABSOLUTE;
 
+        this._easing = function(t) {
+            return t;
+        };
+        this._inpterpolation = MOTION.Linear;
+
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
             this.addProperty(arguments[0], arguments[1], arguments[2]);
-            this.setEasing(arguments[5]);
+
+            if (typeof arguments[5] !== 'undefined')
+                this.setEasing(arguments[5]);
         } else if (typeof arguments[0] === 'string') {
             MOTION.call(this, arguments[2], arguments[3]);
             this.addProperty(arguments[0], arguments[1]);
-            this.setEasing(arguments[4]);
+
+            if (typeof arguments[4] !== 'undefined')
+                this.setEasing(arguments[4]);
         } else {
             MOTION.call(this, arguments[0], arguments[1]);
-            this.setEasing(arguments[2]);
+
+            if (typeof arguments[2] !== 'undefined')
+                this.setEasing(arguments[2]);
         }
     };
 
@@ -1127,10 +1240,8 @@ Bounce.InOut = function(t) {
     MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
     MOTION.Tween.prototype.setEasing = function(easing) {
-        this._easing = (typeof easing == 'undefined') ? (function(t) {
-            return t;
-        }) : easing;
-
+        console.log(this._easing)
+        this._easing = easing;
         return this;
     };
 
@@ -1141,11 +1252,21 @@ Bounce.InOut = function(t) {
     };
 
     MOTION.Tween.prototype.noEasing = function() {
-        this.setEasing(function(t) {
+        this._easing = function(t) {
             return t;
-        });
-
+        };
         return this;
+    };
+
+    MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
+        this._inpterpolation = inpterpolation;
+        return this;
+    };
+
+    MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
+
+    MOTION.Tween.prototype.getInterpolation = function() {
+        return this._inpterpolation;
     };
 
     MOTION.Tween.prototype.relative = function() {
@@ -1172,15 +1293,15 @@ Bounce.InOut = function(t) {
         return this._valueMode;
     };
 
-    MOTION.Tween.prototype.dispatchStartedEvent = function() {  
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
         if (this._onStart)
             this._onStart(this._object);
     };
 
     MOTION.Tween.prototype.dispatchEndedEvent = function() {
-         if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++){
-                this._properties[i].setStart(); 
+        if (this._valueMode == MOTION.RELATIVE)
+            for (var i = 0; i < this._properties.length; i++) {
+                this._properties[i].setStart();
             }
 
         if (this._onEnd)

@@ -27,62 +27,6 @@
     var width = window.innerWidth;
     var height = window.innerHeight;
 
-    PieArc = function(radius, offset, angleOffset, rotation) {
-        this.offset = offset;
-        this.angleOffset = angleOffset;
-
-        this.radius = radius;
-        this.rotation = rotation;
-        this.color = randomColor();
-
-        this.draw = function() {
-            context.save();
-            context.translate(this.x, this.y)
-            context.rotate(this.rotation)
-            context.translate(this.offset * Math.cos(this.angleOffset / 2), this.offset * Math.sin(this.angleOffset / 2))
-            context.beginPath();
-            context.moveTo(0, 0);
-            context.arc(0, 0, this.radius, 0, this.angleOffset);
-            context.lineTo(0, 0);
-            context.fillStyle = this.color;
-            context.fill();
-            context.restore();
-        };
-
-        return this;
-    }
-
-    function setupPieArcs() {
-        pieArcs = [];
-
-        pieRadius = height * .3;
-        pieOffset = height * .5;
-        pieAngles = [30, 10, 45, 35, 60, 38, 75, 67];
-        pieRotation = 0;
-        pieDuration = 200;
-
-        for (var i = 0; i < pieAngles.length; i++) {
-            pieArcs.push(new PieArc(pieRadius, pieOffset, radians(pieAngles[i]), radians(pieRotation)));
-            pieRotation += pieAngles[i];
-        }
-
-        var a = chartRotation;
-
-        sequence = new MOTION.Sequence();
-
-        for (var i = 0; i < pieArcs.length; i++) {
-            var pieArc = pieArcs[i]
-            a -= radians((i > 0) ? (pieAngles[i - 1] / 2 + pieAngles[i] / 2) : pieAngles[i] / 2);
-
-            sequence.add(new MOTION.Tween(pieDuration).add(this, 'chartRotation', a).easing(Expo.In));
-            sequence.add(new MOTION.Tween(pieDuration).add(pieArc, 'offset', 0).add(pieArc.color, 'a', [0, 1]).easing(Circ.Out));
-            sequence.add(new MOTION(pieDuration));
-        }
-
-        sequence.add(new MOTION.Tween(this, 'chartY', height + pieRadius, pieDuration / 2).easing(Circ.In));
-        sequence.repeat().play();
-    }
-
     setup();
     draw();
 
@@ -92,37 +36,7 @@
         canvas.height = height;
 
         document.body.appendChild(canvas)
-        context = canvas.getContext('2d');
-
-        chartX = width / 2;
-        chartY = height / 2;
-        chartRotation = radians(270);
-
-        setupPieArcs();
-
-        document.getElementById('play').onclick = function() {
-            sequence.play()
-        }
-        document.getElementById('stop').onclick = function() {
-            sequence.stop()
-        }
-
-        flag = false;
-
-        document.onmousedown = function(e) {
-            flag = true;
-            sequence.pause();
-        }
-
-        document.onmousemove = function(e) {
-            if (flag)
-                sequence.seek(e.clientX / window.innerWidth)
-        }
-
-        document.onmouseup = function(e) {
-            flag = false;
-            sequence.resume();
-        }
+        context = canvas.getContext('2d');   
     }
 
     function draw(time) {
@@ -133,12 +47,15 @@
         context.fillRect(0, 0, width, height);
 
         context.save();
-        context.translate(chartX, chartY);
-        context.rotate(chartRotation);
-
-        for (var i = 0; i < pieArcs.length; i++)
-            pieArcs[i].draw();
-
+        context.translate(this.x, this.y)
+        context.rotate(this.rotation)
+        context.translate(this.offset * Math.cos(this.angleOffset / 2), this.offset * Math.sin(this.angleOffset / 2))
+        context.beginPath();
+        context.moveTo(0, 0);
+        context.arc(0, 0, this.radius, 0, this.angleOffset);
+        context.lineTo(0, 0);
+        context.fillStyle = this.color;
+        context.fill();
         context.restore();
 
         document.getElementById('time').innerHTML = sequence.time() | 0;

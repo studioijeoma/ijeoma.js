@@ -37,7 +37,7 @@
     MOTION.MotionController.prototype.dispatchChangedEvent = function() {
         this._updateMotions();
 
-         if (this._isPlaying) {
+        if (this._isPlaying) {
             for (var i = 0; i < this._motions.length; i++) {
                 var c = this._motions[i];
 
@@ -49,7 +49,7 @@
                 }
             }
         }
-        
+
         MOTION.prototype.dispatchChangedEvent.call(this)
     };
 
