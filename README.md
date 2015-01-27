@@ -1,10 +1,10 @@
 #ijeoma.js
  
-A [fufu-powered](http://en.wikipedia.org/wiki/Fufu) Javascript library for creating animations which look and feel tasty :-J Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. 
+A [fufu-powered](http://en.wikipedia.org/wiki/Fufu) Javascript library for creating animations which look and feel tasty. Ijeoma (ee-JOH-mah) means bon voyage in Igbo, a language from Nigeria. 
 
-The code is based on [ijeomamotion for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which I ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). The Java and JS library have been used in projects like Chromeweblab ["Data Tracer"](https://www.youtube.com/watch?v=RrgjufJhmwk#t=40), Nike Camp Victory ["Nike+ Heat Map"](https://www.youtube.com/watch?v=xtTGsYyR0Ng#t=140), [The Office of Creative Research's (OCR) "The room would be good enough for the time she had to stay"](https://vimeo.com/69681117) and more. 
+The code is based on [ijeomamotion for Java/Processing](https://github.com/ekeneijeoma/ijeomamotion) which was ported to JS for processing.js so it could be used in Processing cross-mode (between Java and JS modes with no changes to the code). The Java and JS library have been used in projects like Chromeweblab ["Data Tracer"](https://www.youtube.com/watch?v=RrgjufJhmwk#t=40), Nike Camp Victory ["Nike+ Heat Map"](https://www.youtube.com/watch?v=xtTGsYyR0Ng#t=140), [The Office of Creative Research's (OCR) "The room would be good enough for the time she had to stay"](https://vimeo.com/69681117) and more. 
 
-While processing.js and Processing Javascript mode were sleeping and p5.js was born. ijeomamotion was being refactored to ijeoma.js which weights a lot less, has more muscle and is independent from processing.js and p5.js. Although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js) because we still love Processing :) 
+While processing.js and Processing Javascript mode were sleeping and p5.js was born, ijeomamotion was being refactored to ijeoma.js which weights a lot less, has more muscle and is independent from processing.js and p5.js. Although there is an [addon for p5.js](https://github.com/ekeneijeoma/p5.ijeoma.js) because we still love Processing. 
 
 #Download 
 Developement: [ijeoma.js](http://goo.gl/04mfZ7)
@@ -45,14 +45,14 @@ Tweening a variable named x from 0 to 1024 in 1000 millseconds.
 //new MOTION.Tween(object, property, end, duration, [delay], [easing])
 var x = 0;
 // if no object is passed it will default to window
-var tween = new MOTION.Tween(window, "x", 1024, 1000).play(); 
+var t = new MOTION.Tween(window, "x", 1024, 1000).play(); 
 ```
 or
 ```javascript 
 //NOTE: [start,end] is a required array
 //new MOTION.Tween(property, [start,end], duration, [delay], [easing])
 // object defaults to window and the variable x is defined in window with 
-var tween = new MOTION.Tween("x", [0,1024],1000).play(); a starting value of 0
+var t = new MOTION.Tween("x", [0,1024],1000).play(); a starting value of 0
 ```
 
 ###Tweening using relative and absolute start and end values
@@ -69,13 +69,13 @@ tween.valueMode(MOTION.RELATIVE);
 ###Tweening multiple variables and object properties
 ```javascript
 //new MOTION.Tween(duration, [delay], [easing])
-var tween = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
+var t = new MOTION.Tween(1000).add(window, "x", [0,1024]).add(window, "y", [0,768]).add(window, "size", [0,100]).play();
 ```
 or
 ```javascript
 //new MOTION.Tween(duration, [delay], [easing])
 // object defaults to window
-var tween = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); 
+var t = new MOTION.Tween(1000).add("x", [0,1024]).add("y", [0,768]).add("size", [0,100]).play(); 
 ```
 
 You can also call play and stop on all motion objects using
@@ -87,11 +87,11 @@ MOTION.stopAll()
 ###Delaying
 ```javascript
 //delay for 500 milliseconds
-var tween = new MOTION.Tween("w", 1024, 1000, 500).play(); 
+var t = new MOTION.Tween("w", 1024, 1000, 500).play(); 
 ```
 or
 ```javascript
-var tween = new MOTION.Tween("w", 1024, 1000).delay(500).play();
+var t = new MOTION.Tween("w", 1024, 1000).delay(500).play();
 ```
 
 ###Easing
@@ -125,13 +125,13 @@ MOTION.seekAll(position);
 ```
 ###Repeating
 ```javascript
-var tween = new MOTION.Tween(...).repeat().play();
+var t = new MOTION.Tween(...).repeat().play();
 
 MOTION.repeatAll([duration]);
 ```
 ###Reversing
 ```javascript 
-var tween = new MOTION.Tween(...).repeat().reverse().play();
+var t = new MOTION.Tween(...).repeat().reverse().play();
 
 MOTION.reverseAll();
 ```
@@ -143,7 +143,7 @@ t = new MOTION.Tween(...).onStart(func).onUpdate(func).onEnd(func).play();
 
 ###Changing speed/timescale
 ```javascript 
-var tween = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
+var t = new MOTION.Tween(...).timeScale(2) //plays back twice as fast
 
 MOTION.timeScaleAll(time);
 ``` 
