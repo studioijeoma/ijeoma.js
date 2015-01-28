@@ -1,13 +1,13 @@
 <head>
-   <style>
+    <style>
     body {
         padding: 0;
         margin: 0;
     }
-    div { 
+    div {
         position: absolute;
         z-index: 100;
-        padding: 10px 0 0 10px; 
+        padding: 10px 0 0 10px;
     }
     </style>
 </head>
@@ -25,23 +25,37 @@
     <!-- // <script src="js/RequestAnimationFrame.js"></script> -->
     <script language="javascript" src="../build/ijeoma.js"></script>
     <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
     setup();
     draw();
 
-    function setup() {
-        width = window.innerWidth;
+    function setup() {  
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
 
-        rect = document.createElement('div');
-        rect.style.cssText = 'position: absolute; left:0; top:0; width:' + width + 'px; height:100%; background-color:black';
+        document.body.appendChild(canvas)
 
-        document.body.appendChild(rect); 
+        context = canvas.getContext('2d'); 
 
-        callback1 = new MOTION.Tween(1000).onEnd(function(){console.log('callback1')});
-        callback2 = new MOTION.Tween(2000).onEnd(function(){console.log('callback2')});
-        callback3 = new MOTION.Tween(3000).onEnd(function(){console.log('callback3')});
+        callbackText = '';
 
-        // MOTION.playAll()
-        
+        // document.body.appendChild(rect);
+
+        callback1 = new MOTION.Tween(1000).onEnd(function() {
+            callbackText = 'ONE'
+        });
+        callback2 = new MOTION.Tween(2000).onEnd(function() {
+            callbackText = 'TWO'
+        });
+        callback3 = new MOTION.Tween(3000).onEnd(function() {
+            callbackText = 'THREE'
+        });
+
+        MOTION.playAll() 
+
         document.getElementById('play').onclick = function() {
             MOTION.playAll()
         }
@@ -66,14 +80,24 @@
             MOTION.resumeAll();
         }
     }
+ 
 
     function draw(time) {
         requestAnimationFrame(draw);
         MOTION.update(time);
 
-        document.getElementById('time1').innerHTML = callback1.time()
-        document.getElementById('time2').innerHTML = callback2.time()
-        document.getElementById('time3').innerHTML = callback3.time()
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, width, height);
+
+        context.font= width*.15+"px Arial";
+        context.textAlign="center"; 
+
+        context.fillStyle = 'black';
+        context.fillText(callbackText, width/2, height/2);
+
+        document.getElementById('time1').innerHTML = Math.round(callback1.time())
+        document.getElementById('time2').innerHTML = Math.round(callback2.time())
+        document.getElementById('time3').innerHTML = Math.round(callback3.time())
     }
     </script>
 </body>

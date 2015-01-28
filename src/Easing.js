@@ -134,7 +134,7 @@
     };
     MOTION.Bounce = function() {};
     MOTION.Bounce.In = function(t) {
-        return 1 - Bounce.Out(1 - t, 0);
+        return 1 - MOTION.Bounce.Out(1 - t, 0);
     };
     MOTION.Bounce.Out = function(t) {
         if ((t /= 1) < (1 / 2.75)) {
@@ -148,7 +148,7 @@
         }
     };
     MOTION.Bounce.InOut = function(t) {
-        if (t < .5) return Bounce.In(t * 2, 0) * .5;
-        return Bounce.Out(t * 2 - 1, 0) * .5 + .5;
+        if (t < .5) return MOTION.Bounce.In(t * 2, 0) * .5;
+        return MOTION.Bounce.Out(t * 2 - 1, 0) * .5 + .5;
     }
 })(MOTION);

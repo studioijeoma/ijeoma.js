@@ -140,7 +140,7 @@
             var duration2 = roundRandom(5000, 7500);
             var endRadius = roundRandom(1, circleCount) * circleOffset
 
-            n.radiusTween = new MOTION.Tween(n, 'radius', endRadius, duration2, 0, Quad.InOut).repeat().reverse().play()
+            n.radiusTween = new MOTION.Tween(n, 'radius', endRadius, duration2, 0, MOTION.Quad.InOut).repeat().reverse().play()
 
             nodes.push(n)
         }

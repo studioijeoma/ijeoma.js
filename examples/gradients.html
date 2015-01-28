@@ -56,7 +56,7 @@
         c1 = randomColor();
         c2 = c1;
 
-        tween = new MOTION.Tween(1000, 0, Quad.In)
+        tween = new MOTION.Tween(1000, 0, MOTION.Quad.In)
             .add(new ColorProperty('c1', randomColor()))
             .add(new ColorProperty('c2', c1))
             .relative()
