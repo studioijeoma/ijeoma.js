@@ -1055,8 +1055,7 @@
     MOTION.Timeline.prototype.constructor = MOTION.Timeline;
 
 
-    MOTION.Timeline.prototype.play = function(time) {
-        console.log(time)
+    MOTION.Timeline.prototype.play = function(time) { 
         if (typeof arguments[0] == 'undefined') {
             MOTION.MotionController.prototype.play.call(this);
         } else if (typeof arguments[0] == 'number') {
