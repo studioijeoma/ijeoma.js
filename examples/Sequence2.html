@@ -47,7 +47,7 @@
         radius = 10;
         duration = 500;
          
-        sequence = new MOTION.Sequence().relative();
+        sequence = new MOTION.Sequence() 
         sequence.add(new MOTION.Tween(duration).add('radius', 55))
         sequence.add(new MOTION.Tween(duration).add('x', 400).add('y', 100))
         sequence.add(new MOTION.Tween(duration).add('x', 450).add('y', 400))

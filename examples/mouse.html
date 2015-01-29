@@ -1,13 +1,13 @@
 <head>
-   <style>
+    <style>
     body {
         padding: 0;
         margin: 0;
     }
-    div { 
+    div {
         position: absolute;
         z-index: 100;
-        padding: 10px 0 0 10px; 
+        padding: 10px 0 0 10px;
     }
     </style>
 </head>
@@ -33,27 +33,25 @@
         canvas.width = width;
         canvas.height = height;
 
-        document.body.appendChild(canvas)
+        x = width / 2;
+        y = height / 2;
+
+        tween = new MOTION.Tween(500)
+            .add('x', x)
+            .add('y', y)
+            .easing(MOTION.Quad.Out)
+            .relative()
+            .play()
 
         time = document.getElementById('time')
 
         context = canvas.getContext('2d');
-        context.lineWidth = .5;
 
-        radius = height * .1;
-        x = width / 2;
-        y = -radius; 
-
-        tween = new MOTION.Tween(1000).add('x', x).add('y', y).easing(MOTION.Cubic.Out).relative().play()
-
-        document.onclick = function(e) {
-            console.log('asdf')
-
-            // tween.stop()
-            // tween.get()
+        document.body.appendChild(canvas)
+        document.onmousemove = function(e) { 
             tween.get('x').end(e.clientX)
             tween.get('y').end(e.clientY)
-            tween.play();
+            tween.play()
         }
     }
 
@@ -65,8 +63,8 @@
         context.fillRect(0, 0, width, height);
 
         context.beginPath();
-        context.arc(x, y, radius, 0, TWO_PI);
         context.fillStyle = 'white';
+        context.arc(x, y, 20, 0, TWO_PI);
         context.fill();
 
         document.getElementById('time').innerHTML = tween.time() | 0;

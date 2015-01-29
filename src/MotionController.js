@@ -88,19 +88,6 @@
         return this._easing;
     };
 
-    MOTION.MotionController.prototype.valueMode = MOTION.MotionController.prototype.setValueMode;
-
-    MOTION.MotionController.prototype.setValueMode = function(_valueMode) {
-        MOTION.prototype.setValueMode.call(this, _valueMode);
-
-        for (var i = 0; i < this._motions.length; i++)
-            this._motions[i].setValueMode(_valueMode);
-
-        return this;
-    };
-
-    MOTION.MotionController.prototype.valueMode = MOTION.MotionController.prototype.setValueMode;
-
     MOTION.MotionController.prototype.add = function(motion) {
         this.insert(motion, 0);
         return this;

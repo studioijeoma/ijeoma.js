@@ -13,20 +13,20 @@
         return (y1 * (1 - t2) + y2 * t2);
     };
 
-    MOTION.Cubic = function(y0, y1, y2, y3, t) {
-        var a0, a1, a2, a3, t2;
-        t2 = t * t;
-        a0 = y3 - y2 - y0 + y1;
-        a1 = y0 - y1 - a0;
-        a2 = y2 - y0;
-        a3 = y1;
-        //http://paulbourke.net/miscellaneous/interpolation/
-        //     a0 = -0.5*y0 + 1.5*y1 - 1.5*y2 + 0.5*y3;
-        // a1 = y0 - 2.5*y1 + 2*y2 - 0.5*y3;
-        // a2 = -0.5*y0 + 0.5*y2;
-        // a3 = y1;
-        return (a0 * t * t2 + a1 * t2 + a2 * t + a3);
-    };
+    // MOTION.Cubic = function(y0, y1, y2, y3, t) {
+    //     var a0, a1, a2, a3, t2;
+    //     t2 = t * t;
+    //     a0 = y3 - y2 - y0 + y1;
+    //     a1 = y0 - y1 - a0;
+    //     a2 = y2 - y0;
+    //     a3 = y1;
+    //     //http://paulbourke.net/miscellaneous/interpolation/
+    //     //     a0 = -0.5*y0 + 1.5*y1 - 1.5*y2 + 0.5*y3;
+    //     // a1 = y0 - 2.5*y1 + 2*y2 - 0.5*y3;
+    //     // a2 = -0.5*y0 + 0.5*y2;
+    //     // a3 = y1;
+    //     return (a0 * t * t2 + a1 * t2 + a2 * t + a3);
+    // };
 
     /*
      * Tension: 1 is high, 0 normal, -1 is low Bias: 0 is even, positive is
