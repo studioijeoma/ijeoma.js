@@ -30,5 +30,14 @@
         "grunt-contrib-concat": "~0.5.0",
         "grunt-contrib-uglify": "~0.5.1",
         "grunt-contrib-watch": "^0.6.1"
+    },
+    "autoupdate": {
+        "source": "git",
+        "target": "git://github.com/ekeneijeoma/ijeoma.git",
+        "basePath": "",
+        "files": [
+            "ijeoma.min.js", 
+            "ijeoma.js"
+        ]
     }
 }
