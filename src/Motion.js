@@ -311,11 +311,11 @@
         return this;
     };
 
-    MOTION.prototype.duration = MOTION.prototype.setDuration;
-
     MOTION.prototype.getDuration = function() {
         return this._duration;
     };
+
+    MOTION.prototype.duration = MOTION.prototype.getDuration;
 
     MOTION.prototype.getRepeatTime = function() {
         return this._repeatTime;
