@@ -1,7 +1,7 @@
 {
     "name": "ijeoma.js",
     "filename": "ijeoma.min.js",
-    "version": "1.0.5",
+    "version": "0.10.0",
     "description": "Lightweight HTML5 canvas library",
     "homepage": "https://github.com/ekeneijeoma/ijeoma.js",
     "keywords": [
