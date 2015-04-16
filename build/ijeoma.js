@@ -449,87 +449,96 @@
         })();
     }
 })(window);
-;(function(MOTION, undefined) {
-    MOTION.Quad = function() {};
-    MOTION.Quad.In = function(t) {
+;(function(MOTION, undefined) {    
+    MOTION.Easing = function() {};
+
+    MOTION.Easing.Quad = function() {};
+    MOTION.Easing.Quad.In = function(t) {
         return (t /= 1) * t;
     };
-    MOTION.Quad.Out = function(t) {
+    MOTION.Easing.Quad.Out = function(t) {
         return -(t /= 1) * (t - 2);
     };
-    MOTION.Quad.InOut = function(t) {
+    MOTION.Easing.Quad.InOut = function(t) {
         if ((t /= 1 / 2) < 1) return .5 * t * t;
         return -.5 * ((--t) * (t - 2) - 1);
     };
-    MOTION.Cubic = function() {};
-    MOTION.Cubic.In = function(t) {
+
+    MOTION.Easing.Cubic = function() {};
+    MOTION.Easing.Cubic.In = function(t) {
         return (t /= 1) * t * t;
     };
-    MOTION.Cubic.Out = function(t) {
+    MOTION.Easing.Cubic.Out = function(t) {
         return ((t = t / 1 - 1) * t * t + 1);
     };
-    MOTION.Cubic.InOut = function(t) {
+    MOTION.Easing.Cubic.InOut = function(t) {
         if ((t /= 1 / 2) < 1) return .5 * t * t * t;
         return .5 * ((t -= 2) * t * t + 2);
     };
-    MOTION.Quart = function() {};
-    MOTION.Quart.In = function(t) {
+
+    MOTION.Easing.Quart = function() {};
+    MOTION.Easing.Quart.In = function(t) {
         return (t /= 1) * t * t * t;
     };
-    MOTION.Quart.Out = function(t) {
+    MOTION.Easing.Quart.Out = function(t) {
         return -((t = t / 1 - 1) * t * t * t - 1);
     };
-    MOTION.Quart.InOut = function(t) {
+    MOTION.Easing.Quart.InOut = function(t) {
         if ((t /= 1 / 2) < 1) return .5 * t * t * t * t;
         return -.5 * ((t -= 2) * t * t * t - 2);
     };
-    MOTION.Quint = function() {};
-    MOTION.Quint.In = function(t) {
+
+    MOTION.Easing.Quint = function() {};
+    MOTION.Easing.Quint.In = function(t) {
         return (t /= 1) * t * t * t * t;
     };
-    MOTION.Quint.Out = function(t) {
+    MOTION.Easing.Quint.Out = function(t) {
         return ((t = t / 1 - 1) * t * t * t * t + 1);
     };
-    MOTION.Quint.InOut = function(t) {
+    MOTION.Easing.Quint.InOut = function(t) {
         if ((t /= 1 / 2) < 1) return .5 * t * t * t * t * t;
         return .5 * ((t -= 2) * t * t * t * t + 2);
     };
-    MOTION.Sine = function() {};
-    MOTION.Sine.In = function(t) {
+
+    MOTION.Easing.Sine = function() {};
+    MOTION.Easing.Sine.In = function(t) {
         return -Math.cos(t / 1 * (Math.PI / 2)) + 1;
     };
-    MOTION.Sine.Out = function(t) {
+    MOTION.Easing.Sine.Out = function(t) {
         return Math.sin(t / 1 * (Math.PI / 2));
     };
-    MOTION.Sine.InOut = function(t) {
+    MOTION.Easing.Sine.InOut = function(t) {
         return -.5 * (Math.cos(Math.PI * t / 1) - 1);
     };
-    MOTION.Expo = function() {};
-    MOTION.Expo.In = function(t) {
+
+    MOTION.Easing.Expo = function() {};
+    MOTION.Easing.Expo.In = function(t) {
         return (t == 0) ? 0 : Math.pow(2, 10 * (t / 1 - 1));
     };
-    MOTION.Expo.Out = function(t) {
+    MOTION.Easing.Expo.Out = function(t) {
         return (t == 1) ? 1 : (-Math.pow(2, -10 * t / 1) + 1);
     };
-    MOTION.Expo.InOut = function(t) {
+    MOTION.Easing.Expo.InOut = function(t) {
         if (t == 0) return 0;
         if (t == 1) return 1;
         if ((t /= 1 / 2) < 1) return .5 * Math.pow(2, 10 * (t - 1));
         return .5 * (-Math.pow(2, -10 * --t) + 2);
     };
-    MOTION.Circ = function() {};
-    MOTION.Circ.In = function(t) {
+
+    MOTION.Easing.Circ = function() {};
+    MOTION.Easing.Circ.In = function(t) {
         return -(Math.sqrt(1 - (t /= 1) * t) - 1);
     };
-    MOTION.Circ.Out = function(t) {
+    MOTION.Easing.Circ.Out = function(t) {
         return Math.sqrt(1 - (t = t / 1 - 1) * t);
     };
-    MOTION.Circ.InOut = function(t) {
+    MOTION.Easing.Circ.InOut = function(t) {
         if ((t /= 1 / 2) < 1) return -.5 * (Math.sqrt(1 - t * t) - 1);
         return .5 * (Math.sqrt(1 - (t -= 2) * t) + 1);
     };
-    MOTION.Elastic = function() {};
-    MOTION.Elastic.In = function(t) {
+
+    MOTION.Easing.Elastic = function() {};
+    MOTION.Easing.Elastic.In = function(t) {
         var s = 1.70158;
         var p = 0;
         var a = 1;
@@ -542,7 +551,7 @@
         } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
         return -(a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
     };
-    MOTION.Elastic.Out = function(t) {
+    MOTION.Easing.Elastic.Out = function(t) {
         var s = 1.70158;
         var p = 0;
         var a = 1;
@@ -555,7 +564,7 @@
         } else var s = p / (2 * Math.PI) * Math.asin(1 / a);
         return a * Math.pow(2, -10 * t) * Math.sin((t - s) * (2 * Math.PI) / p) + 1;
     };
-    MOTION.Elastic.InOut = function(t) {
+    MOTION.Easing.Elastic.InOut = function(t) {
         var s = 1.70158;
         var p = 0;
         var a = 1;
@@ -569,25 +578,27 @@
         if (t < 1) return -.5 * (a * Math.pow(2, 10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p));
         return a * Math.pow(2, -10 * (t -= 1)) * Math.sin((t - s) * (2 * Math.PI) / p) * .5 + 1;
     };
-    MOTION.Back = function() {};
-    MOTION.Back.In = function(t, s) {
+
+    MOTION.Easing.Back = function() {};
+    MOTION.Easing.Back.In = function(t, s) {
         if (s == undefined) s = 1.70158;
         return (t /= 1) * t * ((s + 1) * t - s);
     };
-    MOTION.Back.Out = function(t, s) {
+    MOTION.Easing.Back.Out = function(t, s) {
         if (s == undefined) s = 1.70158;
         return ((t = t / 1 - 1) * t * ((s + 1) * t + s) + 1);
     };
-    MOTION.Back.InOut = function(t, s) {
+    MOTION.Easing.Back.InOut = function(t, s) {
         if (s == undefined) s = 1.70158;
         if ((t /= 1 / 2) < 1) return .5 * (t * t * (((s *= (1.525)) + 1) * t - s));
         return .5 * ((t -= 2) * t * (((s *= (1.525)) + 1) * t + s) + 2);
     };
-    MOTION.Bounce = function() {};
-    MOTION.Bounce.In = function(t) {
-        return 1 - MOTION.Bounce.Out(1 - t, 0);
+
+    MOTION.Easing.Bounce = function() {};
+    MOTION.Easing.Bounce.In = function(t) {
+        return 1 - MOTION.Easing.Bounce.Out(1 - t, 0);
     };
-    MOTION.Bounce.Out = function(t) {
+    MOTION.Easing.Bounce.Out = function(t) {
         if ((t /= 1) < (1 / 2.75)) {
             return (7.5625 * t * t);
         } else if (t < (2 / 2.75)) {
@@ -598,46 +609,64 @@
             return (7.5625 * (t -= (2.625 / 2.75)) * t + .984375);
         }
     };
-    MOTION.Bounce.InOut = function(t) {
-        if (t < .5) return MOTION.Bounce.In(t * 2, 0) * .5;
-        return MOTION.Bounce.Out(t * 2 - 1, 0) * .5 + .5;
-    }
-})(MOTION);
-;(function(MOTION, undefined) {  
-    MOTION.Linear = function(y1, y2, t) {
+    MOTION.Easing.Bounce.InOut = function(t) {
+        if (t < .5) return MOTION.Easing.Bounce.In(t * 2, 0) * .5;
+        return MOTION.Easing.Bounce.Out(t * 2 - 1, 0) * .5 + .5;
+    };
+
+    MOTION.Quad = MOTION.Easing.Quad;
+    MOTION.Cubic = MOTION.Easing.Cubic;
+    MOTION.Quart = MOTION.Easing.Quart;
+    MOTION.Quint = MOTION.Easing.Quint;
+    MOTION.Sine = MOTION.Easing.Sine;
+    MOTION.Expo = MOTION.Easing.Expo;
+    MOTION.Circ = MOTION.Easing.Circ;
+    MOTION.Elastic = MOTION.Easing.Elastic;
+    MOTION.Back = MOTION.Easing.Back;
+    MOTION.Bounce = MOTION.Easing.Bounce;
+})(MOTION);;(function(MOTION, undefined) {  
+    MOTION.Interoplation = function() {}
+
+    MOTION.Interoplation.Linear = function(y1, y2, t) {
         return (y1 * (1 - t) + y2 * t);
     };
 
-    MOTION.Smoothstep = function(y1, y2, t) {
-        // return (y1 * (1 - t) + y2 * t);
-        // ((x) * (x) * (3 - 2 * (x)))
-    };
+    // MOTION.Interoplation.Smoothstep = function(y1, y2, t) {
+    //     // return (y1 * (1 - t) + y2 * t);
+    //     // ((x) * (x) * (3 - 2 * (x)))
+    // };
 
-    MOTION.Cosine = function(y1, y2, t) {
+    MOTION.Interoplation.Cosine = function(y1, y2, t) {
         var t2 = (1 - PApplet.cos(t * PConstants.PI)) / 2;
         return (y1 * (1 - t2) + y2 * t2);
     };
 
-    // MOTION.Cubic = function(y0, y1, y2, y3, t) {
-    //     var a0, a1, a2, a3, t2;
-    //     t2 = t * t;
-    //     a0 = y3 - y2 - y0 + y1;
-    //     a1 = y0 - y1 - a0;
-    //     a2 = y2 - y0;
-    //     a3 = y1;
-    //     //http://paulbourke.net/miscellaneous/interpolation/
-    //     //     a0 = -0.5*y0 + 1.5*y1 - 1.5*y2 + 0.5*y3;
-    //     // a1 = y0 - 2.5*y1 + 2*y2 - 0.5*y3;
-    //     // a2 = -0.5*y0 + 0.5*y2;
-    //     // a3 = y1;
-    //     return (a0 * t * t2 + a1 * t2 + a2 * t + a3);
-    // };
+    MOTION.Interoplation.Cubic = function(y0, y1, y2, y3, t) {
+        var a0, a1, a2, a3, t2;
+        t2 = t * t;
+        a0 = y3 - y2 - y0 + y1;
+        a1 = y0 - y1 - a0;
+        a2 = y2 - y0;
+        a3 = y1;
+        //http://paulbourke.net/miscellaneous/interpolation/
+        //     a0 = -0.5*y0 + 1.5*y1 - 1.5*y2 + 0.5*y3;
+        // a1 = y0 - 2.5*y1 + 2*y2 - 0.5*y3;
+        // a2 = -0.5*y0 + 0.5*y2;
+        // a3 = y1;
+        return (a0 * t * t2 + a1 * t2 + a2 * t + a3);
+    };
 
     /*
      * Tension: 1 is high, 0 normal, -1 is low Bias: 0 is even, positive is
      * towards first segment, negative towards the other
      */
-    MOTION.Hermite = function(y0, y1, y2, y3, t, tension, bias) {
+    MOTION.Interoplation.Hermite = function(y0, y1, y2, y3, t, tension, bias) {
+        if(!tension)
+            tension = 0;
+
+        if(!bias)
+            bias = 0; 
+
         var m0, m1, t2, t3;
         var a0, a1, a2, a3;
         t2 = t * t;
@@ -845,8 +874,9 @@
         this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
 
         var values = (typeof arguments[0] === 'object') ? values : arguments[1];
-        this._start = (values instanceof Array) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
-        this._end = this._object[this._field] = (values instanceof Array) ? values[1] : values;
+        this._isArray = values instanceof Array; 
+        this._start = (this._isArray) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
+        this._end = this._object[this._field] = (this._isArray) ? values[1] : values;
 
         this._position = 0;
 
@@ -869,57 +899,46 @@
     MOTION.Property.prototype.update = function(position) {
         this._position = position;
 
-        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1))
-            this._object[this._field] = MOTION.Linear(this._start, this._end, this._position);
-        else {
+        if ((this._position > 0 && this._position <= 1) || (this._position == 0 && this._order == 1)){ 
+            this._object[this._field] = (this._isArray) ? this._updateArray(this._position) : MOTION.Interoplation.Linear(this._start, this._end, this._position);
+        }else {
 
         }
     };
 
-    MOTION.Property.prototype._updateArray = function(position) {
-        var segmentTRange = 1 / (this._end.length - 1);
+    MOTION.Property.prototype._updateArray = function(position) { 
+        var segmentSize = 1 / this._end.length
+        var segmentIndex = Math.floor(map(position, 0, 1, 0, this._end.length));
+        var segmentPosition = map(position, segmentIndex * segmentSize, (segmentIndex + 1) * segmentSize, 0, 1);
 
-        if (position < 1) {
-            segmentPointIndex = Math.floor((this._end.length - 1) * position);
-            segmentT = MOTION._map((position % segmentTRange), 0, segmentTRange, 0, 1);
-        } else {
-            segmentPointIndex = (this._end.length - 2);
-            segmentT = 1;
-        }
+        var p1, p2, p3, p4;
 
-        var v1, v2, v3, v4;
+        p2 = this._end[segmentIndex];
+        p3 = this._end[segmentIndex + 1];
+        p1 = p4 = 0;
 
-        v2 = this._end[segmentPointIndex];
-        v3 = this._end[segmentPointIndex + 1];
-        v1 = v4 = 0;
-
-        if (segmentPointIndex == 0) {
+        if (segmentIndex == 0) {
             var segmentBegin = this._end[0];
             var segmentEnd = this._end[1];
             var segmentSlope = segmentEnd - segmentBegin;
-            v1 = segmentEnd - segmentSlope;
+            p1 = segmentEnd - segmentSlope;
         } else {
-            v1 = this._end[segmentPointIndex - 1];
+            p1 = this._end[segmentIndex - 1];
         }
-        
-        if ((segmentPointIndex + 1) == this._end.length - 1) {
+
+        if (segmentIndex == this._end.length - 1) {
             var segmentBegin = this._end[this._end.length - 2];
             var segmentEnd = this._end[this._end.length - 1];
             var segmentSlope = segmentEnd - segmentBegin;
-            v4 = segmentEnd + segmentSlope;
+            p4 = segmentEnd + segmentSlope;
         } else {
-            v4 = this._end[segmentPointIndex + 2];
+            p4 = this._end[segmentIndex + 1];
         }
-
-        // if (this._interpolation === MOTION.LINEAR) {
-        return MOTION.Linear(v2.y, v3.y, segmentT);
-        // } else if (this._interpolation === MOTION.COSINE) {
-        // return MOTION.Cosine(v2.y, v3.y, segmentT);
-        // } else if (this._interpolation === MOTION.CUBIC) {
-        //     return MOTION.Cubic(v1.y, v2.y, v3.y, v4.y, segmentT);
-        // } else if (this._interpolation === MOTION.HERMITE) {
-        //     return MOTION.Hermite(v1.y, v2.y, v3.y, v4.y, segmentT, tension, bias);
-        // }
+ 
+        return MOTION.Interoplation.Linear(p2, p3, segmentPosition)
+        // return MOTION.Interoplation.Cosine(p2, p3, segmentPosition)
+        // return MOTION.Interoplation.Cubic(p1, p2, p3, p4, segmentPosition)
+        // return MOTION.Interoplation.Hermite(p1, p2, p3, p4, segmentPosition)
     };
 
     MOTION.Property.prototype.getStart = function() {
@@ -975,8 +994,7 @@
 
     MOTION.NumberProperty.prototype = Object.create(MOTION.Property.prototype);
     MOTION.NumberProperty.prototype.constrctor = MOTION.NumberProperty;
-})(MOTION);
-;(function(MOTION, undefined) {
+})(MOTION);;(function(MOTION, undefined) {
     MOTION.Sequence = function(children) {
         MOTION.MotionController.call(this, children);
 
