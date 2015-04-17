@@ -1,0 +1,114 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    
+    div {
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="play">Play</button>
+        <button id="stop">Stop</button>
+        <button id="time"></button>
+        <button>Click and drag left to right to scrub</button>
+    </div>
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script src="js/utils.js"></script>
+    <script language="javascript" src="../build/ijeoma.js"></script>
+    <script language="javascript">
+    setup();
+    draw();
+
+    function setup() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        context = canvas.getContext('2d');
+
+        x = 0;
+        y = 0;
+
+        count = 10;
+        size = width / 10
+
+        xs = []
+        ys = []
+
+        for (var i = 0; i <= count; i++) {
+            xs.push(i * size)
+            ys.push(Math.random() * height)
+        }
+
+        tween = new MOTION.Tween(2000)
+            .add('x', xs)
+            .add('y', ys)
+            .play()
+
+        document.getElementById('play').onclick = function() {
+            tween.play()
+        }
+        document.getElementById('stop').onclick = function() {
+            tween.stop()
+        }
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            tween.pause();
+        }
+
+        document.onmousemove = function(e) {
+            if (flag)
+                tween.seek(e.clientX / window.innerWidth)
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            tween.resume();
+        }
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+
+        if (typeof time === 'undefined')
+            return true;
+
+        MOTION.update(time);
+ 
+        context.beginPath(); 
+        context.moveTo(xs[0], ys[0]);
+
+        for (var i = 0; i < 1; i+=.1) {   
+            context.lineTo(MOTION.Interoplation.getInterpolationAt(i, xs), MOTION.Interoplation.getInterpolationAt(i,ys));
+        }
+
+        context.strokeStyle = 'black';
+        context.stroke();
+
+        // context.beginPath();
+        // context.arc(x, y, 20, 0, TWO_PI);
+        // context.fillStyle = 'green';
+        // context.fill();
+
+        // context.restore();
+
+        document.getElementById('time').innerHTML = tween.time() | 0;
+    }
+    </script>
+</body>

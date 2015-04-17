@@ -39,36 +39,10 @@
         }
     };
 
-    MOTION.Property.prototype._updateArray = function(position) { 
-        var segmentSize = 1 / this._end.length
-        var segmentIndex = Math.floor(map(position, 0, 1, 0, this._end.length));
-        var segmentPosition = map(position, segmentIndex * segmentSize, (segmentIndex + 1) * segmentSize, 0, 1);
-
-        var p1, p2, p3, p4;
-
-        p2 = this._end[segmentIndex];
-        p3 = this._end[segmentIndex + 1];
-        p1 = p4 = 0;
-
-        if (segmentIndex == 0) {
-            var segmentBegin = this._end[0];
-            var segmentEnd = this._end[1];
-            var segmentSlope = segmentEnd - segmentBegin;
-            p1 = segmentEnd - segmentSlope;
-        } else {
-            p1 = this._end[segmentIndex - 1];
-        }
-
-        if (segmentIndex == this._end.length - 1) {
-            var segmentBegin = this._end[this._end.length - 2];
-            var segmentEnd = this._end[this._end.length - 1];
-            var segmentSlope = segmentEnd - segmentBegin;
-            p4 = segmentEnd + segmentSlope;
-        } else {
-            p4 = this._end[segmentIndex + 1];
-        }
- 
-        return MOTION.Interoplation.Linear(p2, p3, segmentPosition)
+    MOTION.Property.prototype._updateArray = function(position) {   
+        return MOTION.Interoplation.getInterpolationAt(this.getPosition(), this._end);
+             
+        // return MOTION.Interoplation.Linear(p2, p3, segmentPosition)
         // return MOTION.Interoplation.Cosine(p2, p3, segmentPosition)
         // return MOTION.Interoplation.Cubic(p1, p2, p3, p4, segmentPosition)
         // return MOTION.Interoplation.Hermite(p1, p2, p3, p4, segmentPosition)

@@ -624,24 +624,24 @@
     MOTION.Elastic = MOTION.Easing.Elastic;
     MOTION.Back = MOTION.Easing.Back;
     MOTION.Bounce = MOTION.Easing.Bounce;
-})(MOTION);;(function(MOTION, undefined) {  
+})(MOTION);;(function(MOTION, undefined) {
     MOTION.Interoplation = function() {}
 
-    MOTION.Interoplation.Linear = function(y1, y2, t) {
+    MOTION.Interoplation.Linear = function(t, y1, y2) {
         return (y1 * (1 - t) + y2 * t);
     };
 
-    // MOTION.Interoplation.Smoothstep = function(y1, y2, t) {
+    // MOTION.Interoplation.Smoothstep = function(t,y1, y2) {
     //     // return (y1 * (1 - t) + y2 * t);
     //     // ((x) * (x) * (3 - 2 * (x)))
     // };
 
-    MOTION.Interoplation.Cosine = function(y1, y2, t) {
+    MOTION.Interoplation.Cosine = function(t, y1, y2) {
         var t2 = (1 - PApplet.cos(t * PConstants.PI)) / 2;
         return (y1 * (1 - t2) + y2 * t2);
     };
 
-    MOTION.Interoplation.Cubic = function(y0, y1, y2, y3, t) {
+    MOTION.Interoplation.Cubic = function(t, y0, y1, y2, y3) {
         var a0, a1, a2, a3, t2;
         t2 = t * t;
         a0 = y3 - y2 - y0 + y1;
@@ -660,12 +660,10 @@
      * Tension: 1 is high, 0 normal, -1 is low Bias: 0 is even, positive is
      * towards first segment, negative towards the other
      */
-    MOTION.Interoplation.Hermite = function(y0, y1, y2, y3, t, tension, bias) {
-        if(!tension)
-            tension = 0;
-
-        if(!bias)
-            bias = 0; 
+    MOTION.Interoplation.Hermite = function(t, y0, y1, y2, y3, tension, bias) {
+        debugger
+        if (tension == undefined) tension = 0;
+        if (bias == undefined) bias = 0;
 
         var m0, m1, t2, t3;
         var a0, a1, a2, a3;
@@ -681,6 +679,52 @@
         a3 = -2 * t3 + 3 * t2;
         return (a0 * y1 + a1 * m0 + a2 * m1 + a3 * y2);
     };
+
+    MOTION.Interoplation.getPointsAt = function(t, points, count) {
+        if (count == undefined || count != 2 || count != 4) count = 4;
+
+        var segmentSize = 1 / points.length
+        var segmentIndex = Math.floor(map(t, 0, 1, 0, points.length));
+        var segmentT = map(t, segmentIndex * segmentSize, (segmentIndex + 1) * segmentSize, 0, 1);
+
+        var p1, p2, p3, p4;
+
+        p2 = points[segmentIndex];
+        p3 = points[segmentIndex + 1];
+
+        if (count == 2)
+            return [p2, p3]
+
+        p1 = p4 = 0;
+
+        if (segmentIndex == 0) {
+            var segmentBegin = points[0];
+            var segmentEnd = points[1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            p1 = segmentEnd - segmentSlope;
+        } else {
+            p1 = points[segmentIndex - 1];
+        }
+
+        if (segmentIndex == points.length - 1) {
+            var segmentBegin = points[points.length - 2];
+            var segmentEnd = points[points.length - 1];
+            var segmentSlope = segmentEnd - segmentBegin;
+            p4 = segmentEnd + segmentSlope;
+        } else {
+            p4 = points[segmentIndex + 1];
+        }
+
+        debugger
+
+        return [p1, p2, p3, p4]
+    };
+
+    MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
+        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear   
+        return interpolation(this.getPointsAt(t, points))
+    }
+
 })(MOTION);
 ;(function(MOTION, undefined) {
     MOTION.MotionController = function(motions) {
@@ -906,36 +950,10 @@
         }
     };
 
-    MOTION.Property.prototype._updateArray = function(position) { 
-        var segmentSize = 1 / this._end.length
-        var segmentIndex = Math.floor(map(position, 0, 1, 0, this._end.length));
-        var segmentPosition = map(position, segmentIndex * segmentSize, (segmentIndex + 1) * segmentSize, 0, 1);
-
-        var p1, p2, p3, p4;
-
-        p2 = this._end[segmentIndex];
-        p3 = this._end[segmentIndex + 1];
-        p1 = p4 = 0;
-
-        if (segmentIndex == 0) {
-            var segmentBegin = this._end[0];
-            var segmentEnd = this._end[1];
-            var segmentSlope = segmentEnd - segmentBegin;
-            p1 = segmentEnd - segmentSlope;
-        } else {
-            p1 = this._end[segmentIndex - 1];
-        }
-
-        if (segmentIndex == this._end.length - 1) {
-            var segmentBegin = this._end[this._end.length - 2];
-            var segmentEnd = this._end[this._end.length - 1];
-            var segmentSlope = segmentEnd - segmentBegin;
-            p4 = segmentEnd + segmentSlope;
-        } else {
-            p4 = this._end[segmentIndex + 1];
-        }
- 
-        return MOTION.Interoplation.Linear(p2, p3, segmentPosition)
+    MOTION.Property.prototype._updateArray = function(position) {   
+        return MOTION.Interoplation.getInterpolationAt(this.getPosition(), this._end);
+             
+        // return MOTION.Interoplation.Linear(p2, p3, segmentPosition)
         // return MOTION.Interoplation.Cosine(p2, p3, segmentPosition)
         // return MOTION.Interoplation.Cubic(p1, p2, p3, p4, segmentPosition)
         // return MOTION.Interoplation.Hermite(p1, p2, p3, p4, segmentPosition)
@@ -1158,7 +1176,7 @@
         this._easing = function(t) {
             return t;
         };
-        this._inpterpolation = MOTION.Linear;
+        this._interpolation = MOTION.Interoplation.Linear;
 
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
@@ -1183,9 +1201,9 @@
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype._updateProperties = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            this._properties[i].update(this._easing(this.position()));
+    MOTION.Tween.prototype._updateProperties = function() { 
+        for (var i = 0; i < this._properties.length; i++) 
+            this._properties[i].update(this.position());  
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
@@ -1243,7 +1261,7 @@
 
     MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
-    MOTION.Tween.prototype.setEasing = function(easing) { 
+    MOTION.Tween.prototype.setEasing = function(easing) {
         this._easing = easing;
         return this;
     };
@@ -1262,14 +1280,14 @@
     };
 
     MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
-        this._inpterpolation = inpterpolation;
+        this._interpolation = inpterpolation;
         return this;
     };
 
     MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
 
     MOTION.Tween.prototype.getInterpolation = function() {
-        return this._inpterpolation;
+        return this._interpolation;
     };
 
     MOTION.Tween.prototype.relative = function() {
@@ -1306,7 +1324,7 @@
             this._onStart(this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {  
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
             this._onEnd(this._object);
     };

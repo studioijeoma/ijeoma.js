@@ -6,7 +6,7 @@
         this._easing = function(t) {
             return t;
         };
-        this._inpterpolation = MOTION.Linear;
+        this._interpolation = MOTION.Interoplation.Linear;
 
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
@@ -31,9 +31,9 @@
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype._updateProperties = function() {
-        for (var i = 0; i < this._properties.length; i++)
-            this._properties[i].update(this._easing(this.position()));
+    MOTION.Tween.prototype._updateProperties = function() { 
+        for (var i = 0; i < this._properties.length; i++) 
+            this._properties[i].update(this.position());  
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
@@ -91,7 +91,7 @@
 
     MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
 
-    MOTION.Tween.prototype.setEasing = function(easing) { 
+    MOTION.Tween.prototype.setEasing = function(easing) {
         this._easing = easing;
         return this;
     };
@@ -110,14 +110,14 @@
     };
 
     MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
-        this._inpterpolation = inpterpolation;
+        this._interpolation = inpterpolation;
         return this;
     };
 
     MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
 
     MOTION.Tween.prototype.getInterpolation = function() {
-        return this._inpterpolation;
+        return this._interpolation;
     };
 
     MOTION.Tween.prototype.relative = function() {
@@ -154,7 +154,7 @@
             this._onStart(this._object);
     };
 
-    MOTION.Tween.prototype.dispatchEndedEvent = function() {  
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
         if (this._onEnd)
             this._onEnd(this._object);
     };
