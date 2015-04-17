@@ -4,7 +4,6 @@
         padding: 0;
         margin: 0;
     }
-    
     div {
         position: absolute;
         z-index: 100;
@@ -90,16 +89,25 @@
             return true;
 
         MOTION.update(time);
- 
-        context.beginPath(); 
-        context.moveTo(xs[0], ys[0]);
 
-        for (var i = 0; i < 1; i+=.1) {   
-            context.lineTo(MOTION.Interoplation.getInterpolationAt(i, xs), MOTION.Interoplation.getInterpolationAt(i,ys));
+        var r = .01;
+
+        // context.beginPath();
+        // context.moveTo(xs[0], ys[0]);
+        // for (var i = 0; i < 1; i += r) {
+        //     context.lineTo(MOTION.Interoplation.getInterpolationAt(i, xs), MOTION.Interoplation.getInterpolationAt(i, ys));
+        // }
+        // context.strokeStyle = 'black';
+        // context.stroke();
+
+        for (var i = 0; i <= 1; i += r) {
+            context.beginPath();
+            context.arc(MOTION.Interoplation.getInterpolationAt(i, xs), MOTION.Interoplation.getInterpolationAt(i, ys), 5, 0, TWO_PI);
+            context.fillStyle = 'black';
+            context.fill(); 
         }
 
-        context.strokeStyle = 'black';
-        context.stroke();
+        debugger
 
         // context.beginPath();
         // context.arc(x, y, 20, 0, TWO_PI);

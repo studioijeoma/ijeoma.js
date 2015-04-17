@@ -31,9 +31,9 @@
     MOTION.Tween.prototype = Object.create(MOTION.prototype);
     MOTION.Tween.prototype.constrctor = MOTION.Tween;
 
-    MOTION.Tween.prototype._updateProperties = function() { 
-        for (var i = 0; i < this._properties.length; i++) 
-            this._properties[i].update(this.position());  
+    MOTION.Tween.prototype._updateProperties = function() {
+        for (var i = 0; i < this._properties.length; i++)
+            this._properties[i].update(this.position(), this._easing, this._interpolation);
     };
 
     MOTION.Tween.prototype.addProperty = function(object, property, end) {
@@ -42,7 +42,7 @@
         else if (typeof arguments[0] === 'object')
             p = new MOTION.NumberProperty(object, property, end);
         else
-            p = new MOTION.NumberProperty(arguments[0], arguments[1]);
+            p = new MOTION.NumberProperty(window, arguments[0], arguments[1]);
 
         this._properties.push(p);
 
