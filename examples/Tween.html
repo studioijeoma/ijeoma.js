@@ -1,13 +1,13 @@
 <head>
-   <style>
+    <style>
     body {
         padding: 0;
         margin: 0;
     }
-    #menu { 
+    #menu {
         position: absolute;
         z-index: 100;
-        padding: 10px 0 0 10px; 
+        padding: 10px 0 0 10px;
     }
     </style>
 </head>
@@ -36,11 +36,11 @@
 
         time = document.getElementById('time')
 
-        tween = new MOTION.Tween(2000).add('x', [-width,width]) 
+        tween = new MOTION.Tween(2000).add('x', [-width, width])
             .onUpdate(function() {
                 rect.style.left = x + 'px';
                 time.innerHTML = this.time() | 0;
-            }) 
+            })
             .reverse()
             .repeat()
             .play()
