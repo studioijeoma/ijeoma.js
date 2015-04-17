@@ -1,10 +1,10 @@
 (function(MOTION, undefined) {
     MOTION.Interoplation = function() {}
 
-    MOTION.Interoplation.Linear = function(t, y1, y2) {
+    MOTION.Interoplation.Linear = function(t, y1, y2) {  
         if (y1 instanceof Array) {
-            y2 = y1[2]
-            y1 = y1[1]
+            y2 = y1[2];
+            y1 = y1[1];
         }
         return (y1 * (1 - t) + y2 * t);
     };
