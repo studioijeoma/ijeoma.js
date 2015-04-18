@@ -36,16 +36,13 @@
             this._properties[i].update(this.position(), this._easing, this._interpolation);
     };
 
-    MOTION.Tween.prototype.addProperty = function(object, property, end) {
-        // debugger
+    MOTION.Tween.prototype.addProperty = function(object, property, values) { 
         if (arguments[0] instanceof MOTION.Property)
-            p = arguments[0];
+            this._properties.push(arguments[0]);
         else if (typeof arguments[0] === 'object')
-            p = new MOTION.NumberProperty(object, property, end);
+            this._properties.push(new MOTION.NumberProperty(object, property, values));
         else
-            p = new MOTION.NumberProperty(window, arguments[0], arguments[1]);
-
-        this._properties.push(p);
+            this._properties.push(new MOTION.NumberProperty(window, arguments[0], arguments[1])); 
 
         return this;
     };

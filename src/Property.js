@@ -3,15 +3,17 @@
     MOTION._properties = [];
 
     MOTION.Property = function(object, field, values) {
-        this._object = (typeof arguments[0] === 'object') ? object : window;
-        this._field = (typeof arguments[0] === 'object') ? field : arguments[0];
+        this._object = object;
+        this._field = field;
 
-        var values = (typeof arguments[0] === 'object') ? values : arguments[1];
-
-        this._hasArray = values.length > 2;
- 
-        this._start = (this._hasArray) ? values[0] : ((typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field]);
-        this._end = this._object[this._field] = (this._hasArray) ? values : values[1];
+        if (typeof values == 'object') {
+            this._start = this._object[this._field] = values[0]
+            this._end = (values.length > 2) ? values : values[1];
+            this._hasArray = (values.length > 2);
+        } else {
+            this._start = (typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field];
+            this._end = values;
+        }
 
         var found = MOTION._properties.filter(function(d) {
             return d.object == this._object && d.field == this._field;
@@ -30,7 +32,7 @@
     };
 
     MOTION.Property.prototype.update = function(t, easing, interoplation) {
-        if ((t > 0 && t <= 1) || (t == 0 && this._order == 1)) { 
+        if ((t > 0 && t <= 1) || (t == 0 && this._order == 1)) {
             if (this._hasArray)
                 this._object[this._field] = MOTION.Interoplation.getInterpolationAt(easing(t), this._end, interoplation);
             else
