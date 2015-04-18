@@ -79,7 +79,7 @@
     }; 
 
     MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
-        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear;  
+        if (interpolation == undefined) interpolation = MOTION.Interoplation.Hermite;  
 
         var segmentLength = 1 / points.length
         var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));

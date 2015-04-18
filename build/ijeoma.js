@@ -705,7 +705,7 @@
     }; 
 
     MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
-        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear;  
+        if (interpolation == undefined) interpolation = MOTION.Interoplation.Hermite;  
 
         var segmentLength = 1 / points.length
         var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));
@@ -1172,7 +1172,7 @@
         this._easing = function(t) {
             return t;
         };
-        this._interpolation = MOTION.Interoplation.Cubic;
+        this._interpolation = MOTION.Interoplation.Hermite;
 
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);

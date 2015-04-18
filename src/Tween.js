@@ -6,7 +6,7 @@
         this._easing = function(t) {
             return t;
         };
-        this._interpolation = MOTION.Interoplation.Cubic;
+        this._interpolation = MOTION.Interoplation.Hermite;
 
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);

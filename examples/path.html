@@ -109,8 +109,8 @@
         context.beginPath();
         context.moveTo(xs[0], ys[0]);
         for (var i = 0; i < 1; i += .001) {
-            var xi = MOTION.Interoplation.getInterpolationAt(i, xs, MOTION.Interoplation.Cubic)
-            var yi = MOTION.Interoplation.getInterpolationAt(i, ys, MOTION.Interoplation.Cubic)
+            var xi = MOTION.Interoplation.getInterpolationAt(i, xs)
+            var yi = MOTION.Interoplation.getInterpolationAt(i, ys)
             context.lineTo(xi, yi);
         }
         context.strokeStyle = 'black';
