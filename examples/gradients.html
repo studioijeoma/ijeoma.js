@@ -35,9 +35,8 @@
     ColorProperty.prototype = Object.create(MOTION.Property.prototype);
     ColorProperty.prototype.constrctor = MOTION.ColorProperty;
 
-    ColorProperty.prototype.update = function(position) {
-        this._position = position;
-        this._object[this._field] = lerpColor(this._start, this._end, this._position);
+    ColorProperty.prototype.update = function(t) { 
+        this._object[this._field] = lerpColor(this._start, this._end, t);
     };
 
     setup();

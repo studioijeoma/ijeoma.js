@@ -933,18 +933,21 @@
     MOTION._properties = [];
 
     MOTION.Property = function(object, field, values) {
-        this._object = object;
-        this._field = field;
+        this._object = (typeof arguments[0] == 'object') ? object : window;
+        this._field = (typeof arguments[1] == 'string') ? field : arguments[0];
+         
+        var values = (typeof arguments[1] == 'string') ? values : arguments[1];
+        console.log(values)
 
-        if (typeof values == 'object') {
+        if (values instanceof Array) {
             this._start = this._object[this._field] = values[0]
             this._end = (values.length > 2) ? values : values[1];
             this._hasArray = (values.length > 2);
         } else {
             this._start = (typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field];
             this._end = values;
-        }
-
+        } 
+        
         var found = MOTION._properties.filter(function(d) {
             return d.object == this._object && d.field == this._field;
         }, this);
@@ -982,6 +985,7 @@
                 this._start = this._object[this._field];
         } else
             this._start = start;
+
         return this;
     };
 
@@ -1212,7 +1216,7 @@
         else if (typeof arguments[0] === 'object')
             this._properties.push(new MOTION.NumberProperty(object, property, values));
         else
-            this._properties.push(new MOTION.NumberProperty(window, arguments[0], arguments[1])); 
+            this._properties.push(new MOTION.NumberProperty(arguments[0], arguments[1])); 
 
         return this;
     };

@@ -42,7 +42,7 @@
         else if (typeof arguments[0] === 'object')
             this._properties.push(new MOTION.NumberProperty(object, property, values));
         else
-            this._properties.push(new MOTION.NumberProperty(window, arguments[0], arguments[1])); 
+            this._properties.push(new MOTION.NumberProperty(arguments[0], arguments[1])); 
 
         return this;
     };
