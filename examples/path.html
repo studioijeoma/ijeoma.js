@@ -42,8 +42,7 @@
         x = 0;
         y = 0;
 
-        count = 10;
-        size = width / 10;
+        
 
         setupPoints()
 
@@ -53,7 +52,7 @@
             .repeat()
             .play()
             .onRepeat(function() {
-                setupPoints()
+                setupPoints();
                 this.get('x').setEnd(xs)
                 this.get('y').setEnd(ys)
             })
@@ -84,6 +83,9 @@
     }
 
     function setupPoints() {
+        count = 20;
+        size = width / count;
+
         xs = []
         ys = []
 
@@ -101,14 +103,12 @@
 
         MOTION.update(time);
 
-        var r = .01;
-
         context.fillStyle = 'white';
         context.fillRect(0, 0, width, height);
 
         context.beginPath();
         context.moveTo(xs[0], ys[0]);
-        for (var i = 0; i < 1; i += r) {
+        for (var i = 0; i < 1; i += .001) {
             var xi = MOTION.Interoplation.getInterpolationAt(i, xs, MOTION.Interoplation.Cubic)
             var yi = MOTION.Interoplation.getInterpolationAt(i, ys, MOTION.Interoplation.Cubic)
             context.lineTo(xi, yi);
@@ -116,15 +116,10 @@
         context.strokeStyle = 'black';
         context.stroke();
 
-        for (var i = 0; i <= 1; i += r) {
-            var step = 10;
-
-            var xi = MOTION.Interoplation.getInterpolationAt(i, xs, MOTION.Interoplation.Cubic)
-            var yi = MOTION.Interoplation.getInterpolationAt(i, ys, MOTION.Interoplation.Cubic)
-
+        for (var i = 0; i <= xs.length; i++) { 
             context.beginPath();
-            context.arc(xi, yi, 5, 0, TWO_PI);
-            context.fillStyle = 'black';
+            context.arc(xs[i], ys[i], 5, 0, TWO_PI);
+            context.fillStyle = 'red';
             context.fill();
         }
 
