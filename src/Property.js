@@ -6,8 +6,7 @@
         this._object = (typeof arguments[0] == 'object') ? object : window;
         this._field = (typeof arguments[1] == 'string') ? field : arguments[0];
          
-        var values = (typeof arguments[1] == 'string') ? values : arguments[1];
-        console.log(values)
+        var values = (typeof arguments[1] == 'string') ? values : arguments[1]; 
 
         if (values instanceof Array) {
             this._start = this._object[this._field] = values[0]
@@ -17,7 +16,7 @@
             this._start = (typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field];
             this._end = values;
         } 
-        
+
         var found = MOTION._properties.filter(function(d) {
             return d.object == this._object && d.field == this._field;
         }, this);

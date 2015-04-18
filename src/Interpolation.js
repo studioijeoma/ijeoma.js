@@ -1,7 +1,8 @@
 (function(MOTION, undefined) {
     MOTION.Interoplation = function() {}
 
-    MOTION.Interoplation.Linear = function(t, y1, y2) {  
+    MOTION.Interoplation.Linear = function(t, y1, y2) {
+        // debugger
         if (y1 instanceof Array) {
             y2 = y1[2];
             y1 = y1[1];
@@ -25,6 +26,7 @@
     };
 
     MOTION.Interoplation.Cubic = function(t, y0, y1, y2, y3) {
+        // debugger
         if (y0 instanceof Array) {
             y1 = y0[1];
             y2 = y0[2];
@@ -74,49 +76,39 @@
         a2 = t3 - t2;
         a3 = -2 * t3 + 3 * t2;
         return (a0 * y1 + a1 * m0 + a2 * m1 + a3 * y2);
-    };
+    }; 
 
-    MOTION.Interoplation.getSegmentAt = function(t, points, length) {
-        if (length == undefined || length != 2 || length != 4) length = 4;
+    MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
+        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear;  
 
         var segmentLength = 1 / points.length
         var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));
-        var segmentPosition = MOTION._map(t, segmentIndex * segmentLength, (segmentIndex + 1) * segmentLength, 0, 1);
+        var segmentT = MOTION._map(t, segmentIndex * segmentLength, (segmentIndex + 1) * segmentLength, 0, 1);
+
+        var segmentLength = 1 / points.length
+        var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));
 
         var p1, p2, p3, p4;
 
         p2 = points[segmentIndex];
-        p3 = points[segmentIndex + 1];
-        p1 = p4 = 0;
-
-        if (length == 2)
-            return [p2, p3];
-            // return [p1, p2, p3, p4];
+        p3 = points[segmentIndex + 1]; 
 
         if (segmentIndex == 0) {
             var segmentBegin = points[0];
             var segmentEnd = points[1];
             var segmentSlope = segmentEnd - segmentBegin;
             p1 = segmentEnd - segmentSlope;
-        } else {
-            p1 = points[segmentIndex - 1];
-        }
+        } else 
+            p1 = points[segmentIndex - 1]; 
 
-        if (segmentIndex == points.length - 1) {
+        if (segmentIndex == points.length - 2) {
             var segmentBegin = points[points.length - 2];
             var segmentEnd = points[points.length - 1];
             var segmentSlope = segmentEnd - segmentBegin;
             p4 = segmentEnd + segmentSlope;
-        } else {
-            p4 = points[segmentIndex + 1];
-        }
-
-        return [p1, p2, p3, p4];
-    };
-
-    MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
-        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear; 
-        return interpolation(t, this.getSegmentAt(t, points))
+        } else 
+            p4 = points[segmentIndex + 2]; 
+ 
+        return interpolation(segmentT, [p1, p2, p3, p4])
     }
-
 })(MOTION);

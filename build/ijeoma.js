@@ -627,7 +627,8 @@
 })(MOTION);;(function(MOTION, undefined) {
     MOTION.Interoplation = function() {}
 
-    MOTION.Interoplation.Linear = function(t, y1, y2) {  
+    MOTION.Interoplation.Linear = function(t, y1, y2) {
+        // debugger
         if (y1 instanceof Array) {
             y2 = y1[2];
             y1 = y1[1];
@@ -651,6 +652,7 @@
     };
 
     MOTION.Interoplation.Cubic = function(t, y0, y1, y2, y3) {
+        // debugger
         if (y0 instanceof Array) {
             y1 = y0[1];
             y2 = y0[2];
@@ -700,52 +702,43 @@
         a2 = t3 - t2;
         a3 = -2 * t3 + 3 * t2;
         return (a0 * y1 + a1 * m0 + a2 * m1 + a3 * y2);
-    };
+    }; 
 
-    MOTION.Interoplation.getSegmentAt = function(t, points, length) {
-        if (length == undefined || length != 2 || length != 4) length = 4;
+    MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
+        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear;  
 
         var segmentLength = 1 / points.length
         var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));
-        var segmentPosition = MOTION._map(t, segmentIndex * segmentLength, (segmentIndex + 1) * segmentLength, 0, 1);
+        var segmentT = MOTION._map(t, segmentIndex * segmentLength, (segmentIndex + 1) * segmentLength, 0, 1);
+
+        var segmentLength = 1 / points.length
+        var segmentIndex = Math.floor(MOTION._map(t, 0, 1, 0, points.length));
 
         var p1, p2, p3, p4;
 
         p2 = points[segmentIndex];
-        p3 = points[segmentIndex + 1];
-        p1 = p4 = 0;
-
-        if (length == 2)
-            return [p2, p3];
-            // return [p1, p2, p3, p4];
+        p3 = points[segmentIndex + 1]; 
 
         if (segmentIndex == 0) {
             var segmentBegin = points[0];
             var segmentEnd = points[1];
             var segmentSlope = segmentEnd - segmentBegin;
             p1 = segmentEnd - segmentSlope;
-        } else {
-            p1 = points[segmentIndex - 1];
-        }
+        } else 
+            p1 = points[segmentIndex - 1]; 
 
-        if (segmentIndex == points.length - 1) {
+        if (segmentIndex == points.length - 2) {
             var segmentBegin = points[points.length - 2];
             var segmentEnd = points[points.length - 1];
             var segmentSlope = segmentEnd - segmentBegin;
             p4 = segmentEnd + segmentSlope;
-        } else {
-            p4 = points[segmentIndex + 1];
-        }
-
-        return [p1, p2, p3, p4];
-    };
-
-    MOTION.Interoplation.getInterpolationAt = function(t, points, interpolation) {
-        if (interpolation == undefined) interpolation = MOTION.Interoplation.Linear; 
-        return interpolation(t, this.getSegmentAt(t, points))
+        } else 
+            p4 = points[segmentIndex + 2]; 
+ 
+        return interpolation(segmentT, [p1, p2, p3, p4])
     }
-
-})(MOTION);;(function(MOTION, undefined) {
+})(MOTION);
+;(function(MOTION, undefined) {
     MOTION.MotionController = function(motions) {
         MOTION.call(this);
 
@@ -936,8 +929,7 @@
         this._object = (typeof arguments[0] == 'object') ? object : window;
         this._field = (typeof arguments[1] == 'string') ? field : arguments[0];
          
-        var values = (typeof arguments[1] == 'string') ? values : arguments[1];
-        console.log(values)
+        var values = (typeof arguments[1] == 'string') ? values : arguments[1]; 
 
         if (values instanceof Array) {
             this._start = this._object[this._field] = values[0]
@@ -947,7 +939,7 @@
             this._start = (typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field];
             this._end = values;
         } 
-        
+
         var found = MOTION._properties.filter(function(d) {
             return d.object == this._object && d.field == this._field;
         }, this);
@@ -1180,7 +1172,7 @@
         this._easing = function(t) {
             return t;
         };
-        this._interpolation = MOTION.Interoplation.Linear;
+        this._interpolation = MOTION.Interoplation.Cubic;
 
         if (typeof arguments[0] === 'object') {
             MOTION.call(this, arguments[3], arguments[4]);
@@ -1210,13 +1202,13 @@
             this._properties[i].update(this.position(), this._easing, this._interpolation);
     };
 
-    MOTION.Tween.prototype.addProperty = function(object, property, values) { 
+    MOTION.Tween.prototype.addProperty = function(object, property, values) {
         if (arguments[0] instanceof MOTION.Property)
             this._properties.push(arguments[0]);
         else if (typeof arguments[0] === 'object')
             this._properties.push(new MOTION.NumberProperty(object, property, values));
         else
-            this._properties.push(new MOTION.NumberProperty(arguments[0], arguments[1])); 
+            this._properties.push(new MOTION.NumberProperty(arguments[0], arguments[1]));
 
         return this;
     };
@@ -1235,111 +1227,111 @@
             for (var j = 0; j < this._properties.length; j++)
                 if (this._properties[j]._field === arguments[0])
                     j = i;
+        }
+
+        if (i && i != -1)
+            this._properties.splice(i, 1);
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.getProperty = function() {
+        if (typeof arguments[0] === 'string') {
+            for (var j = 0; j < this._properties.length; j++)
+                if (this._properties[j]._field === arguments[0])
+                    return this._properties[j];
+        } else if (typeof arguments[0] === 'number') {
+            return this._properties[arguments[0]];
+        } else {
+            return this._properties;
+        }
+    };
+
+    MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
+
+    MOTION.Tween.prototype.getCount = function() {
+        return this._properties.length;
+    };
+
+    MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
+
+    MOTION.Tween.prototype.setEasing = function(easing) {
+        this._easing = easing;
+        return this;
+    };
+
+    MOTION.Tween.prototype.easing = MOTION.Tween.prototype.setEasing;
+
+    MOTION.Tween.prototype.getEasing = function() {
+        return this._easing;
+    };
+
+    MOTION.Tween.prototype.noEasing = function() {
+        this._easing = function(t) {
+            return t;
+        };
+        return this;
+    };
+
+    MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
+        this._interpolation = inpterpolation;
+        return this;
+    };
+
+    MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
+
+    MOTION.Tween.prototype.getInterpolation = function() {
+        return this._interpolation;
+    };
+
+    MOTION.Tween.prototype.relative = function() {
+        this.setValueMode(MOTION.RELATIVE);
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.absolute = function() {
+        this.setValueMode(MOTION.ABSOLUTE);
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.setValueMode = function(_valueMode) {
+        this._valueMode = _valueMode;
+
+        return this;
+    };
+
+    MOTION.Tween.prototype.valueMode = MOTION.Tween.prototype.setValueMode;
+
+    MOTION.Tween.prototype.getValueMode = function() {
+        return this._valueMode;
+    };
+
+    MOTION.Tween.prototype.dispatchStartedEvent = function() {
+        if (this._valueMode == MOTION.RELATIVE)
+            for (var i = 0; i < this._properties.length; i++) {
+                this._properties[i].setStart();
             }
 
-            if (i && i != -1)
-                this._properties.splice(i, 1);
+        if (this._onStart)
+            this._onStart(this._object);
+    };
 
-            return this;
-        };
+    MOTION.Tween.prototype.dispatchEndedEvent = function() {
+        if (this._onEnd)
+            this._onEnd(this._object);
+    };
 
-        MOTION.Tween.prototype.getProperty = function() { 
-            if (typeof arguments[0] === 'string') {
-                for (var j = 0; j < this._properties.length; j++)
-                    if (this._properties[j]._field === arguments[0])
-                        return this._properties[j];
-                } else if (typeof arguments[0] === 'number') {
-                    return this._properties[arguments[0]];
-                } else {
-                    return this._properties;
-                }
-            };
+    MOTION.Tween.prototype.dispatchChangedEvent = function() {
+        this._updateProperties();
 
-            MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
+        if (this._onUpdate)
+            this._onUpdate(this._object);
+    };
 
-            MOTION.Tween.prototype.getCount = function() {
-                return this._properties.length;
-            };
-
-            MOTION.Tween.prototype.count = MOTION.Tween.prototype.getCount;
-
-            MOTION.Tween.prototype.setEasing = function(easing) {
-                this._easing = easing;
-                return this;
-            };
-
-            MOTION.Tween.prototype.easing = MOTION.Tween.prototype.setEasing;
-
-            MOTION.Tween.prototype.getEasing = function() {
-                return this._easing;
-            };
-
-            MOTION.Tween.prototype.noEasing = function() {
-                this._easing = function(t) {
-                    return t;
-                };
-                return this;
-            };
-
-            MOTION.Tween.prototype.setInterpolation = function(inpterpolation) {
-                this._interpolation = inpterpolation;
-                return this;
-            };
-
-            MOTION.Tween.prototype.interpolation = MOTION.Tween.prototype.setInterpolation;
-
-            MOTION.Tween.prototype.getInterpolation = function() {
-                return this._interpolation;
-            };
-
-            MOTION.Tween.prototype.relative = function() {
-                this.setValueMode(MOTION.RELATIVE);
-
-                return this;
-            };
-
-            MOTION.Tween.prototype.absolute = function() {
-                this.setValueMode(MOTION.ABSOLUTE);
-
-                return this;
-            };
-
-            MOTION.Tween.prototype.setValueMode = function(_valueMode) {
-                this._valueMode = _valueMode;
-
-                return this;
-            };
-
-            MOTION.Tween.prototype.valueMode = MOTION.Tween.prototype.setValueMode;
-
-            MOTION.Tween.prototype.getValueMode = function() {
-                return this._valueMode;
-            };
-
-            MOTION.Tween.prototype.dispatchStartedEvent = function() {
-                if (this._valueMode == MOTION.RELATIVE)
-                    for (var i = 0; i < this._properties.length; i++) {
-                        this._properties[i].setStart();
-                    }
-
-                    if (this._onStart)
-                        this._onStart(this._object);
-                };
-
-                MOTION.Tween.prototype.dispatchEndedEvent = function() {
-                    if (this._onEnd)
-                        this._onEnd(this._object);
-                };
-
-                MOTION.Tween.prototype.dispatchChangedEvent = function() {
-                    this._updateProperties();
-
-                    if (this._onUpdate)
-                        this._onUpdate(this._object);
-                };
-
-                MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
-                    if (this._onRepeat)
-                        this._onRepeat(this._object);
-                };
-            })(MOTION);
+    MOTION.Tween.prototype.dispatchRepeatedEvent = function() {
+        if (this._onRepeat)
+            this._onRepeat(this._object);
+    };
+})(MOTION);
