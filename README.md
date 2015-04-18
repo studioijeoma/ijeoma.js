@@ -26,6 +26,8 @@ Production: [ijeoma.min.js](http://goo.gl/c5OR98)
 
 [Gradients](http://ekeneijeoma.github.io/ijeoma.js/examples/gradients.html): shows how to create custom property for tweening colors
 
+[Path](http://ekeneijeoma.github.io/ijeoma.js/examples/path.html)
+
 [Lines](http://ekeneijeoma.github.io/ijeoma.js/examples/lines.html)
 
 Bar Charts: [1](http://ekeneijeoma.github.io/ijeoma.js/examples/barChart1.html), [2](http://ekeneijeoma.github.io/ijeoma.js/examples/barChart2.html)
