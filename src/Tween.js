@@ -40,9 +40,9 @@
         if (arguments[0] instanceof MOTION.Property)
             this._properties.push(arguments[0]);
         else if (typeof arguments[0] === 'object')
-            this._properties.push(new MOTION.NumberProperty(object, property, values));
+            this._properties.push(new MOTION.Property(object, property, values));
         else
-            this._properties.push(new MOTION.NumberProperty(arguments[0], arguments[1]));
+            this._properties.push(new MOTION.Property(arguments[0], arguments[1]));
 
         return this;
     };

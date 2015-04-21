@@ -1,0 +1,125 @@
+<head>
+    <style>
+    body {
+        padding: 0;
+        margin: 0;
+    }
+    div {
+        position: absolute;
+        z-index: 100;
+        padding: 10px 0 0 10px;
+    }
+    </style>
+</head>
+
+<body>
+    <div>
+        <button id="time"></button>
+        <button>Click and drag left to right to scrub</button>
+    </div>
+
+    <script src="js/RequestAnimationFrame.js"></script>
+    <script language="javascript" src="../build/ijeoma.js"></script>
+    <script language="javascript" src="js/utils.js"></script>
+    <script language="javascript">
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    setup();
+    draw();
+
+    function roundRandom(d) {
+        return Math.round(Math.random() * d)
+    }
+
+    function randomColor() {
+        return 'rgb(' + roundRandom(255) + ',' + roundRandom(255) + ',' + roundRandom(255) + ')'
+    }
+
+    function randomArray(count, max) {
+        if (max == 'undefined') max = 1;
+
+        var a = new Array(count);
+
+        for (var i = 0; i < count; i++)
+            a[i] = roundRandom(max)
+
+        return a;
+    }
+
+    function randomXs(count) {
+        return randomArray(count, width)
+    }
+
+    function randomYs(count) {
+        return randomArray(count, height)
+    }
+
+    function setup() {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        document.body.appendChild(canvas)
+
+        flag = false;
+
+        document.onmousedown = function(e) {
+            flag = true;
+            t.pause();
+            console.log(flag)
+        }
+
+        document.onmousemove = function(e) {
+            if (flag) {
+                t.seek(e.clientX / window.innerWidth)
+            }
+        }
+
+        document.onmouseup = function(e) {
+            flag = false;
+            t.resume();
+        }
+
+        context = canvas.getContext('2d');
+
+        count = 10;
+        size = width / count;
+
+        xs = [];
+        ys = randomYs(count);
+        colors = [];
+
+        for (var i = 0; i < count; i++) {
+            xs.push(size * i)
+            colors.push(randomColor())
+        }
+
+        t = new MOTION.Tween(1000)
+            .add('ys', randomYs(count))
+            .easing(MOTION.Back.InOut)
+            .relative()
+            .play()
+            .onEnd(function() {
+                this.get('ys').end(randomYs(count))
+                this.play()
+            });
+    }
+
+    function draw(time) {
+        requestAnimationFrame(draw);
+
+        MOTION.update(time);
+
+        context.fillStyle = 'white';
+        context.fillRect(0, 0, width, height);
+
+        for (var i = 0; i < count; i++) {
+            context.fillStyle = colors[i]
+            context.fillRect(xs[i], ys[i], size, 100);
+        }
+
+        document.getElementById('time').innerHTML = t.time() | 0;
+    }
+    </script>
+</body>
