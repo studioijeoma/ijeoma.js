@@ -71,9 +71,8 @@
         }
 
         document.onmousemove = function(e) {
-            if (flag) {
+            if (flag)
                 t.seek(e.clientX / window.innerWidth)
-            }
         }
 
         document.onmouseup = function(e) {
@@ -83,7 +82,7 @@
 
         context = canvas.getContext('2d');
 
-        count = 10;
+        count = 1000;
         size = width / count;
 
         xs = [];
@@ -95,14 +94,14 @@
             colors.push(randomColor())
         }
 
-        t = new MOTION.Tween(1000)
+        t = new MOTION.Tween(1250)
             .add('ys', randomYs(count))
-            .easing(MOTION.Back.InOut)
+            .easing(MOTION.Quad.InOut)
             .relative()
             .play()
             .onEnd(function() {
                 this.get('ys').end(randomYs(count))
-                this.play()
+                this.delay(250).play()
             });
     }
 

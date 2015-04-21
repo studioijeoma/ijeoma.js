@@ -26,6 +26,8 @@ Production: [ijeoma.min.js](http://goo.gl/c5OR98)
 
 [Gradients](http://ekeneijeoma.github.io/ijeoma.js/examples/gradients.html): shows how to create custom property for tweening colors
 
+[Arrays](http://ekeneijeoma.github.io/ijeoma.js/examples/arrays.html)
+
 [Path](http://ekeneijeoma.github.io/ijeoma.js/examples/path.html)
 
 [Lines](http://ekeneijeoma.github.io/ijeoma.js/examples/lines.html)
@@ -56,6 +58,22 @@ or
 // object defaults to window and the variable x is defined in window with 
 var t = new MOTION.Tween("x", [0,1024],1000).play(); a starting value of 0
 ```
+
+Tweening an array
+```javascript  
+//NOTE: start and end array must have the same length
+var xy = [0,0];
+var t = new MOTION.Tween(window, "xy", [100,200], 1000).play(); 
+```
+
+Tweening through an array of points as on a path
+```javascript 
+//NOTE: array length must be greater than 3
+var x = 0;
+var t = new MOTION.Tween(window, "x", [0,100,200,300,400], 1000).play(); 
+```
+
+Tweening 
 
 ###Tweening using relative and absolute start and end values
 ```javascript
