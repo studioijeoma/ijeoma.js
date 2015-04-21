@@ -73,8 +73,6 @@ var x = 0;
 var t = new MOTION.Tween(window, "x", [0,100,200,300,400], 1000).play(); 
 ```
 
-Tweening 
-
 ###Tweening using relative and absolute start and end values
 ```javascript
 //the default which tweens from defined start to end values every play
