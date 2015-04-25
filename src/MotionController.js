@@ -62,17 +62,17 @@
         return this._motions;
     };
 
-    MOTION.Tween.prototype.getFirst = function() {
+    MOTION.MotionController.prototype.getFirst = function() {
         return this._motions[0];
     }
 
-    MOTION.Tween.prototype.first = MOTION.Tween.prototype.getFirst;
+    MOTION.MotionController.prototype.first = MOTION.MotionController.prototype.getFirst;
 
-    MOTION.Tween.prototype.getLast = function() {
+    MOTION.MotionController.prototype.getLast = function() {
         return this._motions[this._motions.length];
     }
 
-    MOTION.Tween.prototype.last = MOTION.Tween.prototype.getLast;
+    MOTION.MotionController.prototype.last = MOTION.MotionController.prototype.getLast;
 
     MOTION.MotionController.prototype.getCount = function() {
         return this._motions.length;

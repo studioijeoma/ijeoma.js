@@ -7,19 +7,19 @@
         this._field = (typeof arguments[1] == 'string') ? field : arguments[0];
         this._isArray = false;
         this._isPath = false;
- 
-        var values = (typeof arguments[1] == 'string') ? values : arguments[1]; 
- 
+
+        var values = (typeof arguments[1] == 'string') ? values : arguments[1];
+
         if (values instanceof Array) {
             //it'll either be interpolating between 2 arrays or through multiple points
             if (values.length == 2) {
                 //interpolates between a start and end number or number values/properties of a custom color or vector object;
                 //(window, 'x', [0,1]) or (window, 'x', [[0,0,0],[1,2,3])
-                this._start = this._object[this._field] = values[0];
+                this._start = values[0];
                 this._end = values[1]
                 this._isArray = values[0] instanceof Array && values[1] instanceof Array;
             } else {
-                if (this._object[this._field] instanceof Array) { 
+                if (this._object[this._field] instanceof Array) {
                     this._start = (this._object[this._field].length == 0) ? new Array(values.length) : this._object[this._field];
                     this._end = values;
                     this._isArray = true;
@@ -56,7 +56,7 @@
 
     MOTION.Property.prototype.update = function(t, easing, interoplation) {
         // if ((t > 0 && t <= 1) || (t == 0 && this._order == 1)) {
-        if (this._isArray) { 
+        if (this._isArray) {
             var a = [];
             for (var i = 0; i < this._start.length; i++)
                 a.push(MOTION.Interoplation.Linear(easing(t), this._start[i], this._end[i]));
@@ -72,7 +72,7 @@
         return this._start;
     };
 
-    MOTION.Property.prototype.setStart = function(start) { 
+    MOTION.Property.prototype.setStart = function(start) {
         if (typeof start === 'undefined') {
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
@@ -102,5 +102,5 @@
         return this._object[this._field];
     };
 
-    MOTION.Property.prototype.value = MOTION.Property.prototype.getValue; 
+    MOTION.Property.prototype.value = MOTION.Property.prototype.getValue;
 })(MOTION);
