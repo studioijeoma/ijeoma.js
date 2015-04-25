@@ -83,6 +83,18 @@
 
     MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
 
+    MOTION.Tween.prototype.getFirstProperty = function() {
+        return this._properties[0];
+    }
+
+    MOTION.Tween.prototype.first = MOTION.Tween.prototype.getFirstProperty;
+
+    MOTION.Tween.prototype.getLastProperty = function() {
+        return this._properties[this._properties.length];
+    }
+
+    MOTION.Tween.prototype.last = MOTION.Tween.prototype.getLastProperty;
+
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
     };

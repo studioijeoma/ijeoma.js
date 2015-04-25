@@ -62,6 +62,18 @@
         return this._motions;
     };
 
+    MOTION.Tween.prototype.getFirst = function() {
+        return this._motions[0];
+    }
+
+    MOTION.Tween.prototype.first = MOTION.Tween.prototype.getFirst;
+
+    MOTION.Tween.prototype.getLast = function() {
+        return this._motions[this._motions.length];
+    }
+
+    MOTION.Tween.prototype.last = MOTION.Tween.prototype.getLast;
+
     MOTION.MotionController.prototype.getCount = function() {
         return this._motions.length;
     };

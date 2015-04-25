@@ -802,6 +802,18 @@
         return this._motions;
     };
 
+    MOTION.Tween.prototype.getFirst = function() {
+        return this._motions[0];
+    }
+
+    MOTION.Tween.prototype.first = MOTION.Tween.prototype.getFirst;
+
+    MOTION.Tween.prototype.getLast = function() {
+        return this._motions[this._motions.length];
+    }
+
+    MOTION.Tween.prototype.last = MOTION.Tween.prototype.getLast;
+
     MOTION.MotionController.prototype.getCount = function() {
         return this._motions.length;
     };
@@ -1266,6 +1278,18 @@
     };
 
     MOTION.Tween.prototype.get = MOTION.Tween.prototype.getProperty;
+
+    MOTION.Tween.prototype.getFirstProperty = function() {
+        return this._properties[0];
+    }
+
+    MOTION.Tween.prototype.first = MOTION.Tween.prototype.getFirstProperty;
+
+    MOTION.Tween.prototype.getLastProperty = function() {
+        return this._properties[this._properties.length];
+    }
+
+    MOTION.Tween.prototype.last = MOTION.Tween.prototype.getLastProperty;
 
     MOTION.Tween.prototype.getCount = function() {
         return this._properties.length;
