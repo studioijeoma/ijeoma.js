@@ -46,6 +46,11 @@
     MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
+    MOTION._valueMode = MOTION.ABSOLUTE;
+
+    MOTION.valueMode = function(mode) {
+        MOTION._valueMode = mode;
+    }
 
     MOTION.playAll = function() {
         for (var i = 0; i < MOTION._motions.length; i++)
@@ -1196,8 +1201,7 @@
 })(MOTION)
 ;(function(MOTION, undefined) {
     MOTION.Tween = function(object, property, end, duration, delay, easing) {
-        this._properties = [];
-        this._valueMode = MOTION.ABSOLUTE;
+        this._properties = [];;
 
         this._easing = function(t) {
             return t;
@@ -1244,7 +1248,6 @@
     };
 
     MOTION.Tween.prototype.add = MOTION.Tween.prototype.addProperty;
-
 
     MOTION.Tween.prototype.remove = function(child) {
         var i;
@@ -1352,9 +1355,8 @@
 
     MOTION.Tween.prototype.dispatchStartedEvent = function() {
         if (this._valueMode == MOTION.RELATIVE)
-            for (var i = 0; i < this._properties.length; i++) {
-                this._properties[i].setStart();
-            }
+            for (var i = 0; i < this._properties.length; i++) 
+                this._properties[i].setStart(); 
 
         if (this._onStart)
             this._onStart(this._object);

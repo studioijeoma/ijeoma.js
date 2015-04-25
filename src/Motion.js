@@ -46,6 +46,11 @@
     MOTION._performance = (typeof window !== undefined && window.performance !== undefined && window.performance.now !== undefined) ? window.performance : Date;
     MOTION._useOnce = false;
     MOTION._time = 0;
+    MOTION._valueMode = MOTION.ABSOLUTE;
+
+    MOTION.valueMode = function(mode) {
+        MOTION._valueMode = mode;
+    }
 
     MOTION.playAll = function() {
         for (var i = 0; i < MOTION._motions.length; i++)
