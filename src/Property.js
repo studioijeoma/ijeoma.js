@@ -5,6 +5,11 @@
     MOTION.Property = function(object, field, values) {
         this._object = (typeof arguments[0] == 'object') ? object : window;
         this._field = (typeof arguments[1] == 'string') ? field : arguments[0];
+        
+        this._order = MOTION._properties.filter(function(d) { 
+            return d._object == this._object && d._field == this._field;
+        }, this).length; 
+
         this._isArray = false;
         this._isPath = false;
 
@@ -37,21 +42,8 @@
             this._start = (typeof this._object[this._field] == 'undefined') ? 0 : this._object[this._field];
             this._end = values;
         }
-
-        var found = MOTION._properties.filter(function(d) {
-            return d.object == this._object && d.field == this._field;
-        }, this);
-
-        if (found.length == 1) {
-            this._order = ++found[0].count;
-        } else {
-            MOTION._properties.push({
-                object: this._object,
-                field: this._field,
-                count: 1
-            })
-            this._order = 1;
-        }
+ 
+        MOTION._properties.push(this);
     };
 
     MOTION.Property.prototype.update = function(t, easing, interoplation) {
@@ -74,6 +66,7 @@
 
     MOTION.Property.prototype.setStart = function(start) {
         if (typeof start === 'undefined') {
+            debugger
             if (typeof this._object[this._field] === 'undefined')
                 this._start = 0;
             else
@@ -83,7 +76,6 @@
 
         return this;
     };
-
 
     MOTION.Property.prototype.start = MOTION.Property.prototype.setStart;
 

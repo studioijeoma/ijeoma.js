@@ -107,7 +107,7 @@
 
     MOTION.MotionController.prototype.insert = function(motion, time) {
         motion.delay(time);
-        if (this._valueMode) motion.valueMode(this._valueMode);
+        // if (this._valueMode) motion.valueMode(this._valueMode);
         motion._hasController = true;
 
         this._motions.push(motion);
